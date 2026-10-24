@@ -1,6 +1,6 @@
 # Generation service contract
 
-## Assetwright-owned generation workflow
+## Assetwright-owned Blender workflow
 
 Assetwright should turn a prompt and optional reference image into a game-ready mesh with its own Blender-based pipeline. Do not send generation jobs to a paid 3D-model API.
 
@@ -21,9 +21,11 @@ Run one Blender job at a time. Geometry generation, cleanup, and GLB export can 
 
 The current Android app calls Assetwright's versioned service only. The provider API key field and paid 3D-provider adapter are not part of this plan. Never submit live generation jobs from CI.
 
-## Android-to-service API
+## Future Android-to-service API
 
-All endpoints are versioned under `/v1`. The service requires authenticated requests over HTTPS. The provider API key is not an Android build secret and must never be shipped in the APK.
+These endpoints describe a later app-service integration. The current Android app does not call the local PC worker directly; local generation is started through the private MCP bridge.
+
+When a hosted service is added, endpoints will be versioned under `/v1` and require authenticated requests over HTTPS. The provider API key is not an Android build secret and must never be shipped in the APK.
 
 ### Create a generation
 
@@ -124,7 +126,9 @@ To learn hidden geometry, gather supervision for unseen sides. When a user has o
 
 ## ChatGPT training bridge
 
-Expose the run-review workflow through a private MCP server backed by Assetwright's service. Connect that server to ChatGPT as a custom MCP app. This lets ChatGPT inspect saved runs and return structured corrections without placing a model-provider key or unrestricted Blender shell inside the Android app.
+The first local MCP server is in `tools/blender/local_mcp_server.py`. It exposes Blender status, one allowlisted demo generator, and the generated preview. Connect it through a private Secure MCP Tunnel; it binds only to loopback and does not offer an arbitrary shell or script tool. See [Local Blender bridge](LOCAL_BLENDER_BRIDGE.md).
+
+Expand this bridge into a run-review workflow as generation records are added. That lets ChatGPT inspect saved runs and propose structured corrections without placing unrestricted Blender execution or credentials inside the Android app.
 
 Initial MCP tools:
 
