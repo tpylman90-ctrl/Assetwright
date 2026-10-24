@@ -7,15 +7,15 @@ Assetwright creates real-time game assets. It targets usable silhouettes, predic
 ## Planned flow
 
 1. The Android client collects a text prompt and/or one reference image, plus a game-performance preset.
-2. During development, a local MCP worker on the creator's PC starts an allowlisted Blender generator. Blender runs on that PC and saves an editable source asset, GLB, and preview.
-3. GitHub Actions provides reproducible build and validation jobs, then prepares a mobile-friendly GLB for Godot.
+2. During development, a run request in a private workbench repository starts an allowlisted Blender generator on the creator's Windows PC through a self-hosted GitHub Actions runner.
+3. Blender produces a detailed source asset, GLB, and preview on the PC. GitHub stores the review artifact temporarily; selected approved assets can then be admitted to the public project and optimized for Godot.
 4. The client previews the result and lets the user save or export the asset. A hosted service can follow when generation volume and operating cost are understood.
 
 ## Boundaries
 
 - Android UI and asset library live under app/.
 - The initial Android-to-service job contract is documented in [Generation API](GENERATION_API.md).
-- Asset generation uses an Assetwright-owned Blender Python pipeline. The local MCP worker is in `tools/blender/local_mcp_server.py`; it binds only to loopback and exposes named generators, not arbitrary commands. ChatGPT reaches it through a private Secure MCP Tunnel. See [Local Blender bridge](LOCAL_BLENDER_BRIDGE.md) and [Generation API](GENERATION_API.md).
+- Asset generation uses an Assetwright-owned Blender Python pipeline. The private workbench runs allowlisted generators on the PC and keeps generated files out of Git by default. See [Private Blender workbench](PRIVATE_BLENDER_WORKBENCH.md) and [Generation API](GENERATION_API.md).
 - Record prompts, asset specs, generator versions, turntable renders, and user corrections after every run. Improve templates from the records first; promote trained updates only after validation. Details are in [the learning loop](GENERATION_API.md#learning-loop).
 - A private MCP bridge lets ChatGPT inspect runs, propose constrained Blender corrections, and help curate training examples. Run changes and training promotions require user confirmation; see [the ChatGPT training bridge](GENERATION_API.md#chatgpt-training-bridge).
 - Signing secrets belong in GitHub Actions secrets only; never commit keystores or credentials.
