@@ -1,6 +1,6 @@
 # Blender asset build on GitHub
 
-Assetwright uses Blender as a free, self-hosted generation step. GitHub Actions provides a temporary Linux runner, installs Blender, runs the procedural asset script in background mode, and stores its outputs as a workflow artifact. Blender is installed for the job; the application binary is not committed to the repository.
+This GitHub Actions workflow is a reproducible CI demo, not the main modeling workstation. It installs Blender on a temporary Linux runner, runs the procedural sample generator, and stores the GLB and preview as a workflow artifact. For higher-detail authoring on your PC and ChatGPT review through a private tunnel, see [Local Blender worker](LOCAL_BLENDER_BRIDGE.md). The Blender application binary is not committed to the repository.
 
 ## Run it
 
