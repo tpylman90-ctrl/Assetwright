@@ -27,8 +27,12 @@ def material(name, color, metallic=0.0, roughness=0.55, emission=0.0):
     bsdf.inputs["Metallic"].default_value = metallic
     bsdf.inputs["Roughness"].default_value = roughness
     if emission:
-        bsdf.inputs["Emission Color"].default_value = (*color, 1.0)
-        bsdf.inputs["Emission Strength"].default_value = emission
+        color_socket = bsdf.inputs.get("Emission Color") or bsdf.inputs.get("Emission")
+        strength_socket = bsdf.inputs.get("Emission Strength")
+        if color_socket is not None:
+            color_socket.default_value = (*color, 1.0)
+        if strength_socket is not None:
+            strength_socket.default_value = emission
     return mat
 
 
