@@ -15,10 +15,10 @@ jobs:
     env:
       ANDROID_HOME: /usr/local/lib/android/sdk
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
-      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      ANDROID_KEYSTORE_BASE64: \${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      ANDROID_KEYSTORE_PASSWORD: \${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEY_PASSWORD: \${{ secrets.ANDROID_KEY_PASSWORD }}
+      ANDROID_KEY_ALIAS: \${{ secrets.ANDROID_KEY_ALIAS }}
 
     steps:
       - name: Check out source
@@ -38,7 +38,7 @@ jobs:
       - name: Accept licenses and install Android SDK
         run: |
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
-          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37" "build-tools;36.0.0" "platform-tools"
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0" "platform-tools"
 
       - name: Build debug APK
         run: gradle :app:assembleDebug
@@ -52,7 +52,7 @@ jobs:
           retention-days: 14
 
       - name: Decode upload key
-        if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' }}
+        if: \${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' }}
         run: |
           KEY_PATH="$RUNNER_TEMP/assetwright-upload.jks"
           printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$KEY_PATH"
@@ -60,11 +60,11 @@ jobs:
           echo "ANDROID_KEYSTORE_PATH=$KEY_PATH" >> "$GITHUB_ENV"
 
       - name: Build signed release APK
-        if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' }}
+        if: \${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' }}
         run: gradle :app:assembleRelease
 
       - name: Upload signed release APK
-        if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' }}
+        if: \${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: assetwright-signed-release-apk
