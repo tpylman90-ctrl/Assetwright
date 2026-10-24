@@ -6,7 +6,7 @@
 
 The Android starter app and signed APK workflow are being established. The first version is designed around one cloud generation job at a time, game performance budgets, and Godot-friendly GLB output. It is not a 3D-printing workflow.
 
-The generation service is not connected yet. The app currently provides the creation screen and image selection; the next stage is wiring a free/open model endpoint and the 3D preview/export pipeline.
+The generation service is not connected yet. The creation screen now supports a text prompt, one reference image, a game performance target, and a clear prepared-request state. The next stage is choosing and wiring a model endpoint, then building the 3D preview and export pipeline.
 
 ## Android app
 
