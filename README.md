@@ -15,4 +15,4 @@ The generation service is not connected yet. The creation screen now supports a 
 - Debug APK: build with `gradle :app:assembleDebug`
 - Signed release APK: build with `gradle :app:assembleRelease` after configuring the repository Actions secrets described in [Android signing](docs/ANDROID_SIGNING.md).
 
-See [the architecture notes](docs/ARCHITECTURE.md) for the planned generation pipeline.
+See [the architecture notes](docs/ARCHITECTURE.md) and [generation API contract](docs/GENERATION_API.md) for the service design and provider boundary.
