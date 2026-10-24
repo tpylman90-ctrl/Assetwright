@@ -6,7 +6,7 @@
 
 Assetwright targets game-ready assets with mobile-friendly mesh budgets and Godot-ready GLB output. It is not a 3D-printing workflow.
 
-The detailed Blender workflow is being prepared for a private GitHub Actions runner on the creator's PC, so Blender can use local hardware without a ChatGPT MCP bridge. Trial outputs are temporary: one job at a time, 250 MiB per run, and three-day artifact retention. The current generator is a procedural cargo-drone demo; prompt-driven geometry and Android integration are future steps. See [Private Blender workbench](docs/PRIVATE_BLENDER_WORKBENCH.md) and [the hosted CI demo](docs/BLENDER_CI.md).
+The active Blender path is the hosted GitHub Actions workflow, which runs on GitHub's Ubuntu runner and stores the GLB and preview as a three-day artifact. This keeps generation moving without the creator's PC. The current generator is a procedural cargo-drone demo; prompt-driven geometry and Android integration are future steps. A private Windows runner remains an optional higher-detail path for later. See [the hosted Blender demo](docs/BLENDER_CI.md) and [the private workbench notes](docs/PRIVATE_BLENDER_WORKBENCH.md).
 
 ## Android app
 
