@@ -28,17 +28,17 @@ def scratched_albedo(name, color, size=512):
 
     # Fine directional scratches and scattered chips; the restrained mask keeps
     # the finish readable at mobile viewing sizes.
-    for _ in range(180):
+    for _ in range(360):
         x = rng.randrange(size)
         y = rng.randrange(size)
-        length = rng.randrange(5, 34)
+        length = rng.randrange(8, 50)
         dx, dy = rng.choice(((1, 0), (1, 1), (1, -1), (0, 1)))
         for step in range(length):
             px = x + dx * step
             py = y + dy * step
             if 0 <= px < size and 0 <= py < size:
                 wear[py * size + px] = 1
-    for _ in range(900):
+    for _ in range(1500):
         x = rng.randrange(size)
         y = rng.randrange(size)
         wear[y * size + x] = 2
@@ -50,9 +50,9 @@ def scratched_albedo(name, color, size=512):
             idx = y * size + x
             shade = broad + rng.uniform(-0.055, 0.045)
             if wear[idx] == 1:
-                shade *= 0.68
+                shade *= 0.48
             elif wear[idx] == 2:
-                shade *= 1.12
+                shade *= 1.30
             pixels.extend((
                 min(1.0, max(0.0, color[0] * shade)),
                 min(1.0, max(0.0, color[1] * shade)),
@@ -252,6 +252,7 @@ def build_scene(output_dir):
             bevelled_box(label + " intake louver", (x, -0.738, z), (0.32, 0.035, 0.026), edge, 0.009)
         bevelled_box(label + " top warning stripe", (x, -0.30, 2.015), (0.69, 0.095, 0.025), orange, 0.012)
         bevelled_box(label + " outer service panel", (side * 1.715, 0.10, 1.62), (0.045, 0.72, 0.50), panel, 0.055)
+        bevelled_box(label + " worn side safety stripe", (side * 1.75, -0.42, 1.62), (0.025, 0.60, 0.075), orange, 0.014)
         for y in (-0.21, 0.41):
             for z in (1.43, 1.81):
                 fastener(label + " nacelle bolt", (side * 1.747, y, z), warm_metal, rotation=(0, 1.5708, 0), radius=0.024, depth=0.018)
@@ -261,13 +262,17 @@ def build_scene(output_dir):
         cylinder(label + " rear exhaust core", (x, 0.755, 1.62), 0.145, 0.045, warm_metal, rotation=(1.5708, 0, 0), vertices=32)
         bevelled_box(label + " teal status marker", (side * 1.36, -0.12, 2.055), (0.13, 0.27, 0.045), teal, 0.02)
 
-    # Four simple landing legs, sized for a game prop silhouette.
+    # Four articulated landing legs with angled upper and lower links.
     for side in (-1, 1):
         for fore in (-1, 1):
-            x, y = side * 0.52, fore * 0.68
-            leg = bevelled_box("Landing strut", (x, y, 0.88), (0.11, 0.12, 0.76), edge, 0.035)
-            leg.rotation_euler[1] = side * -0.16
-            bevelled_box("Landing foot", (x + side * 0.10, y, 0.49), (0.36, 0.24, 0.11), dark, 0.035)
+            hip_x, y = side * 0.52, fore * 0.68
+            knee_x, knee_z = hip_x + side * 0.18, 0.82
+            foot_x = hip_x + side * 0.32
+            upper = bevelled_box("Angled upper landing link", (hip_x + side * 0.09, y, 1.01), (0.12, 0.14, 0.52), edge, 0.035)
+            upper.rotation_euler[1] = -side * 0.44
+            lower = bevelled_box("Lower landing link", (hip_x + side * 0.25, y, 0.68), (0.095, 0.12, 0.42), edge, 0.028)
+            lower.rotation_euler[1] = side * 0.49
+            bevelled_box("Landing foot", (foot_x, y, 0.50), (0.38, 0.26, 0.11), dark, 0.035)
 
     # Recessed side vents and small safety markings.
     for side in (-1, 1):
@@ -336,15 +341,19 @@ def build_scene(output_dir):
         for y in (-0.12, 0.55):
             torus("Cargo tie-down loop", (side * 0.48, y, 1.31), 0.055, 0.012, warm_metal, rotation=(1.5708, 0, 0), major_segments=20, minor_segments=6)
 
-    # Landing gear receives visible knee hubs, hydraulic sleeves, and treaded feet.
+    # Hinge barrels, exposed hydraulic rods, and inset treads make the gear functional.
     for side in (-1, 1):
         for fore in (-1, 1):
-            x, y = side * 0.52, fore * 0.68
-            cylinder("Landing gear pivot", (x + side * -0.06, y, 1.10), 0.075, 0.13, edge, rotation=(0, 1.5708, 0), vertices=32)
-            bevelled_box("Landing piston sleeve", (x + side * 0.06, y, 0.91), (0.065, 0.07, 0.42), dark, 0.025)
-            foot_x = x + side * 0.10
-            for stripe in (-0.075, 0, 0.075):
-                bevelled_box("Landing foot tread", (foot_x + stripe, y - 0.01, 0.55), (0.035, 0.18, 0.018), edge, 0.008)
+            hip_x, y = side * 0.52, fore * 0.68
+            knee_x, knee_z = hip_x + side * 0.18, 0.82
+            foot_x = hip_x + side * 0.32
+            cylinder("Landing knee hinge", (knee_x, y, knee_z), 0.085, 0.16, dark, rotation=(0, 1.5708, 0), vertices=32)
+            cylinder("Landing hinge cap", (knee_x + side * 0.09, y, knee_z), 0.048, 0.035, warm_metal, rotation=(0, 1.5708, 0), vertices=24)
+            cylinder("Upper gear hinge", (hip_x, y, 1.18), 0.075, 0.13, dark, rotation=(0, 1.5708, 0), vertices=32)
+            hydraulic = bevelled_box("Hydraulic landing piston", (hip_x + side * 0.11, y - fore * 0.055, 0.99), (0.045, 0.05, 0.37), warm_metal, 0.012)
+            hydraulic.rotation_euler[1] = -side * 0.30
+            for stripe in (-0.09, 0, 0.09):
+                bevelled_box("Landing foot tread", (foot_x + stripe, y - 0.015, 0.56), (0.035, 0.18, 0.018), edge, 0.008)
 
     # Add small hull access covers and maintenance lights to break up broad surfaces.
     for side in (-1, 1):
@@ -375,9 +384,9 @@ def build_scene(output_dir):
     world_background = scene.world.node_tree.nodes.get("Background")
     if world_background is not None:
         world_background.inputs["Color"].default_value = (0.42, 0.45, 0.50, 1.0)
-        world_background.inputs["Strength"].default_value = 0.45
+        world_background.inputs["Strength"].default_value = 0.35
     scene.render.image_settings.file_format = "PNG"
-    scene.view_settings.view_transform = "Standard"
+    scene.view_settings.view_transform = "AgX"
     scene.display.shading.light = "STUDIO"
     scene.display.shading.show_cavity = True
     scene.display.shading.cavity_type = "BOTH"
@@ -400,7 +409,7 @@ def build_scene(output_dir):
     bpy.ops.object.light_add(type="AREA", location=(3.8, -4.2, 6.5))
     key = bpy.context.object
     key.name = "Large soft key"
-    key.data.energy = 850
+    key.data.energy = 520
     key.data.shape = "DISK"
     key.data.size = 5.0
     point_camera(key, (0, 0, 1.4))
@@ -408,7 +417,7 @@ def build_scene(output_dir):
     bpy.ops.object.light_add(type="AREA", location=(-4.0, 1.2, 3.8))
     fill = bpy.context.object
     fill.name = "Cool rim light"
-    fill.data.energy = 650
+    fill.data.energy = 360
     fill.data.color = (0.25, 0.72, 1.0)
     fill.data.size = 3.5
     point_camera(fill, (0, 0, 1.4))
