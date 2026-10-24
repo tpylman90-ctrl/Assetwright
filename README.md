@@ -6,7 +6,7 @@
 
 The Android starter app and signed APK workflow are being established. The first version is designed around one cloud generation job at a time, game performance budgets, and Godot-friendly GLB output. It is not a 3D-printing workflow.
 
-The generation service is not connected yet. The creation screen now supports a text prompt, one reference image, a game performance target, and a clear prepared-request state. The next stage is choosing and wiring a model endpoint, then building the 3D preview and export pipeline.
+The Android creation screen is not connected to generation yet. The first Blender-owned asset build now runs in GitHub Actions and produces a downloadable GLB plus preview render. It is a procedural prototype that establishes the export path; prompt-driven generation and the Android-to-worker connection come next. See [Blender on GitHub](docs/BLENDER_CI.md) for how to run it.
 
 ## Android app
 
