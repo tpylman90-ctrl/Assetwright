@@ -17,9 +17,7 @@ Blender is the geometry and asset-processing engine, not an image-to-3D AI model
 
 ## Compute plan
 
-During detailed authoring, a private workbench repo runs an allowlisted Blender job on the creator's Windows PC through a self-hosted GitHub Actions runner. Blender can use the local hardware for higher-detail modeling and previews. Keep one job active at a time, keep trial outputs out of Git, retain review artifacts for three days, and cap each run at 250 MiB. Keep only selected assets long term. See [Private Blender workbench](PRIVATE_BLENDER_WORKBENCH.md).
-
-The public repo's hosted Ubuntu Blender workflow remains a small reproducible CI demo. The Android app is not connected to the local runner. The current plan uses Assetwright's own Blender pipeline and does not include a paid 3D-generation API.
+For now, run the public repository's Blender demo on GitHub's hosted Ubuntu runner. It builds the procedural cargo-drone sample, keeps files out of Git, and retains the GLB and preview artifact for three days. The Android app is not connected to the workflow. The private Windows workbench can return later when the creator's PC is available. The current plan uses Assetwright's own Blender pipeline and does not include a paid 3D-generation API.
 
 ## Future Android-to-service API
 
