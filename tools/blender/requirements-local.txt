@@ -1,0 +1,2 @@
+# Local MCP connector dependencies for Assetwright's Blender worker.
+mcp>=2.0,<3.0
