@@ -17,7 +17,7 @@ Assetwright creates real-time game assets. It targets usable silhouettes, predic
 - The initial Android-to-service job contract is documented in [Generation API](GENERATION_API.md).
 - Asset generation uses an Assetwright-owned Blender Python pipeline. The private workbench runs allowlisted generators on the PC and keeps generated files out of Git by default. See [Private Blender workbench](PRIVATE_BLENDER_WORKBENCH.md) and [Generation API](GENERATION_API.md).
 - Record prompts, asset specs, generator versions, turntable renders, and user corrections after every run. Improve templates from the records first; promote trained updates only after validation. Details are in [the learning loop](GENERATION_API.md#learning-loop).
-- A private MCP bridge lets ChatGPT inspect runs, propose constrained Blender corrections, and help curate training examples. Run changes and training promotions require user confirmation; see [the ChatGPT training bridge](GENERATION_API.md#chatgpt-training-bridge).
+- The private GitHub Actions workbench returns short-lived GLB and preview artifacts for review. Keep reviewed examples only with the user's permission; promote generator changes after validation. See [the private workbench](PRIVATE_BLENDER_WORKBENCH.md) and [the learning loop](GENERATION_API.md#learning-loop).
 - Signing secrets belong in GitHub Actions secrets only; never commit keystores or credentials.
 
 The current starter build contains the creation screen and reference-image picker. It does not yet call a generation endpoint or display a generated mesh.
