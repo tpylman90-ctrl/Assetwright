@@ -6,6 +6,8 @@ Run:
 import argparse
 import math
 import os
+import random
+from array import array
 import sys
 
 import bpy
@@ -19,14 +21,68 @@ def arguments():
     return parser.parse_args(argv)
 
 
+def scratched_albedo(name, color, size=512):
+    """Create a small packed game texture with subtle metal grain and paint wear."""
+    rng = random.Random(name)
+    wear = bytearray(size * size)
+
+    # Fine directional scratches and scattered chips; the restrained mask keeps
+    # the finish readable at mobile viewing sizes.
+    for _ in range(180):
+        x = rng.randrange(size)
+        y = rng.randrange(size)
+        length = rng.randrange(5, 34)
+        dx, dy = rng.choice(((1, 0), (1, 1), (1, -1), (0, 1)))
+        for step in range(length):
+            px = x + dx * step
+            py = y + dy * step
+            if 0 <= px < size and 0 <= py < size:
+                wear[py * size + px] = 1
+    for _ in range(900):
+        x = rng.randrange(size)
+        y = rng.randrange(size)
+        wear[y * size + x] = 2
+
+    pixels = array("f")
+    for y in range(size):
+        broad = 0.96 + 0.018 * math.sin(y * 0.12)
+        for x in range(size):
+            idx = y * size + x
+            shade = broad + rng.uniform(-0.055, 0.045)
+            if wear[idx] == 1:
+                shade *= 0.68
+            elif wear[idx] == 2:
+                shade *= 1.12
+            pixels.extend((
+                min(1.0, max(0.0, color[0] * shade)),
+                min(1.0, max(0.0, color[1] * shade)),
+                min(1.0, max(0.0, color[2] * shade)),
+                1.0,
+            ))
+
+    image = bpy.data.images.new(name + " Albedo", width=size, height=size, alpha=False)
+    image.pixels.foreach_set(pixels)
+    image.pack()
+    return image
+
+
 def material(name, color, metallic=0.0, roughness=0.55, emission=0.0):
     mat = bpy.data.materials.new(name=name)
     mat.diffuse_color = (*color, 1.0)
     mat.use_nodes = True
-    bsdf = mat.node_tree.nodes.get("Principled BSDF")
+    nodes = mat.node_tree.nodes
+    links = mat.node_tree.links
+    bsdf = nodes.get("Principled BSDF")
     bsdf.inputs["Base Color"].default_value = (*color, 1.0)
     bsdf.inputs["Metallic"].default_value = metallic
     bsdf.inputs["Roughness"].default_value = roughness
+
+    albedo = nodes.new("ShaderNodeTexImage")
+    albedo.name = name + " scratched albedo"
+    albedo.image = scratched_albedo(name, color)
+    albedo.interpolation = "Linear"
+    links.new(albedo.outputs["Color"], bsdf.inputs["Base Color"])
+
     if emission:
         color_socket = bsdf.inputs.get("Emission Color") or bsdf.inputs.get("Emission")
         strength_socket = bsdf.inputs.get("Emission Strength")
@@ -35,7 +91,6 @@ def material(name, color, metallic=0.0, roughness=0.55, emission=0.0):
         if strength_socket is not None:
             strength_socket.default_value = emission
     return mat
-
 
 def bevelled_box(name, location, dimensions, mat, bevel=0.08):
     bpy.ops.mesh.primitive_cube_add(size=1, location=location)
@@ -138,6 +193,20 @@ def lofted_hull(name, sections, mat, bevel=0.035):
     return obj
 
 
+def unwrap_model_meshes(objects):
+    """Give every exported mesh UVs so packed image materials survive GLB export."""
+    for obj in objects:
+        if obj.type != "MESH":
+            continue
+        bpy.ops.object.select_all(action="DESELECT")
+        obj.select_set(True)
+        bpy.context.view_layer.objects.active = obj
+        bpy.ops.object.mode_set(mode="EDIT")
+        bpy.ops.mesh.select_all(action="SELECT")
+        bpy.ops.uv.smart_project(island_margin=0.025)
+        bpy.ops.object.mode_set(mode="OBJECT")
+
+
 def point_camera(obj, target):
     obj.rotation_euler = (Vector(target) - obj.location).to_track_quat("-Z", "Y").to_euler()
 
@@ -169,15 +238,28 @@ def build_scene(output_dir):
     bevelled_box("Top cargo hatch", (0, 0.18, 2.04), (0.82, 0.96, 0.12), edge, 0.045)
     bevelled_box("Hatch inset", (0, 0.18, 2.11), (0.56, 0.68, 0.025), dark, 0.015)
 
-    # Twin side engines and their short reinforced pylons.
+    # Twin armored engine pods with recessed intake grilles and visible mounts.
     for side, label in ((-1, "Port"), (1, "Starboard")):
-        x = side * 1.17
-        bevelled_box(label + " engine pylon", (side * 0.88, 0.02, 1.55), (0.72, 0.32, 0.3), edge, 0.07)
-        cylinder(label + " engine nacelle", (x, 0.0, 1.58), 0.34, 1.22, dark, rotation=(1.5708, 0, 0))
-        cylinder(label + " intake rim", (x, -0.625, 1.58), 0.29, 0.08, edge, rotation=(1.5708, 0, 0))
-        cylinder(label + " intake core", (x, -0.674, 1.58), 0.19, 0.025, dark, rotation=(1.5708, 0, 0))
-        cylinder(label + " rear exhaust", (x, 0.625, 1.58), 0.25, 0.07, edge, rotation=(1.5708, 0, 0))
-        bevelled_box(label + " teal marker", (side * 1.17, -0.05, 1.94), (0.16, 0.32, 0.06), teal, 0.025)
+        x = side * 1.36
+        bevelled_box(label + " engine mount pylon", (side * 0.91, 0.02, 1.56), (0.72, 0.38, 0.34), edge, 0.08)
+        cylinder(label + " articulated drive collar", (side * 1.03, 0.02, 1.59), 0.22, 0.24, dark, rotation=(0, 1.5708, 0), vertices=32)
+        cylinder(label + " outer drive ring", (side * 1.15, 0.02, 1.59), 0.24, 0.08, warm_metal, rotation=(0, 1.5708, 0), vertices=32)
+        bevelled_box(label + " armored engine pod", (x, 0.0, 1.62), (0.70, 1.34, 0.78), alloy, 0.12)
+        bevelled_box(label + " intake bezel", (x, -0.68, 1.62), (0.48, 0.055, 0.55), edge, 0.06)
+        bevelled_box(label + " recessed intake", (x, -0.716, 1.62), (0.38, 0.03, 0.44), dark, 0.045)
+        for blade_index in range(6):
+            z = 1.44 + blade_index * 0.072
+            bevelled_box(label + " intake louver", (x, -0.738, z), (0.32, 0.035, 0.026), edge, 0.009)
+        bevelled_box(label + " top warning stripe", (x, -0.30, 2.015), (0.69, 0.095, 0.025), orange, 0.012)
+        bevelled_box(label + " outer service panel", (side * 1.715, 0.10, 1.62), (0.045, 0.72, 0.50), panel, 0.055)
+        for y in (-0.21, 0.41):
+            for z in (1.43, 1.81):
+                fastener(label + " nacelle bolt", (side * 1.747, y, z), warm_metal, rotation=(0, 1.5708, 0), radius=0.024, depth=0.018)
+        for vent_index in range(4):
+            bevelled_box(label + " side exhaust vent", (side * 1.75, -0.02 + vent_index * 0.10, 1.59), (0.025, 0.055, 0.30), dark, 0.009)
+        cylinder(label + " rear exhaust throat", (x, 0.68, 1.62), 0.235, 0.13, dark, rotation=(1.5708, 0, 0), vertices=40)
+        cylinder(label + " rear exhaust core", (x, 0.755, 1.62), 0.145, 0.045, warm_metal, rotation=(1.5708, 0, 0), vertices=32)
+        bevelled_box(label + " teal status marker", (side * 1.36, -0.12, 2.055), (0.13, 0.27, 0.045), teal, 0.02)
 
     # Four simple landing legs, sized for a game prop silhouette.
     for side in (-1, 1):
@@ -209,17 +291,22 @@ def build_scene(output_dir):
             for z in (1.52, 1.86):
                 fastener(label + " armor bolt", (side * 0.826, y, z), warm_metal, rotation=(0, 1.5708, 0), radius=0.026, depth=0.018)
 
-    # Replace the flat nose with a layered sensor face and protected optical array.
-    bevelled_box("Nose sensor bezel", (0, -1.215, 1.72), (0.92, 0.065, 0.39), dark, 0.085)
-    bevelled_box("Nose sensor faceplate", (0, -1.255, 1.72), (0.78, 0.035, 0.27), edge, 0.055)
-    for x, radius in ((-0.24, 0.075), (0, 0.105), (0.24, 0.075)):
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=radius, location=(x, -1.28, 1.72))
-        optic = bpy.context.object
-        optic.name = "Optical navigation sensor"
-        optic.scale = (1.0, 0.35, 1.0)
-        optic.data.materials.append(teal if x == 0 else dark)
-    for side in (-1, 1):
-        bevelled_box("Nose bumper", (side * 0.49, -1.18, 1.52), (0.12, 0.12, 0.13), orange, 0.035)
+    # Front armor layout: bolted central plate, vent stacks, and cyan running lights.
+    bevelled_box("Nose sensor bezel", (0, -1.235, 1.72), (1.02, 0.065, 0.46), dark, 0.065)
+    bevelled_box("Nose armor faceplate", (0, -1.278, 1.72), (0.88, 0.035, 0.36), edge, 0.045)
+    bevelled_box("Central service hatch", (0, -1.302, 1.72), (0.55, 0.025, 0.30), alloy, 0.025)
+    bevelled_box("Service hatch inset", (0, -1.319, 1.72), (0.38, 0.012, 0.19), panel, 0.012)
+    bevelled_box("Identification plate", (0, -1.329, 1.84), (0.26, 0.012, 0.045), dark, 0.008)
+    for x in (-0.52, 0.52):
+        bevelled_box("Vertical teal running light", (x, -1.29, 1.73), (0.045, 0.025, 0.23), teal, 0.018)
+        vent_x = x * 0.72
+        bevelled_box("Forward vent recess", (vent_x, -1.285, 1.66), (0.105, 0.025, 0.28), dark, 0.018)
+        for index in range(4):
+            bevelled_box("Forward vent slat", (vent_x, -1.303, 1.56 + index * 0.065), (0.073, 0.018, 0.018), edge, 0.006)
+    for x in (-0.40, 0.40):
+        for z in (1.57, 1.87):
+            fastener("Nose plate bolt", (x, -1.31, z), warm_metal, rotation=(1.5708, 0, 0), radius=0.021, depth=0.015)
+
 
     # Fine perimeter trim, locking dogs, and fasteners around the cargo hatch.
     for x in (-0.47, 0.47):
@@ -234,23 +321,12 @@ def build_scene(output_dir):
         for y in (-0.10, 0.34):
             fastener("Service panel screw", (x, y, 2.065), edge, radius=0.018, depth=0.014)
 
-    # Engine intakes gain a machined rim, recessed fan, and central hub.
+    # Raised exhaust rings and recessed center nozzles on the pod backs.
     for side, label in ((-1, "Port"), (1, "Starboard")):
-        x, y, z = side * 1.17, -0.685, 1.58
-        torus(label + " intake machined lip", (x, y, z), 0.255, 0.035, warm_metal, rotation=(1.5708, 0, 0), major_segments=40, minor_segments=10)
-        cylinder(label + " intake hub", (x, y - 0.012, z), 0.075, 0.045, edge, rotation=(1.5708, 0, 0), vertices=24)
-        for blade_index in range(8):
-            angle = blade_index * 0.785398
-            blade = bevelled_box(
-                label + " intake rotor blade",
-                (x + 0.145 * math.cos(angle), y - 0.027, z + 0.145 * math.sin(angle)),
-                (0.17, 0.025, 0.035), edge, 0.012
-            )
-            blade.rotation_euler[1] = -angle
-        # Rear nozzle rings and recessed hot section.
-        rear_y = 0.69
-        torus(label + " exhaust nozzle lip", (x, rear_y, z), 0.22, 0.035, edge, rotation=(1.5708, 0, 0), major_segments=40, minor_segments=10)
-        cylinder(label + " exhaust throat", (x, rear_y + 0.018, z), 0.16, 0.045, dark, rotation=(1.5708, 0, 0), vertices=32)
+        x = side * 1.36
+        torus(label + " exhaust retaining ring", (x, 0.77, 1.62), 0.205, 0.028, edge, rotation=(1.5708, 0, 0), major_segments=40, minor_segments=10)
+        torus(label + " exhaust copper seal", (x, 0.79, 1.62), 0.158, 0.012, orange, rotation=(1.5708, 0, 0), major_segments=36, minor_segments=8)
+
 
     # Under-belly cargo cradle, guide rails, and tie-down points.
     bevelled_box("Underslung cargo pod", (0, 0.22, 1.14), (0.78, 0.96, 0.25), panel, 0.085)
@@ -264,7 +340,7 @@ def build_scene(output_dir):
     for side in (-1, 1):
         for fore in (-1, 1):
             x, y = side * 0.52, fore * 0.68
-            cylinder("Landing gear pivot", (x + side * -0.06, y, 1.10), 0.105, 0.16, warm_metal, rotation=(0, 1.5708, 0), vertices=24)
+            cylinder("Landing gear pivot", (x + side * -0.06, y, 1.10), 0.075, 0.13, edge, rotation=(0, 1.5708, 0), vertices=32)
             bevelled_box("Landing piston sleeve", (x + side * 0.06, y, 0.91), (0.065, 0.07, 0.42), dark, 0.025)
             foot_x = x + side * 0.10
             for stripe in (-0.075, 0, 0.075):
@@ -294,7 +370,7 @@ def build_scene(output_dir):
     scene.display.shading.cavity_ridge_factor = 1.25
     scene.display.shading.cavity_valley_factor = 0.8
     scene.display.shading.show_shadows = True
-    scene.display.shading.color_type = "MATERIAL"
+    scene.display.shading.color_type = "TEXTURE"
     scene.render.resolution_x = 1280
     scene.render.resolution_y = 960
     scene.render.resolution_percentage = 100
@@ -330,6 +406,7 @@ def build_scene(output_dir):
     preview_path = os.path.abspath(os.path.join(output_dir, "cargo_drone_preview.png"))
     glb_path = os.path.abspath(os.path.join(output_dir, "cargo_drone.glb"))
     scene.render.filepath = preview_path
+    unwrap_model_meshes([obj for obj in scene.objects if obj.type == "MESH" and obj.name != "Preview floor"])
     bpy.ops.render.render(write_still=True)
 
     # Keep only asset geometry in the exported GLB.
