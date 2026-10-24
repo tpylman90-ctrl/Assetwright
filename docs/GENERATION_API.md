@@ -17,13 +17,13 @@ Blender is the geometry and asset-processing engine, not an image-to-3D AI model
 
 ## Compute plan
 
-Run one Blender job at a time. Geometry generation, cleanup, and GLB export can run in a CPU worker; GPU compute is only needed if we later host an image-generation model. This avoids paying a per-asset 3D API fee and keeps the mesh pipeline under our control. Keep jobs queued and bounded, and store their outputs as Assetwright-owned files.
+During detailed authoring, a private workbench repo runs an allowlisted Blender job on the creator's Windows PC through a self-hosted GitHub Actions runner. Blender can use the local hardware for higher-detail modeling and previews. Keep one job active at a time, keep trial outputs out of Git, retain review artifacts for three days, and cap each run at 250 MiB. Keep only selected assets long term. See [Private Blender workbench](PRIVATE_BLENDER_WORKBENCH.md).
 
-The current Android app calls Assetwright's versioned service only. The provider API key field and paid 3D-provider adapter are not part of this plan. Never submit live generation jobs from CI.
+The public repo's hosted Ubuntu Blender workflow remains a small reproducible CI demo. The Android app is not connected to the local runner. The provider API key field and paid 3D-provider adapter are not part of this plan.
 
 ## Future Android-to-service API
 
-These endpoints describe a later app-service integration. The current Android app does not call the local PC worker directly; local generation is started through the private MCP bridge.
+These endpoints describe a later app-service integration. The current Android app does not call the private workbench directly; Blender runs are started through GitHub Actions.
 
 When a hosted service is added, endpoints will be versioned under `/v1` and require authenticated requests over HTTPS. The provider API key is not an Android build secret and must never be shipped in the APK.
 
@@ -124,28 +124,13 @@ Improve in stages:
 
 To learn hidden geometry, gather supervision for unseen sides. When a user has only one reference image, mark unseen geometry as an inferred design choice. Use user edits, extra views, and accepted/rejected turntable views to teach the system what belongs on the rear and sides. Single-view reconstruction is inherently ambiguous; more complete views and corrections provide stronger evidence.
 
-## ChatGPT training bridge
+## Assistant-assisted training workflow
 
-The first local MCP server is in `tools/blender/local_mcp_server.py`. It exposes Blender status, one allowlisted demo generator, and the generated preview. Connect it through a private Secure MCP Tunnel; it binds only to loopback and does not offer an arbitrary shell or script tool. See [Local Blender bridge](LOCAL_BLENDER_BRIDGE.md).
+Use GitHub Actions to run one approved request at a time on the private Blender workstation. The workflow downloads the current allowlisted generator from the public Assetwright repo, writes the GLB and preview to a temporary directory, and uploads a short-lived artifact. The assistant reviews that artifact and proposes geometry or recipe edits through normal code changes.
 
-Expand this bridge into a run-review workflow as generation records are added. That lets ChatGPT inspect saved runs and propose structured corrections without placing unrestricted Blender execution or credentials inside the Android app.
+For each user-approved training example, keep the prompt or asset brief, reference images, generator version, editable parameters, GLB, consistent views, mesh statistics, and the user's correction. Retain examples only with the user's permission. The training workflow must never execute arbitrary Python from prompts or images.
 
-Initial MCP tools:
-
-| Tool | Access | Purpose |
-| --- | --- | --- |
-| `list_generation_runs` | Read | Find recent runs by status, asset family, or profile |
-| `get_generation_review` | Read | Return prompt, asset brief, generator version, mesh metrics, and turntable images |
-| `propose_geometry_patch` | Write, approval required | Save a constrained JSON patch for an existing asset recipe |
-| `run_blender_revision` | Write, user confirmation required | Queue a revision using an allowlisted Blender generator and a patch |
-| `record_training_feedback` | Write, user confirmation required | Save accepted, edited, or rejected labels and before/after outputs |
-| `queue_training_candidate` | Write, explicit confirmation required | Start an offline candidate training/evaluation job after the dataset gate is met |
-
-The assistant should inspect the turntable and mesh report, propose changes to named geometry parameters, and explain the expected effect. It must not execute arbitrary Python from prompts, images, or generated scripts. Blender runs in a restricted worker with allowlisted generators, time and resource limits, and no access to signing secrets.
-
-Keep reads available for review. Require confirmation before queuing a Blender revision or changing the training dataset. Candidate training stays offline until it passes the held-out comparison; promoting a candidate to production remains a separate user-approved action.
-
-Connect ChatGPT to the MCP server over authenticated HTTPS or a private Secure MCP Tunnel. Install and configure the custom MCP app from ChatGPT web; the server must be reachable through one of those supported paths. Keep authentication and dataset-retention choices explicit. Do not expose the server publicly without authentication.
+Initially, improve deterministic Blender templates and prompt-to-brief rules. Train a separate parameter-prediction model only after reviewed examples provide a held-out validation set. Keep candidate training separate from generation and require user approval before promotion.
 
 ## Service boundaries
 
