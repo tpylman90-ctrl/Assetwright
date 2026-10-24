@@ -4,9 +4,9 @@
 
 ## Project status
 
-The Android starter app and signed APK workflow are being established. The first version is designed around one cloud generation job at a time, game performance budgets, and Godot-friendly GLB output. It is not a 3D-printing workflow.
+Assetwright targets game-ready assets with mobile-friendly mesh budgets and Godot-ready GLB output. It is not a 3D-printing workflow.
 
-The Android creation screen is not connected to generation yet. The first Blender-owned asset build now runs in GitHub Actions and produces a downloadable GLB plus preview render. It is a procedural prototype that establishes the export path; prompt-driven generation and the Android-to-worker connection come next. See [Blender on GitHub](docs/BLENDER_CI.md) for how to run it.
+The detailed Blender worker is being set up to run locally on the creator's PC. ChatGPT can review its renders through a private MCP tunnel, while GitHub Actions handles reproducible build and validation jobs. The current generator is a procedural cargo-drone demo; prompt-driven geometry and Android integration are future steps. See [Local Blender setup](docs/LOCAL_BLENDER_BRIDGE.md) and [the GitHub Blender build](docs/BLENDER_CI.md).
 
 ## Android app
 
