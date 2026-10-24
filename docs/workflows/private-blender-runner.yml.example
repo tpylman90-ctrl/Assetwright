@@ -5,7 +5,6 @@ on:
     branches: [main]
     paths:
       - "run-request.json"
-      - ".github/workflows/blender.yml"
   workflow_dispatch:
 
 permissions:
@@ -42,16 +41,32 @@ jobs:
             throw "Unsupported generator in run-request.json."
           }
 
-          $blender = Get-Command blender.exe -ErrorAction SilentlyContinue
-          if (-not $blender) {
-            throw "blender.exe was not found on the self-hosted runner PATH."
+          $blenderCommand = Get-Command blender.exe -ErrorAction SilentlyContinue
+          $blenderPath = if ($blenderCommand) { $blenderCommand.Source } else { $null }
+
+          if (-not $blenderPath) {
+            $roots = @($env:ProgramFiles, ${env:ProgramFiles(x86)})
+            $matches = foreach ($root in $roots) {
+              if ($root) {
+                $installRoot = Join-Path $root "Blender Foundation"
+                Get-ChildItem -Path $installRoot -Filter blender.exe -File -Recurse -ErrorAction SilentlyContinue
+              }
+            }
+            $candidate = $matches | Sort-Object FullName | Select-Object -Last 1
+            if ($candidate) {
+              $blenderPath = $candidate.FullName
+            }
+          }
+
+          if (-not $blenderPath) {
+            throw "blender.exe was not found on PATH or in Program Files."
           }
 
           $outputPath = Join-Path $env:RUNNER_TEMP "assetwright-$env:GITHUB_RUN_ID"
           New-Item -ItemType Directory -Path $outputPath -Force | Out-Null
           $generatorPath = Join-Path $env:ASSETWRIGHT_SOURCE "tools/blender/generate_cargo_drone.py"
 
-          & $blender.Source --background --factory-startup --python $generatorPath -- --output-dir $outputPath
+          & $blenderPath --background --factory-startup --python $generatorPath -- --output-dir $outputPath
           if ($LASTEXITCODE -ne 0) {
             throw "Blender exited with code $LASTEXITCODE."
           }
