@@ -97,18 +97,18 @@ def generate_cargo_drone_demo(approved: bool = False) -> dict[str, Any]:
 
     job_id = "local_" + uuid.uuid4().hex[:12]
     output_dir = OUTPUT_ROOT / job_id
-    output_dir.mkdir(parents=True, exist_ok=False)
-    command = [
-        executable,
-        "--background",
-        "--factory-startup",
-        "--python",
-        str(GENERATOR),
-        "--",
-        "--output-dir",
-        str(output_dir),
-    ]
     try:
+        output_dir.mkdir(parents=True, exist_ok=False)
+        command = [
+            executable,
+            "--background",
+            "--factory-startup",
+            "--python",
+            str(GENERATOR),
+            "--",
+            "--output-dir",
+            str(output_dir),
+        ]
         result = subprocess.run(
             command,
             cwd=ROOT,
