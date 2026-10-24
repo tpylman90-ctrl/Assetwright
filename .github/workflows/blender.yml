@@ -11,6 +11,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: blender-demo-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build-demo:
     runs-on: ubuntu-24.04
@@ -42,4 +46,4 @@ jobs:
           name: assetwright-blender-demo
           path: generated/
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 3
