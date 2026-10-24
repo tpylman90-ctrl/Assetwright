@@ -359,11 +359,25 @@ def build_scene(output_dir):
 
     # Neutral studio floor and soft lighting are for the preview render only.
     floor_mat = material("Preview floor", (0.38, 0.39, 0.40), 0.08, 0.92)
-    bevelled_box("Preview floor", (0, 0, 0.23), (200, 200, 0.2), floor_mat, 0)
+    bevelled_box("Preview floor", (0, 0, 0.335), (200, 200, 0.2), floor_mat, 0)
 
     scene = bpy.context.scene
-    # Workbench renders reliably on a headless CPU-only GitHub runner.
-    scene.render.engine = "BLENDER_WORKBENCH"
+    # Use Eevee for real material, light, and shadow response on the hosted runner.
+    # If offscreen GPU support is unavailable, the render loop falls back to Workbench.
+    scene.render.engine = "BLENDER_EEVEE"
+    if hasattr(scene, "eevee"):
+        scene.eevee.taa_render_samples = 32
+        scene.eevee.use_gtao = True
+        scene.eevee.gtao_distance = 0.28
+        scene.eevee.gtao_factor = 1.25
+        scene.eevee.use_soft_shadows = True
+    scene.world.use_nodes = True
+    world_background = scene.world.node_tree.nodes.get("Background")
+    if world_background is not None:
+        world_background.inputs["Color"].default_value = (0.42, 0.45, 0.50, 1.0)
+        world_background.inputs["Strength"].default_value = 0.45
+    scene.render.image_settings.file_format = "PNG"
+    scene.view_settings.view_transform = "Standard"
     scene.display.shading.light = "STUDIO"
     scene.display.shading.show_cavity = True
     scene.display.shading.cavity_type = "BOTH"
@@ -433,7 +447,25 @@ def build_scene(output_dir):
         scene.camera = camera
         view_path = os.path.abspath(os.path.join(output_dir, "cargo_drone_" + view_name + ".png"))
         scene.render.filepath = view_path
-        bpy.ops.render.render(write_still=True)
+        try:
+            bpy.ops.render.render(write_still=True)
+        except Exception as render_error:
+            if scene.render.engine != "BLENDER_EEVEE":
+                raise
+            print("Eevee offscreen render unavailable; falling back to Blender Workbench: {}".format(render_error))
+            scene.render.engine = "BLENDER_WORKBENCH"
+            scene.display.shading.light = "STUDIO"
+            scene.display.shading.color_type = "TEXTURE"
+            scene.display.shading.background_type = "VIEWPORT"
+            scene.display.shading.background_color = (0.38, 0.39, 0.40)
+            scene.display.shading.show_cavity = True
+            scene.display.shading.cavity_type = "BOTH"
+            scene.display.shading.cavity_ridge_factor = 1.25
+            scene.display.shading.cavity_valley_factor = 1.0
+            scene.display.shading.studiolight_intensity = 1.25
+            scene.display.shading.shadow_intensity = 0.35
+            scene.display.shading.show_specular_highlight = True
+            bpy.ops.render.render(write_still=True)
         view_paths.append(view_path)
         view_images.append(bpy.data.images.load(view_path, check_existing=False))
 
