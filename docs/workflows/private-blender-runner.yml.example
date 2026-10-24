@@ -1,0 +1,78 @@
+name: Local Blender workbench
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "run-request.json"
+      - ".github/workflows/blender.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: assetwright-local-blender
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    if: github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, windows, x64, assetwright-blender]
+    timeout-minutes: 45
+    steps:
+      - name: Check out private workbench request
+        uses: actions/checkout@v4
+
+      - name: Fetch current Assetwright Blender generators
+        shell: pwsh
+        run: |
+          $sourcePath = Join-Path $env:RUNNER_TEMP "Assetwright-source"
+          if (Test-Path $sourcePath) {
+            Remove-Item -Recurse -Force $sourcePath
+          }
+          git clone --depth 1 https://github.com/tpylman90-ctrl/Assetwright.git $sourcePath
+          "ASSETWRIGHT_SOURCE=$sourcePath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Run allowlisted Blender generator
+        shell: pwsh
+        run: |
+          $request = Get-Content "run-request.json" -Raw | ConvertFrom-Json
+          if ($request.generator -ne "cargo_drone_demo") {
+            throw "Unsupported generator in run-request.json."
+          }
+
+          $blender = Get-Command blender.exe -ErrorAction SilentlyContinue
+          if (-not $blender) {
+            throw "blender.exe was not found on the self-hosted runner PATH."
+          }
+
+          $outputPath = Join-Path $env:RUNNER_TEMP "assetwright-$env:GITHUB_RUN_ID"
+          New-Item -ItemType Directory -Path $outputPath -Force | Out-Null
+          $generatorPath = Join-Path $env:ASSETWRIGHT_SOURCE "tools/blender/generate_cargo_drone.py"
+
+          & $blender.Source --background --factory-startup --python $generatorPath -- --output-dir $outputPath
+          if ($LASTEXITCODE -ne 0) {
+            throw "Blender exited with code $LASTEXITCODE."
+          }
+
+          $glb = Join-Path $outputPath "cargo_drone.glb"
+          $preview = Join-Path $outputPath "cargo_drone_preview.png"
+          if (-not (Test-Path $glb) -or -not (Test-Path $preview)) {
+            throw "The Blender generator did not produce both expected outputs."
+          }
+
+          $totalBytes = (Get-ChildItem $outputPath -File -Recurse | Measure-Object -Property Length -Sum).Sum
+          if ($totalBytes -gt 262144000) {
+            throw "Generated output exceeds the 250 MiB per-run storage cap."
+          }
+
+          "ASSETWRIGHT_OUTPUT=$outputPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Upload temporary review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-blender-${{ github.run_id }}
+          path: ${{ env.ASSETWRIGHT_OUTPUT }}/*
+          if-no-files-found: error
+          retention-days: 3
