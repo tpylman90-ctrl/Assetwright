@@ -4,6 +4,7 @@ Run:
   blender --background --factory-startup --python tools/blender/generate_cargo_drone.py -- --output-dir generated
 """
 import argparse
+import math
 import os
 import sys
 
@@ -88,6 +89,55 @@ def fastener(name, location, mat, rotation=(0, 0, 0), radius=0.028, depth=0.018)
     return obj
 
 
+def lofted_hull(name, sections, mat, bevel=0.035):
+    """Create a tapered hard-surface body from chamfered cross sections.
+
+    Each section is (y, half_width, half_height, center_z). The eight-sided
+    profile keeps the hull angular while a small multi-segment bevel softens
+    the edges for a polished game-asset finish.
+    """
+    vertices = []
+    faces = []
+    chamfer_ratio = 0.24
+    for y, half_width, half_height, center_z in sections:
+        cut = min(half_width, half_height) * chamfer_ratio
+        ring = [
+            (-half_width + cut, -half_height),
+            (half_width - cut, -half_height),
+            (half_width, -half_height + cut),
+            (half_width, half_height - cut),
+            (half_width - cut, half_height),
+            (-half_width + cut, half_height),
+            (-half_width, half_height - cut),
+            (-half_width, -half_height + cut),
+        ]
+        vertices.extend((x, y, center_z + z) for x, z in ring)
+
+    section_count = len(sections)
+    side_count = 8
+    faces.append(tuple(range(side_count)))
+    faces.append(tuple(reversed(range((section_count - 1) * side_count, section_count * side_count))))
+    for section in range(section_count - 1):
+        for edge_index in range(side_count):
+            a = section * side_count + edge_index
+            b = section * side_count + (edge_index + 1) % side_count
+            c = (section + 1) * side_count + (edge_index + 1) % side_count
+            d = (section + 1) * side_count + edge_index
+            faces.append((a, b, c, d))
+
+    mesh = bpy.data.meshes.new(name + " precision mesh")
+    mesh.from_pydata(vertices, [], faces)
+    mesh.materials.append(mat)
+    mesh.update()
+    obj = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(obj)
+    edge_bevel = obj.modifiers.new("Three segment edge fillets", "BEVEL")
+    edge_bevel.width = bevel
+    edge_bevel.segments = 3
+    obj.modifiers.new("Weighted machined normals", "WEIGHTED_NORMAL")
+    return obj
+
+
 def point_camera(obj, target):
     obj.rotation_euler = (Vector(target) - obj.location).to_track_quat("-Z", "Y").to_euler()
 
@@ -104,9 +154,18 @@ def build_scene(output_dir):
     panel = material("Deep teal armor panels", (0.075, 0.19, 0.21), 0.62, 0.31)
     warm_metal = material("Warm titanium hardware", (0.48, 0.29, 0.14), 0.74, 0.3)
 
-    # Main armored cargo shell: nose points toward -Y.
-    bevelled_box("Cargo hull", (0, 0, 1.65), (1.48, 2.15, 0.72), alloy, 0.16)
-    bevelled_box("Forward armored nose", (0, -0.92, 1.72), (1.22, 0.54, 0.62), edge, 0.12)
+    # Tapered, chamfered cargo shell: nose points toward -Y.
+    lofted_hull("Cargo hull", [
+        (-1.05, 0.56, 0.23, 1.65),
+        (-0.82, 0.70, 0.34, 1.65),
+        (0.62, 0.72, 0.34, 1.65),
+        (1.05, 0.57, 0.24, 1.65),
+    ], alloy, 0.035)
+    lofted_hull("Forward armored cowl", [
+        (-1.24, 0.40, 0.18, 1.72),
+        (-1.03, 0.56, 0.28, 1.72),
+        (-0.72, 0.58, 0.29, 1.72),
+    ], edge, 0.028)
     bevelled_box("Top cargo hatch", (0, 0.18, 2.04), (0.82, 0.96, 0.12), edge, 0.045)
     bevelled_box("Hatch inset", (0, 0.18, 2.11), (0.56, 0.68, 0.025), dark, 0.015)
 
@@ -184,7 +243,7 @@ def build_scene(output_dir):
             angle = blade_index * 0.785398
             blade = bevelled_box(
                 label + " intake rotor blade",
-                (x + 0.145 * __import__("math").cos(angle), y - 0.027, z + 0.145 * __import__("math").sin(angle)),
+                (x + 0.145 * math.cos(angle), y - 0.027, z + 0.145 * math.sin(angle)),
                 (0.17, 0.025, 0.035), edge, 0.012
             )
             blade.rotation_euler[1] = -angle
