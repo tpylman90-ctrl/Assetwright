@@ -25,7 +25,7 @@ Commit them to the private repo's `main` branch.
 
 In the private workbench repo, open **Settings → Actions → Runners → New self-hosted runner**, choose **Windows x64**, and follow the commands GitHub shows. Give the runner the custom label `assetwright-blender` in addition to the default labels. Keep the runner process open while a Blender job is needed.
 
-The runner invokes the Blender installation already on the laptop. Make sure `blender.exe` is available on PATH. GitHub's registration token is short-lived; use it only in the local runner setup screen and do not paste it into chat.
+The runner uses `blender.exe` from PATH or searches the standard Program Files Blender installation folders. GitHub's registration token is short-lived; use it only in the local runner setup screen and do not paste it into chat.
 
 The workflow runs only for changes to `run-request.json` on `main` or a manual `workflow_dispatch`. It has no pull-request trigger. GitHub warns that self-hosted runners attached to public repositories can be compromised by untrusted pull-request code, so this runner belongs in the private workbench. Avoid adding untrusted collaborators or pull-request triggers. See [GitHub's self-hosted runner security guidance](https://docs.github.com/en/actions/reference/security/secure-use).
 
