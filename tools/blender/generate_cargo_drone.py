@@ -117,7 +117,7 @@ def build_scene(output_dir):
     bevelled_box("Preview floor", (0, 0, 0.23), (200, 200, 0.2), floor_mat, 0)
 
     scene = bpy.context.scene
-    scene.render.engine = "BLENDER_EEVEE_NEXT" if "BLENDER_EEVEE_NEXT" in bpy.types for bpy.types.RenderEngine.bl_rna.properties["rna_type"].enum_items else "BLENDER_EEVEE"
+    try:\n        scene.render.engine = "BLENDER_EEVEE_NEXT"\n    except TypeError:\n        scene.render.engine = "BLENDER_EEVEE"
     scene.render.resolution_x = 960
     scene.render.resolution_y = 720
     scene.render.resolution_percentage = 100
