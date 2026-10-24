@@ -123,7 +123,7 @@ def lofted_hull(name, sections, mat, bevel=0.035):
             b = section * side_count + (edge_index + 1) % side_count
             c = (section + 1) * side_count + (edge_index + 1) % side_count
             d = (section + 1) * side_count + edge_index
-            faces.append((a, b, c, d))
+            faces.append((a, d, c, b))
 
     mesh = bpy.data.meshes.new(name + " precision mesh")
     mesh.from_pydata(vertices, [], faces)
