@@ -295,8 +295,8 @@ def build_scene(output_dir):
     scene.display.shading.cavity_valley_factor = 0.8
     scene.display.shading.show_shadows = True
     scene.display.shading.color_type = "MATERIAL"
-    scene.render.resolution_x = 960
-    scene.render.resolution_y = 720
+    scene.render.resolution_x = 1280
+    scene.render.resolution_y = 960
     scene.render.resolution_percentage = 100
     scene.render.image_settings.file_format = "PNG"
     scene.render.film_transparent = False
@@ -322,7 +322,7 @@ def build_scene(output_dir):
     camera = bpy.context.object
     camera.name = "Preview camera"
     camera.data.type = "ORTHO"
-    camera.data.ortho_scale = 5.8
+    camera.data.ortho_scale = 7.0
     point_camera(camera, (0, 0, 1.3))
     scene.camera = camera
 
