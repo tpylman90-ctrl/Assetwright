@@ -122,6 +122,27 @@ Improve in stages:
 
 To learn hidden geometry, gather supervision for unseen sides. When a user has only one reference image, mark unseen geometry as an inferred design choice. Use user edits, extra views, and accepted/rejected turntable views to teach the system what belongs on the rear and sides. Single-view reconstruction is inherently ambiguous; more complete views and corrections provide stronger evidence.
 
+## ChatGPT training bridge
+
+Expose the run-review workflow through a private MCP server backed by Assetwright's service. Connect that server to ChatGPT as a custom MCP app. This lets ChatGPT inspect saved runs and return structured corrections without placing a model-provider key or unrestricted Blender shell inside the Android app.
+
+Initial MCP tools:
+
+| Tool | Access | Purpose |
+| --- | --- | --- |
+| `list_generation_runs` | Read | Find recent runs by status, asset family, or profile |
+| `get_generation_review` | Read | Return prompt, asset brief, generator version, mesh metrics, and turntable images |
+| `propose_geometry_patch` | Write, approval required | Save a constrained JSON patch for an existing asset recipe |
+| `run_blender_revision` | Write, user confirmation required | Queue a revision using an allowlisted Blender generator and a patch |
+| `record_training_feedback` | Write, user confirmation required | Save accepted, edited, or rejected labels and before/after outputs |
+| `queue_training_candidate` | Write, explicit confirmation required | Start an offline candidate training/evaluation job after the dataset gate is met |
+
+The assistant should inspect the turntable and mesh report, propose changes to named geometry parameters, and explain the expected effect. It must not execute arbitrary Python from prompts, images, or generated scripts. Blender runs in a restricted worker with allowlisted generators, time and resource limits, and no access to signing secrets.
+
+Keep reads available for review. Require confirmation before queuing a Blender revision or changing the training dataset. Candidate training stays offline until it passes the held-out comparison; promoting a candidate to production remains a separate user-approved action.
+
+Connect ChatGPT to the MCP server over authenticated HTTPS or a private Secure MCP Tunnel. Install and configure the custom MCP app from ChatGPT web; the server must be reachable through one of those supported paths. Keep authentication and dataset-retention choices explicit. Do not expose the server publicly without authentication.
+
 ## Service boundaries
 
 - One generation worker processes a single model job at a time on the selected backend.
