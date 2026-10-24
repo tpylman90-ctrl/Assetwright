@@ -1,0 +1,40 @@
+name: Blender asset demo
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "tools/blender/**"
+      - ".github/workflows/blender.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build-demo:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes blender
+          blender --version
+
+      - name: Build the sample game asset
+        run: |
+          blender --background --factory-startup \
+            --python tools/blender/generate_cargo_drone.py \
+            -- --output-dir generated
+
+      - name: Upload GLB and preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-blender-demo
+          path: generated/
+          if-no-files-found: error
+          retention-days: 14
