@@ -22,7 +22,7 @@ jobs:
       - name: Install Blender
         run: |
           sudo apt-get update
-          sudo apt-get install --yes blender libegl1 libgl1
+          sudo apt-get install --yes blender libegl1 libgl1 python3-numpy
           blender --version
 
       - name: Build the sample game asset
@@ -30,6 +30,11 @@ jobs:
           blender --background --factory-startup \
             --python tools/blender/generate_cargo_drone.py \
             -- --output-dir generated
+
+      - name: Verify generated files
+        run: |
+          test -s generated/cargo_drone.glb
+          test -s generated/cargo_drone_preview.png
 
       - name: Upload GLB and preview
         uses: actions/upload-artifact@v4
