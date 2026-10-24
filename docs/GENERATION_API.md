@@ -98,6 +98,30 @@ The API profile is a target, not a promise from the generator. The service must 
 
 If the provider exceeds the profile budget, mark the asset as over budget and pass it through a mesh-reduction stage before presenting it as game-ready. Do not silently claim a mesh meets its profile based only on the generation request.
 
+## Learning loop
+
+Capture a learning record after every generation, but do not change the production generator from one unreviewed sample. A single thumbs-up or an unedited export says little about hidden geometry; useful learning data includes a corrected asset or a clear comparison against the result.
+
+For each job, save:
+
+- The prompt, user-provided reference image(s), selected game profile, and any requested views.
+- The structured asset brief and Blender generator/template version used.
+- The editable geometry parameters and the exported GLB.
+- Turntable renders from consistent front, side, rear, and top views.
+- Mesh statistics and any validation failures.
+- User feedback: accepted, edited, or rejected; which parts were wrong; and the actual parameter or geometry changes made.
+
+Make feedback easy to give in the app. Offer a short reason list (silhouette, proportions, missing parts, hidden-side layout, materials, or detail) and let users adjust the relevant asset parameters. Save the before/after pair so the correction can be replayed and reviewed.
+
+Improve in stages:
+
+1. After each run, add its record to a versioned dataset, with the user's permission to retain the images and model for improvement.
+2. Initially improve deterministic Blender templates and prompt-to-brief rules from these corrections. This gives a fast, inspectable learning loop without needing to train a large model.
+3. Once the dataset contains enough reviewed examples, train or fine-tune the component that predicts asset briefs or geometry parameters. Keep a held-out validation set and compare each candidate against the current version.
+4. Promote only candidates that improve measured geometry and user acceptance. Version every generator and model, retain rollback ability, and keep training asynchronous to asset generation.
+
+To learn hidden geometry, gather supervision for unseen sides. When a user has only one reference image, mark unseen geometry as an inferred design choice. Use user edits, extra views, and accepted/rejected turntable views to teach the system what belongs on the rear and sides. Single-view reconstruction is inherently ambiguous; more complete views and corrections provide stronger evidence.
+
 ## Service boundaries
 
 - One generation worker processes a single model job at a time on the selected backend.
