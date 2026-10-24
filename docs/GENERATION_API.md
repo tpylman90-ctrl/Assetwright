@@ -1,12 +1,18 @@
 # Generation service contract
 
-## First provider adapter
+## First generation engine
 
-Use a server-side adapter around the Tripo OpenAPI for the first end-to-end prototype. The Android app must call Assetwright's service, never Tripo directly; provider credentials must remain on the server. Tripo tasks are asynchronous, so the Assetwright service owns submission, status polling, and immediate result download.
+Use open model weights on a GPU worker instead of a per-generation API. The recommended first engine is Microsoft's TRELLIS 1.0: it supports text and image conditioning, produces meshes that can be exported as GLB, and its models and most of its code use the MIT license. The official project recommends image conditioning for better results and notes that its text-conditioned models are less creative and detailed. Start by sending user reference images directly to the image model; for prompt-only requests, use the text model first and compare it against a prompt-to-image-then-3D flow.
 
-The adapter should start with Tripo H3. Its API supports text-to-model and image-to-model inputs, standard and detailed quality controls, and a smart low-poly option. Keep provider selection behind an interface so a self-hosted model can replace it later without changing the Android API.
+TRELLIS requires a Linux/NVIDIA setup with at least 16 GB of GPU memory. Running one job at a time controls concurrency and peak demand, but does not lower the model's per-job VRAM requirement. Keep the provider boundary so the model can be replaced after real game-asset quality tests.
 
-Tripo's API is prepaid and generation consumes credits. Do not enable live generation until a server-side API key is configured and the app can show the expected credit cost before submission. Never submit test jobs from CI.
+For an especially small image-to-3D prototype, TripoSR is an alternative: the official project lists MIT licensing and about 6 GB VRAM for one image, but it is image-only and should be treated as a draft-quality baseline.
+
+## Compute plan
+
+Run the worker on an on-demand GPU host that scales to zero, with a single worker and a durable queue. This removes per-asset credit purchases and idle GPU charges, while still billing for compute used during model loading and generation. Set a monthly spend limit at the host, cap each request's runtime, and keep maximum worker concurrency at one for the prototype. Modal currently lists $30/month in included compute on its Starter plan and bills GPU, CPU, and memory by usage; the actual bill depends on the full runtime and selected hardware.
+
+The app calls Assetwright's service only. Model weights run on the GPU host; no provider generation API key is needed. Store job state and outputs on the service side, and never submit live generation jobs from CI.
 
 ## Android-to-service API
 
@@ -92,7 +98,7 @@ If the provider exceeds the profile budget, mark the asset as over budget and pa
 - Enforce per-account active-job limits and request-size limits on the server.
 - Keep provider keys, authentication tokens, and provider task IDs on the server.
 - Store the final GLB under Assetwright control; do not expose short-lived provider URLs to the app.
-- Record provider-reported credits with the job so a future confirmation screen can show cost before submission.
+- Record model name, profile, and GPU worker time per job; enforce a monthly spend limit at the hosting layer.
 - Validate GLB structure and report actual mesh statistics before allowing export.
 
 ## Provider references
@@ -101,3 +107,9 @@ If the provider exceeds the profile budget, mark the asset as over budget and pa
 - [Tripo H3 text-to-model controls](https://docs.tripo3d.ai/model-generation/text-to-model-v3-0-v3-1.html)
 - [Tripo H3 image-to-model controls](https://docs.tripo3d.ai/model-generation/image-to-model-v3-0-v3-1.html)
 - [Tripo API pricing](https://docs.tripo3d.ai/get-started/pricing.html)
+
+## Model and hosting references
+
+- [Microsoft TRELLIS project](https://github.com/microsoft/TRELLIS)
+- [TripoSR project](https://github.com/VAST-AI-Research/TripoSR)
+- [Modal GPU pricing and included compute](https://modal.com/pricing)
