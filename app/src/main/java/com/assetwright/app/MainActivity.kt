@@ -31,6 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -69,7 +70,7 @@ private fun AssetwrightScreen() {
     var prompt by remember { mutableStateOf("") }
     var selectedImage by remember { mutableStateOf<Uri?>(null) }
     var selectedQuality by remember { mutableStateOf("Mobile") }
-    var status by remember { mutableStateOf("Cloud generation will be connected in the next setup pass.") }
+    var status by remember { mutableStateOf("Cloud generation is not connected yet. Add a prompt or reference image to prepare a request.") }
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -144,13 +145,29 @@ private fun AssetwrightScreen() {
                             )
                         }
                     }
-                    OutlinedButton(
-                        onClick = { imagePicker.launch("image/*") },
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = TextMain)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text(if (selectedImage == null) "＋  Add reference image" else "✓  Reference image selected")
+                        OutlinedButton(
+                            onClick = { imagePicker.launch("image/*") },
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = TextMain)
+                        ) {
+                            Text(if (selectedImage == null) "＋  Add reference image" else "✓  Change reference image")
+                        }
+                        if (selectedImage != null) {
+                            TextButton(onClick = { selectedImage = null }) {
+                                Text("Remove", color = TextMuted)
+                            }
+                        }
                     }
+                    Text(
+                        "${prompt.length}/1000 characters",
+                        modifier = Modifier.align(Alignment.End),
+                        color = TextMuted,
+                        fontSize = 11.sp
+                    )
                 }
             }
 
@@ -191,7 +208,14 @@ private fun AssetwrightScreen() {
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Button(
-                        onClick = { status = "The app shell is ready. Connecting the cloud model service is the next step." },
+                        onClick = {
+                            val inputType = when {
+                                prompt.isNotBlank() && selectedImage != null -> "text and reference image"
+                                selectedImage != null -> "reference image"
+                                else -> "text prompt"
+                            }
+                            status = "Request prepared for the $selectedQuality target using $inputType. Cloud generation is not connected yet."
+                        },
                         enabled = prompt.isNotBlank() || selectedImage != null,
                         modifier = Modifier.fillMaxWidth().height(54.dp),
                         shape = RoundedCornerShape(16.dp),
