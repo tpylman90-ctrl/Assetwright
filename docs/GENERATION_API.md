@@ -19,13 +19,13 @@ Blender is the geometry and asset-processing engine, not an image-to-3D AI model
 
 During detailed authoring, a private workbench repo runs an allowlisted Blender job on the creator's Windows PC through a self-hosted GitHub Actions runner. Blender can use the local hardware for higher-detail modeling and previews. Keep one job active at a time, keep trial outputs out of Git, retain review artifacts for three days, and cap each run at 250 MiB. Keep only selected assets long term. See [Private Blender workbench](PRIVATE_BLENDER_WORKBENCH.md).
 
-The public repo's hosted Ubuntu Blender workflow remains a small reproducible CI demo. The Android app is not connected to the local runner. The provider API key field and paid 3D-provider adapter are not part of this plan.
+The public repo's hosted Ubuntu Blender workflow remains a small reproducible CI demo. The Android app is not connected to the local runner. The current plan uses Assetwright's own Blender pipeline and does not include a paid 3D-generation API.
 
 ## Future Android-to-service API
 
 These endpoints describe a later app-service integration. The current Android app does not call the private workbench directly; Blender runs are started through GitHub Actions.
 
-When a hosted service is added, endpoints will be versioned under `/v1` and require authenticated requests over HTTPS. The provider API key is not an Android build secret and must never be shipped in the APK.
+When a hosted service is added, endpoints will be versioned under `/v1` and require authenticated requests over HTTPS. Service credentials must never be shipped in the APK.
 
 ### Create a generation
 
@@ -70,7 +70,7 @@ Example while running:
 }
 ```
 
-On success, return a service-owned, authenticated download URL rather than the provider's temporary URL:
+On success, return a service-owned, authenticated download URL:
 
 ```json
 {
@@ -98,7 +98,7 @@ The API profile is a target, not a promise from the generator. The service must 
 | Balanced | Up to 80,000 faces; 2K texture |
 | High detail | Up to 150,000 faces; up to 4K texture |
 
-If the provider exceeds the profile budget, mark the asset as over budget and pass it through a mesh-reduction stage before presenting it as game-ready. Do not silently claim a mesh meets its profile based only on the generation request.
+If the generated mesh exceeds the profile budget, mark the asset as over budget and pass it through a mesh-reduction stage before presenting it as game-ready. Do not silently claim a mesh meets its profile based only on the generation request.
 
 ## Learning loop
 
@@ -135,14 +135,12 @@ Initially, improve deterministic Blender templates and prompt-to-brief rules. Tr
 ## Service boundaries
 
 - One generation worker processes a single model job at a time on the selected backend.
-- Persist job state outside process memory so a restart does not lose track of running provider jobs.
+- Persist job state outside process memory so a restart does not lose track of running jobs.
 - Enforce per-account active-job limits and request-size limits on the server.
 - Keep authentication tokens and job state on the server.
-- Store the final GLB under Assetwright control; do not expose short-lived provider URLs to the app.
+- Store the final GLB under Assetwright control and provide an authenticated download path to the app.
 - Record generator version, profile, and worker time per job; enforce per-run and monthly compute limits.
 - Validate GLB structure and report actual mesh statistics before allowing export.
-
-## Provider references
 
 ## Blender references
 
