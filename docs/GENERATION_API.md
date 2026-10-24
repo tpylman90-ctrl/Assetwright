@@ -1,18 +1,25 @@
 # Generation service contract
 
-## First generation engine
+## Assetwright-owned generation workflow
 
-Use open model weights on a GPU worker instead of a per-generation API. The recommended first engine is Microsoft's TRELLIS 1.0: it supports text and image conditioning, produces meshes that can be exported as GLB, and its models and most of its code use the MIT license. The official project recommends image conditioning for better results and notes that its text-conditioned models are less creative and detailed. Start by sending user reference images directly to the image model; for prompt-only requests, use the text model first and compare it against a prompt-to-image-then-3D flow.
+Assetwright should turn a prompt and optional reference image into a game-ready mesh with its own Blender-based pipeline. Do not send generation jobs to a paid 3D-model API.
 
-TRELLIS requires a Linux/NVIDIA setup with at least 16 GB of GPU memory. Running one job at a time controls concurrency and peak demand, but does not lower the model's per-job VRAM requirement. Keep the provider boundary so the model can be replaced after real game-asset quality tests.
+The initial workflow is:
 
-For an especially small image-to-3D prototype, TripoSR is an alternative: the official project lists MIT licensing and about 6 GB VRAM for one image, but it is image-only and should be treated as a draft-quality baseline.
+1. Convert the prompt and reference image into a structured asset brief: asset family, silhouette, dimensions, materials, and optional details.
+2. Use Blender Python generators for a small set of supported game-asset families. Build geometry from editable parameters and modular parts, not from a one-image depth extrusion.
+3. Apply materials and image-derived details, then create UVs, a mobile-friendly mesh budget, collision geometry, and optional LODs.
+4. Validate and export a GLB for preview and game-engine use.
+
+This approach is intentionally scoped. A single image does not reveal hidden sides or exact geometry, so the first release should prioritize asset families with controllable geometry (for example, sci-fi crates, barrels, small drones, and weapon props). More families can be added as their Blender generators become reliable. The reference image guides proportions and surface treatment; it is not treated as complete 3D data.
+
+Blender is the geometry and asset-processing engine, not an image-to-3D AI model. During development, concept images can be created through our existing image workflow. For a standalone app, users can start with an uploaded reference; prompt-only concept-image generation would require an image model that we control or host. Keep that choice separate from mesh generation.
 
 ## Compute plan
 
-Run the worker on an on-demand GPU host that scales to zero, with a single worker and a durable queue. This removes per-asset credit purchases and idle GPU charges, while still billing for compute used during model loading and generation. Set a monthly spend limit at the host, cap each request's runtime, and keep maximum worker concurrency at one for the prototype. Modal currently lists $30/month in included compute on its Starter plan and bills GPU, CPU, and memory by usage; the actual bill depends on the full runtime and selected hardware.
+Run one Blender job at a time. Geometry generation, cleanup, and GLB export can run in a CPU worker; GPU compute is only needed if we later host an image-generation model. This avoids paying a per-asset 3D API fee and keeps the mesh pipeline under our control. Keep jobs queued and bounded, and store their outputs as Assetwright-owned files.
 
-The app calls Assetwright's service only. Model weights run on the GPU host; no provider generation API key is needed. Store job state and outputs on the service side, and never submit live generation jobs from CI.
+The current Android app calls Assetwright's versioned service only. The provider API key field and paid 3D-provider adapter are not part of this plan. Never submit live generation jobs from CI.
 
 ## Android-to-service API
 
@@ -108,8 +115,7 @@ If the provider exceeds the profile budget, mark the asset as over budget and pa
 - [Tripo H3 image-to-model controls](https://docs.tripo3d.ai/model-generation/image-to-model-v3-0-v3-1.html)
 - [Tripo API pricing](https://docs.tripo3d.ai/get-started/pricing.html)
 
-## Model and hosting references
+## Blender references
 
-- [Microsoft TRELLIS project](https://github.com/microsoft/TRELLIS)
-- [TripoSR project](https://github.com/VAST-AI-Research/TripoSR)
-- [Modal GPU pricing and included compute](https://modal.com/pricing)
+- [Blender Python API](https://docs.blender.org/api/current/)
+- [Blender background mode](https://docs.blender.org/manual/en/latest/advanced/command_line/arguments.html#background-mode)
