@@ -215,12 +215,12 @@ def build_scene(output_dir):
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.object.delete(use_global=False)
 
-    alloy = material("Worn graphite alloy", (0.22, 0.29, 0.33), 0.72, 0.34)
-    edge = material("Brushed titanium", (0.56, 0.66, 0.68), 0.78, 0.28)
+    alloy = material("Worn graphite alloy", (0.30, 0.32, 0.34), 0.72, 0.34)
+    edge = material("Brushed titanium", (0.60, 0.63, 0.65), 0.78, 0.28)
     dark = material("Engine ceramic", (0.065, 0.095, 0.11), 0.45, 0.42)
     teal = material("Teal status light", (0.02, 0.82, 0.67), 0.18, 0.22, 2.0)
     orange = material("Safety orange", (1.0, 0.34, 0.075), 0.25, 0.38)
-    panel = material("Deep teal armor panels", (0.075, 0.19, 0.21), 0.62, 0.31)
+    panel = material("Deep teal armor panels", (0.12, 0.16, 0.18), 0.62, 0.31)
     warm_metal = material("Warm titanium hardware", (0.48, 0.29, 0.14), 0.74, 0.3)
 
     # Tapered, chamfered cargo shell: nose points toward -Y.
@@ -358,7 +358,7 @@ def build_scene(output_dir):
             lamp.data.materials.append(teal)
 
     # Neutral studio floor and soft lighting are for the preview render only.
-    floor_mat = material("Preview floor", (0.035, 0.055, 0.07), 0.15, 0.82)
+    floor_mat = material("Preview floor", (0.38, 0.39, 0.40), 0.08, 0.92)
     bevelled_box("Preview floor", (0, 0, 0.23), (200, 200, 0.2), floor_mat, 0)
 
     scene = bpy.context.scene
@@ -366,9 +366,14 @@ def build_scene(output_dir):
     scene.render.engine = "BLENDER_WORKBENCH"
     scene.display.shading.light = "STUDIO"
     scene.display.shading.show_cavity = True
-    scene.display.shading.cavity_type = "WORLD"
+    scene.display.shading.cavity_type = "BOTH"
     scene.display.shading.cavity_ridge_factor = 1.25
-    scene.display.shading.cavity_valley_factor = 0.8
+    scene.display.shading.cavity_valley_factor = 1.0
+    scene.display.shading.background_type = "VIEWPORT"
+    scene.display.shading.background_color = (0.38, 0.39, 0.40)
+    scene.display.shading.studiolight_intensity = 1.25
+    scene.display.shading.shadow_intensity = 0.35
+    scene.display.shading.show_specular_highlight = True
     scene.display.shading.show_shadows = True
     scene.display.shading.color_type = "TEXTURE"
     scene.render.resolution_x = 1280
@@ -405,9 +410,58 @@ def build_scene(output_dir):
     os.makedirs(output_dir, exist_ok=True)
     preview_path = os.path.abspath(os.path.join(output_dir, "cargo_drone_preview.png"))
     glb_path = os.path.abspath(os.path.join(output_dir, "cargo_drone.glb"))
-    scene.render.filepath = preview_path
-    unwrap_model_meshes([obj for obj in scene.objects if obj.type == "MESH" and obj.name != "Preview floor"])
-    bpy.ops.render.render(write_still=True)
+    os.makedirs(output_dir, exist_ok=True)
+    unwrap_model_meshes([obj for obj in scene.objects if obj.type == "MESH"])
+
+    # Match the reference's useful front, side, rear, and top inspection views.
+    tile_width, tile_height = 768, 512
+    scene.render.resolution_x = tile_width
+    scene.render.resolution_y = tile_height
+    scene.render.resolution_percentage = 100
+    view_specs = [
+        ("front", (0, -10, 2.7), (0, 0, 1.25)),
+        ("side", (10, 0, 2.7), (0, 0, 1.25)),
+        ("rear", (0, 10, 2.7), (0, 0, 1.25)),
+        ("top", (0, 0, 10), (0, 0, 1.25)),
+    ]
+    view_paths = []
+    view_images = []
+    for view_name, location, target in view_specs:
+        camera.location = location
+        camera.data.ortho_scale = 4.8
+        point_camera(camera, target)
+        scene.camera = camera
+        view_path = os.path.abspath(os.path.join(output_dir, "cargo_drone_" + view_name + ".png"))
+        scene.render.filepath = view_path
+        bpy.ops.render.render(write_still=True)
+        view_paths.append(view_path)
+        view_images.append(bpy.data.images.load(view_path, check_existing=False))
+
+    sheet = bpy.data.images.new(
+        "Cargo drone four-view inspection sheet",
+        width=tile_width * 2,
+        height=tile_height * 2,
+        alpha=False
+    )
+    sheet_pixels = array("f", [0.0]) * (tile_width * tile_height * 4 * 4)
+    placements = ((0, tile_height), (tile_width, tile_height), (0, 0), (tile_width, 0))
+    for source_image, (tile_x, tile_y) in zip(view_images, placements):
+        source_pixels = array("f", [0.0]) * (tile_width * tile_height * 4)
+        source_image.pixels.foreach_get(source_pixels)
+        for row in range(tile_height):
+            src_start = row * tile_width * 4
+            dst_start = ((tile_y + row) * tile_width * 2 + tile_x) * 4
+            sheet_pixels[dst_start:dst_start + tile_width * 4] = source_pixels[src_start:src_start + tile_width * 4]
+    sheet.pixels.foreach_set(sheet_pixels)
+    sheet.filepath_raw = preview_path
+    sheet.file_format = "PNG"
+    sheet.save()
+    for source_image, view_path in zip(view_images, view_paths):
+        bpy.data.images.remove(source_image)
+        os.remove(view_path)
+    scene.render.resolution_x = tile_width * 2
+    scene.render.resolution_y = tile_height * 2
+    scene.render.resolution_percentage = 100
 
     # Keep only asset geometry in the exported GLB.
     bpy.ops.object.select_all(action="DESELECT")
