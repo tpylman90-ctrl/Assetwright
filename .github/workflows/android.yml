@@ -1,0 +1,72 @@
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build Android APKs
+    runs-on: ubuntu-latest
+    env:
+      ANDROID_KEYSTORE_BASE64: \${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      ANDROID_KEYSTORE_PASSWORD: \${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEY_PASSWORD: \${{ secrets.ANDROID_KEY_PASSWORD }}
+      ANDROID_KEY_ALIAS: \${{ secrets.ANDROID_KEY_ALIAS }}
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "9.8.2"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept Android SDK licenses
+        run: yes | sdkmanager --licenses
+
+      - name: Build debug APK
+        run: gradle :app:assembleDebug
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Decode upload key
+        if: \${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' }}
+        run: |
+          KEY_PATH="$RUNNER_TEMP/assetwright-upload.jks"
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$KEY_PATH"
+          chmod 600 "$KEY_PATH"
+          echo "ANDROID_KEYSTORE_PATH=$KEY_PATH" >> "$GITHUB_ENV"
+
+      - name: Build signed release APK
+        if: \${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' }}
+        run: gradle :app:assembleRelease
+
+      - name: Upload signed release APK
+        if: \${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-signed-release-apk
+          path: app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+          retention-days: 30
