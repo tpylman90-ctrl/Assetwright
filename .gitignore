@@ -11,3 +11,5 @@ local.properties
 *.keystore
 secrets.properties
 upload-key.*
+# Local Blender trial outputs (keep approved assets explicitly)
+/generated/local/
