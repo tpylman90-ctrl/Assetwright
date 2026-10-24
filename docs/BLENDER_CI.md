@@ -1,12 +1,12 @@
 # Blender asset build on GitHub
 
-This GitHub Actions workflow is a reproducible CI demo, not the main modeling workstation. It installs Blender on a temporary Linux runner, runs the procedural sample generator, and stores the GLB and preview as a workflow artifact. For higher-detail authoring on your PC and ChatGPT review through a private tunnel, see [Local Blender worker](LOCAL_BLENDER_BRIDGE.md). The Blender application binary is not committed to the repository.
+This GitHub Actions workflow is a reproducible CI demo, not the main modeling workstation. It installs Blender on a temporary Linux runner, runs the procedural sample generator, and stores the GLB and preview as a workflow artifact. For higher-detail authoring on your PC, see the [private Blender workbench](PRIVATE_BLENDER_WORKBENCH.md). The Blender application binary is not committed to the repository.
 
 ## Run it
 
 Open **Actions → Blender asset demo → Run workflow** on the `main` branch. The workflow also runs when files under `tools/blender/` or its own workflow file change.
 
-A successful run publishes the `assetwright-blender-demo` artifact for 14 days. It contains:
+A successful run publishes the `assetwright-blender-demo` artifact for 3 days. It contains:
 
 - `cargo_drone.glb`: the game prop mesh and materials, ready to inspect in a GLB viewer or import into Godot.
 - `cargo_drone_preview.png`: a studio render from Blender.
