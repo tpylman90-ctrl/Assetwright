@@ -22,7 +22,7 @@ jobs:
       - name: Install Blender
         run: |
           sudo apt-get update
-          sudo apt-get install --yes blender
+          sudo apt-get install --yes blender libegl1 libgl1
           blender --version
 
       - name: Build the sample game asset
