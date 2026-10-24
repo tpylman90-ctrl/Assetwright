@@ -15,7 +15,7 @@ Assetwright creates real-time game assets. It targets usable silhouettes, predic
 
 - Android UI and asset library live under app/.
 - The initial Android-to-service job contract is documented in [Generation API](GENERATION_API.md).
-- Cloud inference runs behind a server-side provider adapter. Tripo H3 is the first prototype candidate; the adapter boundary keeps self-hosted models available for a later cost and licensing review.
+- Cloud inference runs behind a server-side model adapter. The current prototype plan uses self-hosted TRELLIS weights on an on-demand GPU worker, with one model job active at a time and a monthly compute cap. See [Generation API](GENERATION_API.md).
 - Signing secrets belong in GitHub Actions secrets only; never commit keystores or credentials.
 
 The current starter build contains the creation screen and reference-image picker. It does not yet call a generation endpoint or display a generated mesh.
