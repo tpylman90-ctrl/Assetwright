@@ -86,17 +86,17 @@ On success, return a service-owned, authenticated download URL rather than the p
 }
 ```
 
-The service should download provider outputs as soon as the provider marks a task successful; Tripo result URLs are temporary. Keep generated assets available long enough for the user to preview and export them.
+The service should store generated assets only long enough for the user to preview and export them, then apply the retention policy selected for that service.
 
 ## Initial game-asset profiles
 
 The API profile is a target, not a promise from the generator. The service must inspect the generated mesh and report actual triangle and texture sizes.
 
-| Profile | Initial target | Provider behavior |
+| Profile | Initial target |
 | --- | --- | --- |
-| Mobile | Up to 20,000 faces; 1K texture | Request smart low-poly output |
-| Balanced | Up to 80,000 faces; 2K texture | Standard geometry and texture |
-| High detail | Up to 150,000 faces; up to 4K texture | Detailed geometry and texture |
+| Mobile | Up to 20,000 faces; 1K texture |
+| Balanced | Up to 80,000 faces; 2K texture |
+| High detail | Up to 150,000 faces; up to 4K texture |
 
 If the provider exceeds the profile budget, mark the asset as over budget and pass it through a mesh-reduction stage before presenting it as game-ready. Do not silently claim a mesh meets its profile based only on the generation request.
 
@@ -137,17 +137,12 @@ Initially, improve deterministic Blender templates and prompt-to-brief rules. Tr
 - One generation worker processes a single model job at a time on the selected backend.
 - Persist job state outside process memory so a restart does not lose track of running provider jobs.
 - Enforce per-account active-job limits and request-size limits on the server.
-- Keep provider keys, authentication tokens, and provider task IDs on the server.
+- Keep authentication tokens and job state on the server.
 - Store the final GLB under Assetwright control; do not expose short-lived provider URLs to the app.
-- Record model name, profile, and GPU worker time per job; enforce a monthly spend limit at the hosting layer.
+- Record generator version, profile, and worker time per job; enforce per-run and monthly compute limits.
 - Validate GLB structure and report actual mesh statistics before allowing export.
 
 ## Provider references
-
-- [Tripo API authentication and asynchronous task flow](https://docs.tripo3d.ai/get-started/quick-start.html)
-- [Tripo H3 text-to-model controls](https://docs.tripo3d.ai/model-generation/text-to-model-v3-0-v3-1.html)
-- [Tripo H3 image-to-model controls](https://docs.tripo3d.ai/model-generation/image-to-model-v3-0-v3-1.html)
-- [Tripo API pricing](https://docs.tripo3d.ai/get-started/pricing.html)
 
 ## Blender references
 
