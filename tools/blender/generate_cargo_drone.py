@@ -48,11 +48,11 @@ def scratched_albedo(name, color, size=512):
         broad = 0.96 + 0.018 * math.sin(y * 0.12)
         for x in range(size):
             idx = y * size + x
-            shade = broad + rng.uniform(-0.055, 0.045)
+            shade = broad + rng.uniform(-0.025, 0.025)
             if wear[idx] == 1:
-                shade *= 0.48
+                shade *= 0.78
             elif wear[idx] == 2:
-                shade *= 1.30
+                shade *= 1.12
             pixels.extend((
                 min(1.0, max(0.0, color[0] * shade)),
                 min(1.0, max(0.0, color[1] * shade)),
@@ -215,8 +215,8 @@ def build_scene(output_dir):
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.object.delete(use_global=False)
 
-    alloy = material("Worn graphite alloy", (0.30, 0.32, 0.34), 0.72, 0.34)
-    edge = material("Brushed titanium", (0.60, 0.63, 0.65), 0.78, 0.28)
+    alloy = material("Worn graphite alloy", (0.38, 0.40, 0.42), 0.72, 0.36)
+    edge = material("Brushed titanium", (0.54, 0.57, 0.59), 0.76, 0.32)
     dark = material("Engine ceramic", (0.065, 0.095, 0.11), 0.45, 0.42)
     teal = material("Teal status light", (0.02, 0.82, 0.67), 0.18, 0.22, 2.0)
     orange = material("Safety orange", (1.0, 0.34, 0.075), 0.25, 0.38)
@@ -399,7 +399,7 @@ def build_scene(output_dir):
             lamp.data.materials.append(teal)
 
     # Neutral studio floor and soft lighting are for the preview render only.
-    floor_mat = material("Preview floor", (0.38, 0.39, 0.40), 0.08, 0.92)
+    floor_mat = material("Preview floor", (0.52, 0.53, 0.54), 0.04, 0.92)
     bevelled_box("Preview floor", (0, 0, 0.335), (200, 200, 0.2), floor_mat, 0)
 
     scene = bpy.context.scene
@@ -415,8 +415,8 @@ def build_scene(output_dir):
     scene.world.use_nodes = True
     world_background = scene.world.node_tree.nodes.get("Background")
     if world_background is not None:
-        world_background.inputs["Color"].default_value = (0.42, 0.45, 0.50, 1.0)
-        world_background.inputs["Strength"].default_value = 0.35
+        world_background.inputs["Color"].default_value = (0.58, 0.60, 0.62, 1.0)
+        world_background.inputs["Strength"].default_value = 0.55
     scene.render.image_settings.file_format = "PNG"
     scene.view_settings.view_transform = "AgX"
     scene.display.shading.light = "STUDIO"
@@ -441,7 +441,7 @@ def build_scene(output_dir):
     bpy.ops.object.light_add(type="AREA", location=(3.8, -4.2, 6.5))
     key = bpy.context.object
     key.name = "Large soft key"
-    key.data.energy = 520
+    key.data.energy = 650
     key.data.shape = "DISK"
     key.data.size = 5.0
     point_camera(key, (0, 0, 1.4))
@@ -449,8 +449,8 @@ def build_scene(output_dir):
     bpy.ops.object.light_add(type="AREA", location=(-4.0, 1.2, 3.8))
     fill = bpy.context.object
     fill.name = "Cool rim light"
-    fill.data.energy = 360
-    fill.data.color = (0.25, 0.72, 1.0)
+    fill.data.energy = 220
+    fill.data.color = (0.78, 0.82, 0.86)
     fill.data.size = 3.5
     point_camera(fill, (0, 0, 1.4))
 
