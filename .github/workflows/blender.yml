@@ -29,16 +29,16 @@ jobs:
           sudo apt-get install --yes blender libegl1 libgl1 python3-numpy
           blender --version
 
-      - name: Build the first hovercraft asset
+      - name: Build the sample game asset
         run: |
           blender --background --factory-startup \
-            --python tools/blender/generate_hovercraft_01.py \
+            --python tools/blender/generate_cargo_drone.py \
             -- --output-dir generated
 
       - name: Verify generated files
         run: |
-          test -s generated/hovercraft_01.glb
-          test -s generated/hovercraft_01_preview.png
+          test -s generated/cargo_drone.glb
+          test -s generated/cargo_drone_preview.png
 
       - name: Upload GLB and preview
         uses: actions/upload-artifact@v4
