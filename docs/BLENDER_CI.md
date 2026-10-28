@@ -18,7 +18,7 @@ Install Blender, then from the repository root run:
 
 ```sh
 blender --background --factory-startup \
-  --python tools/blender/generate_cargo_drone.py \
+  --python tools/blender/generate_hovercraft_01.py \
   -- --output-dir generated
 ```
 
