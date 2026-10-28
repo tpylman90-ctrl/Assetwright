@@ -8,8 +8,9 @@ Open **Actions → Blender asset demo → Run workflow** on the `main` branch. T
 
 A successful run publishes the `assetwright-blender-demo` artifact for 3 days. It contains:
 
-- `cargo_drone.glb`: the game prop mesh and materials, ready to inspect in a GLB viewer or import into Godot.
-- `cargo_drone_preview.png`: a studio render from Blender.
+- `hovercraft_01.glb`: the first standalone hovercraft mesh and materials, ready to inspect in a GLB viewer or import into Godot.
+- `hovercraft_01_preview.png`: a three-view studio sheet of the front, side, and rear.
+- `hovercraft_01_front.png`, `hovercraft_01_side.png`, and `hovercraft_01_rear.png`: individual inspection renders.
 
 ## Run locally
 
@@ -23,6 +24,6 @@ blender --background --factory-startup \
 
 ## What this proves
 
-The sample generator creates a single low-poly style game prop from editable Blender geometry and exports it without a paid model-generation API. The first pass is a procedural prototype, not an AI image-to-3D model. It gives us a working Blender job and export target so we can add prompt parsing, asset recipes, review images, and per-run learning records in small steps.
+The sample generator creates the first hovercraft from editable Blender geometry and exports it without a paid model-generation API. The first pass is a procedural prototype, not an AI image-to-3D model. It gives us a working Blender job and export target so we can add prompt parsing, asset recipes, review images, and per-run learning records in small steps.
 
 The GitHub runner is temporary. Artifacts are for review and download; this workflow does not provide a permanent generation API for the Android app. A persistent service can be added later when the generation path and operating cost are understood.
