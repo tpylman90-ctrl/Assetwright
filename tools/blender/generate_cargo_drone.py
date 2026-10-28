@@ -1,4 +1,4 @@
-"""Build the first standalone game-ready hovercraft from the three-view reference.
+"""Build a small, game-ready sci-fi cargo drone demo with Blender primitives.
 
 Run:
   blender --background --factory-startup --python tools/blender/generate_cargo_drone.py -- --output-dir generated
@@ -48,11 +48,11 @@ def scratched_albedo(name, color, size=512):
         broad = 0.96 + 0.018 * math.sin(y * 0.12)
         for x in range(size):
             idx = y * size + x
-            shade = broad + rng.uniform(-0.025, 0.025)
+            shade = broad + rng.uniform(-0.055, 0.045)
             if wear[idx] == 1:
-                shade *= 0.78
+                shade *= 0.48
             elif wear[idx] == 2:
-                shade *= 1.12
+                shade *= 1.30
             pixels.extend((
                 min(1.0, max(0.0, color[0] * shade)),
                 min(1.0, max(0.0, color[1] * shade)),
@@ -215,8 +215,8 @@ def build_scene(output_dir):
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.object.delete(use_global=False)
 
-    alloy = material("Worn graphite alloy", (0.38, 0.40, 0.42), 0.72, 0.36)
-    edge = material("Brushed titanium", (0.54, 0.57, 0.59), 0.76, 0.32)
+    alloy = material("Worn graphite alloy", (0.30, 0.32, 0.34), 0.72, 0.34)
+    edge = material("Brushed titanium", (0.60, 0.63, 0.65), 0.78, 0.28)
     dark = material("Engine ceramic", (0.065, 0.095, 0.11), 0.45, 0.42)
     teal = material("Teal status light", (0.02, 0.82, 0.67), 0.18, 0.22, 2.0)
     orange = material("Safety orange", (1.0, 0.34, 0.075), 0.25, 0.38)
@@ -313,38 +313,6 @@ def build_scene(output_dir):
             fastener("Nose plate bolt", (x, -1.31, z), warm_metal, rotation=(1.5708, 0, 0), radius=0.021, depth=0.015)
 
 
-    # Broad layered flank armor gives the craft the large engineered side
-    # panels visible in the reference's profile view.
-    for side, label in ((-1, "Port"), (1, "Starboard")):
-        bevelled_box(label + " flank panel gasket", (side * 0.824, 0.12, 1.69), (0.040, 1.10, 0.47), dark, 0.055)
-        bevelled_box(label + " main flank armor", (side * 0.850, 0.12, 1.69), (0.038, 0.99, 0.39), alloy, 0.045)
-        bevelled_box(label + " recessed flank inset", (side * 0.873, 0.12, 1.69), (0.012, 0.72, 0.23), panel, 0.022)
-        # Fine seams and hardware frame the broad plate like removable armor.
-        for y in (-0.405, 0.645):
-            bevelled_box(label + " flank edge seam", (side * 0.875, y, 1.69), (0.014, 0.025, 0.37), edge, 0.006)
-        for y in (-0.34, -0.10, 0.14, 0.38, 0.58):
-            for z in (1.53, 1.85):
-                fastener(label + " flank captive bolt", (side * 0.884, y, z), warm_metal, rotation=(0, 1.5708, 0), radius=0.018, depth=0.012)
-        # A pair of recessed service slots and their raised protective lips.
-        for y in (-0.18, 0.38):
-            bevelled_box(label + " flank service slot", (side * 0.883, y, 1.69), (0.018, 0.16, 0.055), dark, 0.012)
-            bevelled_box(label + " slot inner rail", (side * 0.895, y, 1.69), (0.012, 0.11, 0.014), edge, 0.004)
-
-    # Rear bulkhead panel, tie-down hinges and vertical cooling slots.
-    bevelled_box("Rear bulkhead gasket", (0, 1.055, 1.65), (1.12, 0.045, 0.49), dark, 0.055)
-    bevelled_box("Rear bulkhead armor", (0, 1.087, 1.65), (0.98, 0.035, 0.38), alloy, 0.042)
-    bevelled_box("Rear service hatch", (0, 1.108, 1.65), (0.56, 0.020, 0.25), panel, 0.026)
-    for x in (-0.40, 0.40):
-        for z in (1.51, 1.79):
-            fastener("Rear bulkhead bolt", (x, 1.112, z), warm_metal, rotation=(1.5708, 0, 0), radius=0.020, depth=0.014)
-    for x in (-0.67, 0.67):
-        bevelled_box("Rear cooling vent pocket", (x, 1.09, 1.66), (0.14, 0.018, 0.31), dark, 0.018)
-        for z in (1.56, 1.62, 1.68, 1.74):
-            bevelled_box("Rear cooling vent slat", (x, 1.106, z), (0.10, 0.012, 0.018), edge, 0.005)
-    for x in (-0.54, 0.54):
-        bevelled_box("Rear cyan marker bezel", (x, 1.095, 1.89), (0.08, 0.025, 0.12), dark, 0.016)
-        bevelled_box("Rear cyan marker", (x, 1.112, 1.89), (0.035, 0.012, 0.075), teal, 0.012)
-
     # Fine perimeter trim, locking dogs, and fasteners around the cargo hatch.
     for x in (-0.47, 0.47):
         bevelled_box("Hatch side rail", (x, 0.18, 2.09), (0.055, 1.07, 0.07), edge, 0.025)
@@ -399,7 +367,7 @@ def build_scene(output_dir):
             lamp.data.materials.append(teal)
 
     # Neutral studio floor and soft lighting are for the preview render only.
-    floor_mat = material("Preview floor", (0.52, 0.53, 0.54), 0.04, 0.92)
+    floor_mat = material("Preview floor", (0.38, 0.39, 0.40), 0.08, 0.92)
     bevelled_box("Preview floor", (0, 0, 0.335), (200, 200, 0.2), floor_mat, 0)
 
     scene = bpy.context.scene
@@ -415,8 +383,8 @@ def build_scene(output_dir):
     scene.world.use_nodes = True
     world_background = scene.world.node_tree.nodes.get("Background")
     if world_background is not None:
-        world_background.inputs["Color"].default_value = (0.58, 0.60, 0.62, 1.0)
-        world_background.inputs["Strength"].default_value = 0.55
+        world_background.inputs["Color"].default_value = (0.42, 0.45, 0.50, 1.0)
+        world_background.inputs["Strength"].default_value = 0.35
     scene.render.image_settings.file_format = "PNG"
     scene.view_settings.view_transform = "AgX"
     scene.display.shading.light = "STUDIO"
@@ -441,7 +409,7 @@ def build_scene(output_dir):
     bpy.ops.object.light_add(type="AREA", location=(3.8, -4.2, 6.5))
     key = bpy.context.object
     key.name = "Large soft key"
-    key.data.energy = 650
+    key.data.energy = 520
     key.data.shape = "DISK"
     key.data.size = 5.0
     point_camera(key, (0, 0, 1.4))
@@ -449,8 +417,8 @@ def build_scene(output_dir):
     bpy.ops.object.light_add(type="AREA", location=(-4.0, 1.2, 3.8))
     fill = bpy.context.object
     fill.name = "Cool rim light"
-    fill.data.energy = 220
-    fill.data.color = (0.78, 0.82, 0.86)
+    fill.data.energy = 360
+    fill.data.color = (0.25, 0.72, 1.0)
     fill.data.size = 3.5
     point_camera(fill, (0, 0, 1.4))
 
@@ -463,13 +431,12 @@ def build_scene(output_dir):
     scene.camera = camera
 
     os.makedirs(output_dir, exist_ok=True)
-    preview_path = os.path.abspath(os.path.join(output_dir, "hovercraft_01_preview.png"))
-    glb_path = os.path.abspath(os.path.join(output_dir, "hovercraft_01.glb"))
+    preview_path = os.path.abspath(os.path.join(output_dir, "cargo_drone_preview.png"))
+    glb_path = os.path.abspath(os.path.join(output_dir, "cargo_drone.glb"))
     os.makedirs(output_dir, exist_ok=True)
     unwrap_model_meshes([obj for obj in scene.objects if obj.type == "MESH"])
 
-    # The reference top row is three orthographic views of one craft.
-    # Render those views side by side so proportion changes are easy to compare.
+    # Match the reference's useful front, side, rear, and top inspection views.
     tile_width, tile_height = 768, 512
     scene.render.resolution_x = tile_width
     scene.render.resolution_y = tile_height
@@ -478,6 +445,7 @@ def build_scene(output_dir):
         ("front", (0, -10, 2.7), (0, 0, 1.25)),
         ("side", (10, 0, 2.7), (0, 0, 1.25)),
         ("rear", (0, 10, 2.7), (0, 0, 1.25)),
+        ("top", (0, 0, 10), (0, 0, 1.25)),
     ]
     view_paths = []
     view_images = []
@@ -486,7 +454,7 @@ def build_scene(output_dir):
         camera.data.ortho_scale = 4.8
         point_camera(camera, target)
         scene.camera = camera
-        view_path = os.path.abspath(os.path.join(output_dir, "hovercraft_01_" + view_name + ".png"))
+        view_path = os.path.abspath(os.path.join(output_dir, "cargo_drone_" + view_name + ".png"))
         scene.render.filepath = view_path
         try:
             bpy.ops.render.render(write_still=True)
@@ -511,18 +479,19 @@ def build_scene(output_dir):
         view_images.append(bpy.data.images.load(view_path, check_existing=False))
 
     sheet = bpy.data.images.new(
-        "Hovercraft 01 three-view inspection sheet",
-        width=tile_width * 3,
-        height=tile_height,
+        "Cargo drone four-view inspection sheet",
+        width=tile_width * 2,
+        height=tile_height * 2,
         alpha=False
     )
-    sheet_pixels = array("f", [0.0]) * (tile_width * tile_height * 3 * 4)
-    for tile_x, source_image in enumerate(view_images):
+    sheet_pixels = array("f", [0.0]) * (tile_width * tile_height * 4 * 4)
+    placements = ((0, tile_height), (tile_width, tile_height), (0, 0), (tile_width, 0))
+    for source_image, (tile_x, tile_y) in zip(view_images, placements):
         source_pixels = array("f", [0.0]) * (tile_width * tile_height * 4)
         source_image.pixels.foreach_get(source_pixels)
         for row in range(tile_height):
             src_start = row * tile_width * 4
-            dst_start = (row * tile_width * 3 + tile_x * tile_width) * 4
+            dst_start = ((tile_y + row) * tile_width * 2 + tile_x) * 4
             sheet_pixels[dst_start:dst_start + tile_width * 4] = source_pixels[src_start:src_start + tile_width * 4]
     sheet.pixels.foreach_set(sheet_pixels)
     sheet.filepath_raw = preview_path
@@ -531,8 +500,8 @@ def build_scene(output_dir):
     for source_image, view_path in zip(view_images, view_paths):
         bpy.data.images.remove(source_image)
         os.remove(view_path)
-    scene.render.resolution_x = tile_width * 3
-    scene.render.resolution_y = tile_height
+    scene.render.resolution_x = tile_width * 2
+    scene.render.resolution_y = tile_height * 2
     scene.render.resolution_percentage = 100
 
     # Keep only asset geometry in the exported GLB.
