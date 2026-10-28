@@ -313,6 +313,38 @@ def build_scene(output_dir):
             fastener("Nose plate bolt", (x, -1.31, z), warm_metal, rotation=(1.5708, 0, 0), radius=0.021, depth=0.015)
 
 
+    # Broad layered flank armor gives the craft the large engineered side
+    # panels visible in the reference's profile view.
+    for side, label in ((-1, "Port"), (1, "Starboard")):
+        bevelled_box(label + " flank panel gasket", (side * 0.824, 0.12, 1.69), (0.040, 1.10, 0.47), dark, 0.055)
+        bevelled_box(label + " main flank armor", (side * 0.850, 0.12, 1.69), (0.038, 0.99, 0.39), alloy, 0.045)
+        bevelled_box(label + " recessed flank inset", (side * 0.873, 0.12, 1.69), (0.012, 0.72, 0.23), panel, 0.022)
+        # Fine seams and hardware frame the broad plate like removable armor.
+        for y in (-0.405, 0.645):
+            bevelled_box(label + " flank edge seam", (side * 0.875, y, 1.69), (0.014, 0.025, 0.37), edge, 0.006)
+        for y in (-0.34, -0.10, 0.14, 0.38, 0.58):
+            for z in (1.53, 1.85):
+                fastener(label + " flank captive bolt", (side * 0.884, y, z), warm_metal, rotation=(0, 1.5708, 0), radius=0.018, depth=0.012)
+        # A pair of recessed service slots and their raised protective lips.
+        for y in (-0.18, 0.38):
+            bevelled_box(label + " flank service slot", (side * 0.883, y, 1.69), (0.018, 0.16, 0.055), dark, 0.012)
+            bevelled_box(label + " slot inner rail", (side * 0.895, y, 1.69), (0.012, 0.11, 0.014), edge, 0.004)
+
+    # Rear bulkhead panel, tie-down hinges and vertical cooling slots.
+    bevelled_box("Rear bulkhead gasket", (0, 1.055, 1.65), (1.12, 0.045, 0.49), dark, 0.055)
+    bevelled_box("Rear bulkhead armor", (0, 1.087, 1.65), (0.98, 0.035, 0.38), alloy, 0.042)
+    bevelled_box("Rear service hatch", (0, 1.108, 1.65), (0.56, 0.020, 0.25), panel, 0.026)
+    for x in (-0.40, 0.40):
+        for z in (1.51, 1.79):
+            fastener("Rear bulkhead bolt", (x, 1.112, z), warm_metal, rotation=(1.5708, 0, 0), radius=0.020, depth=0.014)
+    for x in (-0.67, 0.67):
+        bevelled_box("Rear cooling vent pocket", (x, 1.09, 1.66), (0.14, 0.018, 0.31), dark, 0.018)
+        for z in (1.56, 1.62, 1.68, 1.74):
+            bevelled_box("Rear cooling vent slat", (x, 1.106, z), (0.10, 0.012, 0.018), edge, 0.005)
+    for x in (-0.54, 0.54):
+        bevelled_box("Rear cyan marker bezel", (x, 1.095, 1.89), (0.08, 0.025, 0.12), dark, 0.016)
+        bevelled_box("Rear cyan marker", (x, 1.112, 1.89), (0.035, 0.012, 0.075), teal, 0.012)
+
     # Fine perimeter trim, locking dogs, and fasteners around the cargo hatch.
     for x in (-0.47, 0.47):
         bevelled_box("Hatch side rail", (x, 0.18, 2.09), (0.055, 1.07, 0.07), edge, 0.025)
