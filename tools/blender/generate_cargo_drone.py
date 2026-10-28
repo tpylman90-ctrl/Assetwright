@@ -1,4 +1,4 @@
-"""Build a small, game-ready sci-fi cargo drone demo with Blender primitives.
+"""Build the first standalone game-ready hovercraft from the three-view reference.
 
 Run:
   blender --background --factory-startup --python tools/blender/generate_cargo_drone.py -- --output-dir generated
@@ -431,12 +431,13 @@ def build_scene(output_dir):
     scene.camera = camera
 
     os.makedirs(output_dir, exist_ok=True)
-    preview_path = os.path.abspath(os.path.join(output_dir, "cargo_drone_preview.png"))
-    glb_path = os.path.abspath(os.path.join(output_dir, "cargo_drone.glb"))
+    preview_path = os.path.abspath(os.path.join(output_dir, "hovercraft_01_preview.png"))
+    glb_path = os.path.abspath(os.path.join(output_dir, "hovercraft_01.glb"))
     os.makedirs(output_dir, exist_ok=True)
     unwrap_model_meshes([obj for obj in scene.objects if obj.type == "MESH"])
 
-    # Match the reference's useful front, side, rear, and top inspection views.
+    # The reference top row is three orthographic views of one craft.
+    # Render those views side by side so proportion changes are easy to compare.
     tile_width, tile_height = 768, 512
     scene.render.resolution_x = tile_width
     scene.render.resolution_y = tile_height
@@ -445,7 +446,6 @@ def build_scene(output_dir):
         ("front", (0, -10, 2.7), (0, 0, 1.25)),
         ("side", (10, 0, 2.7), (0, 0, 1.25)),
         ("rear", (0, 10, 2.7), (0, 0, 1.25)),
-        ("top", (0, 0, 10), (0, 0, 1.25)),
     ]
     view_paths = []
     view_images = []
@@ -454,7 +454,7 @@ def build_scene(output_dir):
         camera.data.ortho_scale = 4.8
         point_camera(camera, target)
         scene.camera = camera
-        view_path = os.path.abspath(os.path.join(output_dir, "cargo_drone_" + view_name + ".png"))
+        view_path = os.path.abspath(os.path.join(output_dir, "hovercraft_01_" + view_name + ".png"))
         scene.render.filepath = view_path
         try:
             bpy.ops.render.render(write_still=True)
@@ -479,19 +479,18 @@ def build_scene(output_dir):
         view_images.append(bpy.data.images.load(view_path, check_existing=False))
 
     sheet = bpy.data.images.new(
-        "Cargo drone four-view inspection sheet",
-        width=tile_width * 2,
-        height=tile_height * 2,
+        "Hovercraft 01 three-view inspection sheet",
+        width=tile_width * 3,
+        height=tile_height,
         alpha=False
     )
-    sheet_pixels = array("f", [0.0]) * (tile_width * tile_height * 4 * 4)
-    placements = ((0, tile_height), (tile_width, tile_height), (0, 0), (tile_width, 0))
-    for source_image, (tile_x, tile_y) in zip(view_images, placements):
+    sheet_pixels = array("f", [0.0]) * (tile_width * tile_height * 3 * 4)
+    for tile_x, source_image in enumerate(view_images):
         source_pixels = array("f", [0.0]) * (tile_width * tile_height * 4)
         source_image.pixels.foreach_get(source_pixels)
         for row in range(tile_height):
             src_start = row * tile_width * 4
-            dst_start = ((tile_y + row) * tile_width * 2 + tile_x) * 4
+            dst_start = (row * tile_width * 3 + tile_x * tile_width) * 4
             sheet_pixels[dst_start:dst_start + tile_width * 4] = source_pixels[src_start:src_start + tile_width * 4]
     sheet.pixels.foreach_set(sheet_pixels)
     sheet.filepath_raw = preview_path
@@ -500,8 +499,8 @@ def build_scene(output_dir):
     for source_image, view_path in zip(view_images, view_paths):
         bpy.data.images.remove(source_image)
         os.remove(view_path)
-    scene.render.resolution_x = tile_width * 2
-    scene.render.resolution_y = tile_height * 2
+    scene.render.resolution_x = tile_width * 3
+    scene.render.resolution_y = tile_height
     scene.render.resolution_percentage = 100
 
     # Keep only asset geometry in the exported GLB.
