@@ -36,6 +36,9 @@ jobs:
             -- --output-dir generated/mantis
           test -s generated/mantis/mantis_mk1.glb
           test -s generated/mantis/mantis_mk1_review_board.png
+          test -s generated/mantis/mantis_mk1_lod1.glb
+          test -s generated/mantis/mantis_mk1_lod2.glb
+          test -s generated/mantis/mantis_mk1_collision.glb
           python3 -m json.tool generated/mantis/mantis_mk1_training_record.json > /dev/null
           python3 - <<'PY'
           import os
