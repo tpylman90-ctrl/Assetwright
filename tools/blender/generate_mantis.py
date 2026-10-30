@@ -486,6 +486,14 @@ def build(output_dir):
     for o in scene.objects:
         if o.type=="MESH" and o.name!="Preview floor": o.select_set(True)
     meshes=[o for o in scene.objects if o.type=="MESH" and o.name!="Preview floor"]
+    # Smooth curved strips while splitting hard corners; weighted normals preserve panels.
+    for ob in meshes:
+        for face in ob.data.polygons: face.use_smooth=True
+        if hasattr(ob.data,"use_auto_smooth"):
+            ob.data.use_auto_smooth=True
+            ob.data.auto_smooth_angle=math.radians(45)
+        for modifier in ob.modifiers:
+            if modifier.type=="WEIGHTED_NORMAL": modifier.keep_sharp=True
     # Smart UVs are deterministic and keep all material detail inside the GLB.
     for o in meshes:
         bpy.ops.object.select_all(action="DESELECT"); o.select_set(True); bpy.context.view_layer.objects.active=o
