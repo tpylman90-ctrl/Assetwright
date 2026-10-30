@@ -450,7 +450,7 @@ def build(output_dir):
       ("front",(0,-12,1.15),(0,-.1,1.15),5.5),
       ("side",(12,-.4,1.15),(0,-.4,1.15),7.5),
       ("rear",(0,12,1.15),(0,.1,1.15),5.5),
-      ("top",(0,-.1,13),(0,-.1,.9),8.4),
+      ("top",(0,-.42,13),(0,-.42,.9),9.6),
     ]
     view_paths=[]
     for name,loc,target,scale in specs:
@@ -538,8 +538,10 @@ def build(output_dir):
 
     # Low-poly compound collision proxy: broad hull, arm envelopes, and four lift pods.
     collision_objects=[]
-    collision_objects.append(box("COLLISION_MainHull",(0,.50,1.10),(1.50,3.6,1.30),dark,0))
+    collision_objects.append(box("COLLISION_MainHull",(0,.70,1.30),(1.50,4.0,1.80),dark,0))
     for side,label in ((-1,"Port"),(1,"Starboard")):
+        collision_objects.append(beam_between("COLLISION_"+label+"Nose",(side*.13,-3.40,.49),(side*.52,-1.05,1.17),.35,dark,.30,0))
+        collision_objects.append(box("COLLISION_"+label+"EquipmentPods",(side*1.12,1.06,1.12),(.72,1.65,.72),dark,0))
         collision_objects.append(beam_between("COLLISION_"+label+"Arm",(side*.85,-.70,1.12),(side*1.30,-2.91,.45),.34,dark,.34,0))
         bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.50,depth=.25,location=(side*1.30,-2.91,.29))
         collision_objects.append(bpy.context.object); collision_objects[-1].name="COLLISION_"+label+"FrontLift"
