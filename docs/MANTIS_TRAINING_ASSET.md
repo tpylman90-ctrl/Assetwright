@@ -15,7 +15,14 @@ Run the **Mantis MK I training asset** workflow from GitHub Actions, or let a pu
 - Paired rear turbine drums with concentric rings, stators, and amber cores.
 - Swept tail fins and compact aft hover cells.
 
-The generator aims to stay within a 120,000-triangle real-time budget and records the evaluated triangle count in its output metadata. The asset is intended for Godot GLB import and later reuse in SceneForge. It remains a generated procedural exemplar; it does not train or update a machine-learning model by itself.
+The detailed source mesh targets a 120,000-triangle real-time budget and records evaluated triangle counts for each export. The build produces:
+
+- `mantis_mk1.glb`: detailed source / LOD0.
+- `mantis_mk1_lod1.glb`: automatically decimated mid-distance mesh, targeted at 15,000–45,000 triangles.
+- `mantis_mk1_lod2.glb`: automatically decimated far-distance mesh, targeted at 10,000–20,000 triangles.
+- `mantis_mk1_collision.glb`: separate low-poly compound collision proxy.
+
+The LODs currently use size-based detail culling and mesh decimation. They are not hand-retopologized quad-flow meshes. AO, normal, and curvature map baking is also not implemented yet; those are the next high-to-low production stages. The asset is intended for Godot GLB import and later reuse in SceneForge. It remains a procedural training exemplar; it does not train or update a machine-learning model by itself.
 
 ## Learning-loop record
 
