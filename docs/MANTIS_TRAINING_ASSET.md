@@ -1,6 +1,6 @@
 # Mantis / MK I training asset
 
-Mantis is the first reference-led, mechanically dense hover-racer exemplar for Assetwright. It is generated from editable Blender geometry without a paid model-generation service. The same deterministic generator makes the GLB, an editable Blender scene, five inspection renders, a review board, and a JSON feature record.
+Mantis is the first reference-led, mechanically dense hover-racer exemplar for Assetwright. It is generated from editable Blender geometry without a paid model-generation service. The same deterministic generator makes the GLB, an editable Blender scene, five inspection renders plus cockpit and drive close-ups, a review board, and a JSON feature record.
 
 ## Build
 
@@ -23,7 +23,7 @@ The detailed source mesh targets a 120,000-triangle real-time budget and records
 - `mantis_mk1_lod2.glb`: automatically decimated far-distance mesh, capped at 20,000 triangles.
 - `mantis_mk1_collision.glb`: separate low-poly compound collision proxy.
 
-The LODs currently use size-based detail culling and mesh decimation. They are not hand-retopologized quad-flow meshes. AO, normal, and curvature map baking is also not implemented yet; those are the next high-to-low production stages. The asset is intended for Godot GLB import and later reuse in SceneForge. It remains a procedural training exemplar; it does not train or update a machine-learning model by itself.
+The LODs currently use size-based detail culling and mesh decimation. They are not hand-retopologized quad-flow meshes. High-to-low normal, AO, and curvature baking is not implemented yet. Authored micro-normal maps describe fine surface grain; they are not a substitute for baking larger forms. The asset is intended for Godot GLB import and later reuse in SceneForge. It remains a procedural training exemplar; it does not train or update a machine-learning model by itself.
 
 ## Reference reconstruction v5
 
@@ -32,6 +32,12 @@ Replaces the previous solid rectangular hull with separate tapered nose blades, 
 Front, side and rear review cameras are level orthographic views. The concept sheet is visual guidance rather than a metrically consistent CAD drawing; this is a reconstruction, not an exact recovered source mesh. The 120k ceiling is a maximum, not a requirement to pad the mesh. Render comparison remains necessary before approving the asset as a training example.
 
 All exports exclude the studio floor. Text is converted to meshes before triangle accounting, and face normals are recalculated before export. Repeated hover-cell parts use matching angular counts to avoid duplicate overlapping segments.
+
+## Mechanical and material refinement v6
+
+Preserves the approved v5 silhouette. Adds recessed hatch frames and pulls, cockpit switch banks and pedals, suspension clevis ears, connected coolant lines, fin relief panels and small dashboard graphics. Smooth-shaded rings use fewer cross-section segments, freeing budget for these more readable forms.
+
+Non-emissive materials use embedded albedo, roughness and authored tangent-space micro-normal images. Fine coating variation replaces the previous coarse random scratch strokes. Emissive materials are kept clean. The `cockpit_detail` and `drive_detail` renders supplement the five standard review views. Generated LODs still require in-engine visual and performance review.
 
 ## Learning-loop record
 
