@@ -178,7 +178,7 @@ def make_hover_cell(x, y, z, scale, label, mats):
         px=x+rx*.535*scale; py=y+ry*.535*scale
         box(label+" skirt armor segment %02d"%i,(px,py,z+.02*scale),(.065*scale,.235*scale,.145*scale),armor,.014*scale,(0,0,a))
         sx=x+rx*.577*scale; sy=y+ry*.577*scale
-        box(label+" skirt cooling slot %02d"%i,(sx,sy,z+.02*scale),(.018*scale,.072*scale,.036*scale),dark,.004*scale,(0,0,a))
+        box(label+" skirt cooling slot %02d"%i,(sx,sy,z+.02*scale),(.018*scale,.072*scale,.036*scale),black,.004*scale,(0,0,a))
         cyl(label+" skirt latch %02d"%i,(x+rx*.558*scale,y+ry*.558*scale,z+.104*scale),.017*scale,.022*scale,gold,"Z",12)
     # The lower emitter is carried by a recessed cage, not a featureless cylinder.
     torus(label+" lower field coil", (x,y,z-.155*scale), .405*scale, .022*scale, titanium)
