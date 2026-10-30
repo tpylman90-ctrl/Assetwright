@@ -1,0 +1,55 @@
+name: Mantis MK I training asset
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "tools/blender/generate_mantis.py"
+      - ".github/workflows/mantis-asset.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mantis-training-asset
+  cancel-in-progress: false
+
+jobs:
+  build-mantis:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes blender libegl1 libgl1 python3-numpy
+          blender --version
+
+      - name: Build one Mantis training asset
+        run: |
+          blender --background --factory-startup \
+            --python tools/blender/generate_mantis.py \
+            -- --output-dir generated/mantis
+          test -s generated/mantis/mantis_mk1.glb
+          test -s generated/mantis/mantis_mk1_review_board.png
+          python3 -m json.tool generated/mantis/mantis_mk1_training_record.json > /dev/null
+          python3 - <<'PY'
+          import os
+          path = "generated/mantis/mantis_mk1.glb"
+          with open(path, "rb") as f:
+              assert f.read(4) == b"glTF", "GLB magic header is missing"
+          assert os.path.getsize(path) > 4096, "GLB is unexpectedly small"
+          print(f"Verified GLB: {os.path.getsize(path)} bytes")
+          PY
+
+      - name: Upload Mantis model, review views, and training record
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-mantis-mk1
+          path: generated/mantis/
+          if-no-files-found: error
+          retention-days: 3
