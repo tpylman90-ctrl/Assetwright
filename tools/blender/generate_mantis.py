@@ -77,7 +77,7 @@ def box(name, loc, dims, material, bevel=0.04, rot=(0, 0, 0)):
     if bevel:
         b = o.modifiers.new("Machined corner radii", "BEVEL")
         b.width = bevel
-        b.segments = 5
+        b.segments = 4
         bpy.context.view_layer.objects.active = o
         bpy.ops.object.modifier_apply(modifier=b.name)
     o.modifiers.new("Weighted hard-surface normals", "WEIGHTED_NORMAL")
@@ -100,7 +100,7 @@ def rod(name, a, b, radius, material, vertices=16, radius2=None):
     return o
 
 
-def cyl(name, loc, radius, depth, material, axis="Z", vertices=64):
+def cyl(name, loc, radius, depth, material, axis="Z", vertices=32):
     bpy.ops.mesh.primitive_cylinder_add(vertices=vertices, radius=radius, depth=depth, location=loc)
     o=bpy.context.object; o.name=name; o.data.materials.append(material)
     direction={"X":(0,math.pi/2,0),"Y":(math.pi/2,0,0),"Z":(0,0,0)}[axis]
@@ -110,7 +110,7 @@ def cyl(name, loc, radius, depth, material, axis="Z", vertices=64):
 
 
 def torus(name, loc, major, minor, material, axis="Z"):
-    bpy.ops.mesh.primitive_torus_add(major_segments=64, minor_segments=16, major_radius=major, minor_radius=minor, location=loc)
+    bpy.ops.mesh.primitive_torus_add(major_segments=40, minor_segments=10, major_radius=major, minor_radius=minor, location=loc)
     o=bpy.context.object; o.name=name; o.data.materials.append(material)
     o.rotation_euler={"X":(0,math.pi/2,0),"Y":(math.pi/2,0,0),"Z":(0,0,0)}[axis]
     return o
@@ -253,22 +253,6 @@ def build(output_dir):
         rod("Crossmember",(-.53,y,1.0),(.53,y,1.0),.052,black,16)
         for x in (-.53,.53):
             cyl("Crossmember clevis",(x,y,1.0),.082,.08,gold,"X",24)
-
-    # Lengthen the hull and cockpit structure together so the craft reads as a low speedster.
-    body_tags=("Armored central keel","Lower keel skid","Longitudinal chassis","Upper spine rail",
-               "Crossmember","Cockpit","Pilot seat","Seat ","Padded headrest","Lumbar bolster",
-               "Raised shoulder pad","Four-point harness","Seat pad seam","Steering yoke",
-               "Yoke grip","Foot pedal","Seat shell side rail","Seat bolster","Harness strap",
-               "Front canopy","Rear canopy","Upper cockpit rail","Sill rail","Windshield",
-               "Rear canopy crossbar","Canopy triangulation","Instrument pod","Holographic instrument",
-               "Cockpit control knob")
-    for ob in list(bpy.context.scene.objects):
-        if ob.type=="MESH" and any(tag in ob.name for tag in body_tags):
-            ob.location.y*=1.16
-            for vertex in ob.data.vertices: vertex.co.y*=1.16
-            if any(tag in ob.name for tag in ("Armored central keel","Lower keel skid","Cockpit floor","Pilot seat","Seat cushion","Seat back","Padded headrest","Instrument pod")):
-                ob.location.x*=1.12
-                for vertex in ob.data.vertices: vertex.co.x*=1.12
 
     # Open cockpit cell with seat, shoulder hoops, braced canopy frame, and controls.
     box("Cockpit floor pan",(0,.12,1.08),(.78,1.20,.12),black,.045)
@@ -425,6 +409,24 @@ def build(output_dir):
             y=-.18+i*.26
             box(label+" side sill tread",(side*.54,y,1.02),(.09,.14,.025),titanium,.008)
 
+    # Lengthen the hull and cockpit structure together so the craft reads as a low speedster.
+    body_tags=("Armored central keel","Lower keel skid","Longitudinal chassis","Upper spine rail",
+               "Crossmember","Cockpit","Pilot seat","Seat ","Padded headrest","Lumbar bolster",
+               "Raised shoulder pad","Four-point harness","Seat pad seam","Steering yoke",
+               "Yoke grip","Foot pedal","Seat shell side rail","Seat bolster","Harness strap",
+               "Front canopy","Rear canopy","Upper cockpit rail","Sill rail","Windshield",
+               "Rear canopy crossbar","Canopy triangulation","Instrument pod","Holographic instrument",
+               "Cockpit control knob","keel flank armor","keel panel inset",
+               "upper hull deck plate","deck plate inset","hull shoulder rail","shoulder rail clamp")
+    for ob in list(bpy.context.scene.objects):
+        if ob.type=="MESH" and any(tag in ob.name for tag in body_tags):
+            ob.location.y*=1.16
+            for vertex in ob.data.vertices: vertex.co.y*=1.16
+            if any(tag in ob.name for tag in ("Armored central keel","Lower keel skid","Cockpit floor","Pilot seat","Seat cushion","Seat back","Padded headrest","Instrument pod")):
+                ob.location.x*=1.12
+                for vertex in ob.data.vertices: vertex.co.x*=1.12
+
+
     # Studio-only ground, lighting, and cameras. The floor is excluded from export.
     floor_mat=mat("Studio floor (preview only)",(.16,.19,.22),.25,.72)
     box("Preview floor",(0,-.1,.015),(200,200,.10),floor_mat,0)
@@ -517,7 +519,7 @@ def build(output_dir):
     record={
       "asset_id":"mantis_mk1_hover_racer",
       "display_name":"Mantis / MK I",
-      "generator":"Assetwright procedural Blender ground-truth v3",
+      "generator":"Assetwright procedural Blender ground-truth v3.1",
       "reference":"User-provided MANTIS / MK I concept sheet (2963.png); source image is not redistributed by this build.",
       "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that sweep forward and outward and terminate in layered circular hover repulsor cells. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells. Give the craft a longer, broader central armored hull with individually modeled raised flank plates, inset deck panels, shoulder rails, fasteners, and mechanical layers. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
       "negative_prompt":"No enclosed car body, no conventional wheels or tires, no landing legs, no smooth one-piece shell, no low-poly toy appearance, no omitted front arms, no missing hover cells, no opaque canopy, no unsupported floating details, no text outside modeled markings.",
