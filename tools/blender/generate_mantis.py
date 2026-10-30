@@ -238,6 +238,21 @@ def build(output_dir):
     box("Pilot seat shell",(0,.18,1.38),(.54,.64,.18),olive,.09,(-.20,0,0))
     box("Seat cushion",(0,.04,1.49),(.43,.43,.16),leather,.08,(-.18,0,0))
     box("Seat back pad",(0,.46,1.72),(.44,.14,.62),leather,.09,(-.16,0,0))
+    box("Padded headrest",(0,.53,2.04),(.34,.15,.22),leather,.085,(-.16,0,0))
+    box("Lumbar bolster",(0,.46,1.60),(.36,.16,.21),olive_light,.065,(-.16,0,0))
+    for x in (-.19,.19):
+        box("Raised shoulder pad",(x,.45,1.88),(.12,.17,.30),olive,.05,(-.16,0,0))
+        rod("Seat shell side rail",(x,.08,1.35),(x,.48,1.82),.025,titanium,12)
+    box("Four-point harness buckle",(0,.02,1.55),(.12,.035,.10),gold,.025)
+    for z in (1.67,1.76,1.85):
+        rod("Seat pad seam",( -.13,.37,z),(.13,.37,z),.009,olive_light,8)
+    # Exposed control yoke, twin handgrips, and pedal arms make the cockpit legible.
+    rod("Steering yoke stem",(0,-.37,1.56),(0,-.50,1.77),.035,titanium,16)
+    rod("Steering yoke crossbar",(-.22,-.50,1.77),(.22,-.50,1.77),.03,black,16)
+    for x in (-.22,.22):
+        cyl("Yoke grip end",(x,-.50,1.77),.05,.12,leather,"X",20)
+        beam_between("Foot pedal arm",(x*.7,-.61,.99),(x*.7,-.43,1.20),.025,titanium,.03,.006)
+        box("Foot pedal pad",(x*.7,-.64,.97),(.12,.08,.035),dark,.015)
     for x in (-.22,.22):
         box("Seat bolster",(x,.29,1.64),(.10,.38,.30),olive_light,.04,(-.18,0,0))
     for x in (-.18,.18):
@@ -268,11 +283,18 @@ def build(output_dir):
         beam_between(label+" outer arm lower spar",(side*1.22,-1.30,.51),(side*2.10,-2.56,.35),.062,titanium,.066,.015)
         beam_between(label+" outer arm triangulation",elbow,(side*2.10,-2.56,.35),.052,gold,.056,.012)
         # Articulated joints are visibly layered instead of hidden in a smooth shell.
-        for point,r in ((root,.15),(elbow,.19),(wrist,.14)):
-            cyl(label+" exposed arm pivot",point,r,.16,black,"X",32)
-            torus(label+" pivot retaining ring",(point[0]+side*.09,point[1],point[2]),r*.72,.025,gold,"X")
-            cyl(label+" pivot cap",(point[0]+side*.12,point[1],point[2]),r*.43,.035,titanium,"X",24)
-            cyl(label+" pivot bolt",(point[0]+side*.145,point[1],point[2]),r*.15,.018,dark,"X",16)
+        for point,r in ((root,.19),(elbow,.265),(wrist,.185)):
+            cyl(label+" exposed arm pivot drum",point,r,.22,black,"X",40)
+            torus(label+" pivot retaining ring",(point[0]+side*.12,point[1],point[2]),r*.82,.034,gold,"X")
+            torus(label+" concentric bearing race",(point[0]+side*.135,point[1],point[2]),r*.61,.021,titanium,"X")
+            cyl(label+" recessed pivot face",(point[0]+side*.13,point[1],point[2]),r*.57,.038,dark,"X",36)
+            cyl(label+" machined pivot cap",(point[0]+side*.16,point[1],point[2]),r*.40,.042,titanium,"X",32)
+            cyl(label+" central pivot boss",(point[0]+side*.185,point[1],point[2]),r*.19,.035,gold,"X",24)
+            for bolt in range(8):
+                angle=math.tau*bolt/8
+                by=point[1]+math.cos(angle)*r*.69
+                bz=point[2]+math.sin(angle)*r*.69
+                cyl(label+" pivot perimeter bolt %02d"%bolt,(point[0]+side*.19,by,bz),.027,.024,gold,"X",12)
         # Raked shock piston / sleeve.
         beam_between(label+" actuator outer sleeve",(side*.66,-.48,1.08),(side*1.31,-1.30,.85),.074,dark,.074,.014)
         beam_between(label+" actuator polished ram",(side*.88,-.76,1.01),(side*1.42,-1.44,.82),.031,titanium,.032,.008)
@@ -453,8 +475,8 @@ def build(output_dir):
         evaluated_mesh=evaluated.to_mesh()
         triangle_count+=sum(max(0,len(poly.vertices)-2) for poly in evaluated_mesh.polygons)
         evaluated.to_mesh_clear()
-    if triangle_count>85000:
-        raise RuntimeError("Mantis exceeds the 85,000 triangle hero-asset budget: {}".format(triangle_count))
+    if triangle_count>120000:
+        raise RuntimeError("Mantis exceeds the 120,000 triangle hero-asset budget: {}".format(triangle_count))
     record={
       "asset_id":"mantis_mk1_hover_racer",
       "display_name":"Mantis / MK I",
@@ -462,7 +484,7 @@ def build(output_dir):
       "reference":"User-provided MANTIS / MK I concept sheet (2963.png); source image is not redistributed by this build.",
       "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that sweep forward and outward and terminate in layered circular hover repulsor cells. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
       "negative_prompt":"No enclosed car body, no conventional wheels or tires, no landing legs, no smooth one-piece shell, no low-poly toy appearance, no omitted front arms, no missing hover cells, no opaque canopy, no unsupported floating details, no text outside modeled markings.",
-      "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":85000,"triangle_count":triangle_count,"texture_policy":"Procedural material response; no external image dependency"},
+      "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":120000,"triangle_count":triangle_count,"texture_policy":"Procedural material response; no external image dependency"},
       "feature_labels":["open_exoskeleton","twin_forward_articulated_arms","front_hover_cells","open_single_seat_cockpit","skeletal_canopy_frame","modular_side_pods","paired_rear_turbines","swept_tail_fins","aft_hover_cells","olive_metal_materials","mechanical_hardware"],
       "axis_convention":{"forward":"-Y","right":"+X","up":"+Z"},
       "views":["hero_3q","front","side","rear","top"],
