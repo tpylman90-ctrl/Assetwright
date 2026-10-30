@@ -171,6 +171,20 @@ def make_hover_cell(x, y, z, scale, label, mats):
         a=math.tau*i/8
         px=x+math.cos(a)*.39*scale; py=y+math.sin(a)*.39*scale
         rod(label+" emitter vane %02d"%i,(px,py,z+.25*scale),(x+math.cos(a+.18)*.26*scale,y+math.sin(a+.18)*.26*scale,z+.25*scale),.018*scale,titanium,8)
+    # Segmented armored skirt and individually recessed cooling slots.
+    for i in range(12):
+        a=math.tau*i/12
+        rx,ry=math.cos(a),math.sin(a)
+        px=x+rx*.535*scale; py=y+ry*.535*scale
+        box(label+" skirt armor segment %02d"%i,(px,py,z+.02*scale),(.065*scale,.235*scale,.145*scale),armor,.014*scale,(0,0,a))
+        sx=x+rx*.577*scale; sy=y+ry*.577*scale
+        box(label+" skirt cooling slot %02d"%i,(sx,sy,z+.02*scale),(.018*scale,.072*scale,.036*scale),dark,.004*scale,(0,0,a))
+        cyl(label+" skirt latch %02d"%i,(x+rx*.558*scale,y+ry*.558*scale,z+.104*scale),.017*scale,.022*scale,gold,"Z",12)
+    # The lower emitter is carried by a recessed cage, not a featureless cylinder.
+    torus(label+" lower field coil", (x,y,z-.155*scale), .405*scale, .022*scale, titanium)
+    for i in range(6):
+        a=math.tau*i/6
+        rod(label+" lower coil brace %02d"%i,(x+math.cos(a)*.36*scale,y+math.sin(a)*.36*scale,z-.12*scale),(x+math.cos(a)*.48*scale,y+math.sin(a)*.48*scale,z-.07*scale),.022*scale,black,10)
 
 
 def loft(name, sections, material):
@@ -262,6 +276,16 @@ def build(output_dir):
         # Raked shock piston / sleeve.
         beam_between(label+" actuator outer sleeve",(side*.66,-.48,1.08),(side*1.31,-1.30,.85),.074,dark,.074,.014)
         beam_between(label+" actuator polished ram",(side*.88,-.76,1.01),(side*1.42,-1.44,.82),.031,titanium,.032,.008)
+        # Twin outboard damping links echo the compound suspension shown in the wireframe.
+        for offset in (-.14,.14):
+            beam_between(label+" twin shock body",(side*(.78+offset),-.66,1.00),(side*(1.31+offset),-1.31,.80),.052,black,.056,.012)
+            beam_between(label+" shock piston",(side*(.96+offset),-.90,.93),(side*(1.43+offset),-1.48,.75),.022,titanium,.024,.006)
+            cyl(label+" shock collar",(side*(1.28+offset),-1.26,.81),.052,.06,gold,"X",16)
+        # Clevis cheeks keep the arm pivots visually captured by the frame.
+        for offset in (-.10,.10):
+            swept_plate(label+" elbow clevis cheek",(side*(1.10+offset),-1.20),(side*(1.27+offset),-1.47),.10,.075,.78,.08,olive_light)
+        beam_between(label+" outer lattice tie",(side*1.30,-1.45,.83),(side*1.77,-2.11,.68),.045,titanium,.046,.01)
+        beam_between(label+" inner lattice tie",(side*.69,-.54,.93),(side*1.09,-1.08,.72),.04,black,.042,.009)
         # Sculpted segmented forearm fairing, outlined in warning gold.
         swept_plate(label+" tapered swept outer armor",(side*1.26,-1.43),(side*2.10,-2.62),.245,.105,.70,.18,olive)
         swept_plate(label+" raised arm crown",(side*1.37,-1.58),(side*2.04,-2.49),.125,.050,.805,.045,olive_light)
@@ -343,7 +367,7 @@ def build(output_dir):
             box(label+" side sill tread",(side*.54,y,1.02),(.09,.14,.025),titanium,.008)
 
     # Studio-only ground, lighting, and cameras. The floor is excluded from export.
-    floor_mat=mat("Studio floor (preview only)",(.095,.11,.13),.25,.72)
+    floor_mat=mat("Studio floor (preview only)",(.16,.19,.22),.25,.72)
     box("Preview floor",(0,-.1,.015),(200,200,.10),floor_mat,0)
     scene=bpy.context.scene
     scene.render.engine="BLENDER_EEVEE"
@@ -355,7 +379,7 @@ def build(output_dir):
         scene.eevee.use_soft_shadows=True
     scene.world.use_nodes=True
     world=scene.world.node_tree.nodes.get("Background")
-    if world: world.inputs["Color"].default_value=(.12,.15,.19,1); world.inputs["Strength"].default_value=.45
+    if world: world.inputs["Color"].default_value=(.24,.28,.33,1); world.inputs["Strength"].default_value=.55
     scene.view_settings.view_transform="AgX"
     scene.render.image_settings.file_format="PNG"
     scene.render.resolution_percentage=100
@@ -367,9 +391,9 @@ def build(output_dir):
     scene.display.shading.cavity_ridge_factor=1.3
     scene.display.shading.cavity_valley_factor=1.0
     def aim(o,target): o.rotation_euler=(Vector(target)-o.location).to_track_quat("-Z","Y").to_euler()
-    bpy.ops.object.light_add(type="AREA",location=(1,-5,8)); key=bpy.context.object; key.data.energy=1050; key.data.shape="DISK"; key.data.size=6; aim(key,(0,0,1))
-    bpy.ops.object.light_add(type="AREA",location=(-5,1,4)); rim=bpy.context.object; rim.data.energy=900; rim.data.color=(.44,.68,1); rim.data.size=5; aim(rim,(0,0,1))
-    bpy.ops.object.light_add(type="AREA",location=(4,4,5)); warm=bpy.context.object; warm.data.energy=850; warm.data.color=(1,.56,.25); warm.data.size=4; aim(warm,(0,0,1))
+    bpy.ops.object.light_add(type="AREA",location=(1,-5,8)); key=bpy.context.object; key.data.energy=1350; key.data.shape="DISK"; key.data.size=6; aim(key,(0,0,1))
+    bpy.ops.object.light_add(type="AREA",location=(-5,1,4)); rim=bpy.context.object; rim.data.energy=1150; rim.data.color=(.44,.68,1); rim.data.size=5; aim(rim,(0,0,1))
+    bpy.ops.object.light_add(type="AREA",location=(4,4,5)); warm=bpy.context.object; warm.data.energy=1000; warm.data.color=(1,.56,.25); warm.data.size=4; aim(warm,(0,0,1))
     bpy.ops.object.camera_add(location=(7,-9,6)); cam=bpy.context.object; cam.data.type="ORTHO"; cam.data.ortho_scale=8.8; aim(cam,(0,-.05,1.05)); scene.camera=cam
 
     os.makedirs(output_dir,exist_ok=True)
