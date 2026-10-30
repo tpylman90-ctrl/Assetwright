@@ -110,7 +110,7 @@ def cyl(name, loc, radius, depth, material, axis="Z", vertices=32):
 
 
 def torus(name, loc, major, minor, material, axis="Z"):
-    bpy.ops.mesh.primitive_torus_add(major_segments=48, minor_segments=12, major_radius=major, minor_radius=minor, location=loc)
+    bpy.ops.mesh.primitive_torus_add(major_segments=40, minor_segments=10, major_radius=major, minor_radius=minor, location=loc)
     o=bpy.context.object; o.name=name; o.data.materials.append(material)
     o.rotation_euler={"X":(0,math.pi/2,0),"Y":(math.pi/2,0,0),"Z":(0,0,0)}[axis]
     return o
