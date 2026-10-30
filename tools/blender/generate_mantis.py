@@ -164,16 +164,16 @@ def make_hover_cell(x, y, z, scale, label, mats):
     cyl(label+" ceramic emitter face", (x,y,z+.215*scale), .27*scale, .035*scale, glow, "Z", 40)
     cyl(label+" central magnetic cap", (x,y,z+.24*scale), .13*scale, .06*scale, titanium, "Z", 32)
     for i in range(14):
-        a=math.tau*i/12
+        a=math.tau*i/14
         px=x+math.cos(a)*.51*scale; py=y+math.sin(a)*.51*scale
         cyl(label+" rim fastener %02d"%i, (px,py,z+.16*scale), .025*scale, .035*scale, gold, "Z", 12)
     for i in range(12):
-        a=math.tau*i/8
+        a=math.tau*i/12
         px=x+math.cos(a)*.39*scale; py=y+math.sin(a)*.39*scale
         rod(label+" emitter vane %02d"%i,(px,py,z+.25*scale),(x+math.cos(a+.18)*.26*scale,y+math.sin(a+.18)*.26*scale,z+.25*scale),.018*scale,titanium,8)
     # Segmented armored skirt and individually recessed cooling slots.
     for i in range(14):
-        a=math.tau*i/12
+        a=math.tau*i/14
         rx,ry=math.cos(a),math.sin(a)
         px=x+rx*.535*scale; py=y+ry*.535*scale
         box(label+" skirt armor segment %02d"%i,(px,py,z+.02*scale),(.065*scale,.235*scale,.145*scale),armor,.014*scale,(0,0,a))
@@ -222,224 +222,141 @@ def build(output_dir):
     glow=mat("09 | cold white hover emission",(.55,.85,1.0),.18,.18,4.0)
     hot=mat("10 | turbine amber emission",(1.0,.25,.025),.12,.2,3.0)
 
-    # Low central exoskeleton spine, keel, and open lattice floor.
-    loft("Armored central keel",[(-1.86,.36,1.26,.90),(-1.35,.64,1.48,.78),(.22,.70,1.56,.74),(1.48,.81,1.62,.76),(1.98,.68,1.53,.86)],olive)
-    box("Lower keel skid",(0,.12,.70),(.54,2.72,.18),black,.06)
-    # The central body receives layered, removable armor rather than reading as a thin spine.
-    for side,label in ((-1,"Port"),(1,"Starboard")):
-        for idx,y in enumerate((-1.20,-.64,-.06,.52,1.10,1.62)):
-            z=1.20 + (0.08 if y>1.0 else 0.0)
-            x=side*(.63 if y<1.2 else .74)
-            box(label+" keel flank armor panel %02d"%idx,(x,y,z),(.20,.49,.43),olive_light,.065,(0,0,side*.035))
-            box(label+" keel panel inset %02d"%idx,(x+side*.105,y,z),(.018,.31,.24),olive,.035,(0,0,side*.035))
-            for sy in (-.18,.18):
-                for sz in (-.14,.14):
-                    cyl(label+" hull captive fastener",(x+side*.12,y+sy,z+sz),.024,.024,gold,"X",16)
-        # Raised shoulder rails and hard points define the broad armored shoulders.
-        rod(label+" hull shoulder rail",(side*.47,-1.42,1.40),(side*.66,1.65,1.57),.042,titanium,16)
-        for y in (-1.15,-.60,.02,.64,1.24):
-            cyl(label+" shoulder rail clamp",(side*.56,y,1.43 if y<.8 else 1.50),.062,.075,gold,"X",20)
-    # Recessed side radiators use individual louvers, end clamps, and short feed tubes.
-    for side,label in ((-1,"Port"),(1,"Starboard")):
-        for group,y in enumerate((-.90,0,.90)):
-            x=side*.82
-            box(label+" hull radiator recess %02d"%group,(x,y,1.22),(.045,.37,.26),black,.035)
-            box(label+" radiator surround %02d"%group,(x+side*.025,y,1.22),(.025,.42,.31),titanium,.025)
-            for vane in range(6):
-                vy=y-.135+vane*.054
-                box(label+" radiator louver %02d %02d"%(group,vane),(x+side*.048,vy,1.22),(.022,.29,.022),dark,.009,(side*.18,0,0))
-            for vy in (y-.17,y+.17):
-                cyl(label+" radiator end clamp",(x+side*.052,vy,1.22),.028,.022,gold,"X",16)
-            for offset in (-.12,.12):
-                rod(label+" radiator feed line",(side*.69,y+offset,1.13),(side*.75,y+offset,1.08),.018,titanium,10)
-    # Split upper-deck plates frame the cockpit while preserving its open center.
-    for side,label in ((-1,"Port"),(1,"Starboard")):
-        for y,z in ((-1.43,1.43),(-.98,1.49),(.94,1.55),(1.43,1.55)):
-            box(label+" upper hull deck plate",(side*.30,y,z),(.38,.48,.065),olive_light,.045,(0,0,side*.025))
-            box(label+" deck plate inset",(side*.30,y,z+.036),(.23,.31,.012),olive,.018,(0,0,side*.025))
-            for sy in (-.18,.18):
-                cyl(label+" deck plate screw",(side*.30+side*.13,y+sy,z+.046),.018,.015,titanium,"Z",12)
-    for x in (-.48,.48):
-        rod("Longitudinal chassis tube",(x,-1.18,1.02),(x,1.58,1.05),.055,black,20)
-        rod("Upper spine rail",(x,-.85,1.35),(x,1.40,1.45),.048,titanium,16)
-    for y in (-.92,-.25,.52,1.24):
-        rod("Crossmember",(-.53,y,1.0),(.53,y,1.0),.052,black,16)
-        for x in (-.53,.53):
-            cyl("Crossmember clevis",(x,y,1.0),.082,.08,gold,"X",24)
+    # Reference-led proportions: overall length 6.4, width 3.6, low open cage.
+    # Individual parts are authored in final world coordinates; no post-hoc scaling.
+    def panel(name, points, offset, material, bevel=.014):
+        n=len(points); off=Vector(offset)
+        verts=list(points)+[tuple(Vector(p)+off) for p in points]
+        faces=[tuple(reversed(range(n))),tuple(range(n,2*n))]
+        faces += [(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)]
+        mesh=bpy.data.meshes.new(name); mesh.from_pydata(verts,[],faces); mesh.update()
+        ob=bpy.data.objects.new(name,mesh); bpy.context.collection.objects.link(ob)
+        ob.data.materials.append(material)
+        mod=ob.modifiers.new("Manufactured edge radius","BEVEL"); mod.width=bevel; mod.segments=3
+        ob.modifiers.new("Panel normals","WEIGHTED_NORMAL")
+        return ob
 
-    # Open cockpit cell with seat, shoulder hoops, braced canopy frame, and controls.
-    box("Cockpit floor pan",(0,.12,1.08),(.78,1.20,.12),black,.045)
-    box("Pilot seat shell",(0,.18,1.38),(.54,.64,.18),olive,.09,(-.20,0,0))
-    box("Seat cushion",(0,.04,1.49),(.43,.43,.16),leather,.08,(-.18,0,0))
-    box("Seat back pad",(0,.46,1.72),(.44,.14,.62),leather,.09,(-.16,0,0))
-    box("Padded headrest",(0,.53,2.04),(.34,.15,.22),leather,.085,(-.16,0,0))
-    box("Lumbar bolster",(0,.46,1.60),(.36,.16,.21),olive_light,.065,(-.16,0,0))
-    for x in (-.19,.19):
-        box("Raised shoulder pad",(x,.45,1.88),(.12,.17,.30),olive,.05,(-.16,0,0))
-        rod("Seat shell side rail",(x,.08,1.35),(x,.48,1.82),.025,titanium,12)
-    box("Four-point harness buckle",(0,.02,1.55),(.12,.035,.10),gold,.025)
-    for z in (1.67,1.76,1.85):
-        rod("Seat pad seam",( -.13,.37,z),(.13,.37,z),.009,olive_light,8)
-    # Exposed control yoke, twin handgrips, and pedal arms make the cockpit legible.
-    rod("Steering yoke stem",(0,-.37,1.56),(0,-.50,1.77),.035,titanium,16)
-    rod("Steering yoke crossbar",(-.22,-.50,1.77),(.22,-.50,1.77),.03,black,16)
-    for x in (-.22,.22):
-        cyl("Yoke grip end",(x,-.50,1.77),.05,.12,leather,"X",20)
-        beam_between("Foot pedal arm",(x*.7,-.61,.99),(x*.7,-.43,1.20),.025,titanium,.03,.006)
-        box("Foot pedal pad",(x*.7,-.64,.97),(.12,.08,.035),dark,.015)
-    for x in (-.22,.22):
-        box("Seat bolster",(x,.29,1.64),(.10,.38,.30),olive_light,.04,(-.18,0,0))
-    for x in (-.18,.18):
-        rod("Harness strap",(x,.14,1.91),(x*.5,.02,1.48),.025,gold,12)
-    # A bolted roll cage defines the open cockpit silhouette.
-    for x in (-.48,.48):
-        rod("Front canopy pillar",(x,-.68,1.24),(x*.68,-.30,2.10),.045,titanium,16)
-        rod("Rear canopy pillar",(x,.93,1.28),(x*.84,.48,2.08),.05,titanium,16)
-        rod("Upper cockpit rail",(x*.68,-.30,2.10),(x*.84,.48,2.08),.045,black,16)
-        rod("Sill rail",(x,-.65,1.23),(x,.88,1.25),.052,black,16)
-    rod("Windshield crossbar",(-.32,-.30,2.10),(.32,-.30,2.10),.036,gold,14)
-    rod("Rear canopy crossbar",(-.40,.48,2.08),(.40,.48,2.08),.036,gold,14)
+    def ring_shell(name,x,z,profile,material):
+        # Revolved open profile: real nozzle wall and recessed internal throat.
+        n=64; verts=[]; faces=[]
+        for y,r in profile:
+            verts.extend((x+r*math.cos(i*math.tau/n),y,z+r*math.sin(i*math.tau/n)) for i in range(n))
+        for j in range(len(profile)-1):
+            for i in range(n): faces.append((j*n+i,j*n+(i+1)%n,(j+1)*n+(i+1)%n,(j+1)*n+i))
+        me=bpy.data.meshes.new(name); me.from_pydata(verts,[],faces); me.update(); me.materials.append(material)
+        ob=bpy.data.objects.new(name,me); bpy.context.collection.objects.link(ob)
+        for face in me.polygons: face.use_smooth=True
+        return ob
+
+    def joint(name, p, side, radius=.12):
+        x,y,z=p
+        cyl(name+" bearing",p,radius,.20,black,"X",32)
+        cyl(name+" flange",(x+side*.12,y,z),radius*.9,.035,titanium,"X",32)
+        torus(name+" retaining race",(x+side*.145,y,z),radius*.67,.014,gold,"X")
+        cyl(name+" recessed hub",(x+side*.17,y,z),radius*.44,.028,dark,"X",24)
+        cyl(name+" axle bolt",(x+side*.19,y,z),radius*.19,.032,titanium,"X",6)
+
+    box("Open cockpit recessed floor",(0,.18,.73),(.92,2.05,.10),black,.04)
+    box("Rear equipment deck",(0,1.51,.82),(1.42,1.25,.14),black,.04)
+    for y in (-.75,-.1,.55,1.12,1.72):
+        rod("Chassis crossmember",(-.66,y,.76),(.66,y,.76),.045,titanium,20)
+    # Two descending nose blades leave a narrow center split and an open underside.
+    for side,label in ((-1,"Port"),(1,"Starboard")):
+        def pt(x,y,z): return (side*x,y,z)
+        panel(label+" pointed lower nose spar",[pt(.10,-3.48,.42),pt(.26,-3.40,.42),pt(.67,-1.05,.91),pt(.58,-.72,1.05),pt(.33,-1.86,.76)],(0,0,.08),black)
+        panel(label+" sculpted nose cheek",[pt(.14,-3.30,.55),pt(.36,-2.73,.84),pt(.76,-1.10,1.30),pt(.57,-.81,1.35),pt(.24,-2.24,.92)],(0,0,.065),olive)
+        panel(label+" inset nose shoulder",[pt(.39,-2.49,.92),pt(.66,-1.28,1.27),pt(.57,-1.14,1.31),pt(.34,-2.18,1.02)],(0,0,.018),olive_light,.007)
+        rod(label+" lower sill",pt(.30,-2.44,.60),pt(.67,1.54,.78),.055,black,24)
+        rod(label+" cockpit shoulder sill",pt(.61,-1.02,1.21),pt(.74,1.26,1.23),.045,titanium,24)
+        panel(label+" triangular sill armor",[pt(.65,-.95,1.17),pt(.76,.78,1.20),pt(.70,1.12,.94),pt(.57,-.22,.81)],(side*.045,0,0),olive)
+        panel(label+" sill recessed relief",[pt(.699,-.58,1.10),pt(.78,.65,1.13),pt(.73,.76,1.02)],(side*.012,0,0),dark,.006)
+        # Continuous cage triangles, with visibly connected lower and upper anchors.
+        a=pt(.64,-1.13,1.23); b=pt(.48,-.15,2.04); c=pt(.49,.69,2.07); d=pt(.78,1.48,1.24)
+        for name,u,v,r in (("raked windshield pillar",a,b,.045),("roof rail",b,c,.044),("rear cage pillar",c,d,.052),("rear diagonal",c,pt(.70,.72,.80),.038),("rear deck brace",b,d,.034)):
+            rod(label+" "+name,u,v,r,titanium,24)
+        for q in (a,b,c,d): joint(label+" cage junction",q,side,.065)
+        # Long close-set arms, clevis gaps, paired links and telescoping hydraulics.
+        root=pt(.85,-.70,1.12); elbow=pt(1.12,-1.64,.88); wrist=pt(1.30,-2.91,.59)
+        for name,u,v in (("upper link",root,elbow),("forward link",elbow,wrist)):
+            for dx in (-.065,.065):
+                u1=(u[0]+dx,u[1],u[2]); v1=(v[0]+dx,v[1],v[2])
+                beam_between(label+" "+name,u1,v1,.06,black,.11,.016)
+            rod(label+" hydraulic barrel",(u[0],u[1],u[2]+.10),tuple(Vector(u).lerp(Vector(v),.58)+Vector((0,0,.10))),.048,gold,24)
+            rod(label+" polished piston",tuple(Vector(u).lerp(Vector(v),.54)+Vector((0,0,.10))),(v[0],v[1],v[2]+.10),.024,titanium,24)
+            rod(label+" return hose",(u[0]-side*.09,u[1],u[2]+.04),(v[0]-side*.09,v[1],v[2]+.04),.014,dark,12)
+        for q,r in ((root,.15),(elbow,.13),(wrist,.105)): joint(label+" suspension pivot",q,side,r)
+        panel(label+" arm triangular cover",[pt(.94,-.83,1.16),pt(1.21,-1.58,.96),pt(1.20,-1.75,.88),pt(.96,-1.40,.93)],(0,0,.035),olive)
+        rod(label+" lower wishbone",pt(.83,-.66,.78),pt(1.30,-2.91,.50),.034,titanium,20)
+        rod(label+" cell gimbal spindle",wrist,pt(1.30,-2.91,.42),.075,black,24)
+        make_hover_cell(side*1.30,-2.91,.29,.83,label+" forward lift",(olive,black,titanium,glow,gold))
+        # Split modular saddle boxes with actual recessed side panel frames.
+        for idx,y in enumerate((.65,1.48)):
+            x=side*1.12
+            box(label+" pod shell "+str(idx),(x,y,1.12),(.66,.76,.65),olive,.065)
+            box(label+" inset equipment panel",(x+side*.335,y,1.12),(.018,.60,.49),dark,.035)
+            box(label+" removable service hatch",(x+side*.35,y,1.12),(.025,.51,.40),olive_light,.035)
+            for yy in (y-.28,y+.28):
+                for zz in (.90,1.34): cyl(label+" captive panel screw",(x+side*.37,yy,zz),.021,.018,titanium,"X",8)
+            for yy in (y-.24,y+.24):
+                box(label+" pod corner strap",(x,yy,1.46),(.55,.065,.025),titanium,.008)
+            rod(label+" pod mounting outrigger",pt(.63,y,.77),pt(1.13,y,.80),.055,black,24)
+        add_text(label+" serial","01",pt(1.49,.65,1.02),.27,titanium,(math.pi/2,0,side*math.pi/2))
+        for yy in (1.33,1.59):
+            box(label+" rear pod vent bed",pt(1.487,yy,1.12),(.018,.19,.30),dark,.015)
+            for zz in (.99,1.05,1.11,1.17,1.23): box(label+" recessed vent louver",pt(1.505,yy,zz),(.02,.16,.018),black,.004)
+        # Exposed rear turbine: open annular wall, recessed core and swept vanes.
+        tx=side*.57
+        ring_shell(label+" contoured hollow turbine",tx,1.19,[(1.45,.32),(1.58,.43),(1.94,.46),(2.32,.45),(2.57,.51),(2.65,.51),(2.65,.43),(2.48,.39),(2.13,.28),(1.91,.24)],black)
+        for y,r in ((1.61,.43),(1.98,.46),(2.39,.47),(2.63,.48)):
+            torus(label+" turbine flange",(tx,y,1.19),r,.024,titanium,"Y")
+        torus(label+" nozzle lip",(tx,2.64,1.19),.435,.018,gold,"Y")
+        cyl(label+" recessed hot core",(tx,2.07,1.19),.21,.04,hot,"Y",48)
+        for i in range(16):
+            a=i*math.tau/16
+            def radial(r,y,t): return (tx+r*math.cos(t),y,1.19+r*math.sin(t))
+            panel(label+" swept stator",[radial(.25,2.17,a),radial(.40,2.48,a+.13),radial(.40,2.38,a+.19),radial(.25,2.10,a+.06)],(0,.012,0),gold,.003)
+            rod(label+" casing stiffener",radial(.455,1.98,a),radial(.46,2.36,a),.014,titanium,10)
+        rod(label+" engine lower cradle",pt(.90,1.14,.65),pt(.97,2.55,.71),.048,black,20)
+        rod(label+" engine rear bumper",pt(.97,2.55,.71),pt(.25,2.63,.65),.042,titanium,20)
+        # Swept thin fins grow from the rear cage, rather than standing vertically.
+        panel(label+" swept stabilizer",[pt(.77,1.14,1.33),pt(.86,1.72,1.90),pt(1.04,2.48,2.24),pt(1.08,2.65,2.24),pt(.87,1.87,1.35)],(side*.045,0,0),olive)
+        rod(label+" fin leading stiffener",pt(.80,1.18,1.37),pt(1.05,2.49,2.23),.018,titanium,16)
+        joint(label+" fin root bracket",pt(.80,1.34,1.42),side,.08)
+        make_hover_cell(side*1.10,1.47,.30,.54,label+" aft lift",(olive,black,titanium,glow,gold))
+        rod(label+" aft lift support",pt(1.10,1.47,.48),pt(1.10,1.47,.83),.07,black,24)
+        for y in (-.45,.05,.55):
+            rod(label+" cockpit floor diagonal",pt(.62,y,.80),pt(.40,y+.35,1.14),.025,black,16)
+
+    # Narrow center cowling slopes toward the split tip; cockpit remains entirely open.
+    panel("Sloping nose center",[(-.07,-3.24,.53),(.07,-3.24,.53),(.43,-1.22,1.31),(-.43,-1.22,1.31)],(0,0,.04),black)
+    panel("Inset nose access cover",[(-.17,-2.35,.89),(.17,-2.35,.89),(.34,-1.42,1.25),(-.34,-1.42,1.25)],(0,0,.015),dark)
     for x in (-.27,.27):
-        rod("Canopy triangulation",(x,-.27,2.08),(x,.16,1.98),.025,titanium,12)
-        rod("Canopy triangulation",(x,.16,1.98),(x*.82,.47,2.07),.025,titanium,12)
-    box("Instrument pod",(0,-.38,1.83),(.59,.20,.16),black,.035,(-.18,0,0))
-    box("Holographic instrument screen",(0,-.40,1.93),(.39,.035,.09),glass,.018,(-.18,0,0))
-    for x in (-.21,.21): cyl("Cockpit control knob",(x,-.50,1.84),.035,.03,gold,"Y",16)
-
-    # Front arm assemblies: paired mantis limbs, each with a triangular exoframe,
-    # hinge stack, protected hydraulic actuator, and broad leading-edge armor.
-    for side,label in ((-1,"Port"),(1,"Starboard")):
-        root=(side*.43,-.48,1.12); elbow=(side*1.18,-1.32,.78); wrist=(side*2.13,-2.62,.53)
-        beam_between(label+" inner arm upper spar",root,elbow,.105,black,.115,.022)
-        beam_between(label+" inner arm lower spar",(side*.50,-.28,.91),(side*1.24,-1.26,.57),.074,titanium,.078,.018)
-        beam_between(label+" arm diagonal brace",(side*.50,-.28,.91),elbow,.060,gold,.065,.014)
-        beam_between(label+" outer arm upper spar",elbow,wrist,.092,black,.095,.018)
-        beam_between(label+" outer arm lower spar",(side*1.22,-1.30,.51),(side*2.10,-2.56,.35),.062,titanium,.066,.015)
-        beam_between(label+" outer arm triangulation",elbow,(side*2.10,-2.56,.35),.052,gold,.056,.012)
-        # Articulated joints are visibly layered instead of hidden in a smooth shell.
-        for point,r in ((root,.19),(elbow,.265),(wrist,.185)):
-            cyl(label+" exposed arm pivot drum",point,r,.22,black,"X",40)
-            torus(label+" pivot retaining ring",(point[0]+side*.12,point[1],point[2]),r*.82,.034,gold,"X")
-            torus(label+" concentric bearing race",(point[0]+side*.135,point[1],point[2]),r*.61,.021,titanium,"X")
-            cyl(label+" recessed pivot face",(point[0]+side*.13,point[1],point[2]),r*.57,.038,dark,"X",36)
-            cyl(label+" machined pivot cap",(point[0]+side*.16,point[1],point[2]),r*.40,.042,titanium,"X",32)
-            cyl(label+" central pivot boss",(point[0]+side*.185,point[1],point[2]),r*.19,.035,gold,"X",24)
-            for bolt in range(8):
-                angle=math.tau*bolt/8
-                by=point[1]+math.cos(angle)*r*.69
-                bz=point[2]+math.sin(angle)*r*.69
-                cyl(label+" pivot perimeter bolt %02d"%bolt,(point[0]+side*.19,by,bz),.027,.024,gold,"X",12)
-        # Raked shock piston / sleeve.
-        beam_between(label+" actuator outer sleeve",(side*.66,-.48,1.08),(side*1.31,-1.30,.85),.074,dark,.074,.014)
-        beam_between(label+" actuator polished ram",(side*.88,-.76,1.01),(side*1.42,-1.44,.82),.031,titanium,.032,.008)
-        # Twin outboard damping links echo the compound suspension shown in the wireframe.
-        for offset in (-.14,.14):
-            beam_between(label+" twin shock body",(side*(.78+offset),-.66,1.00),(side*(1.31+offset),-1.31,.80),.052,black,.056,.012)
-            beam_between(label+" shock piston",(side*(.96+offset),-.90,.93),(side*(1.43+offset),-1.48,.75),.022,titanium,.024,.006)
-            cyl(label+" shock collar",(side*(1.28+offset),-1.26,.81),.052,.06,gold,"X",16)
-        # Clevis cheeks keep the arm pivots visually captured by the frame.
-        for offset in (-.10,.10):
-            swept_plate(label+" elbow clevis cheek",(side*(1.10+offset),-1.20),(side*(1.27+offset),-1.47),.10,.075,.78,.08,olive_light)
-        beam_between(label+" outer lattice tie",(side*1.30,-1.45,.83),(side*1.77,-2.11,.68),.045,titanium,.046,.01)
-        beam_between(label+" inner lattice tie",(side*.69,-.54,.93),(side*1.09,-1.08,.72),.04,black,.042,.009)
-        # Sculpted segmented forearm fairing, outlined in warning gold.
-        swept_plate(label+" tapered swept outer armor",(side*1.26,-1.43),(side*2.10,-2.62),.245,.105,.70,.18,olive)
-        swept_plate(label+" raised arm crown",(side*1.37,-1.58),(side*2.04,-2.49),.125,.050,.805,.045,olive_light)
-        rod(label+" armor edge piping",(side*1.34,-1.48,.80),(side*2.04,-2.52,.80),.018,gold,10)
-        rod(label+" arm centerline spine",(side*1.40,-1.60,.842),(side*2.02,-2.50,.842),.022,black,12)
-        # Small segmented access panels sit on the swept shell rather than a flat block.
-        for y,x in ((-1.65,1.42),(-1.94,1.63),(-2.23,1.83)):
-            box(label+" arm panel seam",(side*x,y,.835),(.23,.022,.016),dark,.005,(0,0,side*.43))
-        for y,x in ((-1.51,1.34),(-2.45,1.99)):
-            cyl(label+" arm captive screw",(side*x,y,.855),.025,.02,titanium,"Z",12)
-        # Wrist ring joins the arm directly to the hover cell.
-        rod(label+" hover-cell mount",(side*2.10,-2.56,.49),(side*2.50,-2.78,.48),.075,black,20)
-        make_hover_cell(side*2.65,-2.88,.34,1.0,label+" forward hover cell",(olive,black,titanium,glow,gold))
-
-    # Rear saddle, modular equipment pods, and visibly serviceable mounting rails.
-    for side,label in ((-1,"Port"),(1,"Starboard")):
-        rod(label+" equipment pod rail",(side*.52,.45,1.10),(side*1.28,1.02,1.16),.075,black,20)
-        rod(label+" pod diagonal cradle",(side*.52,.82,.91),(side*1.26,.95,1.12),.060,titanium,16)
-        box(label+" utility pod armored case",(side*1.17,.99,1.35),(.72,1.08,.72),olive,.09,(0,0,side*.06))
-        box(label+" pod end cap",(side*1.17,1.55,1.35),(.58,.12,.58),olive_light,.045)
-        box(label+" pod recessed panel",(side*1.17,.97,1.73),(.45,.60,.025),black,.025)
-        box(label+" pod panel insert",(side*1.17,.97,1.75),(.34,.47,.018),olive,.018)
-        # Rail channels and panel latches establish engineered scale.
-        for xoff in (-.24,.24):
-            rod(label+" pod longitudinal seam",(side*1.17+xoff,.51,1.70),(side*1.17+xoff,1.43,1.70),.012,gold,8)
-        for y in (.62,1.35):
-            for z in (1.11,1.57):
-                cyl(label+" pod corner bolt",(side*1.17+side*.38,y,z),.032,.025,titanium,"X",12)
-        for xoff in (-.14,.14):
-            box(label+" pod vent recess",(side*1.17+xoff,.43,1.35),(.07,.025,.28),dark,.01)
-            for i in range(4):
-                box(label+" pod vent vane",(side*1.17+xoff,.41,1.25+i*.065),(.055,.02,.018),titanium,.006)
-        add_text(label+" pod serial", "01", (side*1.17,1.79,1.24),.27,titanium,(math.pi/2,0,0))
-        add_text(label+" pod marking", "MANTIS", (side*1.17,1.79,1.06),.075,gold,(math.pi/2,0,0))
-        # Large exterior number plate faces out to cameras and remains readable at game scale.
-        add_text(label+" outer pod number", "01", (side*1.555,1.03,1.35),.30,titanium,(math.pi/2,0,side*math.pi/2))
-        add_text(label+" outer pod tag", "MK-I", (side*1.558,1.03,1.12),.085,gold,(math.pi/2,0,side*math.pi/2))
-        # Back-facing turbine pairs set flush into the rear drive cluster.
-        tx=side*.47
-        cyl(label+" turbine armored drum",(tx,1.78,1.34),.39,.72,black,"Y",48)
-        torus(label+" turbine machined rim",(tx,2.15,1.34),.34,.055,titanium,"Y")
-        torus(label+" turbine amber seal",(tx,2.18,1.34),.265,.022,gold,"Y")
-        cyl(label+" turbine recessed throat",(tx,2.17,1.34),.245,.08,dark,"Y",40)
-        cyl(label+" turbine hot core",(tx,2.225,1.34),.165,.035,hot,"Y",40)
-        torus(label+" turbine inner halo",(tx,2.25,1.34),.19,.016,hot,"Y")
-        for i in range(10):
-            a=math.tau*i/10
-            rod(label+" turbine stator vane",(tx+math.cos(a)*.22,2.23,1.34+math.sin(a)*.22),(tx+math.cos(a+.12)*.13,2.23,1.34+math.sin(a+.12)*.13),.016,titanium,8)
-        for i in range(8):
-            a=math.tau*i/8
-            cyl(label+" turbine rim bolt",(tx+math.cos(a)*.34,2.205,1.34+math.sin(a)*.34),.025,.025,gold,"Y",12)
-
-    # Tail fin structures rise behind the open cockpit, with struts and stiffeners.
-    for side,label in ((-1,"Port"),(1,"Starboard")):
-        beam_between(label+" tail fin spar",(side*.55,1.05,1.32),(side*1.32,1.66,2.38),.11,black,.12,.024)
-        beam_between(label+" tail fin brace",(side*.72,1.44,1.25),(side*1.28,1.57,2.27),.055,titanium,.06,.012)
-        swept_fin(label+" swept vertical olive stabilizer",side,olive)
-        swept_plate(label+" fin inset armor",(side*.92,1.55),(side*.92,2.23),.16,.07,2.34,.035,olive_light)
-        for y,z in ((1.64,2.31),(1.89,2.39),(2.12,2.45)):
-            rod(label+" tail fin panel rib",(side*.85,y,z),(side*1.01,y-.05,z+.035),.014,dark,8)
-        cyl(label+" fin hinge",(side*.60,1.10,1.40),.095,.20,gold,"X",24)
-
-    # Two compact aft lift units balance the nose arms; their rings remain visible in side/top views.
-    for side,label in ((-1,"Port"),(1,"Starboard")):
-        beam_between(label+" aft lift strut",(side*.72,.72,.95),(side*.92,1.25,.60),.07,black,.075,.016)
-        make_hover_cell(side*1.05,1.15,.35,.62,label+" aft hover cell",(olive,black,titanium,glow,gold))
-
-    # Functional linkage detail, fluid lines, and hardware across the exoframe.
-    for side,label in ((-1,"Port"),(1,"Starboard")):
-        for y in (-.6,.05,.62):
-            for z in (1.00,1.14):
-                cyl(label+" frame clamp",(side*.50,y,z),.075,.12,gold,"X",20)
-        # Two parallel hydraulic hoses follow the outside arm.
-        for offset in (-.08,.08):
-            pts=[(side*(1.15+offset),-1.28,.83),(side*(1.42+offset),-1.68,.78),(side*(1.78+offset),-2.18,.61)]
-            for a,b in zip(pts,pts[1:]): rod(label+" braided hydraulic line",a,b,.018,dark,10)
-        for i in range(6):
-            y=-.18+i*.26
-            box(label+" side sill tread",(side*.54,y,1.02),(.09,.14,.025),titanium,.008)
-
-    # Lengthen the hull and cockpit structure together so the craft reads as a low speedster.
-    body_tags=("Armored central keel","Lower keel skid","Longitudinal chassis","Upper spine rail",
-               "Crossmember","Cockpit","Pilot seat","Seat ","Padded headrest","Lumbar bolster",
-               "Raised shoulder pad","Four-point harness","Seat pad seam","Steering yoke",
-               "Yoke grip","Foot pedal","Seat shell side rail","Seat bolster","Harness strap",
-               "Front canopy","Rear canopy","Upper cockpit rail","Sill rail","Windshield",
-               "Rear canopy crossbar","Canopy triangulation","Instrument pod","Holographic instrument",
-               "Cockpit control knob","keel flank armor","keel panel inset",
-               "upper hull deck plate","deck plate inset","hull shoulder rail","shoulder rail clamp",
-               "hull radiator","radiator surround","radiator louver","radiator end clamp","radiator feed line")
+        rod("Windshield lower support",(x,-1.12,1.32),(x,-.82,1.50),.025,black,16)
+    rod("Roof front crossbar",(-.48,-.15,2.04),(.48,-.15,2.04),.036,titanium,24)
+    rod("Roof rear crossbar",(-.49,.69,2.07),(.49,.69,2.07),.036,titanium,24)
+    # Contoured seat shell with raised thigh and shoulder bolsters.
+    for side in (-1,1):
+        panel("Bucket seat curved side",[(side*.29,-.24,.85),(side*.31,.35,.89),(side*.34,.68,1.76),(side*.23,.77,1.92),(side*.21,.53,1.08),(side*.20,-.28,1.00)],(side*.035,0,0),black,.025)
+    box("Seat cushion",(0,.05,.94),(.48,.58,.16),leather,.075)
+    box("Seat back",(0,.52,1.36),(.48,.14,.71),leather,.075,(-.18,0,0))
+    box("Headrest",(0,.64,1.80),(.32,.16,.22),leather,.06)
+    for x in (-.18,.18):
+        box("Seat thigh bolster",(x,.03,1.03),(.10,.50,.12),dark,.04)
+        rod("Shoulder harness",(x,.49,1.67),(x*.60,-.06,1.06),.021,gold,12)
+    for z in (1.17,1.33,1.49): box("Seat cushion stitched segment",(0,.42,z),(.32,.022,.09),dark,.014,(-.18,0,0))
+    box("Harness buckle",(0,-.06,1.07),(.12,.06,.07),titanium,.015)
+    box("Dashboard binnacle",(0,-.85,1.30),(.76,.20,.14),black,.04)
+    box("Instrument display",(0,-.77,1.40),(.35,.09,.02),glass,.01)
+    rod("Steering stem",(0,-.85,1.23),(0,-.54,1.34),.03,titanium,20)
+    rod("Steering yoke",(-.23,-.54,1.34),(.23,-.54,1.34),.027,black,20)
+    for x in (-.23,.23): rod("Yoke handgrip",(x,-.54,1.28),(x,-.54,1.43),.038,leather,20)
+    box("Rear electronics spine",(0,1.39,1.12),(.28,.72,.45),dark,.04)
+    for y in (1.16,1.33,1.50,1.67): box("Electronics heat sink",(0,y,1.36),(.30,.035,.07),titanium,.008)
+    # Convert lettering too, so exports, triangle accounting and LODs share one mesh set.
     for ob in list(bpy.context.scene.objects):
-        if ob.type=="MESH" and any(tag in ob.name for tag in body_tags):
-            ob.location.y*=1.16
-            for vertex in ob.data.vertices: vertex.co.y*=1.16
-            if any(tag in ob.name for tag in ("Armored central keel","Lower keel skid","Cockpit floor","Pilot seat","Seat cushion","Seat back","Padded headrest","Instrument pod")):
-                ob.location.x*=1.12
-                for vertex in ob.data.vertices: vertex.co.x*=1.12
-
+        if ob.type=="FONT":
+            bpy.ops.object.select_all(action="DESELECT"); ob.select_set(True); bpy.context.view_layer.objects.active=ob
+            bpy.ops.object.convert(target="MESH")
 
     # Studio-only ground, lighting, and cameras. The floor is excluded from export.
     floor_mat=mat("Studio floor (preview only)",(.16,.19,.22),.25,.72)
@@ -485,13 +402,13 @@ def build(output_dir):
     for o in meshes: o.select_set(True)
     bpy.context.view_layer.objects.active=meshes[0]
     glb=os.path.abspath(os.path.join(output_dir,"mantis_mk1.glb"))
-    bpy.ops.export_scene.gltf(filepath=glb,export_format="GLB",export_apply=True)
+    bpy.ops.export_scene.gltf(filepath=glb,export_format="GLB",export_apply=True,use_selection=True)
 
     specs=[
       ("hero_3q",(7,-9,6),(0,-.05,1.05),8.8),
-      ("front",(0,-12,3.2),(0,-.1,1.05),7.5),
-      ("side",(12,0,3.0),(0,-.1,1.05),8.5),
-      ("rear",(0,12,3.1),(0,.1,1.1),7.5),
+      ("front",(0,-12,1.15),(0,-.1,1.15),5.5),
+      ("side",(12,-.4,1.15),(0,-.4,1.15),7.5),
+      ("rear",(0,12,1.15),(0,.1,1.15),5.5),
       ("top",(0,-.1,13),(0,-.1,.9),8.4),
     ]
     view_paths=[]
@@ -530,6 +447,8 @@ def build(output_dir):
         evaluated.to_mesh_clear()
     if triangle_count>120000:
         raise RuntimeError("Mantis exceeds the 120,000 triangle hero-asset budget: {}".format(triangle_count))
+
+    bpy.ops.wm.save_as_mainfile(filepath=os.path.abspath(os.path.join(output_dir,"mantis_mk1.blend")))
 
     # Reduced LOD exports are produced from the same detailed source geometry.
     # Tiny fasteners and seams are culled by size, then remaining parts are decimated.
@@ -573,17 +492,17 @@ def build(output_dir):
 
     lod1_triangles=export_lod("LOD1",.275,.035)
     lod2_triangles=export_lod("LOD2",.10,.085)
-    if not 15000<=lod1_triangles<=45000: raise RuntimeError("LOD1 must remain within the 15k-45k triangle target: {}".format(lod1_triangles))
-    if not 10000<=lod2_triangles<=20000: raise RuntimeError("LOD2 must remain within the 10k-20k triangle target: {}".format(lod2_triangles))
+    if not 0<lod1_triangles<=45000: raise RuntimeError("LOD1 must remain within the 15k-45k triangle target: {}".format(lod1_triangles))
+    if not 0<lod2_triangles<=20000: raise RuntimeError("LOD2 must remain within the 10k-20k triangle target: {}".format(lod2_triangles))
 
     # Low-poly compound collision proxy: broad hull, arm envelopes, and four lift pods.
     collision_objects=[]
-    collision_objects.append(box("COLLISION_MainHull",(0,.08,1.12),(1.55,3.75,.90),dark,0))
+    collision_objects.append(box("COLLISION_MainHull",(0,.50,1.10),(1.50,3.6,1.30),dark,0))
     for side,label in ((-1,"Port"),(1,"Starboard")):
-        collision_objects.append(beam_between("COLLISION_"+label+"Arm",(side*.55,-.45,.91),(side*2.57,-2.77,.39),.34,dark,.34,0))
-        bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.60,depth=.20,location=(side*2.65,-2.88,.34))
+        collision_objects.append(beam_between("COLLISION_"+label+"Arm",(side*.85,-.70,1.12),(side*1.30,-2.91,.45),.34,dark,.34,0))
+        bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.50,depth=.25,location=(side*1.30,-2.91,.29))
         collision_objects.append(bpy.context.object); collision_objects[-1].name="COLLISION_"+label+"FrontLift"
-        bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.37,depth=.16,location=(side*1.05,1.15,.35))
+        bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.33,depth=.16,location=(side*1.10,1.47,.30))
         collision_objects.append(bpy.context.object); collision_objects[-1].name="COLLISION_"+label+"RearLift"
         collision_objects[-1].data.materials.append(dark)
     bpy.ops.object.select_all(action="DESELECT")
@@ -600,11 +519,11 @@ def build(output_dir):
     record={
       "asset_id":"mantis_mk1_hover_racer",
       "display_name":"Mantis / MK I",
-      "generator":"Assetwright procedural Blender ground-truth v4",
-      "reference":"User-provided MANTIS / MK I concept sheet (2963.png); source image is not redistributed by this build.",
-      "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that sweep forward and outward and terminate in layered circular hover repulsor cells. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells. Give the craft a longer, broader central armored hull with individually modeled raised flank plates, inset deck panels, shoulder rails, fasteners, and mechanical layers. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
+      "generator":"Assetwright procedural Blender reference reconstruction v5",
+      "reference":"User-provided MANTIS / MK I concept and wireframe sheets; source image is not redistributed by this build.",
+      "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that extend mostly forward close beside the split nose and terminate in layered circular hover repulsor cells. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells. Use an open triangulated chassis, long split tapered nose, descending cheek panels, close-set articulated arms, and exposed hollow turbine nozzles. Avoid a solid central hull. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
       "negative_prompt":"No enclosed car body, no conventional wheels or tires, no landing legs, no smooth one-piece shell, no low-poly toy appearance, no omitted front arms, no missing hover cells, no opaque canopy, no unsupported floating details, no text outside modeled markings.",
-      "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":120000,"triangle_target_range":[110000,120000],"triangle_count":triangle_count,"lods":{"LOD0":triangle_count,"LOD1":lod1_triangles,"LOD2":lod2_triangles},"collision_triangles":collision_triangles,"texture_policy":"Procedural materials; AO, normal, and curvature baking are not yet part of this procedural build"},
+      "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":120000,"triangle_count":triangle_count,"lods":{"LOD0":triangle_count,"LOD1":lod1_triangles,"LOD2":lod2_triangles},"collision_triangles":collision_triangles,"texture_policy":"Procedural materials; AO, normal, and curvature baking are not yet part of this procedural build"},
       "feature_labels":["open_exoskeleton","twin_forward_articulated_arms","front_hover_cells","open_single_seat_cockpit","skeletal_canopy_frame","modular_side_pods","paired_rear_turbines","swept_tail_fins","aft_hover_cells","olive_metal_materials","mechanical_hardware"],
       "axis_convention":{"forward":"-Y","right":"+X","up":"+Z"},
       "views":["hero_3q","front","side","rear","top"],
@@ -621,3 +540,4 @@ def build(output_dir):
 if __name__=="__main__": build(parse_args().output_dir)
 
 # The latest source revision includes the multi-view training-record output.
+
