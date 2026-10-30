@@ -123,6 +123,35 @@ def beam_between(name, a, b, width, material, depth=None, bevel=0.02):
     return o
 
 
+def swept_plate(name, start, end, width_root, width_tip, z, thickness, material):
+    """Tapered, swept polygonal armor plate following an articulated arm."""
+    a=Vector((start[0],start[1],0)); b=Vector((end[0],end[1],0))
+    side=Vector((-(b-a).y,(b-a).x,0)).normalized()
+    points=[a+side*width_root,b+side*width_tip,b-side*width_tip,a-side*width_root]
+    verts=[(p.x,p.y,z-thickness*.5) for p in points]+[(p.x,p.y,z+thickness*.5) for p in points]
+    faces=[(0,1,2,3),(7,6,5,4)]
+    for i in range(4): faces.append((i,(i+1)%4,(i+1)%4+4,i+4))
+    me=bpy.data.meshes.new(name+" mesh"); me.from_pydata(verts,[],faces); me.materials.append(material); me.update()
+    ob=bpy.data.objects.new(name,me); bpy.context.collection.objects.link(ob)
+    bevel=ob.modifiers.new("Armored tapered edge breaks","BEVEL"); bevel.width=min(.025,thickness*.24); bevel.segments=3
+    ob.modifiers.new("Weighted plate normals","WEIGHTED_NORMAL")
+    return ob
+
+
+def swept_fin(name, side, material):
+    """Extruded swept vertical tail fin, profiled in the rear/vertical plane."""
+    profile=[(1.08,1.42),(1.37,2.28),(1.78,2.57),(2.34,2.62),(2.12,1.53)]
+    x0=side*.84; x1=side*1.02
+    verts=[(x0,y,z) for y,z in profile]+[(x1,y,z) for y,z in profile]
+    faces=[tuple(range(5)),tuple(reversed(range(5,10)))]
+    for i in range(5): faces.append((i,(i+1)%5,(i+1)%5+5,i+5))
+    me=bpy.data.meshes.new(name+" mesh"); me.from_pydata(verts,[],faces); me.materials.append(material); me.update()
+    ob=bpy.data.objects.new(name,me); bpy.context.collection.objects.link(ob)
+    bevel=ob.modifiers.new("Tail-fin machined edge","BEVEL"); bevel.width=.035; bevel.segments=3
+    ob.modifiers.new("Weighted fin normals","WEIGHTED_NORMAL")
+    return ob
+
+
 def make_hover_cell(x, y, z, scale, label, mats):
     armor, black, titanium, glow, gold = mats
     # Layered magnetic-disc housing; top is visible from the 3/4 camera.
@@ -234,14 +263,15 @@ def build(output_dir):
         beam_between(label+" actuator outer sleeve",(side*.66,-.48,1.08),(side*1.31,-1.30,.85),.074,dark,.074,.014)
         beam_between(label+" actuator polished ram",(side*.88,-.76,1.01),(side*1.42,-1.44,.82),.031,titanium,.032,.008)
         # Sculpted segmented forearm fairing, outlined in warning gold.
-        fair=box(label+" olive arm armor",(side*1.62,-1.96,.70),(.40,1.56,.20),olive,.08,(0,0,side*.43))
-        box(label+" arm crown plate",(side*1.62,-1.96,.815),(.28,1.34,.035),olive_light,.035,(0,0,side*.43))
-        rod(label+" armor edge piping",(side*1.45,-1.35,.83),(side*1.99,-2.54,.63),.014,gold,10)
-        # small segmented access panels and fasteners on each limb
-        for y in (-1.55,-1.90,-2.25):
-            box(label+" arm panel seam",(side*1.62,y,.84),(.24,.025,.018),dark,.006,(0,0,side*.43))
-        for y in (-2.36,-1.48):
-            cyl(label+" arm captive screw",(side*1.62,y,.845),.025,.02,titanium,"Z",12)
+        swept_plate(label+" tapered swept outer armor",(side*1.26,-1.43),(side*2.10,-2.62),.245,.105,.70,.18,olive)
+        swept_plate(label+" raised arm crown",(side*1.37,-1.58),(side*2.04,-2.49),.125,.050,.805,.045,olive_light)
+        rod(label+" armor edge piping",(side*1.34,-1.48,.80),(side*2.04,-2.52,.80),.018,gold,10)
+        rod(label+" arm centerline spine",(side*1.40,-1.60,.842),(side*2.02,-2.50,.842),.022,black,12)
+        # Small segmented access panels sit on the swept shell rather than a flat block.
+        for y,x in ((-1.65,1.42),(-1.94,1.63),(-2.23,1.83)):
+            box(label+" arm panel seam",(side*x,y,.835),(.23,.022,.016),dark,.005,(0,0,side*.43))
+        for y,x in ((-1.51,1.34),(-2.45,1.99)):
+            cyl(label+" arm captive screw",(side*x,y,.855),.025,.02,titanium,"Z",12)
         # Wrist ring joins the arm directly to the hover cell.
         rod(label+" hover-cell mount",(side*2.10,-2.56,.49),(side*2.50,-2.78,.48),.075,black,20)
         make_hover_cell(side*2.65,-2.88,.34,1.0,label+" forward hover cell",(olive,black,titanium,glow,gold))
@@ -266,6 +296,9 @@ def build(output_dir):
                 box(label+" pod vent vane",(side*1.17+xoff,.41,1.25+i*.065),(.055,.02,.018),titanium,.006)
         add_text(label+" pod serial", "01", (side*1.17,1.79,1.24),.27,titanium,(math.pi/2,0,0))
         add_text(label+" pod marking", "MANTIS", (side*1.17,1.79,1.06),.075,gold,(math.pi/2,0,0))
+        # Large exterior number plate faces out to cameras and remains readable at game scale.
+        add_text(label+" outer pod number", "01", (side*1.555,1.03,1.35),.30,titanium,(math.pi/2,0,side*math.pi/2))
+        add_text(label+" outer pod tag", "MK-I", (side*1.558,1.03,1.12),.085,gold,(math.pi/2,0,side*math.pi/2))
         # Back-facing turbine pairs set flush into the rear drive cluster.
         tx=side*.47
         cyl(label+" turbine armored drum",(tx,1.78,1.34),.39,.72,black,"Y",48)
@@ -285,10 +318,10 @@ def build(output_dir):
     for side,label in ((-1,"Port"),(1,"Starboard")):
         beam_between(label+" tail fin spar",(side*.55,1.05,1.32),(side*1.32,1.66,2.38),.11,black,.12,.024)
         beam_between(label+" tail fin brace",(side*.72,1.44,1.25),(side*1.28,1.57,2.27),.055,titanium,.06,.012)
-        fin=box(label+" swept olive tail fin",(side*1.02,1.49,1.98),(.48,.88,.10),olive,.045,(side*.28,side*.38,side*.12))
-        box(label+" tail fin inset",(side*1.02,1.46,2.04),(.27,.55,.018),olive_light,.015,(side*.28,side*.38,side*.12))
-        for y in (1.27,1.48,1.69):
-            box(label+" fin panel line",(side*1.02,y,2.055),(.23,.018,.012),dark,.004,(side*.28,side*.38,side*.12))
+        swept_fin(label+" swept vertical olive stabilizer",side,olive)
+        swept_plate(label+" fin inset armor",(side*.92,1.55),(side*.92,2.23),.16,.07,2.34,.035,olive_light)
+        for y,z in ((1.64,2.31),(1.89,2.39),(2.12,2.45)):
+            rod(label+" tail fin panel rib",(side*.85,y,z),(side*1.01,y-.05,z+.035),.014,dark,8)
         cyl(label+" fin hinge",(side*.60,1.10,1.40),.095,.20,gold,"X",24)
 
     # Two compact aft lift units balance the nose arms; their rings remain visible in side/top views.
