@@ -585,7 +585,7 @@ def build(output_dir):
         return lod_triangles
 
     lod1_triangles=export_lod("LOD1",.25,.035)
-    lod2_triangles=export_lod("LOD2",.07,.085)
+    lod2_triangles=export_lod("LOD2",.06,.085)
     if not 0<lod1_triangles<=45000: raise RuntimeError("LOD1 must remain within the 15k-45k triangle target: {}".format(lod1_triangles))
     if not 0<lod2_triangles<=20000: raise RuntimeError("LOD2 must remain within the 10k-20k triangle target: {}".format(lod2_triangles))
 
