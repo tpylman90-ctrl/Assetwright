@@ -163,7 +163,7 @@ def make_hover_cell(x, y, z, scale, label, mats):
     cyl(label+" recessed emitter well", (x,y,z+.17*scale), .34*scale, .07*scale, black, "Z", 40)
     cyl(label+" ceramic emitter face", (x,y,z+.215*scale), .27*scale, .035*scale, glow, "Z", 40)
     cyl(label+" central magnetic cap", (x,y,z+.24*scale), .13*scale, .06*scale, titanium, "Z", 32)
-    for i in range(16):
+    for i in range(14):
         a=math.tau*i/12
         px=x+math.cos(a)*.51*scale; py=y+math.sin(a)*.51*scale
         cyl(label+" rim fastener %02d"%i, (px,py,z+.16*scale), .025*scale, .035*scale, gold, "Z", 12)
@@ -172,7 +172,7 @@ def make_hover_cell(x, y, z, scale, label, mats):
         px=x+math.cos(a)*.39*scale; py=y+math.sin(a)*.39*scale
         rod(label+" emitter vane %02d"%i,(px,py,z+.25*scale),(x+math.cos(a+.18)*.26*scale,y+math.sin(a+.18)*.26*scale,z+.25*scale),.018*scale,titanium,8)
     # Segmented armored skirt and individually recessed cooling slots.
-    for i in range(16):
+    for i in range(14):
         a=math.tau*i/12
         rx,ry=math.cos(a),math.sin(a)
         px=x+rx*.535*scale; py=y+ry*.535*scale
@@ -241,7 +241,7 @@ def build(output_dir):
             cyl(label+" shoulder rail clamp",(side*.56,y,1.43 if y<.8 else 1.50),.062,.075,gold,"X",20)
     # Recessed side radiators use individual louvers, end clamps, and short feed tubes.
     for side,label in ((-1,"Port"),(1,"Starboard")):
-        for group,y in enumerate((-1.00,-.40,.30,.90)):
+        for group,y in enumerate((-.90,0,.90)):
             x=side*.82
             box(label+" hull radiator recess %02d"%group,(x,y,1.22),(.045,.37,.26),black,.035)
             box(label+" radiator surround %02d"%group,(x+side*.025,y,1.22),(.025,.42,.31),titanium,.025)
@@ -533,7 +533,7 @@ def build(output_dir):
     record={
       "asset_id":"mantis_mk1_hover_racer",
       "display_name":"Mantis / MK I",
-      "generator":"Assetwright procedural Blender ground-truth v3.2",
+      "generator":"Assetwright procedural Blender ground-truth v3.3",
       "reference":"User-provided MANTIS / MK I concept sheet (2963.png); source image is not redistributed by this build.",
       "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that sweep forward and outward and terminate in layered circular hover repulsor cells. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells. Give the craft a longer, broader central armored hull with individually modeled raised flank plates, inset deck panels, shoulder rails, fasteners, and mechanical layers. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
       "negative_prompt":"No enclosed car body, no conventional wheels or tires, no landing legs, no smooth one-piece shell, no low-poly toy appearance, no omitted front arms, no missing hover cells, no opaque canopy, no unsupported floating details, no text outside modeled markings.",
