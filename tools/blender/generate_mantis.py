@@ -77,7 +77,7 @@ def box(name, loc, dims, material, bevel=0.04, rot=(0, 0, 0)):
     if bevel:
         b = o.modifiers.new("Machined corner radii", "BEVEL")
         b.width = bevel
-        b.segments = 4
+        b.segments = 3
         bpy.context.view_layer.objects.active = o
         bpy.ops.object.modifier_apply(modifier=b.name)
     o.modifiers.new("Weighted hard-surface normals", "WEIGHTED_NORMAL")
