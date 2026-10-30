@@ -417,3 +417,5 @@ def build(output_dir):
     print("MANTIS_BUILD_OK glb_bytes={} meshes={} outputs={}".format(os.path.getsize(glb),len(meshes),len(view_paths)+2))
 
 if __name__=="__main__": build(parse_args().output_dir)
+
+# The latest source revision includes the multi-view training-record output.
