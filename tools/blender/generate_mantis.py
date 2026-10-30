@@ -530,22 +530,90 @@ def build(output_dir):
         evaluated.to_mesh_clear()
     if triangle_count>120000:
         raise RuntimeError("Mantis exceeds the 120,000 triangle hero-asset budget: {}".format(triangle_count))
+
+    # Reduced LOD exports are produced from the same detailed source geometry.
+    # Tiny fasteners and seams are culled by size, then remaining parts are decimated.
+    def export_lod(label, ratio, detail_cutoff):
+        copies=[]
+        for original in meshes:
+            if max(original.dimensions) < detail_cutoff:
+                continue
+            obj=original.copy()
+            obj.data=original.data.copy()
+            obj.name=label+"_"+original.name
+            scene.collection.objects.link(obj)
+            poly_count=len(obj.data.polygons)
+            if poly_count>24:
+                dec=obj.modifiers.new(label+" controlled polygon reduction","DECIMATE")
+                dec.decimate_type="COLLAPSE"
+                dec.ratio=ratio
+                dec.use_collapse_triangulate=True
+            copies.append(obj)
+        bpy.ops.object.select_all(action="DESELECT")
+        for obj in copies: obj.select_set(True)
+        if copies:
+            bpy.context.view_layer.objects.active=copies[0]
+            depsgraph=bpy.context.evaluated_depsgraph_get()
+            lod_triangles=0
+            for obj in copies:
+                evaluated=obj.evaluated_get(depsgraph)
+                mesh=evaluated.to_mesh()
+                lod_triangles+=sum(max(0,len(poly.vertices)-2) for poly in mesh.polygons)
+                evaluated.to_mesh_clear()
+            path=os.path.abspath(os.path.join(output_dir,"mantis_mk1_"+label.lower()+".glb"))
+            bpy.ops.export_scene.gltf(filepath=path,export_format="GLB",export_apply=True,use_selection=True)
+        else:
+            lod_triangles=0
+            path=""
+        for obj in copies:
+            data=obj.data
+            bpy.data.objects.remove(obj,do_unlink=True)
+            if data.users==0: bpy.data.meshes.remove(data)
+        return lod_triangles
+
+    lod1_triangles=export_lod("LOD1",.35,.035)
+    lod2_triangles=export_lod("LOD2",.14,.085)
+
+    # Low-poly compound collision proxy: broad hull, arm envelopes, and four lift pods.
+    collision_objects=[]
+    collision_objects.append(box("COLLISION_MainHull",(0,.08,1.12),(1.55,3.75,.90),dark,0))
+    for side,label in ((-1,"Port"),(1,"Starboard")):
+        collision_objects.append(beam_between("COLLISION_"+label+"Arm",(side*.55,-.45,.91),(side*2.57,-2.77,.39),.34,dark,.34,0))
+        bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.60,depth=.20,location=(side*2.65,-2.88,.34))
+        collision_objects.append(bpy.context.object); collision_objects[-1].name="COLLISION_"+label+"FrontLift"
+        bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.37,depth=.16,location=(side*1.05,1.15,.35))
+        collision_objects.append(bpy.context.object); collision_objects[-1].name="COLLISION_"+label+"RearLift"
+        collision_objects[-1].data.materials.append(dark)
+    bpy.ops.object.select_all(action="DESELECT")
+    for obj in collision_objects: obj.select_set(True)
+    bpy.context.view_layer.objects.active=collision_objects[0]
+    collision_path=os.path.abspath(os.path.join(output_dir,"mantis_mk1_collision.glb"))
+    bpy.ops.export_scene.gltf(filepath=collision_path,export_format="GLB",export_apply=True,use_selection=True)
+    collision_triangles=sum(sum(max(0,len(poly.vertices)-2) for poly in obj.data.polygons) for obj in collision_objects)
+    for obj in collision_objects:
+        data=obj.data
+        bpy.data.objects.remove(obj,do_unlink=True)
+        if data.users==0: bpy.data.meshes.remove(data)
+
     record={
       "asset_id":"mantis_mk1_hover_racer",
       "display_name":"Mantis / MK I",
-      "generator":"Assetwright procedural Blender ground-truth v3.3",
+      "generator":"Assetwright procedural Blender ground-truth v4",
       "reference":"User-provided MANTIS / MK I concept sheet (2963.png); source image is not redistributed by this build.",
       "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that sweep forward and outward and terminate in layered circular hover repulsor cells. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells. Give the craft a longer, broader central armored hull with individually modeled raised flank plates, inset deck panels, shoulder rails, fasteners, and mechanical layers. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
       "negative_prompt":"No enclosed car body, no conventional wheels or tires, no landing legs, no smooth one-piece shell, no low-poly toy appearance, no omitted front arms, no missing hover cells, no opaque canopy, no unsupported floating details, no text outside modeled markings.",
-      "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":120000,"triangle_target_range":[110000,120000],"triangle_count":triangle_count,"texture_policy":"Procedural material response; no external image dependency"},
+      "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":120000,"triangle_target_range":[110000,120000],"triangle_count":triangle_count,"lods":{"LOD0":triangle_count,"LOD1":lod1_triangles,"LOD2":lod2_triangles},"collision_triangles":collision_triangles,"texture_policy":"Procedural materials; AO, normal, and curvature baking are not yet part of this procedural build"},
       "feature_labels":["open_exoskeleton","twin_forward_articulated_arms","front_hover_cells","open_single_seat_cockpit","skeletal_canopy_frame","modular_side_pods","paired_rear_turbines","swept_tail_fins","aft_hover_cells","olive_metal_materials","mechanical_hardware"],
       "axis_convention":{"forward":"-Y","right":"+X","up":"+Z"},
       "views":["hero_3q","front","side","rear","top"],
-      "files":["mantis_mk1.glb","mantis_mk1_review_board.png"],
+      "files":["mantis_mk1.glb","mantis_mk1_lod1.glb","mantis_mk1_lod2.glb","mantis_mk1_collision.glb","mantis_mk1_review_board.png"],
       "license":"No repository license declared; confirm distribution terms before redistribution"
     }
     with open(os.path.join(output_dir,"mantis_mk1_training_record.json"),"w",encoding="utf-8") as f: json.dump(record,f,indent=2)
     if not os.path.isfile(glb) or os.path.getsize(glb)<4096: raise RuntimeError("GLB export missing or unexpectedly small")
+    for artifact in ("mantis_mk1_lod1.glb","mantis_mk1_lod2.glb","mantis_mk1_collision.glb"):
+        artifact_path=os.path.join(output_dir,artifact)
+        if not os.path.isfile(artifact_path) or os.path.getsize(artifact_path)<1024: raise RuntimeError("{} missing or unexpectedly small".format(artifact))
     print("MANTIS_BUILD_OK glb_bytes={} meshes={} outputs={}".format(os.path.getsize(glb),len(meshes),len(view_paths)+2))
 
 if __name__=="__main__": build(parse_args().output_dir)
