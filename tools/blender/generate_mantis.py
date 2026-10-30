@@ -571,8 +571,10 @@ def build(output_dir):
             if data.users==0: bpy.data.meshes.remove(data)
         return lod_triangles
 
-    lod1_triangles=export_lod("LOD1",.35,.035)
-    lod2_triangles=export_lod("LOD2",.14,.085)
+    lod1_triangles=export_lod("LOD1",.29,.035)
+    lod2_triangles=export_lod("LOD2",.10,.085)
+    if not 15000<=lod1_triangles<=45000: raise RuntimeError("LOD1 must remain within the 15k-45k triangle target: {}".format(lod1_triangles))
+    if not 10000<=lod2_triangles<=20000: raise RuntimeError("LOD2 must remain within the 10k-20k triangle target: {}".format(lod2_triangles))
 
     # Low-poly compound collision proxy: broad hull, arm envelopes, and four lift pods.
     collision_objects=[]
