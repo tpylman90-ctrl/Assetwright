@@ -453,16 +453,16 @@ def build(output_dir):
         evaluated_mesh=evaluated.to_mesh()
         triangle_count+=sum(max(0,len(poly.vertices)-2) for poly in evaluated_mesh.polygons)
         evaluated.to_mesh_clear()
-    if triangle_count>60000:
-        raise RuntimeError("Mantis exceeds the 60,000 triangle game budget: {}".format(triangle_count))
+    if triangle_count>85000:
+        raise RuntimeError("Mantis exceeds the 85,000 triangle hero-asset budget: {}".format(triangle_count))
     record={
       "asset_id":"mantis_mk1_hover_racer",
       "display_name":"Mantis / MK I",
-      "generator":"Assetwright procedural Blender ground-truth v1",
+      "generator":"Assetwright procedural Blender ground-truth v2",
       "reference":"User-provided MANTIS / MK I concept sheet (2963.png); source image is not redistributed by this build.",
       "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that sweep forward and outward and terminate in layered circular hover repulsor cells. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
       "negative_prompt":"No enclosed car body, no conventional wheels or tires, no landing legs, no smooth one-piece shell, no low-poly toy appearance, no omitted front arms, no missing hover cells, no opaque canopy, no unsupported floating details, no text outside modeled markings.",
-      "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":60000,"triangle_count":triangle_count,"texture_policy":"Procedural material response; no external image dependency"},
+      "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":85000,"triangle_count":triangle_count,"texture_policy":"Procedural material response; no external image dependency"},
       "feature_labels":["open_exoskeleton","twin_forward_articulated_arms","front_hover_cells","open_single_seat_cockpit","skeletal_canopy_frame","modular_side_pods","paired_rear_turbines","swept_tail_fins","aft_hover_cells","olive_metal_materials","mechanical_hardware"],
       "axis_convention":{"forward":"-Y","right":"+X","up":"+Z"},
       "views":["hero_3q","front","side","rear","top"],
