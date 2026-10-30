@@ -15,7 +15,7 @@ Run the **Mantis MK I training asset** workflow from GitHub Actions, or let a pu
 - Paired rear turbine drums with concentric rings, stators, and amber cores.
 - Swept tail fins and compact aft hover cells.
 
-The generator aims to stay within a 85,000-triangle real-time budget and records the evaluated triangle count in its output metadata. The asset is intended for Godot GLB import and later reuse in SceneForge. It remains a generated procedural exemplar; it does not train or update a machine-learning model by itself.
+The generator aims to stay within a 120,000-triangle real-time budget and records the evaluated triangle count in its output metadata. The asset is intended for Godot GLB import and later reuse in SceneForge. It remains a generated procedural exemplar; it does not train or update a machine-learning model by itself.
 
 ## Learning-loop record
 
