@@ -77,7 +77,7 @@ def box(name, loc, dims, material, bevel=0.04, rot=(0, 0, 0)):
     if bevel:
         b = o.modifiers.new("Machined corner radii", "BEVEL")
         b.width = bevel
-        b.segments = 3
+        b.segments = 5
         bpy.context.view_layer.objects.active = o
         bpy.ops.object.modifier_apply(modifier=b.name)
     o.modifiers.new("Weighted hard-surface normals", "WEIGHTED_NORMAL")
@@ -100,7 +100,7 @@ def rod(name, a, b, radius, material, vertices=16, radius2=None):
     return o
 
 
-def cyl(name, loc, radius, depth, material, axis="Z", vertices=32):
+def cyl(name, loc, radius, depth, material, axis="Z", vertices=64):
     bpy.ops.mesh.primitive_cylinder_add(vertices=vertices, radius=radius, depth=depth, location=loc)
     o=bpy.context.object; o.name=name; o.data.materials.append(material)
     direction={"X":(0,math.pi/2,0),"Y":(math.pi/2,0,0),"Z":(0,0,0)}[axis]
@@ -110,7 +110,7 @@ def cyl(name, loc, radius, depth, material, axis="Z", vertices=32):
 
 
 def torus(name, loc, major, minor, material, axis="Z"):
-    bpy.ops.mesh.primitive_torus_add(major_segments=40, minor_segments=10, major_radius=major, minor_radius=minor, location=loc)
+    bpy.ops.mesh.primitive_torus_add(major_segments=64, minor_segments=16, major_radius=major, minor_radius=minor, location=loc)
     o=bpy.context.object; o.name=name; o.data.materials.append(material)
     o.rotation_euler={"X":(0,math.pi/2,0),"Y":(math.pi/2,0,0),"Z":(0,0,0)}[axis]
     return o
@@ -223,8 +223,29 @@ def build(output_dir):
     hot=mat("10 | turbine amber emission",(1.0,.25,.025),.12,.2,3.0)
 
     # Low central exoskeleton spine, keel, and open lattice floor.
-    loft("Armored central keel",[(-1.55,.28,1.18,.92),(-1.10,.52,1.32,.83),(.20,.56,1.36,.78),(1.25,.66,1.48,.80),(1.72,.55,1.42,.88)],olive)
-    box("Lower keel skid",(0,.15,.74),(.44,2.28,.16),black,.06)
+    loft("Armored central keel",[(-1.86,.36,1.26,.90),(-1.35,.64,1.48,.78),(.22,.70,1.56,.74),(1.48,.81,1.62,.76),(1.98,.68,1.53,.86)],olive)
+    box("Lower keel skid",(0,.12,.70),(.54,2.72,.18),black,.06)
+    # The central body receives layered, removable armor rather than reading as a thin spine.
+    for side,label in ((-1,"Port"),(1,"Starboard")):
+        for idx,y in enumerate((-1.20,-.64,-.06,.52,1.10,1.62)):
+            z=1.20 + (0.08 if y>1.0 else 0.0)
+            x=side*(.63 if y<1.2 else .74)
+            box(label+" keel flank armor panel %02d"%idx,(x,y,z),(.20,.49,.43),olive_light,.065,(0,0,side*.035))
+            box(label+" keel panel inset %02d"%idx,(x+side*.105,y,z),(.018,.31,.24),olive,.035,(0,0,side*.035))
+            for sy in (-.18,.18):
+                for sz in (-.14,.14):
+                    cyl(label+" hull captive fastener",(x+side*.12,y+sy,z+sz),.024,.024,gold,"X",16)
+        # Raised shoulder rails and hard points define the broad armored shoulders.
+        rod(label+" hull shoulder rail",(side*.47,-1.42,1.40),(side*.66,1.65,1.57),.042,titanium,16)
+        for y in (-1.15,-.60,.02,.64,1.24):
+            cyl(label+" shoulder rail clamp",(side*.56,y,1.43 if y<.8 else 1.50),.062,.075,gold,"X",20)
+    # Split upper-deck plates frame the cockpit while preserving its open center.
+    for side,label in ((-1,"Port"),(1,"Starboard")):
+        for y,z in ((-1.43,1.43),(-.98,1.49),(.94,1.55),(1.43,1.55)):
+            box(label+" upper hull deck plate",(side*.30,y,z),(.38,.48,.065),olive_light,.045,(0,0,side*.025))
+            box(label+" deck plate inset",(side*.30,y,z+.036),(.23,.31,.012),olive,.018,(0,0,side*.025))
+            for sy in (-.18,.18):
+                cyl(label+" deck plate screw",(side*.30+side*.13,y+sy,z+.046),.018,.015,titanium,"Z",12)
     for x in (-.48,.48):
         rod("Longitudinal chassis tube",(x,-1.18,1.02),(x,1.58,1.05),.055,black,20)
         rod("Upper spine rail",(x,-.85,1.35),(x,1.40,1.45),.048,titanium,16)
@@ -232,6 +253,22 @@ def build(output_dir):
         rod("Crossmember",(-.53,y,1.0),(.53,y,1.0),.052,black,16)
         for x in (-.53,.53):
             cyl("Crossmember clevis",(x,y,1.0),.082,.08,gold,"X",24)
+
+    # Lengthen the hull and cockpit structure together so the craft reads as a low speedster.
+    body_tags=("Armored central keel","Lower keel skid","Longitudinal chassis","Upper spine rail",
+               "Crossmember","Cockpit","Pilot seat","Seat ","Padded headrest","Lumbar bolster",
+               "Raised shoulder pad","Four-point harness","Seat pad seam","Steering yoke",
+               "Yoke grip","Foot pedal","Seat shell side rail","Seat bolster","Harness strap",
+               "Front canopy","Rear canopy","Upper cockpit rail","Sill rail","Windshield",
+               "Rear canopy crossbar","Canopy triangulation","Instrument pod","Holographic instrument",
+               "Cockpit control knob")
+    for ob in list(bpy.context.scene.objects):
+        if ob.type=="MESH" and any(tag in ob.name for tag in body_tags):
+            ob.location.y*=1.16
+            for vertex in ob.data.vertices: vertex.co.y*=1.16
+            if any(tag in ob.name for tag in ("Armored central keel","Lower keel skid","Cockpit floor","Pilot seat","Seat cushion","Seat back","Padded headrest","Instrument pod")):
+                ob.location.x*=1.12
+                for vertex in ob.data.vertices: vertex.co.x*=1.12
 
     # Open cockpit cell with seat, shoulder hoops, braced canopy frame, and controls.
     box("Cockpit floor pan",(0,.12,1.08),(.78,1.20,.12),black,.045)
@@ -480,11 +517,11 @@ def build(output_dir):
     record={
       "asset_id":"mantis_mk1_hover_racer",
       "display_name":"Mantis / MK I",
-      "generator":"Assetwright procedural Blender ground-truth v2",
+      "generator":"Assetwright procedural Blender ground-truth v3",
       "reference":"User-provided MANTIS / MK I concept sheet (2963.png); source image is not redistributed by this build.",
-      "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that sweep forward and outward and terminate in layered circular hover repulsor cells. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
+      "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that sweep forward and outward and terminate in layered circular hover repulsor cells. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells. Give the craft a longer, broader central armored hull with individually modeled raised flank plates, inset deck panels, shoulder rails, fasteners, and mechanical layers. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
       "negative_prompt":"No enclosed car body, no conventional wheels or tires, no landing legs, no smooth one-piece shell, no low-poly toy appearance, no omitted front arms, no missing hover cells, no opaque canopy, no unsupported floating details, no text outside modeled markings.",
-      "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":120000,"triangle_count":triangle_count,"texture_policy":"Procedural material response; no external image dependency"},
+      "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":120000,"triangle_target_range":[110000,120000],"triangle_count":triangle_count,"texture_policy":"Procedural material response; no external image dependency"},
       "feature_labels":["open_exoskeleton","twin_forward_articulated_arms","front_hover_cells","open_single_seat_cockpit","skeletal_canopy_frame","modular_side_pods","paired_rear_turbines","swept_tail_fins","aft_hover_cells","olive_metal_materials","mechanical_hardware"],
       "axis_convention":{"forward":"-Y","right":"+X","up":"+Z"},
       "views":["hero_3q","front","side","rear","top"],
