@@ -310,7 +310,9 @@ def build(output_dir):
         for y,r in ((1.61,.43),(1.98,.46),(2.39,.47),(2.63,.48)):
             torus(label+" turbine flange",(tx,y,1.19),r,.024,titanium,"Y")
         torus(label+" nozzle lip",(tx,2.64,1.19),.435,.018,gold,"Y")
-        cyl(label+" recessed hot core",(tx,2.07,1.19),.21,.04,hot,"Y",48)
+        cyl(label+" recessed core backplate",(tx,2.02,1.19),.24,.035,dark,"Y",48)
+        cyl(label+" recessed hot core",(tx,2.07,1.19),.105,.04,hot,"Y",40)
+        torus(label+" internal core ring",(tx,2.09,1.19),.18,.012,gold,"Y")
         for i in range(16):
             a=i*math.tau/16
             def radial(r,y,t): return (tx+r*math.cos(t),y,1.19+r*math.sin(t))
@@ -326,6 +328,45 @@ def build(output_dir):
         rod(label+" aft lift support",pt(1.10,1.47,.48),pt(1.10,1.47,.83),.07,black,24)
         for y in (-.45,.05,.55):
             rod(label+" cockpit floor diagonal",pt(.62,y,.80),pt(.40,y+.35,1.14),.025,black,16)
+
+    # Secondary engineered forms from the reference close-ups.
+    for side,label in ((-1,"Port"),(1,"Starboard")):
+        def pt(x,y,z): return (side*x,y,z)
+        # Layered forward-link armor follows the linkage slope, leaving pistons exposed.
+        panel(label+" forward link armored web",[pt(1.18,-1.80,.90),pt(1.36,-2.67,.65),pt(1.39,-2.79,.56),pt(1.25,-2.22,.64),pt(1.16,-1.85,.78)],(side*.035,0,0),olive)
+        panel(label+" forward link inset",[pt(1.224,-1.94,.81),pt(1.355,-2.61,.63),pt(1.31,-2.32,.67)],(side*.012,0,0),gold,.005)
+        for y,z,x in ((-1.94,.83,1.23),(-2.56,.65,1.35)):
+            cyl(label+" web attachment",pt(x,y,z),.025,.035,titanium,"X",8)
+        # Triangular gussets and paired mounting ears reinforce the cage intersections.
+        for y in (-.98,1.12):
+            panel(label+" sill triangular gusset",[pt(.69,y,1.19),pt(.69,y+.26,1.19),pt(.69,y+.19,.99)],(side*.035,0,0),black)
+            for yy in (y+.05,y+.20): cyl(label+" gusset bolt",pt(.735,yy,1.15),.024,.022,titanium,"X",8)
+        # Four small edge fasteners on each large cheek, without filling flat panels.
+        for x,y,z in ((.25,-2.74,.82),(.39,-2.16,1.04),(.54,-1.60,1.21),(.66,-1.18,1.33)):
+            cyl(label+" nose countersunk screw",pt(x,y,z),.022,.015,titanium,"Z",8)
+        box(label+" nose running lamp bed",pt(.59,-1.45,1.23),(.055,.35,.05),black,.012,(.28,0,0))
+        for y in (-1.55,-1.48,-1.41): box(label+" running lamp emitter",pt(.59,y,1.26),(.035,.035,.025),glow,.007)
+        # Low stacked turbine control heads occupy the rear deck above the engines.
+        box(label+" turbine governor cradle",pt(.57,1.83,1.69),(.56,.68,.10),black,.035)
+        box(label+" turbine governor casing",pt(.57,1.83,1.81),(.43,.53,.15),olive,.035)
+        cyl(label+" governor recessed fan",pt(.57,1.83,1.90),.18,.035,dark,"Z",40)
+        torus(label+" governor retaining lip",pt(.57,1.83,1.92),.17,.017,titanium)
+        for i in range(8):
+            a=i*math.tau/8
+            rod(label+" governor grille",(side*.57+.065*math.cos(a),1.83+.065*math.sin(a),1.934),(side*.57+.15*math.cos(a+.23),1.83+.15*math.sin(a+.23),1.934),.012,titanium,8)
+        for y in (1.64,2.05):
+            rod(label+" engine service line",pt(.90,y,1.48),pt(.77,y,1.79),.022,gold,16)
+        # Visible rear cooling plates and cylinder straps replace a bare barrel.
+        for i in range(5):
+            y=1.67+i*.105
+            box(label+" turbine cooling plate",pt(.97,y,1.23),(.055,.025,.33),black,.008)
+        for y in (1.62,2.30):
+            for a in (.35,1.2,2.1):
+                x=side*.57+.47*math.cos(a); z=1.19+.47*math.sin(a)
+                box(label+" turbine flange clamp",(x,y,z),(.07,.09,.07),gold,.013)
+        # Rear frame triangulation supports the drive cluster and stabilizers.
+        rod(label+" rear triangulated rail",pt(.49,.69,2.07),pt(.72,1.46,1.66),.031,black,20)
+        rod(label+" engine diagonal tie",pt(.72,1.46,1.66),pt(.96,2.44,.73),.032,black,20)
 
     # Narrow center cowling slopes toward the split tip; cockpit remains entirely open.
     panel("Sloping nose center",[(-.07,-3.24,.53),(.07,-3.24,.53),(.43,-1.22,1.31),(-.43,-1.22,1.31)],(0,0,.04),black)
@@ -397,7 +438,7 @@ def build(output_dir):
     # Smart UVs are deterministic and keep all material detail inside the GLB.
     for o in meshes:
         bpy.ops.object.select_all(action="DESELECT"); o.select_set(True); bpy.context.view_layer.objects.active=o
-        bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="SELECT"); bpy.ops.uv.smart_project(island_margin=.02); bpy.ops.object.mode_set(mode="OBJECT")
+        bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="SELECT"); bpy.ops.mesh.normals_make_consistent(inside=False); bpy.ops.uv.smart_project(island_margin=.02); bpy.ops.object.mode_set(mode="OBJECT")
     bpy.ops.object.select_all(action="DESELECT")
     for o in meshes: o.select_set(True)
     bpy.context.view_layer.objects.active=meshes[0]
@@ -405,7 +446,7 @@ def build(output_dir):
     bpy.ops.export_scene.gltf(filepath=glb,export_format="GLB",export_apply=True,use_selection=True)
 
     specs=[
-      ("hero_3q",(7,-9,6),(0,-.05,1.05),8.8),
+      ("hero_3q",(8,-10,5.4),(0,-.05,1.05),8.8),
       ("front",(0,-12,1.15),(0,-.1,1.15),5.5),
       ("side",(12,-.4,1.15),(0,-.4,1.15),7.5),
       ("rear",(0,12,1.15),(0,.1,1.15),5.5),
@@ -490,8 +531,8 @@ def build(output_dir):
             if data.users==0: bpy.data.meshes.remove(data)
         return lod_triangles
 
-    lod1_triangles=export_lod("LOD1",.275,.035)
-    lod2_triangles=export_lod("LOD2",.10,.085)
+    lod1_triangles=export_lod("LOD1",.25,.035)
+    lod2_triangles=export_lod("LOD2",.08,.085)
     if not 0<lod1_triangles<=45000: raise RuntimeError("LOD1 must remain within the 15k-45k triangle target: {}".format(lod1_triangles))
     if not 0<lod2_triangles<=20000: raise RuntimeError("LOD2 must remain within the 10k-20k triangle target: {}".format(lod2_triangles))
 
@@ -527,7 +568,7 @@ def build(output_dir):
       "feature_labels":["open_exoskeleton","twin_forward_articulated_arms","front_hover_cells","open_single_seat_cockpit","skeletal_canopy_frame","modular_side_pods","paired_rear_turbines","swept_tail_fins","aft_hover_cells","olive_metal_materials","mechanical_hardware"],
       "axis_convention":{"forward":"-Y","right":"+X","up":"+Z"},
       "views":["hero_3q","front","side","rear","top"],
-      "files":["mantis_mk1.glb","mantis_mk1_lod1.glb","mantis_mk1_lod2.glb","mantis_mk1_collision.glb","mantis_mk1_review_board.png"],
+      "files":["mantis_mk1.blend","mantis_mk1.glb","mantis_mk1_lod1.glb","mantis_mk1_lod2.glb","mantis_mk1_collision.glb","mantis_mk1_review_board.png"],
       "license":"No repository license declared; confirm distribution terms before redistribution"
     }
     with open(os.path.join(output_dir,"mantis_mk1_training_record.json"),"w",encoding="utf-8") as f: json.dump(record,f,indent=2)
