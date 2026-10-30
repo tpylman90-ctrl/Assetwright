@@ -5,7 +5,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "tools/blender/**"
+      - "tools/blender/generate_cargo_drone.py"
       - ".github/workflows/blender.yml"
 
 permissions:
