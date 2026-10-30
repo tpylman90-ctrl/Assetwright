@@ -1,6 +1,6 @@
 # Mantis / MK I training asset
 
-Mantis is the first reference-led, mechanically dense hover-racer exemplar for Assetwright. It is generated from editable Blender geometry without a paid model-generation service. The same deterministic generator makes the GLB, five inspection renders, a review board, and a JSON feature record.
+Mantis is the first reference-led, mechanically dense hover-racer exemplar for Assetwright. It is generated from editable Blender geometry without a paid model-generation service. The same deterministic generator makes the GLB, an editable Blender scene, five inspection renders, a review board, and a JSON feature record.
 
 ## Build
 
@@ -17,12 +17,21 @@ Run the **Mantis MK I training asset** workflow from GitHub Actions, or let a pu
 
 The detailed source mesh targets a 120,000-triangle real-time budget and records evaluated triangle counts for each export. The build produces:
 
+- `mantis_mk1.blend`: editable geometry, materials, studio and cameras.
 - `mantis_mk1.glb`: detailed source / LOD0.
-- `mantis_mk1_lod1.glb`: automatically decimated mid-distance mesh, targeted at 15,000–45,000 triangles.
-- `mantis_mk1_lod2.glb`: automatically decimated far-distance mesh, targeted at 10,000–20,000 triangles.
+- `mantis_mk1_lod1.glb`: automatically decimated mid-distance mesh, capped at 45,000 triangles.
+- `mantis_mk1_lod2.glb`: automatically decimated far-distance mesh, capped at 20,000 triangles.
 - `mantis_mk1_collision.glb`: separate low-poly compound collision proxy.
 
 The LODs currently use size-based detail culling and mesh decimation. They are not hand-retopologized quad-flow meshes. AO, normal, and curvature map baking is also not implemented yet; those are the next high-to-low production stages. The asset is intended for Godot GLB import and later reuse in SceneForge. It remains a procedural training exemplar; it does not train or update a machine-learning model by itself.
+
+## Reference reconstruction v5
+
+Replaces the previous solid rectangular hull with separate tapered nose blades, sloping cheek panels, a recessed cockpit floor and connected triangulated cage. Front suspension links now extend forward close to the nose. Rear turbines have open revolved nozzle walls, recessed cores, swept stator blades and top-mounted governors. Thin swept stabilizers and split service pods follow the reference layout. Parts are authored at their final coordinates instead of stretching rotated meshes afterward.
+
+Front, side and rear review cameras are level orthographic views. The concept sheet is visual guidance rather than a metrically consistent CAD drawing; this is a reconstruction, not an exact recovered source mesh. The 120k ceiling is a maximum, not a requirement to pad the mesh. Render comparison remains necessary before approving the asset as a training example.
+
+All exports exclude the studio floor. Text is converted to meshes before triangle accounting, and face normals are recalculated before export. Repeated hover-cell parts use matching angular counts to avoid duplicate overlapping segments.
 
 ## Learning-loop record
 
