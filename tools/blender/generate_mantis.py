@@ -23,46 +23,52 @@ def parse_args():
 
 
 def mat(name, color, metallic=0.25, roughness=0.45, emission=0.0):
-    m = bpy.data.materials.new(name)
-    m.diffuse_color = (*color, 1.0)
-    m.use_nodes = True
-    nodes, links = m.node_tree.nodes, m.node_tree.links
-    bsdf = nodes.get("Principled BSDF")
-    bsdf.inputs["Base Color"].default_value = (*color, 1.0)
-    bsdf.inputs["Metallic"].default_value = metallic
-    bsdf.inputs["Roughness"].default_value = roughness
-    # Base-color images are embedded in GLB, since Blender-only procedural
-    # shaders are not portable to Godot/glTF viewers.
-    size=256; rng=random.Random(name); marks=bytearray(size*size)
-    for _ in range(190):
-        x=rng.randrange(size); y=rng.randrange(size); length=rng.randrange(5,24)
-        dx,dy=rng.choice(((1,0),(1,1),(1,-1),(0,1)))
-        for k in range(length):
-            px=x+dx*k; py=y+dy*k
-            if 0<=px<size and 0<=py<size: marks[py*size+px]=1
-    pix=array("f")
-    for y in range(size):
-        for x in range(size):
-            shade=rng.uniform(.91,1.035)
-            if marks[y*size+x]: shade*=.61
-            pix.extend((min(1,color[0]*shade),min(1,color[1]*shade),min(1,color[2]*shade),1.0))
-    image=bpy.data.images.new(name+" | packed albedo",width=size,height=size,alpha=False)
-    image.pixels.foreach_set(pix); image.pack()
-    tex=nodes.new("ShaderNodeTexImage"); tex.name=name+" embedded wear albedo"; tex.image=image
-    links.new(tex.outputs["Color"],bsdf.inputs["Base Color"])
-    noise = nodes.new("ShaderNodeTexNoise")
-    noise.inputs["Scale"].default_value = 155.0
-    noise.inputs["Detail"].default_value = 2.0
-    bump = nodes.new("ShaderNodeBump")
-    bump.inputs["Strength"].default_value = 0.12
-    bump.inputs["Distance"].default_value = 0.018
-    links.new(noise.outputs["Fac"], bump.inputs["Height"])
-    links.new(bump.outputs["Normal"], bsdf.inputs["Normal"])
+    """Portable authored PBR maps; no render-only noise shader or fake baked AO."""
+    m=bpy.data.materials.new(name); m.diffuse_color=(*color,1); m.use_nodes=True
+    nodes,links=m.node_tree.nodes,m.node_tree.links; bsdf=nodes.get("Principled BSDF")
+    bsdf.inputs["Base Color"].default_value=(*color,1)
+    bsdf.inputs["Metallic"].default_value=metallic
+    bsdf.inputs["Roughness"].default_value=roughness
     if emission:
-        c = bsdf.inputs.get("Emission Color") or bsdf.inputs.get("Emission")
-        s = bsdf.inputs.get("Emission Strength")
-        if c: c.default_value = (*color, 1.0)
-        if s: s.default_value = emission
+        c=bsdf.inputs.get("Emission Color") or bsdf.inputs.get("Emission")
+        e=bsdf.inputs.get("Emission Strength")
+        if c: c.default_value=(*color,1)
+        if e: e.default_value=emission
+        return m
+    size=256; rng=random.Random(name); base=array("f"); rough=array("f"); normals=array("f")
+    # Fine coating grain, directional brushing and sparse pinprick chips.
+    # Avoid the earlier oversized random dark strokes repeated across every part.
+    textile="upholstery" in name; brushed="titanium" in name
+    for y in range(size):
+        row=rng.uniform(-.025,.025) if brushed else 0
+        for x in range(size):
+            grain=rng.uniform(-.025,.025)
+            broad=.018*math.sin(x*.045)*math.sin(y*.067)
+            weave=.018*math.sin(x*math.pi/2)*math.sin(y*math.pi/2) if textile else 0
+            chip=rng.random()<.0015 and "olive" in name
+            shade=1+grain+broad+row+weave
+            rgb=tuple(c*shade for c in color)
+            if chip: rgb=tuple(c*.80+.045 for c in color)
+            base.extend((*rgb,1))
+            r=max(.08,min(.90,roughness+grain*1.8+broad+row+(.10 if chip else 0)))
+            rough.extend((r,r,r,1))
+            nx=.5+(weave*.35 if textile else grain*.12)
+            ny=.5+(row*.35 if brushed else grain*.12)
+            normals.extend((nx,ny,1,1))
+    def texture(label,pixels,data=False):
+        im=bpy.data.images.new(name+" | "+label,width=size,height=size,alpha=False)
+        if data: im.colorspace_settings.name="Non-Color"
+        im.pixels.foreach_set(pixels); im.pack()
+        node=nodes.new("ShaderNodeTexImage");node.image=im;node.label=label
+        return node
+    albedo=texture("coating albedo",base)
+    links.new(albedo.outputs["Color"],bsdf.inputs["Base Color"])
+    rough_tex=texture("surface roughness",rough,True)
+    links.new(rough_tex.outputs["Color"],bsdf.inputs["Roughness"])
+    normal_tex=texture("micro surface normal",normals,True)
+    normal=nodes.new("ShaderNodeNormalMap");normal.inputs["Strength"].default_value=.35
+    links.new(normal_tex.outputs["Color"],normal.inputs["Color"])
+    links.new(normal.outputs["Normal"],bsdf.inputs["Normal"])
     return m
 
 
@@ -77,7 +83,7 @@ def box(name, loc, dims, material, bevel=0.04, rot=(0, 0, 0)):
     if bevel:
         b = o.modifiers.new("Machined corner radii", "BEVEL")
         b.width = bevel
-        b.segments = 3
+        b.segments = 2 if max(dims)<.16 else 3
         bpy.context.view_layer.objects.active = o
         bpy.ops.object.modifier_apply(modifier=b.name)
     o.modifiers.new("Weighted hard-surface normals", "WEIGHTED_NORMAL")
@@ -110,9 +116,10 @@ def cyl(name, loc, radius, depth, material, axis="Z", vertices=32):
 
 
 def torus(name, loc, major, minor, material, axis="Z"):
-    bpy.ops.mesh.primitive_torus_add(major_segments=40, minor_segments=10, major_radius=major, minor_radius=minor, location=loc)
+    bpy.ops.mesh.primitive_torus_add(major_segments=32, minor_segments=8, major_radius=major, minor_radius=minor, location=loc)
     o=bpy.context.object; o.name=name; o.data.materials.append(material)
     o.rotation_euler={"X":(0,math.pi/2,0),"Y":(math.pi/2,0,0),"Z":(0,0,0)}[axis]
+    for face in o.data.polygons: face.use_smooth=True
     return o
 
 
@@ -294,7 +301,15 @@ def build(output_dir):
             x=side*1.12
             box(label+" pod shell "+str(idx),(x,y,1.12),(.66,.76,.65),olive,.065)
             box(label+" inset equipment panel",(x+side*.335,y,1.12),(.018,.60,.49),dark,.035)
-            box(label+" removable service hatch",(x+side*.35,y,1.12),(.025,.51,.40),olive_light,.035)
+            box(label+" recessed service hatch",(x+side*.349,y,1.12),(.018,.48,.36),olive,.025)
+            for yy in (y-.272,y+.272):
+                box(label+" raised hatch vertical rim",(x+side*.363,yy,1.12),(.040,.035,.46),olive_light,.012)
+            for zz in (.895,1.345):
+                box(label+" raised hatch horizontal rim",(x+side*.363,y,zz),(.040,.57,.035),olive_light,.012)
+            for yy in (y-.18,y+.18):
+                box(label+" recessed panel latch",(x+side*.368,yy,.96),(.038,.09,.035),titanium,.009)
+            box(label+" panel pull recess",(x+side*.362,y,1.275),(.016,.17,.045),dark,.009)
+            rod(label+" flush pull handle",(x+side*.38,y-.065,1.275),(x+side*.38,y+.065,1.275),.010,titanium,12)
             for yy in (y-.28,y+.28):
                 for zz in (.90,1.34): cyl(label+" captive panel screw",(x+side*.37,yy,zz),.021,.018,titanium,"X",8)
             for yy in (y-.24,y+.24):
@@ -393,6 +408,42 @@ def build(output_dir):
     for x in (-.23,.23): rod("Yoke handgrip",(x,-.54,1.28),(x,-.54,1.43),.038,leather,20)
     box("Rear electronics spine",(0,1.39,1.12),(.28,.72,.45),dark,.04)
     for y in (1.16,1.33,1.50,1.67): box("Electronics heat sink",(0,y,1.36),(.30,.035,.07),titanium,.008)
+    # Detailed cockpit switch banks and fitted pedal well stay inside approved silhouette.
+    for side,label in ((-1,"Port"),(1,"Starboard")):
+        x=side*.36
+        box(label+" cockpit console",(x,-.18,1.04),(.13,.64,.12),black,.024)
+        box(label+" switch recess",(x,-.18,1.106),(.095,.48,.012),dark,.008)
+        for i in range(4):
+            y=-.36+i*.12
+            cyl(label+" switch mounting collar",(x,y,1.12),.023,.012,titanium,"Z",12)
+            rod(label+" toggle",(x,y,1.13),(x,y-.012,1.165),.008,gold,8)
+        box(label+" pedal tread",(side*.17,-.65,.84),(.16,.19,.025),titanium,.012,(.25,0,0))
+        for y in (-.71,-.65,-.59): box(label+" pedal grip groove",(side*.17,y,.861),(.12,.015,.008),dark,.002)
+        # A formed clevis wraps each front suspension root instead of a floating axle.
+        for yy in (-.78,-.63):
+            panel(label+" suspension root mounting ear",[(side*.68,yy,1.02),(side*.89,yy,1.03),(side*.94,yy,1.20),(side*.77,yy,1.29)],(0,.035,0),olive,.012)
+        rod(label+" pivot locking pin",(side*.89,-.83,1.12),(side*.89,-.56,1.12),.026,titanium,16)
+        # Connected bent service lines with couplers, offset from the frame tubes.
+        pts=[(side*.78,.72,1.40),(side*.85,.97,1.52),(side*.86,1.24,1.54),(side*.78,1.53,1.60)]
+        for i,(a,b) in enumerate(zip(pts,pts[1:])):
+            rod(label+" coolant hose",a,b,.028,dark,16)
+        for q in (pts[0],pts[-1]):
+            cyl(label+" hose coupling",q,.042,.08,gold,"Z",12)
+        # Thin protective fin relief follows the swept shape without changing its outline.
+        panel(label+" stabilizer relief",[(side*.91,1.68,1.74),(side*1.055,2.40,2.16),(side*.96,1.93,1.69)],(side*.008,0,0),olive_light,.005)
+        # Fastened dorsal saddle between roll cage and serviceable rear drive.
+        box(label+" rear electrical junction",(side*.32,1.21,1.24),(.22,.30,.15),black,.025)
+        for y in (1.13,1.29): cyl(label+" junction captive bolt",(side*.32,y,1.325),.018,.012,titanium,"Z",8)
+    # Instrument graphics are real emissive geometry, readable in the exported GLB.
+    for i in range(6):
+        box("Instrument telemetry bar",(-.135+i*.05,-.77,1.414),(.025,.018+(i%3)*.012,.002),glow,0)
+    for x in (-.28,.28):
+        cyl("Dashboard selector bezel",(x,-.80,1.385),.045,.015,titanium,"Z",24)
+        cyl("Dashboard selector knob",(x,-.80,1.40),.030,.025,dark,"Z",12)
+    box("Harness metal clasp",(0,-.065,1.113),(.075,.045,.012),gold,.008)
+    for x in (-.18,.18):
+        for y in (-.13,.05,.23): box("Seat stitch",(x,y,1.117),(.009,.07,.004),olive_light,0)
+
     # Convert lettering too, so exports, triangle accounting and LODs share one mesh set.
     for ob in list(bpy.context.scene.objects):
         if ob.type=="FONT":
@@ -451,6 +502,8 @@ def build(output_dir):
       ("side",(12,-.4,1.15),(0,-.4,1.15),7.5),
       ("rear",(0,12,1.15),(0,.1,1.15),5.5),
       ("top",(0,-.42,13),(0,-.42,.9),9.6),
+      ("cockpit_detail",(3,-3,3.6),(0,-.05,1.30),3.15),
+      ("drive_detail",(4,5,3.0),(0,1.75,1.23),3.9),
     ]
     view_paths=[]
     for name,loc,target,scale in specs:
@@ -466,7 +519,7 @@ def build(output_dir):
         view_paths.append(path)
 
     # Compose five review views into a portable board with the hero view prominent.
-    images=[bpy.data.images.load(p,check_existing=False) for p in view_paths]
+    images=[bpy.data.images.load(p,check_existing=False) for p in view_paths[:5]]
     tile_w,tile_h=960,720
     sheet=bpy.data.images.new("Mantis MK I Assetwright review board",width=tile_w*2,height=tile_h*3,alpha=False)
     pix=array("f",[0.04,0.05,0.06,1.0])*(tile_w*2*tile_h*3)
@@ -532,7 +585,7 @@ def build(output_dir):
         return lod_triangles
 
     lod1_triangles=export_lod("LOD1",.25,.035)
-    lod2_triangles=export_lod("LOD2",.08,.085)
+    lod2_triangles=export_lod("LOD2",.07,.085)
     if not 0<lod1_triangles<=45000: raise RuntimeError("LOD1 must remain within the 15k-45k triangle target: {}".format(lod1_triangles))
     if not 0<lod2_triangles<=20000: raise RuntimeError("LOD2 must remain within the 10k-20k triangle target: {}".format(lod2_triangles))
 
@@ -562,14 +615,14 @@ def build(output_dir):
     record={
       "asset_id":"mantis_mk1_hover_racer",
       "display_name":"Mantis / MK I",
-      "generator":"Assetwright procedural Blender reference reconstruction v5",
+      "generator":"Assetwright procedural Blender mechanical and portable PBR refinement v6",
       "reference":"User-provided MANTIS / MK I concept and wireframe sheets; source image is not redistributed by this build.",
       "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that extend mostly forward close beside the split nose and terminate in layered circular hover repulsor cells. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells. Use an open triangulated chassis, long split tapered nose, descending cheek panels, close-set articulated arms, and exposed hollow turbine nozzles. Avoid a solid central hull. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
       "negative_prompt":"No enclosed car body, no conventional wheels or tires, no landing legs, no smooth one-piece shell, no low-poly toy appearance, no omitted front arms, no missing hover cells, no opaque canopy, no unsupported floating details, no text outside modeled markings.",
-      "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":120000,"triangle_count":triangle_count,"lods":{"LOD0":triangle_count,"LOD1":lod1_triangles,"LOD2":lod2_triangles},"collision_triangles":collision_triangles,"texture_policy":"Procedural materials; AO, normal, and curvature baking are not yet part of this procedural build"},
+      "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":120000,"triangle_count":triangle_count,"lods":{"LOD0":triangle_count,"LOD1":lod1_triangles,"LOD2":lod2_triangles},"collision_triangles":collision_triangles,"texture_policy":"Embedded albedo, roughness and authored micro-normal maps; high-to-low normal, AO and curvature baking not implemented"},
       "feature_labels":["open_exoskeleton","twin_forward_articulated_arms","front_hover_cells","open_single_seat_cockpit","skeletal_canopy_frame","modular_side_pods","paired_rear_turbines","swept_tail_fins","aft_hover_cells","olive_metal_materials","mechanical_hardware"],
       "axis_convention":{"forward":"-Y","right":"+X","up":"+Z"},
-      "views":["hero_3q","front","side","rear","top"],
+      "views":["hero_3q","front","side","rear","top","cockpit_detail","drive_detail"],
       "files":["mantis_mk1.blend","mantis_mk1.glb","mantis_mk1_lod1.glb","mantis_mk1_lod2.glb","mantis_mk1_collision.glb","mantis_mk1_review_board.png"],
       "license":"No repository license declared; confirm distribution terms before redistribution"
     }
