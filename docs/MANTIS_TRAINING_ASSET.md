@@ -1,6 +1,6 @@
 # Mantis / MK I training asset
 
-Mantis is the first reference-led, mechanically dense hover-racer exemplar for Assetwright. It is generated from editable Blender geometry without a paid model-generation service. The same deterministic generator makes the GLB, an editable Blender scene, five inspection renders plus cockpit and drive close-ups, a review board, and a JSON feature record.
+Mantis is the first reference-led, mechanically dense hover-racer exemplar for Assetwright. It is generated from editable Blender geometry without a paid model-generation service. The same deterministic generator makes the GLB, an editable Blender scene, five inspection renders plus cockpit and drive close-ups and a rear chase-angle review, a review board, and a JSON feature record.
 
 ## Build
 
@@ -38,6 +38,12 @@ All exports exclude the studio floor. Text is converted to meshes before triangl
 Preserves the approved v5 silhouette. Adds recessed hatch frames and pulls, cockpit switch banks and pedals, suspension clevis ears, connected coolant lines, fin relief panels and small dashboard graphics. Smooth-shaded rings use fewer cross-section segments, freeing budget for these more readable forms.
 
 Non-emissive materials use embedded albedo, roughness and authored tangent-space micro-normal images. Fine coating variation replaces the previous coarse random scratch strokes. Emissive materials are kept clean. The `cockpit_detail` and `drive_detail` renders supplement the five standard review views. Generated LODs still require in-engine visual and performance review.
+
+## Rear packaging refinement v7
+
+Rear lift discs are moved inward, rearward and upward to nest immediately beneath the rear chassis, with short saddle mounts replacing the exposed stalks. Front arm reach is reduced 20% around the fixed suspension roots; lift cells move rigidly to retain circular rims and fastener patterns. Collision proxies follow the new positions.
+
+The rear assembly gains separate tapered nozzle petals, actuator rods, recessed combustion rings and center cones, angular lower guards and diffuser vanes, rear marker housings and a central service plate. A `chase` render supplements the standard views to assess the rear at a driving-camera angle; it is a Blender review, not an in-engine screenshot.
 
 ## Learning-loop record
 
