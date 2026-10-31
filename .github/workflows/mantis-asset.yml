@@ -31,7 +31,7 @@ jobs:
 
       - name: Build one Mantis training asset
         run: |
-          blender --background --factory-startup \
+          blender --background --factory-startup --python-exit-code 1 \
             --python tools/blender/generate_mantis.py \
             -- --output-dir generated/mantis
           test -s generated/mantis/mantis_mk1.glb
@@ -39,14 +39,36 @@ jobs:
           test -s generated/mantis/mantis_mk1_lod1.glb
           test -s generated/mantis/mantis_mk1_lod2.glb
           test -s generated/mantis/mantis_mk1_collision.glb
+          test -s generated/mantis/mantis_mk1_rear_3q.png
+          test -s generated/mantis/mantis_mk1_chase.png
           python3 -m json.tool generated/mantis/mantis_mk1_training_record.json > /dev/null
           python3 - <<'PY'
-          import os
-          path = "generated/mantis/mantis_mk1.glb"
-          with open(path, "rb") as f:
-              assert f.read(4) == b"glTF", "GLB magic header is missing"
-          assert os.path.getsize(path) > 4096, "GLB is unexpectedly small"
-          print(f"Verified GLB: {os.path.getsize(path)} bytes")
+          import json, os, struct
+          root = "generated/mantis"
+          record = json.load(open(root + "/mantis_mk1_training_record.json"))
+          target = record["game_target"]
+          checks = [
+              ("mantis_mk1.glb", target["triangle_count"], 120000),
+              ("mantis_mk1_lod1.glb", target["lods"]["LOD1"], 45000),
+              ("mantis_mk1_lod2.glb", target["lods"]["LOD2"], 20000),
+              ("mantis_mk1_collision.glb", target["collision_triangles"], 1000),
+          ]
+          for name, expected, budget in checks:
+              raw = open(root + "/" + name, "rb").read()
+              magic, version, total = struct.unpack_from("<4sII", raw)
+              assert magic == b"glTF" and version == 2 and total == len(raw), name
+              length, kind = struct.unpack_from("<II", raw, 12)
+              assert kind == 0x4e4f534a, name
+              data = json.loads(raw[20:20+length])
+              triangles = 0
+              for mesh in data.get("meshes", []):
+                  for primitive in mesh["primitives"]:
+                      assert primitive.get("mode", 4) == 4, name
+                      accessor = data["accessors"][primitive["indices"]]
+                      triangles += accessor["count"] // 3
+              assert 0 < triangles == expected <= budget, (name, triangles, expected)
+              assert not any(n.get("name") == "Preview floor" for n in data.get("nodes", []))
+              print(name, triangles, "triangles;", len(raw), "bytes")
           PY
 
       - name: Upload Mantis model, review views, and training record

@@ -89,3 +89,14 @@ Next implementation order:
 5. Move budget validation ahead of expensive renders and report per-assembly triangle costs.
 
 These are project-specific decisions informed by the sources, not universal prescriptions. The v7 build remains an unbaked procedural asset and has not been driving-tested in Godot.
+
+
+## Controlled housing rebuild v8
+
+Rebuilds the side equipment pods from six deliberate octagonal cross-sections: tapered ends, raised shoulders and pinched lower edges. Boolean-cut pockets contain recessed service hatches. Crown ribs and lower carriers follow the new shell; mounting clevises connect it to the chassis. This replaces the earlier repeated beveled boxes.
+
+Rear drives use shorter axial packaging, narrower stepped barrels, thick terminal collars and segmented outer jackets. The existing petals, stators, governors, lines and rear markers share an assembly transform to retain their fit. Rear lift cells remain at the v7 positions. Front suspension webs now have shaped, variable-width cross-sections, and shoulder harnesses are flat straps.
+
+The full-detail and reduced LOD budgets are checked before review rendering. The training record now includes evaluated triangle costs grouped into drive, pods, lift and chassis/cockpit. Grouping uses object-name categories for diagnostics, rather than claiming a semantic ML segmentation. Blender API compatibility covers Eevee engine naming/settings and BMesh face-normal recalculation.
+
+Adds a rear three-quarter camera alongside side, top and chase views. These are renders of the procedural mesh. Inspect neutral-clay views and the exported GLB alongside the material renders. No Godot driving or LOD-transition validation is claimed. Hand-authored UVs, a high-to-low baking pilot, broader frame reconstruction and reference-directed material wear remain unfinished.

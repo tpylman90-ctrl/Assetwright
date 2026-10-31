@@ -12,6 +12,7 @@ import random
 import sys
 from array import array
 import bpy
+import bmesh
 from mathutils import Vector
 
 
@@ -245,7 +246,7 @@ def build(output_dir):
 
     def ring_shell(name,x,z,profile,material):
         # Revolved open profile: real nozzle wall and recessed internal throat.
-        n=64; verts=[]; faces=[]
+        n=40; verts=[]; faces=[]
         for y,r in profile:
             verts.extend((x+r*math.cos(i*math.tau/n),y,z+r*math.sin(i*math.tau/n)) for i in range(n))
         for j in range(len(profile)-1):
@@ -287,7 +288,13 @@ def build(output_dir):
         for name,u,v in (("upper link",root,elbow),("forward link",elbow,wrist)):
             for dx in (-.065,.065):
                 u1=(u[0]+dx,u[1],u[2]); v1=(v[0]+dx,v[1],v[2])
-                beam_between(label+" "+name,u1,v1,.06,black,.11,.016)
+                direction=Vector(v1)-Vector(u1)
+                web=loft(label+" "+name+" forged web",[(0,.045,.065,-.065),
+                    (direction.length*.16,.075,.075,-.075),
+                    (direction.length*.72,.055,.060,-.060),
+                    (direction.length,.036,.05,-.05)],black)
+                web.rotation_euler=direction.to_track_quat("Y","Z").to_euler()
+                web.location=Vector(u1)
             rod(label+" hydraulic barrel",(u[0],u[1],u[2]+.10),tuple(Vector(u).lerp(Vector(v),.58)+Vector((0,0,.10))),.048,gold,24)
             rod(label+" polished piston",tuple(Vector(u).lerp(Vector(v),.54)+Vector((0,0,.10))),(v[0],v[1],v[2]+.10),.024,titanium,24)
             rod(label+" return hose",(u[0]-side*.09,u[1],u[2]+.04),(v[0]-side*.09,v[1],v[2]+.04),.014,dark,12)
@@ -296,32 +303,43 @@ def build(output_dir):
         rod(label+" lower wishbone",pt(.83,-.66,.78),pt(1.30,-2.91,.50),.034,titanium,20)
         rod(label+" cell gimbal spindle",wrist,pt(1.30,-2.91,.42),.075,black,24)
         make_hover_cell(side*1.30,-2.91,.29,.83,label+" forward lift",(olive,black,titanium,glow,gold))
-        # Split modular saddle boxes with actual recessed side panel frames.
+        # Cross-section shells taper into a chamfered front and a pinched aft cap.
+        # Outer hatches are cut into the shell, not laid over an unbroken box face.
         for idx,y in enumerate((.65,1.48)):
             x=side*1.12
-            box(label+" pod shell "+str(idx),(x,y,1.12),(.66,.76,.65),olive,.065)
-            box(label+" inset equipment panel",(x+side*.335,y,1.12),(.018,.60,.49),dark,.035)
-            box(label+" recessed service hatch",(x+side*.349,y,1.12),(.018,.48,.36),olive,.025)
-            for yy in (y-.272,y+.272):
-                box(label+" raised hatch vertical rim",(x+side*.363,yy,1.12),(.040,.035,.46),olive_light,.012)
-            for zz in (.895,1.345):
-                box(label+" raised hatch horizontal rim",(x+side*.363,y,zz),(.040,.57,.035),olive_light,.012)
-            for yy in (y-.18,y+.18):
-                box(label+" recessed panel latch",(x+side*.368,yy,.96),(.038,.09,.035),titanium,.009)
-            box(label+" panel pull recess",(x+side*.362,y,1.275),(.016,.17,.045),dark,.009)
-            rod(label+" flush pull handle",(x+side*.38,y-.065,1.275),(x+side*.38,y+.065,1.275),.010,titanium,12)
-            for yy in (y-.28,y+.28):
-                for zz in (.90,1.34): cyl(label+" captive panel screw",(x+side*.37,yy,zz),.021,.018,titanium,"X",8)
-            for yy in (y-.24,y+.24):
-                box(label+" pod corner strap",(x,yy,1.46),(.55,.065,.025),titanium,.008)
-            rod(label+" pod mounting outrigger",pt(.63,y,.77),pt(1.13,y,.80),.055,black,24)
-        add_text(label+" serial","01",pt(1.49,.65,1.02),.27,titanium,(math.pi/2,0,side*math.pi/2))
-        for yy in (1.33,1.59):
-            box(label+" rear pod vent bed",pt(1.487,yy,1.12),(.018,.19,.30),dark,.015)
-            for zz in (.99,1.05,1.11,1.17,1.23): box(label+" recessed vent louver",pt(1.505,yy,zz),(.02,.16,.018),black,.004)
+            shell=loft(label+" shaped pod shell "+str(idx),[
+                (y-.39,.21,1.32,.91),(y-.30,.32,1.45,.81),
+                (y-.22,.35,1.47,.80),(y+.22,.35,1.43,.80),
+                (y+.31,.29,1.36,.86),(y+.37,.20,1.29,.93)],olive)
+            shell.location.x=x
+            # A real shallow service cavity with an olive panel recessed behind the lip.
+            cutter=box("TEMP pod cavity cutter",(x+side*.35,y,1.125),(.15,.48,.37),dark,.025)
+            bpy.context.view_layer.objects.active=shell
+            for existing in list(shell.modifiers):
+                bpy.ops.object.modifier_apply(modifier=existing.name)
+            mod=shell.modifiers.new("Recessed service pocket","BOOLEAN")
+            mod.object=cutter; mod.operation="DIFFERENCE"
+            bpy.context.view_layer.objects.active=shell
+            bpy.ops.object.modifier_apply(modifier=mod.name)
+            bpy.data.objects.remove(cutter,do_unlink=True)
+            box(label+" pod pocket shadow",(x+side*.282,y,1.125),(.012,.465,.35),dark,.020)
+            box(label+" fitted hatch",(x+side*.294,y,1.125),(.014,.415,.30),olive,.018)
+            for yy in (y-.16,y+.16):
+                box(label+" hatch recessed latch",(x+side*.315,yy,1.025),(.030,.055,.055),titanium,.008)
+            for yy in (y-.25,y+.25):
+                # Formed crown ribs follow the shoulder instead of floating flat straps.
+                panel(label+" pod shoulder rib",[pt(.86,yy,1.38),pt(.94,yy,1.48),pt(1.30,yy,1.46),pt(1.43,yy,1.33)],(0,.038,0),black,.009)
+            panel(label+" swept pod lower carrier",[pt(.72,y-.30,.79),pt(1.30,y-.30,.76),pt(1.43,y+.26,.81),pt(.77,y+.30,.85)],(0,0,.055),black)
+            for yy in (y-.22,y+.22):
+                beam_between(label+" pod fitted mounting clevis",pt(.64,yy,.78),pt(1.03,yy,.83),.085,titanium,.11,.012)
+        add_text(label+" serial","01",pt(1.426,.65,1.045),.22,titanium,(math.pi/2,0,side*math.pi/2))
+        for yy in (1.36,1.60):
+            box(label+" rear pod vent bed",pt(1.426,yy,1.15),(.014,.16,.21),dark,.012)
+            for zz in (1.08,1.14,1.20):
+                box(label+" recessed vent louver",pt(1.437,yy,zz),(.018,.125,.018),black,.004)
         # Exposed rear turbine: open annular wall, recessed core and swept vanes.
         tx=side*.57
-        ring_shell(label+" contoured hollow turbine",tx,1.19,[(1.45,.32),(1.58,.43),(1.94,.46),(2.32,.45),(2.57,.51),(2.65,.51),(2.65,.43),(2.48,.39),(2.13,.28),(1.91,.24)],black)
+        ring_shell(label+" contoured hollow turbine",tx,1.19,[(1.45,.32),(1.57,.44),(1.72,.47),(2.28,.47),(2.36,.50),(2.55,.50),(2.65,.47),(2.65,.35),(2.57,.34),(2.42,.34),(2.30,.27),(2.04,.24)],black)
         for y,r in ((1.61,.43),(1.98,.46),(2.39,.47),(2.63,.48)):
             torus(label+" turbine flange",(tx,y,1.19),r,.024,titanium,"Y")
         torus(label+" nozzle lip",(tx,2.64,1.19),.435,.018,gold,"Y")
@@ -400,7 +418,7 @@ def build(output_dir):
     box("Headrest",(0,.64,1.80),(.32,.16,.22),leather,.06)
     for x in (-.18,.18):
         box("Seat thigh bolster",(x,.03,1.03),(.10,.50,.12),dark,.04)
-        rod("Shoulder harness",(x,.49,1.67),(x*.60,-.06,1.06),.021,gold,12)
+        beam_between("Flat woven shoulder harness",(x,.40,1.67),(x*.60,-.06,1.06),.062,leather,.009,.003)
     for z in (1.17,1.33,1.49): box("Seat cushion stitched segment",(0,.42,z),(.32,.022,.09),dark,.014,(-.18,0,0))
     box("Harness buckle",(0,-.06,1.07),(.12,.06,.07),titanium,.015)
     box("Dashboard binnacle",(0,-.85,1.30),(.76,.20,.14),black,.04)
@@ -470,8 +488,8 @@ def build(output_dir):
         # Separate tapered nozzle petals with seams, flanged clamps and inner heat shields.
         for i in range(12):
             a=i*math.tau/12; half=math.pi/12*.84
-            panel(label+" exhaust petal",[rp(.475,2.37,a-half),rp(.525,2.64,a-half),rp(.525,2.64,a+half),rp(.475,2.37,a+half)],(0,.016,0),titanium,.005)
-            rod(label+" petal actuator",rp(.48,2.29,a),rp(.52,2.57,a),.018,black,12)
+            panel(label+" exhaust petal",[rp(.475,2.37,a-half),rp(.485,2.64,a-half),rp(.485,2.64,a+half),rp(.475,2.37,a+half)],(0,.016,0),titanium,.005)
+            rod(label+" petal actuator",rp(.48,2.29,a),rp(.49,2.57,a),.018,black,12)
             cyl(label+" petal lock screw",rp(.50,2.60,a),.018,.028,gold,"Y",8)
         for i in range(8):
             a=i*math.tau/8
@@ -493,6 +511,45 @@ def build(output_dir):
     add_text("Rear Mantis identification","MANTIS",(0,2.392,1.69),.060,titanium,(math.pi/2,0,math.pi))
     for x in (-.16,.16): cyl("Rear bridge captive fastener",(x,2.39,1.72),.018,.018,gold,"Y",8)
 
+    # Compact rear drive packaging: apply one rigid-axis mapping to every fitted part.
+    # Radial scaling reduces the funnel silhouette; the shallower axial span makes a
+    # dense drive module. Mounts, stators, petals and lamps share the same transform.
+    engine_tags=("turbine", "nozzle", "core", "stator", "casing stiffener",
+                 "exhaust petal", "petal actuator", "petal lock", "ion channel",
+                 "combustion", "center ignition", "engine", "governor", "rear marker", "rear amber")
+    bpy.context.view_layer.update()
+    for ob in list(bpy.context.scene.objects):
+        if ob.type!="MESH" or not ob.name.startswith(("Port ","Starboard ")): continue
+        if not any(tag in ob.name for tag in engine_tags): continue
+        side=-1 if ob.name.startswith("Port ") else 1
+        world=ob.matrix_world.copy(); inv=world.inverted()
+        for v in ob.data.vertices:
+            q=world@v.co
+            q.x=side*.57+(q.x-side*.57)*.86
+            q.z=1.19+(q.z-1.19)*.86
+            q.y=1.58+(q.y-1.58)*.78
+            v.co=inv@q
+    # Controlled segmented barrel jackets, fitted over the compact engine profile.
+    for side,label in ((-1,"Port"),(1,"Starboard")):
+        tx=side*.57
+        for i in range(10):
+            angle=math.tau*i/10; half=math.pi/10*.80
+            verts=[]
+            for y,r in ((1.68,.413),(1.73,.438),(2.10,.438),(2.16,.407)):
+                verts.extend((tx+r*math.cos(a),y,1.19+r*math.sin(a)) for a in (angle-half,angle+half))
+            mesh=bpy.data.meshes.new(label+" barrel jacket mesh")
+            mesh.from_pydata(verts,[],[(j,j+1,j+3,j+2) for j in (0,2,4)])
+            mesh.materials.append(black); mesh.update()
+            ob=bpy.data.objects.new(label+" fitted barrel jacket",mesh); bpy.context.collection.objects.link(ob)
+            solid=ob.modifiers.new("Thick segmented casing","SOLIDIFY"); solid.thickness=.025
+            bevel=ob.modifiers.new("Casing edge radii","BEVEL"); bevel.width=.009; bevel.segments=1
+        # A thick terminal collar encloses the nozzle vanes without a wide bell mouth.
+        ring_shell(label+" thick recessed terminal collar",tx,1.19,
+            [(2.13,.42),(2.18,.445),(2.38,.445),(2.42,.408),
+             (2.42,.307),(2.36,.298),(2.20,.298)],titanium)
+        for y in (1.76,2.08):
+            torus(label+" barrel retaining band",(tx,y,1.19),.445,.018,black,"Y")
+
     # Convert lettering too, so exports, triangle accounting and LODs share one mesh set.
     for ob in list(bpy.context.scene.objects):
         if ob.type=="FONT":
@@ -503,13 +560,11 @@ def build(output_dir):
     floor_mat=mat("Studio floor (preview only)",(.16,.19,.22),.25,.72)
     box("Preview floor",(0,-.1,.015),(200,200,.10),floor_mat,0)
     scene=bpy.context.scene
-    scene.render.engine="BLENDER_EEVEE"
+    scene.render.engine="BLENDER_EEVEE_NEXT" if bpy.app.version >= (4,2,0) else "BLENDER_EEVEE"
     if hasattr(scene,"eevee"):
-        scene.eevee.taa_render_samples=48
-        scene.eevee.use_gtao=True
-        scene.eevee.gtao_distance=.25
-        scene.eevee.gtao_factor=1.25
-        scene.eevee.use_soft_shadows=True
+        for key,value in {"taa_render_samples":48,"taa_samples":48,"use_gtao":True,
+                          "gtao_distance":.25,"gtao_factor":1.25,"use_soft_shadows":True}.items():
+            if hasattr(scene.eevee,key): setattr(scene.eevee,key,value)
     scene.world.use_nodes=True
     world=scene.world.node_tree.nodes.get("Background")
     if world: world.inputs["Color"].default_value=(.24,.28,.33,1); world.inputs["Strength"].default_value=.55
@@ -543,62 +598,40 @@ def build(output_dir):
             ob.data.auto_smooth_angle=math.radians(45)
         for modifier in ob.modifiers:
             if modifier.type=="WEIGHTED_NORMAL": modifier.keep_sharp=True
+    # Blender 4.1+ no longer exposes Mesh.use_auto_smooth. Split only manufactured
+    # corners; cylinder spans remain smooth, while collar lips stop looking inflated.
+    if bpy.app.version >= (4,1,0):
+        for ob in meshes:
+            if not any(mod.type=="EDGE_SPLIT" for mod in ob.modifiers):
+                mod=ob.modifiers.new("Manufactured corner normal breaks","EDGE_SPLIT")
+                mod.split_angle=math.radians(35)
+                mod.use_edge_angle=True
+    depsgraph=bpy.context.evaluated_depsgraph_get()
+    triangle_count=0
+    assembly_triangles={}
+    for ob in meshes:
+        evaluated=ob.evaluated_get(depsgraph)
+        evaluated_mesh=evaluated.to_mesh()
+        count=sum(max(0,len(poly.vertices)-2) for poly in evaluated_mesh.polygons)
+        triangle_count+=count
+        name=ob.name.lower()
+        group="drive" if any(t in name for t in ("turbine","engine","barrel","nozzle","stator","petal","core","combustion","governor","collar")) else "pods" if any(t in name for t in ("pod","hatch","vent","serial")) else "lift" if "lift" in name else "chassis_cockpit"
+        assembly_triangles[group]=assembly_triangles.get(group,0)+count
+        evaluated.to_mesh_clear()
+    print("MANTIS_BUDGET",json.dumps({"total":triangle_count,"assemblies":assembly_triangles}),flush=True)
+    if triangle_count>120000:
+        raise RuntimeError("Mantis exceeds the 120,000 triangle hero-asset budget: {}".format(triangle_count))
+
+
     # Smart UVs are deterministic and keep all material detail inside the GLB.
     for o in meshes:
         bpy.ops.object.select_all(action="DESELECT"); o.select_set(True); bpy.context.view_layer.objects.active=o
-        bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="SELECT"); bpy.ops.mesh.normals_make_consistent(inside=False); bpy.ops.uv.smart_project(island_margin=.02); bpy.ops.object.mode_set(mode="OBJECT")
+        bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="SELECT"); bm=bmesh.from_edit_mesh(o.data); bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces)); bmesh.update_edit_mesh(o.data); bpy.ops.uv.smart_project(island_margin=.02); bpy.ops.object.mode_set(mode="OBJECT")
     bpy.ops.object.select_all(action="DESELECT")
     for o in meshes: o.select_set(True)
     bpy.context.view_layer.objects.active=meshes[0]
     glb=os.path.abspath(os.path.join(output_dir,"mantis_mk1.glb"))
     bpy.ops.export_scene.gltf(filepath=glb,export_format="GLB",export_apply=True,use_selection=True)
-
-    specs=[
-      ("hero_3q",(8,-10,5.4),(0,-.05,1.05),8.8),
-      ("front",(0,-12,1.15),(0,-.1,1.15),5.5),
-      ("side",(12,-.4,1.15),(0,-.4,1.15),7.5),
-      ("rear",(0,12,1.15),(0,.1,1.15),5.5),
-      ("top",(0,-.42,13),(0,-.42,.9),9.6),
-      ("cockpit_detail",(3,-3,3.6),(0,-.05,1.30),3.15),
-      ("drive_detail",(4,5,3.0),(0,1.75,1.23),3.9),
-      ("chase",(0,9,4.4),(0,.10,1.1),7.3),
-    ]
-    view_paths=[]
-    for name,loc,target,scale in specs:
-        cam.location=loc; cam.data.ortho_scale=scale; aim(cam,target); scene.camera=cam
-        scene.render.resolution_x=960; scene.render.resolution_y=720
-        path=os.path.abspath(os.path.join(output_dir,"mantis_mk1_"+name+".png")); scene.render.filepath=path
-        try: bpy.ops.render.render(write_still=True)
-        except Exception as exc:
-            if scene.render.engine!="BLENDER_EEVEE": raise
-            print("Eevee offscreen render failed; switching to Workbench:",exc)
-            scene.render.engine="BLENDER_WORKBENCH"; scene.display.shading.light="STUDIO"; scene.display.shading.color_type="MATERIAL"; scene.display.shading.show_cavity=True
-            bpy.ops.render.render(write_still=True)
-        view_paths.append(path)
-
-    # Compose five review views into a portable board with the hero view prominent.
-    images=[bpy.data.images.load(p,check_existing=False) for p in view_paths[:5]]
-    tile_w,tile_h=960,720
-    sheet=bpy.data.images.new("Mantis MK I Assetwright review board",width=tile_w*2,height=tile_h*3,alpha=False)
-    pix=array("f",[0.04,0.05,0.06,1.0])*(tile_w*2*tile_h*3)
-    placements=[(0,2),(tile_w,2),(0,1),(tile_w,1),(0,0)]
-    for im,(ox,oy) in zip(images,placements):
-        src=array("f",[0.0])*(tile_w*tile_h*4); im.pixels.foreach_get(src)
-        for row in range(tile_h):
-            a=row*tile_w*4; b=((oy*tile_h+row)*(tile_w*2)+ox)*4
-            pix[b:b+tile_w*4]=src[a:a+tile_w*4]
-    sheet.pixels.foreach_set(pix); sheet.filepath_raw=os.path.abspath(os.path.join(output_dir,"mantis_mk1_review_board.png")); sheet.file_format="PNG"; sheet.save()
-    for im in images: bpy.data.images.remove(im)
-
-    depsgraph=bpy.context.evaluated_depsgraph_get()
-    triangle_count=0
-    for ob in meshes:
-        evaluated=ob.evaluated_get(depsgraph)
-        evaluated_mesh=evaluated.to_mesh()
-        triangle_count+=sum(max(0,len(poly.vertices)-2) for poly in evaluated_mesh.polygons)
-        evaluated.to_mesh_clear()
-    if triangle_count>120000:
-        raise RuntimeError("Mantis exceeds the 120,000 triangle hero-asset budget: {}".format(triangle_count))
 
     bpy.ops.wm.save_as_mainfile(filepath=os.path.abspath(os.path.join(output_dir,"mantis_mk1.blend")))
 
@@ -612,7 +645,10 @@ def build(output_dir):
             if max(original.dimensions) < detail_cutoff:
                 continue
             obj=original.copy()
-            obj.data=original.data.copy()
+            # Decimate evaluated geometry so bevel/solidify costs cannot evade LOD reduction.
+            depsgraph=bpy.context.evaluated_depsgraph_get()
+            obj.data=bpy.data.meshes.new_from_object(original.evaluated_get(depsgraph),depsgraph=depsgraph)
+            obj.modifiers.clear()
             obj.name=label+"_"+original.name
             scene.collection.objects.link(obj)
             poly_count=len(obj.data.polygons)
@@ -649,6 +685,46 @@ def build(output_dir):
     if not 0<lod1_triangles<=45000: raise RuntimeError("LOD1 must remain within the 15k-45k triangle target: {}".format(lod1_triangles))
     if not 0<lod2_triangles<=20000: raise RuntimeError("LOD2 must remain within the 10k-20k triangle target: {}".format(lod2_triangles))
 
+    specs=[
+      ("hero_3q",(8,-10,5.4),(0,-.05,1.05),8.8),
+      ("front",(0,-12,1.15),(0,-.1,1.15),5.5),
+      ("side",(12,-.4,1.15),(0,-.4,1.15),7.5),
+      ("rear",(0,12,1.15),(0,.1,1.15),5.5),
+      ("top",(0,-.42,13),(0,-.42,.9),9.6),
+      ("cockpit_detail",(3,-3,3.6),(0,-.05,1.30),3.15),
+      ("drive_detail",(4,5,3.0),(0,1.75,1.23),3.9),
+      ("rear_3q",(7,9,4.6),(0,.35,1.10),8.0),
+      ("chase",(0,9,4.4),(0,.10,1.1),7.3),
+    ]
+    view_paths=[]
+    for name,loc,target,scale in specs:
+        cam.location=loc; cam.data.ortho_scale=scale; aim(cam,target); scene.camera=cam
+        scene.render.resolution_x=960; scene.render.resolution_y=720
+        path=os.path.abspath(os.path.join(output_dir,"mantis_mk1_"+name+".png")); scene.render.filepath=path
+        try: bpy.ops.render.render(write_still=True)
+        except Exception as exc:
+            if scene.render.engine not in ("BLENDER_EEVEE", "BLENDER_EEVEE_NEXT"): raise
+            print("Eevee offscreen render failed; switching to Workbench:",exc)
+            scene.render.engine="BLENDER_WORKBENCH"; scene.display.shading.light="STUDIO"; scene.display.shading.color_type="MATERIAL"; scene.display.shading.show_cavity=True
+            bpy.ops.render.render(write_still=True)
+        view_paths.append(path)
+
+    # Compose five review views into a portable board with the hero view prominent.
+    images=[bpy.data.images.load(p,check_existing=False) for p in view_paths[:5]]
+    tile_w,tile_h=960,720
+    sheet=bpy.data.images.new("Mantis MK I Assetwright review board",width=tile_w*2,height=tile_h*3,alpha=False)
+    pix=array("f",[0.04,0.05,0.06,1.0])*(tile_w*2*tile_h*3)
+    placements=[(0,2),(tile_w,2),(0,1),(tile_w,1),(0,0)]
+    for im,(ox,oy) in zip(images,placements):
+        src=array("f",[0.0])*(tile_w*tile_h*4); im.pixels.foreach_get(src)
+        for row in range(tile_h):
+            a=row*tile_w*4; b=((oy*tile_h+row)*(tile_w*2)+ox)*4
+            pix[b:b+tile_w*4]=src[a:a+tile_w*4]
+    sheet.pixels.foreach_set(pix); sheet.filepath_raw=os.path.abspath(os.path.join(output_dir,"mantis_mk1_review_board.png")); sheet.file_format="PNG"; sheet.save()
+    for im in images: bpy.data.images.remove(im)
+
+    bpy.ops.wm.save_as_mainfile(filepath=os.path.abspath(os.path.join(output_dir,"mantis_mk1.blend")))
+
     # Low-poly compound collision proxy: broad hull, arm envelopes, and four lift pods.
     collision_objects=[]
     collision_objects.append(box("COLLISION_MainHull",(0,.70,1.30),(1.50,4.0,1.80),dark,0))
@@ -675,14 +751,14 @@ def build(output_dir):
     record={
       "asset_id":"mantis_mk1_hover_racer",
       "display_name":"Mantis / MK I",
-      "generator":"Assetwright procedural Blender rear packaging and chase-view refinement v7",
+      "generator":"Assetwright procedural Blender controlled rear housings and tapered pod rebuild v8",
       "reference":"User-provided MANTIS / MK I concept and wireframe sheets; source image is not redistributed by this build.",
       "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that extend mostly forward close beside the split nose and terminate in layered circular hover repulsor cells. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells tucked tightly beneath the rear chassis. Shorten front suspension reach by 20 percent about the original root. Emphasize layered exhaust petals, recessed combustion rings, center cones, under-engine guards and rear service fittings for the driving camera. Use an open triangulated chassis, long split tapered nose, descending cheek panels, close-set articulated arms, and exposed hollow turbine nozzles. Avoid a solid central hull. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
       "negative_prompt":"No enclosed car body, no conventional wheels or tires, no landing legs, no smooth one-piece shell, no low-poly toy appearance, no omitted front arms, no missing hover cells, no opaque canopy, no unsupported floating details, no text outside modeled markings.",
-      "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":120000,"triangle_count":triangle_count,"lods":{"LOD0":triangle_count,"LOD1":lod1_triangles,"LOD2":lod2_triangles},"collision_triangles":collision_triangles,"texture_policy":"Embedded albedo, roughness and authored micro-normal maps; high-to-low normal, AO and curvature baking not implemented"},
+      "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":120000,"triangle_count":triangle_count,"assembly_triangles":assembly_triangles,"lods":{"LOD0":triangle_count,"LOD1":lod1_triangles,"LOD2":lod2_triangles},"collision_triangles":collision_triangles,"texture_policy":"Embedded albedo, roughness and authored micro-normal maps; high-to-low normal, AO and curvature baking not implemented"},
       "feature_labels":["open_exoskeleton","twin_forward_articulated_arms","front_hover_cells","open_single_seat_cockpit","skeletal_canopy_frame","modular_side_pods","paired_rear_turbines","swept_tail_fins","aft_hover_cells","olive_metal_materials","mechanical_hardware"],
       "axis_convention":{"forward":"-Y","right":"+X","up":"+Z"},
-      "views":["hero_3q","front","side","rear","top","cockpit_detail","drive_detail","chase"],
+      "views":["hero_3q","front","side","rear","top","cockpit_detail","drive_detail","rear_3q","chase"],
       "files":["mantis_mk1.blend","mantis_mk1.glb","mantis_mk1_lod1.glb","mantis_mk1_lod2.glb","mantis_mk1_collision.glb","mantis_mk1_review_board.png"],
       "license":"No repository license declared; confirm distribution terms before redistribution"
     }
@@ -696,4 +772,5 @@ def build(output_dir):
 if __name__=="__main__": build(parse_args().output_dir)
 
 # The latest source revision includes the multi-view training-record output.
+
 
