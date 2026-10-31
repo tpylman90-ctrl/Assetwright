@@ -100,3 +100,12 @@ Rear drives use shorter axial packaging, narrower stepped barrels, thick termina
 The full-detail and reduced LOD budgets are checked before review rendering. The training record now includes evaluated triangle costs grouped into drive, pods, lift and chassis/cockpit. Grouping uses object-name categories for diagnostics, rather than claiming a semantic ML segmentation. Blender API compatibility covers Eevee engine naming/settings and BMesh face-normal recalculation.
 
 Adds a rear three-quarter camera alongside side, top and chase views. These are renders of the procedural mesh. Inspect neutral-clay views and the exported GLB alongside the material renders. No Godot driving or LOD-transition validation is claimed. Hand-authored UVs, a high-to-low baking pilot, broader frame reconstruction and reference-directed material wear remain unfinished.
+
+
+## Missing rear cage bay v9
+
+Adds the second open rectangular frame bay visible behind the reference cockpit. Parallel upper and lower side rails span Blender Y=0.69 to Y=1.41, with a new aft roof crossbar, belt crossbar and upright supports. The sloping engine supports start beyond that bay. The added length is 0.72 Blender units, inferred from the reference silhouette rather than its printed dimensions.
+
+Complete rear drive, fin, guard, service-fitting and lift-cell assemblies move rearward by 0.72 units after the compact-drive shaping stage. Their hardware is translated without stretching. Both equipment pods move rearward by 0.36 units, retaining their relative spacing. The deck, longer chassis rails, rear frame ties, electronics and collision envelopes follow the longer layout. Front suspension, nose and front lift positions are preserved. Rear lift centers are now (±0.86, 2.44, 0.64) in Blender coordinates; the bay aft roof crossbar is at Y=1.41, Z=2.07.
+
+Review cameras recenter and widen to fit the longer silhouette at the original 4:3 image aspect ratio. The training record stores the bay length and assembly offsets. The local evaluated shape check reports 116,572 triangles; final exported LOD counts come from each build's record. Godot driving, LOD-transition review and high-to-low baking remain uncompleted.

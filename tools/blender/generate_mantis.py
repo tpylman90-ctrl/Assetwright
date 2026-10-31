@@ -230,6 +230,14 @@ def build(output_dir):
     glow=mat("09 | cold white hover emission",(.55,.85,1.0),.18,.18,4.0)
     hot=mat("10 | turbine amber emission",(1.0,.25,.025),.12,.2,3.0)
 
+    # The reference includes a second open cage bay behind the seat.
+    # Translate complete rear modules after compact-drive shaping; never stretch hardware.
+    rear_bay_length=.72
+    pod_shift=rear_bay_length*.5
+    aft_modules=set()
+    def remember_aft(before):
+        aft_modules.update(set(bpy.context.scene.objects)-before)
+
     # Reference-led proportions: overall length 6.4, width 3.6, low open cage.
     # Individual parts are authored in final world coordinates; no post-hoc scaling.
     def panel(name, points, offset, material, bevel=.014):
@@ -265,8 +273,8 @@ def build(output_dir):
         cyl(name+" axle bolt",(x+side*.19,y,z),radius*.19,.032,titanium,"X",6)
 
     box("Open cockpit recessed floor",(0,.18,.73),(.92,2.05,.10),black,.04)
-    box("Rear equipment deck",(0,1.51,.82),(1.42,1.25,.14),black,.04)
-    for y in (-.75,-.1,.55,1.12,1.72):
+    box("Rear equipment deck",(0,1.51+rear_bay_length,.82),(1.42,1.25,.14),black,.04)
+    for y in (-.75,-.1,.55,1.12+rear_bay_length,1.72+rear_bay_length):
         rod("Chassis crossmember",(-.66,y,.76),(.66,y,.76),.045,titanium,20)
     # Two descending nose blades leave a narrow center split and an open underside.
     for side,label in ((-1,"Port"),(1,"Starboard")):
@@ -274,15 +282,28 @@ def build(output_dir):
         panel(label+" pointed lower nose spar",[pt(.10,-3.48,.42),pt(.26,-3.40,.42),pt(.67,-1.05,.91),pt(.58,-.72,1.05),pt(.33,-1.86,.76)],(0,0,.08),black)
         panel(label+" sculpted nose cheek",[pt(.14,-3.30,.55),pt(.36,-2.73,.84),pt(.76,-1.10,1.30),pt(.57,-.81,1.35),pt(.24,-2.24,.92)],(0,0,.065),olive)
         panel(label+" inset nose shoulder",[pt(.39,-2.49,.92),pt(.66,-1.28,1.27),pt(.57,-1.14,1.31),pt(.34,-2.18,1.02)],(0,0,.018),olive_light,.007)
-        rod(label+" lower sill",pt(.30,-2.44,.60),pt(.67,1.54,.78),.055,black,24)
-        rod(label+" cockpit shoulder sill",pt(.61,-1.02,1.21),pt(.74,1.26,1.23),.045,titanium,24)
+        rod(label+" lower sill",pt(.30,-2.44,.60),pt(.67,1.54+rear_bay_length,.78),.055,black,24)
+        rod(label+" cockpit shoulder sill",pt(.61,-1.02,1.21),pt(.74,1.26+rear_bay_length,1.23),.045,titanium,24)
         panel(label+" triangular sill armor",[pt(.65,-.95,1.17),pt(.76,.78,1.20),pt(.70,1.12,.94),pt(.57,-.22,.81)],(side*.045,0,0),olive)
         panel(label+" sill recessed relief",[pt(.699,-.58,1.10),pt(.78,.65,1.13),pt(.73,.76,1.02)],(side*.012,0,0),dark,.006)
         # Continuous cage triangles, with visibly connected lower and upper anchors.
-        a=pt(.64,-1.13,1.23); b=pt(.48,-.15,2.04); c=pt(.49,.69,2.07); d=pt(.78,1.48,1.24)
-        for name,u,v,r in (("raked windshield pillar",a,b,.045),("roof rail",b,c,.044),("rear cage pillar",c,d,.052),("rear diagonal",c,pt(.70,.72,.80),.038),("rear deck brace",b,d,.034)):
-            rod(label+" "+name,u,v,r,titanium,24)
+        a=pt(.64,-1.13,1.23); b=pt(.48,-.15,2.04); c=pt(.49,.69,2.07)
+        aft_top=pt(.49,.69+rear_bay_length,2.07)
+        aft_lower=pt(.74,.69+rear_bay_length,1.23)
+        d=pt(.78,1.48+rear_bay_length,1.24)
+        for name,u,v,r in (
+            ("raked windshield pillar",a,b,.045),("roof rail",b,c,.044),
+            ("rear bay upper longeron",c,aft_top,.044),
+            ("rear bay lower longeron",pt(.74,.69,1.23),aft_lower,.045),
+            ("rear bay aft upright",aft_top,aft_lower,.045),
+            ("rear cage pillar",aft_top,d,.052),
+            ("rear diagonal",c,pt(.70,.72,.80),.038),
+            ("rear deck brace",pt(.70,.72,.80),d,.034)):
+            rod(label+" "+name,u,v,r,titanium,20)
         for q in (a,b,c,d): joint(label+" cage junction",q,side,.065)
+        # Low-profile collars keep the extra bay readable without a dense bolt cluster.
+        cyl(label+" rear bay aft corner",aft_top,.070,.14,black,"X",16)
+        cyl(label+" rear bay corner pin",(aft_top[0]+side*.08,aft_top[1],aft_top[2]),.025,.025,gold,"X",8)
         # Long close-set arms, clevis gaps, paired links and telescoping hydraulics.
         root=pt(.85,-.70,1.12); elbow=pt(1.12,-1.64,.88); wrist=pt(1.30,-2.91,.59)
         for name,u,v in (("upper link",root,elbow),("forward link",elbow,wrist)):
@@ -305,7 +326,7 @@ def build(output_dir):
         make_hover_cell(side*1.30,-2.91,.29,.83,label+" forward lift",(olive,black,titanium,glow,gold))
         # Cross-section shells taper into a chamfered front and a pinched aft cap.
         # Outer hatches are cut into the shell, not laid over an unbroken box face.
-        for idx,y in enumerate((.65,1.48)):
+        for idx,y in enumerate((.65+pod_shift,1.48+pod_shift)):
             x=side*1.12
             shell=loft(label+" shaped pod shell "+str(idx),[
                 (y-.39,.21,1.32,.91),(y-.30,.32,1.45,.81),
@@ -332,11 +353,12 @@ def build(output_dir):
             panel(label+" swept pod lower carrier",[pt(.72,y-.30,.79),pt(1.30,y-.30,.76),pt(1.43,y+.26,.81),pt(.77,y+.30,.85)],(0,0,.055),black)
             for yy in (y-.22,y+.22):
                 beam_between(label+" pod fitted mounting clevis",pt(.64,yy,.78),pt(1.03,yy,.83),.085,titanium,.11,.012)
-        add_text(label+" serial","01",pt(1.426,.65,1.045),.22,titanium,(math.pi/2,0,side*math.pi/2))
-        for yy in (1.36,1.60):
+        add_text(label+" serial","01",pt(1.426,.65+pod_shift,1.045),.22,titanium,(math.pi/2,0,side*math.pi/2))
+        for yy in (1.36+pod_shift,1.60+pod_shift):
             box(label+" rear pod vent bed",pt(1.426,yy,1.15),(.014,.16,.21),dark,.012)
             for zz in (1.08,1.14,1.20):
                 box(label+" recessed vent louver",pt(1.437,yy,zz),(.018,.125,.018),black,.004)
+        before_aft=set(bpy.context.scene.objects)
         # Exposed rear turbine: open annular wall, recessed core and swept vanes.
         tx=side*.57
         ring_shell(label+" contoured hollow turbine",tx,1.19,[(1.45,.32),(1.57,.44),(1.72,.47),(2.28,.47),(2.36,.50),(2.55,.50),(2.65,.47),(2.65,.35),(2.57,.34),(2.42,.34),(2.30,.27),(2.04,.24)],black)
@@ -361,6 +383,7 @@ def build(output_dir):
         box(label+" integrated lift saddle",pt(.86,1.72,.785),(.46,.45,.065),black,.025)
         for dy in (-.16,.16):
             beam_between(label+" lift cradle cheek",pt(.86,1.72+dy,.77),pt(.72,1.72+dy,.88),.055,titanium,.07,.012)
+        remember_aft(before_aft)
         for y in (-.45,.05,.55):
             rod(label+" cockpit floor diagonal",pt(.62,y,.80),pt(.40,y+.35,1.14),.025,black,16)
 
@@ -373,7 +396,7 @@ def build(output_dir):
         for y,z,x in ((-1.94,.83,1.23),(-2.56,.65,1.35)):
             cyl(label+" web attachment",pt(x,y,z),.025,.035,titanium,"X",8)
         # Triangular gussets and paired mounting ears reinforce the cage intersections.
-        for y in (-.98,1.12):
+        for y in (-.98,1.12+rear_bay_length):
             panel(label+" sill triangular gusset",[pt(.69,y,1.19),pt(.69,y+.26,1.19),pt(.69,y+.19,.99)],(side*.035,0,0),black)
             for yy in (y+.05,y+.20): cyl(label+" gusset bolt",pt(.735,yy,1.15),.024,.022,titanium,"X",8)
         # Four small edge fasteners on each large cheek, without filling flat panels.
@@ -381,6 +404,7 @@ def build(output_dir):
             cyl(label+" nose countersunk screw",pt(x,y,z),.022,.015,titanium,"Z",8)
         box(label+" nose running lamp bed",pt(.59,-1.45,1.23),(.055,.35,.05),black,.012,(.28,0,0))
         for y in (-1.55,-1.48,-1.41): box(label+" running lamp emitter",pt(.59,y,1.26),(.035,.035,.025),glow,.007)
+        before_aft=set(bpy.context.scene.objects)
         # Low stacked turbine control heads occupy the rear deck above the engines.
         box(label+" turbine governor cradle",pt(.57,1.83,1.69),(.56,.68,.10),black,.035)
         box(label+" turbine governor casing",pt(.57,1.83,1.81),(.43,.53,.15),olive,.035)
@@ -402,6 +426,7 @@ def build(output_dir):
         # Rear frame triangulation supports the drive cluster and stabilizers.
         rod(label+" rear triangulated rail",pt(.49,.69,2.07),pt(.72,1.46,1.66),.031,black,20)
         rod(label+" engine diagonal tie",pt(.72,1.46,1.66),pt(.96,2.44,.73),.032,black,20)
+        remember_aft(before_aft)
 
     # Narrow center cowling slopes toward the split tip; cockpit remains entirely open.
     panel("Sloping nose center",[(-.07,-3.24,.53),(.07,-3.24,.53),(.43,-1.22,1.31),(-.43,-1.22,1.31)],(0,0,.04),black)
@@ -410,6 +435,8 @@ def build(output_dir):
         rod("Windshield lower support",(x,-1.12,1.32),(x,-.82,1.50),.025,black,16)
     rod("Roof front crossbar",(-.48,-.15,2.04),(.48,-.15,2.04),.036,titanium,24)
     rod("Roof rear crossbar",(-.49,.69,2.07),(.49,.69,2.07),.036,titanium,24)
+    rod("Rear bay aft roof crossbar",(-.49,.69+rear_bay_length,2.07),(.49,.69+rear_bay_length,2.07),.036,titanium,20)
+    rod("Rear bay aft belt crossbar",(-.74,.69+rear_bay_length,1.23),(.74,.69+rear_bay_length,1.23),.035,black,20)
     # Contoured seat shell with raised thigh and shoulder bolsters.
     for side in (-1,1):
         panel("Bucket seat curved side",[(side*.29,-.24,.85),(side*.31,.35,.89),(side*.34,.68,1.76),(side*.23,.77,1.92),(side*.21,.53,1.08),(side*.20,-.28,1.00)],(side*.035,0,0),black,.025)
@@ -426,8 +453,8 @@ def build(output_dir):
     rod("Steering stem",(0,-.85,1.23),(0,-.54,1.34),.03,titanium,20)
     rod("Steering yoke",(-.23,-.54,1.34),(.23,-.54,1.34),.027,black,20)
     for x in (-.23,.23): rod("Yoke handgrip",(x,-.54,1.28),(x,-.54,1.43),.038,leather,20)
-    box("Rear electronics spine",(0,1.39,1.12),(.28,.72,.45),dark,.04)
-    for y in (1.16,1.33,1.50,1.67): box("Electronics heat sink",(0,y,1.36),(.30,.035,.07),titanium,.008)
+    box("Rear electronics spine",(0,1.39+rear_bay_length,1.12),(.28,.72,.45),dark,.04)
+    for y in (1.16,1.33,1.50,1.67): box("Electronics heat sink",(0,y+rear_bay_length,1.36),(.30,.035,.07),titanium,.008)
     # Detailed cockpit switch banks and fitted pedal well stay inside approved silhouette.
     for side,label in ((-1,"Port"),(1,"Starboard")):
         x=side*.36
@@ -443,6 +470,7 @@ def build(output_dir):
         for yy in (-.78,-.63):
             panel(label+" suspension root mounting ear",[(side*.68,yy,1.02),(side*.89,yy,1.03),(side*.94,yy,1.20),(side*.77,yy,1.29)],(0,.035,0),olive,.012)
         rod(label+" pivot locking pin",(side*.89,-.83,1.12),(side*.89,-.56,1.12),.026,titanium,16)
+        before_aft=set(bpy.context.scene.objects)
         # Connected bent service lines with couplers, offset from the frame tubes.
         pts=[(side*.78,.72,1.40),(side*.85,.97,1.52),(side*.86,1.24,1.54),(side*.78,1.53,1.60)]
         for i,(a,b) in enumerate(zip(pts,pts[1:])):
@@ -454,6 +482,7 @@ def build(output_dir):
         # Fastened dorsal saddle between roll cage and serviceable rear drive.
         box(label+" rear electrical junction",(side*.32,1.21,1.24),(.22,.30,.15),black,.025)
         for y in (1.13,1.29): cyl(label+" junction captive bolt",(side*.32,y,1.325),.018,.012,titanium,"Z",8)
+        remember_aft(before_aft)
     # Instrument graphics are real emissive geometry, readable in the exported GLB.
     for i in range(6):
         box("Instrument telemetry bar",(-.135+i*.05,-.77,1.414),(.025,.018+(i%3)*.012,.002),glow,0)
@@ -481,6 +510,7 @@ def build(output_dir):
             for v in ob.data.vertices:
                 q=world@v.co; q.y=arm_y(q.y); v.co=inv@q
 
+    before_aft=set(bpy.context.scene.objects)
     # Rear-facing mechanical detail is authored for the chase camera, not only the hero view.
     for side,label in ((-1,"Port"),(1,"Starboard")):
         tx=side*.57
@@ -511,6 +541,8 @@ def build(output_dir):
     add_text("Rear Mantis identification","MANTIS",(0,2.392,1.69),.060,titanium,(math.pi/2,0,math.pi))
     for x in (-.16,.16): cyl("Rear bridge captive fastener",(x,2.39,1.72),.018,.018,gold,"Y",8)
 
+    remember_aft(before_aft)
+
     # Compact rear drive packaging: apply one rigid-axis mapping to every fitted part.
     # Radial scaling reduces the funnel silhouette; the shallower axial span makes a
     # dense drive module. Mounts, stators, petals and lamps share the same transform.
@@ -529,6 +561,7 @@ def build(output_dir):
             q.z=1.19+(q.z-1.19)*.86
             q.y=1.58+(q.y-1.58)*.78
             v.co=inv@q
+    before_aft=set(bpy.context.scene.objects)
     # Controlled segmented barrel jackets, fitted over the compact engine profile.
     for side,label in ((-1,"Port"),(1,"Starboard")):
         tx=side*.57
@@ -549,6 +582,12 @@ def build(output_dir):
              (2.42,.307),(2.36,.298),(2.20,.298)],titanium)
         for y in (1.76,2.08):
             torus(label+" barrel retaining band",(tx,y,1.19),.445,.018,black,"Y")
+
+    remember_aft(before_aft)
+    # Every turbine, fin, rear lift cell, bracket and service fitting shares this
+    # translation. Circular rims and relative mounting distances remain unchanged.
+    for ob in aft_modules:
+        ob.location.y+=rear_bay_length
 
     # Convert lettering too, so exports, triangle accounting and LODs share one mesh set.
     for ob in list(bpy.context.scene.objects):
@@ -686,15 +725,15 @@ def build(output_dir):
     if not 0<lod2_triangles<=20000: raise RuntimeError("LOD2 must remain within the 10k-20k triangle target: {}".format(lod2_triangles))
 
     specs=[
-      ("hero_3q",(8,-10,5.4),(0,-.05,1.05),8.8),
+      ("hero_3q",(8,-10,5.4),(0,-.05+rear_bay_length*.5,1.05),9.4),
       ("front",(0,-12,1.15),(0,-.1,1.15),5.5),
-      ("side",(12,-.4,1.15),(0,-.4,1.15),7.5),
+      ("side",(12,-.4+rear_bay_length*.5,1.15),(0,-.4+rear_bay_length*.5,1.15),8.3),
       ("rear",(0,12,1.15),(0,.1,1.15),5.5),
-      ("top",(0,-.42,13),(0,-.42,.9),9.6),
+      ("top",(0,-.42+rear_bay_length*.5,13),(0,-.42+rear_bay_length*.5,.9),10.7),
       ("cockpit_detail",(3,-3,3.6),(0,-.05,1.30),3.15),
-      ("drive_detail",(4,5,3.0),(0,1.75,1.23),3.9),
-      ("rear_3q",(7,9,4.6),(0,.35,1.10),8.0),
-      ("chase",(0,9,4.4),(0,.10,1.1),7.3),
+      ("drive_detail",(4,5+rear_bay_length,3.0),(0,1.75+rear_bay_length,1.23),3.9),
+      ("rear_3q",(7,9+rear_bay_length,4.6),(0,.35+rear_bay_length*.5,1.10),8.6),
+      ("chase",(0,9+rear_bay_length,4.4),(0,.10+rear_bay_length*.5,1.1),7.9),
     ]
     view_paths=[]
     for name,loc,target,scale in specs:
@@ -727,14 +766,14 @@ def build(output_dir):
 
     # Low-poly compound collision proxy: broad hull, arm envelopes, and four lift pods.
     collision_objects=[]
-    collision_objects.append(box("COLLISION_MainHull",(0,.70,1.30),(1.50,4.0,1.80),dark,0))
+    collision_objects.append(box("COLLISION_MainHull",(0,.70+rear_bay_length*.5,1.30),(1.50,4.0+rear_bay_length,1.80),dark,0))
     for side,label in ((-1,"Port"),(1,"Starboard")):
         collision_objects.append(beam_between("COLLISION_"+label+"Nose",(side*.13,-3.40,.49),(side*.52,-1.05,1.17),.35,dark,.30,0))
-        collision_objects.append(box("COLLISION_"+label+"EquipmentPods",(side*1.12,1.06,1.12),(.72,1.65,.72),dark,0))
+        collision_objects.append(box("COLLISION_"+label+"EquipmentPods",(side*1.12,1.06+pod_shift,1.12),(.72,1.65,.72),dark,0))
         collision_objects.append(beam_between("COLLISION_"+label+"Arm",(side*.85,-.70,1.12),(side*1.30,-2.468,.45),.34,dark,.34,0))
         bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.50,depth=.25,location=(side*1.30,-2.468,.29))
         collision_objects.append(bpy.context.object); collision_objects[-1].name="COLLISION_"+label+"FrontLift"
-        bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.29,depth=.17,location=(side*.86,1.72,.64))
+        bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.29,depth=.17,location=(side*.86,1.72+rear_bay_length,.64))
         collision_objects.append(bpy.context.object); collision_objects[-1].name="COLLISION_"+label+"RearLift"
         collision_objects[-1].data.materials.append(dark)
     bpy.ops.object.select_all(action="DESELECT")
@@ -751,12 +790,13 @@ def build(output_dir):
     record={
       "asset_id":"mantis_mk1_hover_racer",
       "display_name":"Mantis / MK I",
-      "generator":"Assetwright procedural Blender controlled rear housings and tapered pod rebuild v8",
+      "generator":"Assetwright procedural Blender extended rear rectangular cage bay v9",
+      "rear_frame_bay":{"length":rear_bay_length,"front_y":.69,"aft_y":.69+rear_bay_length,"pod_shift_y":pod_shift,"drive_shift_y":rear_bay_length},
       "reference":"User-provided MANTIS / MK I concept and wireframe sheets; source image is not redistributed by this build.",
-      "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that extend mostly forward close beside the split nose and terminate in layered circular hover repulsor cells. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells tucked tightly beneath the rear chassis. Shorten front suspension reach by 20 percent about the original root. Emphasize layered exhaust petals, recessed combustion rings, center cones, under-engine guards and rear service fittings for the driving camera. Use an open triangulated chassis, long split tapered nose, descending cheek panels, close-set articulated arms, and exposed hollow turbine nozzles. Avoid a solid central hull. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
+      "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that extend mostly forward close beside the split nose and terminate in layered circular hover repulsor cells. Extend the rear exoskeleton with a second open rectangular frame bay behind the seat, with parallel upper rails and an aft crossbar before the sloping rear engine supports. Keep the rear drive, fins and tucked lift cells together beyond that bay. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells tucked tightly beneath the rear chassis. Shorten front suspension reach by 20 percent about the original root. Emphasize layered exhaust petals, recessed combustion rings, center cones, under-engine guards and rear service fittings for the driving camera. Use an open triangulated chassis, long split tapered nose, descending cheek panels, close-set articulated arms, and exposed hollow turbine nozzles. Avoid a solid central hull. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
       "negative_prompt":"No enclosed car body, no conventional wheels or tires, no landing legs, no smooth one-piece shell, no low-poly toy appearance, no omitted front arms, no missing hover cells, no opaque canopy, no unsupported floating details, no text outside modeled markings.",
       "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":120000,"triangle_count":triangle_count,"assembly_triangles":assembly_triangles,"lods":{"LOD0":triangle_count,"LOD1":lod1_triangles,"LOD2":lod2_triangles},"collision_triangles":collision_triangles,"texture_policy":"Embedded albedo, roughness and authored micro-normal maps; high-to-low normal, AO and curvature baking not implemented"},
-      "feature_labels":["open_exoskeleton","twin_forward_articulated_arms","front_hover_cells","open_single_seat_cockpit","skeletal_canopy_frame","modular_side_pods","paired_rear_turbines","swept_tail_fins","aft_hover_cells","olive_metal_materials","mechanical_hardware"],
+      "feature_labels":["open_exoskeleton","extended_rear_rectangular_bay","twin_forward_articulated_arms","front_hover_cells","open_single_seat_cockpit","skeletal_canopy_frame","modular_side_pods","paired_rear_turbines","swept_tail_fins","aft_hover_cells","olive_metal_materials","mechanical_hardware"],
       "axis_convention":{"forward":"-Y","right":"+X","up":"+Z"},
       "views":["hero_3q","front","side","rear","top","cockpit_detail","drive_detail","rear_3q","chase"],
       "files":["mantis_mk1.blend","mantis_mk1.glb","mantis_mk1_lod1.glb","mantis_mk1_lod2.glb","mantis_mk1_collision.glb","mantis_mk1_review_board.png"],
