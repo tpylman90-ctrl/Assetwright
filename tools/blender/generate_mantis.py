@@ -339,8 +339,10 @@ def build(output_dir):
         panel(label+" swept stabilizer",[pt(.77,1.14,1.33),pt(.86,1.72,1.90),pt(1.04,2.48,2.24),pt(1.08,2.65,2.24),pt(.87,1.87,1.35)],(side*.045,0,0),olive)
         rod(label+" fin leading stiffener",pt(.80,1.18,1.37),pt(1.05,2.49,2.23),.018,titanium,16)
         joint(label+" fin root bracket",pt(.80,1.34,1.42),side,.08)
-        make_hover_cell(side*1.10,1.47,.30,.54,label+" aft lift",(olive,black,titanium,glow,gold))
-        rod(label+" aft lift support",pt(1.10,1.47,.48),pt(1.10,1.47,.83),.07,black,24)
+        make_hover_cell(side*.86,1.72,.64,.48,label+" aft lift",(olive,black,titanium,glow,gold))
+        box(label+" integrated lift saddle",pt(.86,1.72,.785),(.46,.45,.065),black,.025)
+        for dy in (-.16,.16):
+            beam_between(label+" lift cradle cheek",pt(.86,1.72+dy,.77),pt(.72,1.72+dy,.88),.055,titanium,.07,.012)
         for y in (-.45,.05,.55):
             rod(label+" cockpit floor diagonal",pt(.62,y,.80),pt(.40,y+.35,1.14),.025,black,16)
 
@@ -444,6 +446,51 @@ def build(output_dir):
     for x in (-.18,.18):
         for y in (-.13,.05,.23): box("Seat stitch",(x,y,1.117),(.009,.07,.004),olive_light,0)
 
+    # Shorten only the front suspension reach about its fixed root; retain circular cells.
+    def arm_y(y): return -.70+(y+.70)*.80
+    bpy.context.view_layer.update()
+    arm_tags=("upper link","forward link","hydraulic barrel","polished piston","return hose",
+              "suspension pivot","arm triangular cover","lower wishbone","cell gimbal spindle",
+              "forward lift","web attachment")
+    for ob in list(bpy.context.scene.objects):
+        if ob.type!="MESH" or not any(t in ob.name for t in arm_tags): continue
+        if "forward lift" in ob.name or "suspension pivot" in ob.name:
+            ob.location.y=arm_y(ob.location.y)
+        else:
+            world=ob.matrix_world.copy(); inv=world.inverted()
+            for v in ob.data.vertices:
+                q=world@v.co; q.y=arm_y(q.y); v.co=inv@q
+
+    # Rear-facing mechanical detail is authored for the chase camera, not only the hero view.
+    for side,label in ((-1,"Port"),(1,"Starboard")):
+        tx=side*.57
+        def rp(r,y,a): return (tx+r*math.cos(a),y,1.19+r*math.sin(a))
+        # Separate tapered nozzle petals with seams, flanged clamps and inner heat shields.
+        for i in range(12):
+            a=i*math.tau/12; half=math.pi/12*.84
+            panel(label+" exhaust petal",[rp(.475,2.37,a-half),rp(.525,2.64,a-half),rp(.525,2.64,a+half),rp(.475,2.37,a+half)],(0,.016,0),titanium,.005)
+            rod(label+" petal actuator",rp(.48,2.29,a),rp(.52,2.57,a),.018,black,12)
+            cyl(label+" petal lock screw",rp(.50,2.60,a),.018,.028,gold,"Y",8)
+        for i in range(8):
+            a=i*math.tau/8
+            rod(label+" inner ion channel",rp(.275,2.16,a),rp(.385,2.47,a),.009,hot,8)
+        torus(label+" recessed combustion ring",(tx,2.22,1.19),.26,.012,hot,"Y")
+        # Recessed stepped center cone visible from behind without closing the nozzle mouth.
+        rod(label+" turbine center bullet",(tx,2.06,1.19),(tx,2.29,1.19),.10,titanium,32,radius2=.035)
+        cyl(label+" center ignition lens",(tx,2.30,1.19),.037,.015,hot,"Y",24)
+        # Angular under-engine guards join the rear cradle, with real open spaces.
+        panel(label+" lower engine guard",[(side*.27,2.14,.69),(side*.93,2.14,.73),(side*.96,2.62,.66),(side*.35,2.69,.60)],(0,0,.035),black,.012)
+        for x in (.39,.70,.88):
+            panel(label+" diffuser vane",[(side*x,2.12,.69),(side*x,2.63,.62),(side*x,2.53,.49),(side*x,2.23,.52)],(side*.018,0,0),titanium,.004)
+        beam_between(label+" rear engine bracket",(side*.89,2.05,.77),(side*.96,2.42,.90),.065,olive,.09,.016)
+        # Rear service lights sit above the nozzle mouths.
+        box(label+" rear marker housing",(side*.90,2.19,1.62),(.25,.09,.08),black,.015)
+        box(label+" rear amber marker",(side*.90,2.241,1.62),(.18,.015,.025),hot,.006)
+    box("Rear bridge instrument enclosure",(0,2.20,1.72),(.40,.34,.22),black,.03)
+    box("Rear bridge recessed plate",(0,2.377,1.72),(.29,.018,.13),olive,.012)
+    add_text("Rear Mantis identification","MANTIS",(0,2.392,1.69),.060,titanium,(math.pi/2,0,math.pi))
+    for x in (-.16,.16): cyl("Rear bridge captive fastener",(x,2.39,1.72),.018,.018,gold,"Y",8)
+
     # Convert lettering too, so exports, triangle accounting and LODs share one mesh set.
     for ob in list(bpy.context.scene.objects):
         if ob.type=="FONT":
@@ -512,6 +559,7 @@ def build(output_dir):
       ("top",(0,-.42,13),(0,-.42,.9),9.6),
       ("cockpit_detail",(3,-3,3.6),(0,-.05,1.30),3.15),
       ("drive_detail",(4,5,3.0),(0,1.75,1.23),3.9),
+      ("chase",(0,9,4.4),(0,.10,1.1),7.3),
     ]
     view_paths=[]
     for name,loc,target,scale in specs:
@@ -592,8 +640,8 @@ def build(output_dir):
             if data.users==0: bpy.data.meshes.remove(data)
         return lod_triangles
 
-    lod1_triangles=export_lod("LOD1",.25,.035)
-    lod2_triangles=export_lod("LOD2",.06,.085)
+    lod1_triangles=export_lod("LOD1",.23,.035)
+    lod2_triangles=export_lod("LOD2",.045,.10)
     if not 0<lod1_triangles<=45000: raise RuntimeError("LOD1 must remain within the 15k-45k triangle target: {}".format(lod1_triangles))
     if not 0<lod2_triangles<=20000: raise RuntimeError("LOD2 must remain within the 10k-20k triangle target: {}".format(lod2_triangles))
 
@@ -603,10 +651,10 @@ def build(output_dir):
     for side,label in ((-1,"Port"),(1,"Starboard")):
         collision_objects.append(beam_between("COLLISION_"+label+"Nose",(side*.13,-3.40,.49),(side*.52,-1.05,1.17),.35,dark,.30,0))
         collision_objects.append(box("COLLISION_"+label+"EquipmentPods",(side*1.12,1.06,1.12),(.72,1.65,.72),dark,0))
-        collision_objects.append(beam_between("COLLISION_"+label+"Arm",(side*.85,-.70,1.12),(side*1.30,-2.91,.45),.34,dark,.34,0))
-        bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.50,depth=.25,location=(side*1.30,-2.91,.29))
+        collision_objects.append(beam_between("COLLISION_"+label+"Arm",(side*.85,-.70,1.12),(side*1.30,-2.468,.45),.34,dark,.34,0))
+        bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.50,depth=.25,location=(side*1.30,-2.468,.29))
         collision_objects.append(bpy.context.object); collision_objects[-1].name="COLLISION_"+label+"FrontLift"
-        bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.33,depth=.16,location=(side*1.10,1.47,.30))
+        bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.29,depth=.17,location=(side*.86,1.72,.64))
         collision_objects.append(bpy.context.object); collision_objects[-1].name="COLLISION_"+label+"RearLift"
         collision_objects[-1].data.materials.append(dark)
     bpy.ops.object.select_all(action="DESELECT")
@@ -623,14 +671,14 @@ def build(output_dir):
     record={
       "asset_id":"mantis_mk1_hover_racer",
       "display_name":"Mantis / MK I",
-      "generator":"Assetwright procedural Blender mechanical and portable PBR refinement v6",
+      "generator":"Assetwright procedural Blender rear packaging and chase-view refinement v7",
       "reference":"User-provided MANTIS / MK I concept and wireframe sheets; source image is not redistributed by this build.",
-      "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that extend mostly forward close beside the split nose and terminate in layered circular hover repulsor cells. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells. Use an open triangulated chassis, long split tapered nose, descending cheek panels, close-set articulated arms, and exposed hollow turbine nozzles. Avoid a solid central hull. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
+      "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that extend mostly forward close beside the split nose and terminate in layered circular hover repulsor cells. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells tucked tightly beneath the rear chassis. Shorten front suspension reach by 20 percent about the original root. Emphasize layered exhaust petals, recessed combustion rings, center cones, under-engine guards and rear service fittings for the driving camera. Use an open triangulated chassis, long split tapered nose, descending cheek panels, close-set articulated arms, and exposed hollow turbine nozzles. Avoid a solid central hull. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
       "negative_prompt":"No enclosed car body, no conventional wheels or tires, no landing legs, no smooth one-piece shell, no low-poly toy appearance, no omitted front arms, no missing hover cells, no opaque canopy, no unsupported floating details, no text outside modeled markings.",
       "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":120000,"triangle_count":triangle_count,"lods":{"LOD0":triangle_count,"LOD1":lod1_triangles,"LOD2":lod2_triangles},"collision_triangles":collision_triangles,"texture_policy":"Embedded albedo, roughness and authored micro-normal maps; high-to-low normal, AO and curvature baking not implemented"},
       "feature_labels":["open_exoskeleton","twin_forward_articulated_arms","front_hover_cells","open_single_seat_cockpit","skeletal_canopy_frame","modular_side_pods","paired_rear_turbines","swept_tail_fins","aft_hover_cells","olive_metal_materials","mechanical_hardware"],
       "axis_convention":{"forward":"-Y","right":"+X","up":"+Z"},
-      "views":["hero_3q","front","side","rear","top","cockpit_detail","drive_detail"],
+      "views":["hero_3q","front","side","rear","top","cockpit_detail","drive_detail","chase"],
       "files":["mantis_mk1.blend","mantis_mk1.glb","mantis_mk1_lod1.glb","mantis_mk1_lod2.glb","mantis_mk1_collision.glb","mantis_mk1_review_board.png"],
       "license":"No repository license declared; confirm distribution terms before redistribution"
     }
