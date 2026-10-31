@@ -607,6 +607,8 @@ def build(output_dir):
     def export_lod(label, ratio, detail_cutoff):
         copies=[]
         for original in meshes:
+            if label=="LOD2" and any(tag in original.name for tag in ("petal actuator","petal lock screw","inner ion channel")):
+                continue
             if max(original.dimensions) < detail_cutoff:
                 continue
             obj=original.copy()
