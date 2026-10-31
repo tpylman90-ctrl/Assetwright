@@ -454,7 +454,9 @@ def build(output_dir):
               "forward lift","web attachment")
     for ob in list(bpy.context.scene.objects):
         if ob.type!="MESH" or not any(t in ob.name for t in arm_tags): continue
-        if "forward lift" in ob.name or "suspension pivot" in ob.name:
+        if "forward lift" in ob.name:
+            ob.location.y+=.442  # rigid translation preserves circular rim and fastener spacing
+        elif "suspension pivot" in ob.name:
             ob.location.y=arm_y(ob.location.y)
         else:
             world=ob.matrix_world.copy(); inv=world.inverted()
