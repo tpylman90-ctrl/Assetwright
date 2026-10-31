@@ -116,7 +116,7 @@ def cyl(name, loc, radius, depth, material, axis="Z", vertices=32):
 
 
 def torus(name, loc, major, minor, material, axis="Z"):
-    bpy.ops.mesh.primitive_torus_add(major_segments=32, minor_segments=8, major_radius=major, minor_radius=minor, location=loc)
+    bpy.ops.mesh.primitive_torus_add(major_segments=32, minor_segments=(6 if minor<.025 else 8), major_radius=major, minor_radius=minor, location=loc)
     o=bpy.context.object; o.name=name; o.data.materials.append(material)
     o.rotation_euler={"X":(0,math.pi/2,0),"Y":(math.pi/2,0,0),"Z":(0,0,0)}[axis]
     for face in o.data.polygons: face.use_smooth=True
@@ -239,7 +239,7 @@ def build(output_dir):
         mesh=bpy.data.meshes.new(name); mesh.from_pydata(verts,[],faces); mesh.update()
         ob=bpy.data.objects.new(name,mesh); bpy.context.collection.objects.link(ob)
         ob.data.materials.append(material)
-        mod=ob.modifiers.new("Manufactured edge radius","BEVEL"); mod.width=bevel; mod.segments=3
+        mod=ob.modifiers.new("Manufactured edge radius","BEVEL"); mod.width=bevel; mod.segments=2 if bevel<=.006 else 3
         ob.modifiers.new("Panel normals","WEIGHTED_NORMAL")
         return ob
 
