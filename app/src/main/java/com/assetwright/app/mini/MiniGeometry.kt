@@ -133,7 +133,7 @@ object MiniGeometry {
                 val angle = i * 2.0 * PI / spec.radialSegments
                 val side = cos(angle).toFloat()
                 val top = sin(angle).toFloat()
-                val frontProgress = ((t + 0.50f) / 0.29f).coerceIn(0f, 1f)
+                val frontProgress = ((t + 0.50f) / 0.45f).coerceIn(0f, 1f)
                 val eased = frontProgress * frontProgress * (3f - 2f * frontProgress)
                 val frontShape = spec.noseTaper + (1f - spec.noseTaper) * eased
                 val width = w * profile * frontShape
