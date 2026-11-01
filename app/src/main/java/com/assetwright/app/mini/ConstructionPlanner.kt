@@ -87,7 +87,7 @@ object ConstructionPlanner {
 
     private val explicitLift = Regex(
         "\\b(2|4|6|two|four|six|twin|dual)\\s*" +
-            "(?:(?:underbody|underslung|hover|lift|magnetic|anti\\s*gravity)\\s+)*" +
+            "(?:(?:underbody|underslung|hover|lift|magnetic|anti\\s*gravity|hidden|tucked|exposed|visible|recessed|concealed|integrated|outboard|external|outrigger)\\s+)*" +
             "(?:repulsors?|pods?|pads?|cells?|units?)\\b",
         RegexOption.IGNORE_CASE
     )
