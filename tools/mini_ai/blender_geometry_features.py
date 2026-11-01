@@ -17,6 +17,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from component_graph import build_graph
+from mesh_islands import connected_bounds
 
 MAX_OBJECTS = 500
 MAX_TRIANGLES = 2_000_000
@@ -78,10 +79,21 @@ def main():
                     part_max[axis] = max(part_max[axis], p[axis])
                     min_bound[axis] = min(min_bound[axis], p[axis])
                     max_bound[axis] = max(max_bound[axis], p[axis])
-            part_boxes.append({
-                "min": part_min, "max": part_max,
-                "triangles": len(mesh.loop_triangles)
-            })
+            # Blender exporters often combine multiple disconnected shells
+            # into one mesh object. Extract candidate geometric islands before
+            # constructing proximity graphs, but do not invent semantic labels.
+            islands = connected_bounds(
+                points,
+                (tuple(edge.vertices) for edge in mesh.edges),
+                (tuple(tri.vertices) for tri in mesh.loop_triangles)
+            )
+            if len(islands) >= 2:
+                part_boxes.extend(islands)
+            else:
+                part_boxes.append({
+                    "min": part_min, "max": part_max,
+                    "triangles": len(mesh.loop_triangles)
+                })
             area = 0.0
             for tri in mesh.loop_triangles:
                 a, b, c = (points[index] for index in tri.vertices)
