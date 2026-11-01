@@ -1,0 +1,7 @@
+{
+  "schema": "assetwright-forge-training-request-v1",
+  "cycle": 1,
+  "max_assets": 4,
+  "focus": "vehicle engine wheel mechanical",
+  "objective": "Study CC0 geometric construction references and produce a provenance-controlled report for Forge review. Do not train or publish unverified Android weights."
+}
