@@ -375,6 +375,7 @@ private fun AssetwrightScreen() {
                                 pendingForgeProposal = null
                                 status = "Generated offline: " + spec.title + " • " +
                                     spec.driveCount + " engines • " +
+                                    spec.liftCount + " " + spec.liftMount + " lift cells • " +
                                     built.triangleCount + " triangles. Drag the model to rotate it." +
                                     if (selectedImage != null) " Reference image not yet used." else ""
                             } catch (ex: Exception) {
@@ -561,6 +562,11 @@ private fun AssetwrightScreen() {
                             Text("ON-DEVICE AI TRAINING", color = Teal,
                                 fontWeight = FontWeight.Bold, fontSize = 12.sp)
                             Text(
+                                "Construction planner: " +
+                                    com.assetwright.app.mini.ConstructionTrainingStore.summary(context),
+                                color = TextMuted, fontSize = 11.sp
+                            )
+                            Text(
                                 "Approved shape corrections train compact numeric weights on " +
                                     "your phone. Full GLB models are not retained as training data.",
                                 color = TextMuted, fontSize = 12.sp, lineHeight = 17.sp
@@ -694,6 +700,7 @@ private fun PreviewCard(asset: GeneratedAsset?) {
                 Text(
                     if (asset == null) "Describe a hover vehicle to create a real mesh"
                     else "Drag to rotate  ·  " + asset.spec.driveCount + " engines  ·  " +
+                        asset.spec.liftCount + " " + asset.spec.liftMount + " lift cells  ·  " +
                         asset.triangleCount + " triangles  ·  GLB export",
                     color = TextMuted, fontSize = 11.sp
                 )
