@@ -6,6 +6,8 @@ proof of a physical joint, semantic role, or actual mesh collision.
 from __future__ import annotations
 import math
 
+from part_role_proposals import validate_proposal
+
 SCHEMA = "assetwright-component-graph-v1"
 MAX_PARTS = 24
 MAX_EDGES = 200
@@ -35,7 +37,7 @@ def build_graph(parts: list[dict], overall_min: list[float], overall_max: list[f
         if any(t < 0 for t in extents):
             continue
         center = [(x+y)/2 for x,y in zip(a,b)]
-        usable.append((index, triangles, a, b, extents, center))
+        usable.append((index, triangles, a, b, extents, center, part.get("role_proposal"))))
     if not usable:
         return {"schema": SCHEMA, "part_count": 0, "nodes": [],
                 "edges": [], "pair_count": 0, "note": "No valid mesh-object bounding boxes"}
@@ -43,20 +45,24 @@ def build_graph(parts: list[dict], overall_min: list[float], overall_max: list[f
     selected = sorted(usable, key=lambda x: (-x[1], -max(x[4]), x[0]))[:MAX_PARTS]
     total = sum(x[1] for x in selected)
     nodes = []
-    for node_id, (_, triangles, a, b, extents, center) in enumerate(selected):
-        nodes.append({
+    for node_id, (_, triangles, a, b, extents, center, weak_role) in enumerate(selected):
+        node = {
             "id": node_id,
             "triangle_fraction": round(triangles/total, 6),
             "extent_ratios": [round(v/scale, 6) for v in sorted(extents)],
             "center_radius": round(math.sqrt(sum(
                 ((c-(x+y)/2)/scale)**2 for c,x,y in zip(center,overall_min,overall_max)
             )), 6)
-        })
+        }
+        # A source object name is a weak proposal, never a validated label.
+        if validate_proposal(weak_role):
+            node["weak_role_proposal"] = weak_role
+        nodes.append(node)
     edges = []
     for i in range(len(selected)):
-        _, ta, amin, amax, ae, acenter = selected[i]
+        _, ta, amin, amax, ae, acenter, _ = selected[i]
         for j in range(i+1,len(selected)):
-            _, tb, bmin, bmax, be, bcenter = selected[j]
+            _, tb, bmin, bmax, be, bcenter, _ = selected[j]
             gaps = [max(0.0, bmin[k]-amax[k], amin[k]-bmax[k]) for k in range(3)]
             gap = math.sqrt(sum(v*v for v in gaps)) / scale
             center_distance = math.sqrt(sum(((a-b)/scale)**2
@@ -82,5 +88,5 @@ def build_graph(parts: list[dict], overall_min: list[float], overall_max: list[f
         "nodes": nodes, "edges": edges, "pair_count": len(edges),
         "relation_counts": {label: sum(e["relation"]==label for e in edges)
                             for label in RELATIONS},
-        "note": "Anonymous object AABB geometry; proximity is not a verified joint"
+        "note": "Object AABB proximity is not a verified joint; optional weak role proposals require visual review"
     }
