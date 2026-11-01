@@ -10,6 +10,8 @@ import com.assetwright.app.mini.MiniAi
 import com.assetwright.app.mini.MiniGeometry
 import com.assetwright.app.mini.MiniPreview
 import com.assetwright.app.mini.TrainingStore
+import com.assetwright.app.mini.DeviceShapeTrainer
+import com.assetwright.app.mini.ForgeLessonStore
 import com.assetwright.app.mini.TrainingSync
 import com.assetwright.app.mini.VehicleSpec
 import android.os.Bundle
@@ -89,6 +91,9 @@ private fun AssetwrightScreen() {
     var forgeRequest by remember { mutableStateOf("") }
     var pendingForgeProposal by remember { mutableStateOf<ForgeProposal?>(null) }
     val context = LocalContext.current
+    var forgeUpdatesEnabled by remember(context) {
+        mutableStateOf(ForgeLessonStore.enabled(context))
+    }
     var pairedTrainingFolder by remember(context) {
         mutableStateOf(TrainingSync.configured(context))
     }
@@ -99,8 +104,8 @@ private fun AssetwrightScreen() {
     var homeExamples by remember(context) {
         mutableStateOf(TrainingStore.home(context))
     }
-    val trainingExamples = remember(context, localExamples, homeExamples) {
-        localExamples.asReversed() + homeExamples.asReversed() + TrainingStore.bundled(context)
+    LaunchedEffect(context, forgeUpdatesEnabled) {
+        if (forgeUpdatesEnabled) ForgeLessonStore.schedule(context)
     }
     val homeImport = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument(),
@@ -364,7 +369,7 @@ private fun AssetwrightScreen() {
                     Button(
                         onClick = {
                             try {
-                                val spec = MiniAi.predict(prompt, selectedQuality, trainingExamples)
+                                val spec = DeviceShapeTrainer.predict(context, prompt, selectedQuality)
                                 val built = MiniGeometry.generate(spec)
                                 generatedAsset = built
                                 pendingForgeProposal = null
@@ -520,8 +525,9 @@ private fun AssetwrightScreen() {
                                             val count = TrainingStore.approve(context, current.spec)
                                             localExamples = TrainingStore.approved(context)
                                             acceptedCount = count
-                                            status = "Approved and learned locally. Your next " +
-                                                "generation can use this corrected design."
+                                            DeviceShapeTrainer.schedule(context)
+                                            status = "Approved locally. The on-device shape model is queued " +
+                                                "for training. New weights will be used after validation."
                                             if (pairedTrainingFolder) {
                                                 try {
                                                     TrainingSync.publishApproved(context)
@@ -540,6 +546,61 @@ private fun AssetwrightScreen() {
                                 ) {
                                     Text("Approve design · Teach Mini AI")
                                 }
+                            }
+                        }
+                    }
+                    Card(
+                        shape = RoundedCornerShape(14.dp),
+                        colors = CardDefaults.cardColors(containerColor = Panel)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(14.dp),
+                            verticalArrangement = Arrangement.spacedBy(7.dp)
+                        ) {
+                            Text("ON-DEVICE AI TRAINING", color = Teal,
+                                fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                            Text(
+                                "Approved shape corrections train compact numeric weights on " +
+                                    "your phone. Full GLB models are not retained as training data.",
+                                color = TextMuted, fontSize = 12.sp, lineHeight = 17.sp
+                            )
+                            val learned = com.assetwright.app.mini.AdaptiveShapeModel.read(context)
+                            Text(
+                                if (learned == null) "Shape model: waiting for approved examples"
+                                else "Shape model: " + learned.trainedCount +
+                                    " approved examples in last checkpoint",
+                                color = TextMain, fontSize = 12.sp
+                            )
+                            OutlinedButton(
+                                onClick = {
+                                    ForgeLessonStore.setEnabled(context, !forgeUpdatesEnabled)
+                                    forgeUpdatesEnabled = !forgeUpdatesEnabled
+                                    status = if (forgeUpdatesEnabled)
+                                        "Forge lesson updates enabled. Only public design recipes " +
+                                            "are downloaded; your training data stays private."
+                                    else "Forge lesson updates disabled."
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = Teal)
+                            ) {
+                                Text(if (forgeUpdatesEnabled) "Disable Forge lesson updates"
+                                    else "Enable Forge training lessons")
+                            }
+                            if (forgeUpdatesEnabled) {
+                                Text(
+                                    "Forge lesson version: " + ForgeLessonStore.version(context) +
+                                        " · Checks approximately every 12 hours online",
+                                    color = TextMuted, fontSize = 11.sp
+                                )
+                                OutlinedButton(
+                                    onClick = {
+                                        ForgeLessonStore.checkNow(context)
+                                        status = "Forge lesson refresh requested. " +
+                                            "New public recipes will be used after download."
+                                    },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = ButtonDefaults.outlinedButtonColors(contentColor = TextMain)
+                                ) { Text("Check Forge lessons now") }
                             }
                         }
                     }
