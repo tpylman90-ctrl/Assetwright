@@ -64,14 +64,27 @@ def file_choices(tree: dict) -> list[dict]:
             for entry in node:
                 walk(entry)
     walk(tree)
-    # Prefer direct GLBs, then other editable mesh formats and Blender files;
-    # smaller models are preferable to expensive 4k/8k downloads.
-    rank = {".glb": 0, ".fbx": 1, ".obj": 2, ".blend": 3, ".zip": 4}
+    # Prefer native Blender over FBX. Most official models publish several
+    # FBX LODs, and choosing three small FBXs first led to zero native Blender
+    # attempts in the initial research cycle.
+    rank = {".blend": 0, ".glb": 1, ".obj": 2, ".fbx": 3, ".zip": 4}
     found.sort(key=lambda f: (
-        f["size"] if f["size"] is not None else MAX_BYTES,
-        rank["." + f["format"]], f["url"]
+        rank["." + f["format"]],
+        f["size"] if f["size"] is not None else MAX_BYTES, f["url"]
     ))
-    return found
+    # Try one low-resolution candidate per format before trying higher LODs
+    # of any format, so importer failures don't waste all fallback attempts.
+    seen_formats = set()
+    first_choice = []
+    extra = []
+    for candidate in found:
+        kind = candidate["format"]
+        if kind in seen_formats:
+            extra.append(candidate)
+        else:
+            seen_formats.add(kind)
+            first_choice.append(candidate)
+    return first_choice + extra
 
 
 def download(candidate: dict, destination: Path) -> dict:
