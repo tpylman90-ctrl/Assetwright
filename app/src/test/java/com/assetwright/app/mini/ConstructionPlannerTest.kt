@@ -80,6 +80,48 @@ class ConstructionPlannerTest {
     }
 
     @Test
+    fun exposedRacerHasVisibleGlassAndOutboardLiftUnits() {
+        // Numeric values are independent regression fixtures, not uploaded
+        // private GLB data. Verify both low-roof and ordinary configurations.
+        for (roof in listOf(1.05f, 1.34f, 1.80f)) {
+            val base = VehicleSpec(
+                "Hover Racer", 4.85f, 2.40f, roof, 1.70f, .48f, 1.18f,
+                "Mobile", "hover racer with twin engines"
+            )
+            val exposed = MiniGeometry.generate(
+                base.copy(constructionPlan = ConstructionPlan(4, "exposed"))
+            )
+            val shell = exposed.parts.first { it.name == "Sculpted continuous body" }
+            val canopy = exposed.parts.first { it.name == "Bonded panoramic canopy" }
+            val hullTop = shell.vertices.maxOf { it.z }
+            val glassTop = canopy.vertices.maxOf { it.z }
+            assertTrue("Glass roof buried below shell at roof=$roof",
+                glassTop - hullTop >= .24f)
+            assertTrue("Glass roof exceeds requested height",
+                glassTop <= roof + .001f)
+            val bodyEdge = shell.vertices.maxOf { kotlin.math.abs(it.x) }
+            val pads = exposed.parts.filter { it.name == "Underslung repulsor" }
+            assertEquals(4, pads.size)
+            for (pad in pads) {
+                val center = kotlin.math.abs(pad.vertices.map { it.x }.average())
+                assertTrue("Exposed pad still hidden within hull silhouette",
+                    center > bodyEdge + .10f)
+            }
+            val tucked = MiniGeometry.generate(
+                base.copy(constructionPlan = ConstructionPlan(4, "tucked"))
+            )
+            val tuckedPads = tucked.parts.filter { it.name == "Underslung repulsor" }
+            assertTrue(tuckedPads.map { pad ->
+                kotlin.math.abs(pad.vertices.map { it.x }.average())
+            }.average() < pads.map { pad ->
+                kotlin.math.abs(pad.vertices.map { it.x }.average())
+            }.average() - .5)
+            assertEquals(2, exposed.parts.count { it.name.endsWith("housing") })
+            assertTrue(exposed.triangleCount < 20000)
+        }
+    }
+
+    @Test
     fun missingTrainingExamplesNeverSilentlyCreateExoticComponents() {
         val model = ConstructionPlanner.plan("hover car with six hidden pads", null)
         assertEquals(6,model.liftCells)
