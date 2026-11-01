@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 5,
+  "cycle": 6,
   "max_assets": 8,
-  "focus": "vehicle engine mechanical machinery generator industrial",
-  "objective": "Detect disconnected geometry islands inside Blender mesh objects, deduplicate across historical CC0 studies, and evaluate source-heldout component proximity priors without modifying Android."
+  "focus": "mechanical industrial robot machinery vehicle",
+  "objective": "Seek new CC0 geometry not already in the cached descriptor dataset, measure separate subcomponents and retrain heldout component-layout profiles on unique assets."
 }
