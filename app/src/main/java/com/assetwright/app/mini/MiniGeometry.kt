@@ -119,17 +119,23 @@ object MiniGeometry {
         val m = MeshBuilder()
         val l = spec.length
         val w = spec.width * 0.5f
+        // Denser, continuous nose-to-shoulder transition. Previously the nose
+        // factor jumped from 0.55 to 1.0 between adjacent stations, causing
+        // an abrupt flare on every exported vehicle.
         val stations = listOf(
-            -0.50f to 0.46f, -0.43f to 0.70f, -0.29f to 0.94f,
-            -0.05f to 0.98f, 0.19f to spec.rearHaunch,
-            0.39f to spec.rearHaunch * 1.02f, 0.50f to 0.82f
+            -0.50f to 0.38f, -0.46f to 0.52f, -0.39f to 0.71f,
+            -0.30f to 0.88f, -0.21f to 0.97f, -0.05f to 1.00f,
+            0.12f to 1.03f, 0.27f to spec.rearHaunch,
+            0.40f to spec.rearHaunch * 1.01f, 0.50f to 0.82f
         )
         val bodyRings = stations.map { (t, profile) ->
             (0 until spec.radialSegments).map { i ->
                 val angle = i * 2.0 * PI / spec.radialSegments
                 val side = cos(angle).toFloat()
                 val top = sin(angle).toFloat()
-                val frontShape = if (t < -0.29f) spec.noseTaper else 1f
+                val frontProgress = ((t + 0.50f) / 0.29f).coerceIn(0f, 1f)
+                val eased = frontProgress * frontProgress * (3f - 2f * frontProgress)
+                val frontShape = spec.noseTaper + (1f - spec.noseTaper) * eased
                 val width = w * profile * frontShape
                 Vec3(
                     width * side,
@@ -152,24 +158,36 @@ object MiniGeometry {
         val roof = spec.roofHeight
         val span = spec.canopyLength.coerceAtMost(l * .56f)
         val center = -l * .045f
-        val cabinStations = listOf(-.5f to .53f, -.38f to .85f,
-            -.13f to 1f, .19f to .98f, .43f to .79f, .5f to .47f)
+        // The old glass ellipse sat above the shoulder at its widest point.
+        // Its lower perimeter now intersects the hull, while its roof is
+        // gradually raised through a fitted eight-station greenhouse profile.
+        val cabinStations = listOf(
+            -.50f to .38f, -.42f to .57f, -.30f to .79f,
+            -.12f to .94f, .08f to 1f, .27f to .91f,
+            .42f to .72f, .50f to .35f
+        )
         val cabinRings = cabinStations.map { (t, taper) ->
             (0 until spec.radialSegments).map { i ->
                 val angle = i * 2.0 * PI / spec.radialSegments
                 val side = cos(angle).toFloat()
                 val top = sin(angle).toFloat()
-                Vec3(w * .80f * taper * side,
-                    center + span * t,
-                    1.14f + (roof - 1.14f) * .5f * (1f + top) * taper)
+                val lowerFoot = 1.03f
+                val z = lowerFoot + .08f * minOf(top, 0f) +
+                    (roof - lowerFoot).coerceAtLeast(0f) * maxOf(top, 0f) * taper
+                Vec3(w * .78f * taper * side, center + span * t, z)
             }
         }
         m.loft("Bonded panoramic canopy", GLASS, cabinRings)
 
-        val front = -l * 0.486f
+        // Light on the front cap, with endpoints INSIDE the actual nose
+        // width. The previous +/-0.48*w strip protruded beyond the narrow nose.
+        val noseHalfWidth = w * .38f * spec.noseTaper
+        val front = -l * .500f - .012f
         m.panel("Continuous front light", LIGHT,
-            Vec3(-w * .48f, front, .90f), Vec3(w * .48f, front, .90f),
-            Vec3(w * .48f, front, .95f), Vec3(-w * .48f, front, .95f))
+            Vec3(-noseHalfWidth * .68f, front, .90f),
+            Vec3(noseHalfWidth * .68f, front, .90f),
+            Vec3(noseHalfWidth * .68f, front, .97f),
+            Vec3(-noseHalfWidth * .68f, front, .97f))
 
         // Engine count is a construction decision, not a body-dimension tweak.
         // Three-engine layouts add a central booster between the two fitted
