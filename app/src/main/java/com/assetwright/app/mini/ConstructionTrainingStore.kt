@@ -11,11 +11,13 @@ import org.json.JSONObject
  */
 object ConstructionTrainingStore {
     private var cached: ConstructionModel? = null
+    private var cachedVersion = -1
     private var status: String = "Not evaluated"
 
     @Synchronized
     fun model(context: Context): ConstructionModel? {
-        if (cached != null) return cached
+        val feedVersion = ForgeLessonStore.version(context)
+        if (cached != null && cachedVersion == feedVersion) return cached
         return try {
             val root = context.assets.open("mini_ai/construction_labels.json")
                 .bufferedReader().use { JSONObject(it.readText()) }
@@ -43,11 +45,30 @@ object ConstructionTrainingStore {
             require(countScore >= .80 && mountScore >= .80) {
                 "Planner validation failed: count=" + countScore + ", mount=" + mountScore
             }
-            cached = candidate
-            status = "Validated on " + heldOut.size + " held-out prompts: " +
-                "count " + (countScore * 100).toInt() + "%, mount " +
-                (mountScore * 100).toInt() + "%"
-            candidate
+            val remote = ForgeLessonStore.semanticLessons(context)
+                .filterNot { row ->
+                    (train + heldOut).any { existing ->
+                        existing.prompt.equals(row.prompt, ignoreCase = true)
+                    }
+                }
+            var chosen = candidate
+            var acceptedRemote = 0
+            if (remote.isNotEmpty()) {
+                val combined = ConstructionPlanner.train(train + remote)
+                val (newCount, newMount) = ConstructionPlanner.evaluate(combined, heldOut)
+                if (newCount >= .80 && newMount >= .80 &&
+                    newCount >= countScore - .02 && newMount >= mountScore - .02) {
+                    chosen = combined
+                    acceptedRemote = remote.size
+                }
+            }
+            cached = chosen
+            cachedVersion = feedVersion
+            status = "Held-out validation " + heldOut.size + " prompts: count " +
+                (countScore * 100).toInt() + "%, mount " +
+                (mountScore * 100).toInt() + "%; accepted Forge construction lessons " +
+                acceptedRemote
+            chosen
         } catch (error: Exception) {
             status = "Conservative four-cell fallback: " +
                 (error.message ?: "invalid corpus")
