@@ -23,7 +23,7 @@ class ForgeAssetCycleTests(unittest.TestCase):
             }
             path.write_text(json.dumps(base), encoding="utf-8")
             self.assertEqual(read_request(path)["cycle"], 1)
-            for bad in (-1, 0, 9, 100):
+            for bad in (-1, 0, 25, 100):
                 base["max_assets"] = bad
                 path.write_text(json.dumps(base), encoding="utf-8")
                 with self.assertRaises(ValueError):
