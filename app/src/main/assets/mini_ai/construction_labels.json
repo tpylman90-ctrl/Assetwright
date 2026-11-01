@@ -1,0 +1,586 @@
+{
+  "schema": "assetwright-semantic-construction-corpus-v1",
+  "version": 1,
+  "provenance": "original authored synthetic controlled construction examples; no third-party mesh-derived semantic labels",
+  "scope": "hover lift unit count and exposed/tucked placement only",
+  "train": [
+    {
+      "prompt": "hover racer with two tucked lift pods",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover SUV equipped with two hidden repulsors",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "heavy hover truck with two recessed pads",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "compact hover car with two concealed lift cells",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover coupe using two integrated hover pods",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "wide hover speedster with two underbody repulsors",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a hover vehicle with two tucked magnetic pads",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a racing hover craft and two hidden lift units",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "long hover car fitted with two recessed repulsor pods",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a hover SUV sporting two concealed hover pads",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a futuristic hover racer with two integrated lift cells",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a narrow hover craft carrying two underbody magnetic lift pods",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover racer with two exposed lift pods",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover SUV equipped with two visible repulsors",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "heavy hover truck with two outboard pads",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "compact hover car with two external lift cells",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover coupe using two outrigger hover pods",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "wide hover speedster with two open repulsors",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a hover vehicle with two exposed magnetic pads",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a racing hover craft and two visible lift units",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "long hover car fitted with two outboard repulsor pods",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a hover SUV sporting two external hover pads",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a futuristic hover racer with two outrigger lift cells",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a narrow hover craft carrying two open magnetic lift pods",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover racer with four tucked lift pods",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover SUV equipped with four hidden repulsors",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "heavy hover truck with four recessed pads",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "compact hover car with four concealed lift cells",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover coupe using four integrated hover pods",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "wide hover speedster with four underbody repulsors",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a hover vehicle with four tucked magnetic pads",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a racing hover craft and four hidden lift units",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "long hover car fitted with four recessed repulsor pods",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a hover SUV sporting four concealed hover pads",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a futuristic hover racer with four integrated lift cells",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a narrow hover craft carrying four underbody magnetic lift pods",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover racer with four exposed lift pods",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover SUV equipped with four visible repulsors",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "heavy hover truck with four outboard pads",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "compact hover car with four external lift cells",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover coupe using four outrigger hover pods",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "wide hover speedster with four open repulsors",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a hover vehicle with four exposed magnetic pads",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a racing hover craft and four visible lift units",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "long hover car fitted with four outboard repulsor pods",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a hover SUV sporting four external hover pads",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a futuristic hover racer with four outrigger lift cells",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a narrow hover craft carrying four open magnetic lift pods",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover racer with six tucked lift pods",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover SUV equipped with six hidden repulsors",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "heavy hover truck with six recessed pads",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "compact hover car with six concealed lift cells",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover coupe using six integrated hover pods",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "wide hover speedster with six underbody repulsors",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a hover vehicle with six tucked magnetic pads",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a racing hover craft and six hidden lift units",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "long hover car fitted with six recessed repulsor pods",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a hover SUV sporting six concealed hover pads",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a futuristic hover racer with six integrated lift cells",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a narrow hover craft carrying six underbody magnetic lift pods",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover racer with six exposed lift pods",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover SUV equipped with six visible repulsors",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "heavy hover truck with six outboard pads",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "compact hover car with six external lift cells",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "hover coupe using six outrigger hover pods",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "wide hover speedster with six open repulsors",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a hover vehicle with six exposed magnetic pads",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a racing hover craft and six visible lift units",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "long hover car fitted with six outboard repulsor pods",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a hover SUV sporting six external hover pads",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a futuristic hover racer with six outrigger lift cells",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    },
+    {
+      "prompt": "a narrow hover craft carrying six open magnetic lift pods",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-construction-example"
+    }
+  ],
+  "heldout": [
+    {
+      "prompt": "a rugged hover racer featuring two hidden lift pads",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "long hover SUV; two recessed repulsors for support",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "fast hover vehicle with two concealed hover pods",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "a sleek hover coupe that uses two tucked lift cells",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "a rugged hover racer featuring two visible lift pads",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "long hover SUV; two outboard repulsors for support",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "fast hover vehicle with two external hover pods",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "a sleek hover coupe that uses two exposed lift cells",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "a rugged hover racer featuring four hidden lift pads",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "long hover SUV; four recessed repulsors for support",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "fast hover vehicle with four concealed hover pods",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "a sleek hover coupe that uses four tucked lift cells",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "a rugged hover racer featuring four visible lift pads",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "long hover SUV; four outboard repulsors for support",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "fast hover vehicle with four external hover pods",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "a sleek hover coupe that uses four exposed lift cells",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "a rugged hover racer featuring six hidden lift pads",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "long hover SUV; six recessed repulsors for support",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "fast hover vehicle with six concealed hover pods",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "a sleek hover coupe that uses six tucked lift cells",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "a rugged hover racer featuring six visible lift pads",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "long hover SUV; six outboard repulsors for support",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "fast hover vehicle with six external hover pods",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-validation-example"
+    },
+    {
+      "prompt": "a sleek hover coupe that uses six exposed lift cells",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "original-editor-labeled-validation-example"
+    }
+  ]
+}
