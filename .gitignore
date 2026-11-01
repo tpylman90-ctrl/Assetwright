@@ -13,3 +13,6 @@ secrets.properties
 upload-key.*
 # Local Blender trial outputs (keep approved assets explicitly)
 /generated/local/
+
+# Locally reviewed 3D learning candidates and source model files
+/local-data/
