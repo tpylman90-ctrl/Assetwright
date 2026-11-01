@@ -3,8 +3,15 @@ name: Android APK
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - 'training/requests/**'
+    paths:
+      - 'app/**'
+      - 'gradle/**'
+      - 'gradlew'
+      - 'gradlew.bat'
+      - 'gradle.properties'
+      - 'settings.gradle.kts'
+      - 'build.gradle.kts'
+      - '.github/workflows/android.yml'
   workflow_dispatch:
 
 permissions:
