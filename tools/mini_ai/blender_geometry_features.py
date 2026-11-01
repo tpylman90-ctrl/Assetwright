@@ -26,9 +26,10 @@ FEATURE_SCHEMA = "assetwright-geometry-descriptor-v1"
 
 def main():
     args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
-    if len(args) != 2:
-        raise ValueError("Expected source model and descriptor output arguments")
-    source, output = map(Path, args)
+    if len(args) not in (2, 3):
+        raise ValueError("Expected source model, descriptor output, [preview_dir]")
+    source, output = map(Path, args[:2])
+    preview_dir = Path(args[2]) if len(args) == 3 else None
     assert source.is_file()
     ext = source.suffix.lower()
     bpy.ops.object.select_all(action="SELECT")
@@ -147,6 +148,43 @@ def main():
         "vertices": total_vertices,
         "component_graph": build_graph(part_boxes, min_bound, max_bound),
     }, sort_keys=True))
+    if preview_dir is not None:
+        # Preview only; never include original mesh files or raw scene paths.
+        # Failure of a headless renderer must not invalidate valid mesh data.
+        try:
+            center = Vector(tuple((a+b)/2 for a,b in zip(min_bound,max_bound)))
+            size = max(dims)
+            camera_data = bpy.data.cameras.new("AssetwrightReviewCamera")
+            camera = bpy.data.objects.new("AssetwrightReviewCamera",camera_data)
+            bpy.context.scene.collection.objects.link(camera)
+            camera.data.type = "ORTHO"
+            camera.data.ortho_scale = size * 1.85
+            camera.data.clip_end = max(1000, size * 100)
+            bpy.context.scene.camera = camera
+            scene = bpy.context.scene
+            scene.render.engine = "BLENDER_WORKBENCH"
+            scene.render.resolution_x = 480
+            scene.render.resolution_y = 360
+            scene.render.resolution_percentage = 100
+            scene.render.image_settings.file_format = "PNG"
+            scene.display.shading.light = "STUDIO"
+            scene.display.shading.color_type = "SINGLE"
+            scene.display.shading.single_color = (.72,.75,.80)
+            scene.display.shading.show_cavity = True
+            preview_dir.mkdir(parents=True,exist_ok=True)
+            for label,direction in [
+                ("three_quarter",(1.6,-2.1,1.15)),
+                ("side",(2.4,0,.6)),
+                ("top",(.1,-.15,2.5))
+            ]:
+                offset = Vector(direction).normalized() * size * 2.5
+                camera.location = center + offset
+                camera.rotation_euler = (center-camera.location).to_track_quat("-Z","Y").to_euler()
+                scene.render.filepath = str(preview_dir/(label+".png"))
+                bpy.ops.render.render(write_still=True)
+            print("ASSETWRIGHT_REVIEW_PREVIEWS",3)
+        except Exception as error:
+            print("ASSETWRIGHT_PREVIEW_UNAVAILABLE",str(error)[:180])
     print("ASSETWRIGHT_GEOMETRY_EXTRACTED", json.dumps({
         "triangles": total_triangles, "mesh_parts": len(objects)
     }))
