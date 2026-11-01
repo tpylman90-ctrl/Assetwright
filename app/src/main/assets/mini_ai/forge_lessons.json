@@ -1,8 +1,8 @@
 {
   "schema": "assetwright-forge-lessons-v1",
   "model_type": "reviewed-shape-lessons",
-  "version": 1,
-  "description": "Original, editor-authored parametric design lessons for offline test. These are not derived from or trained on downloaded GLBs.",
+  "version": 2,
+  "description": "Original Forge-authored vehicle shape recipes: eight initial style examples and twelve parameter-controlled contrast lessons. Bounds and contrast invariants are CI checked; visual mesh quality is not yet verified.",
   "licenses": [
     "Original work by Assetwright"
   ],
@@ -110,6 +110,198 @@
       },
       "provenance": "original-developer-authored-recipe",
       "review_status": "specification-only-not-render-verified"
+    },
+    {
+      "prompt": "wide hover racer with a low roof and long canopy",
+      "parameters": {
+        "length": 4.92,
+        "width": 2.68,
+        "roofHeight": 1.33,
+        "canopyLength": 2.08,
+        "noseTaper": 0.46,
+        "rearHaunch": 1.12
+      },
+      "provenance": "original-forge-authored-contrastive-shape-recipe",
+      "review_status": "parameter-verified-not-render-verified",
+      "learning_objective": "width",
+      "contrast_pair": "width-higher"
+    },
+    {
+      "prompt": "narrow hover racer with a low roof and long canopy",
+      "parameters": {
+        "length": 4.92,
+        "width": 1.73,
+        "roofHeight": 1.33,
+        "canopyLength": 2.08,
+        "noseTaper": 0.46,
+        "rearHaunch": 1.12
+      },
+      "provenance": "original-forge-authored-contrastive-shape-recipe",
+      "review_status": "parameter-verified-not-render-verified",
+      "learning_objective": "width",
+      "contrast_pair": "width-lower"
+    },
+    {
+      "prompt": "long hover coupe with a swept canopy and tapered nose",
+      "parameters": {
+        "length": 6.12,
+        "width": 2.06,
+        "roofHeight": 1.48,
+        "canopyLength": 1.92,
+        "noseTaper": 0.52,
+        "rearHaunch": 1.1
+      },
+      "provenance": "original-forge-authored-contrastive-shape-recipe",
+      "review_status": "parameter-verified-not-render-verified",
+      "learning_objective": "length",
+      "contrast_pair": "length-higher"
+    },
+    {
+      "prompt": "compact hover coupe with a swept canopy and tapered nose",
+      "parameters": {
+        "length": 3.88,
+        "width": 2.06,
+        "roofHeight": 1.48,
+        "canopyLength": 1.92,
+        "noseTaper": 0.52,
+        "rearHaunch": 1.1
+      },
+      "provenance": "original-forge-authored-contrastive-shape-recipe",
+      "review_status": "parameter-verified-not-render-verified",
+      "learning_objective": "length",
+      "contrast_pair": "length-lower"
+    },
+    {
+      "prompt": "tall hover suv with a panoramic passenger canopy",
+      "parameters": {
+        "length": 5.25,
+        "width": 2.38,
+        "roofHeight": 2.13,
+        "canopyLength": 2.35,
+        "noseTaper": 0.59,
+        "rearHaunch": 1.13
+      },
+      "provenance": "original-forge-authored-contrastive-shape-recipe",
+      "review_status": "parameter-verified-not-render-verified",
+      "learning_objective": "roofHeight",
+      "contrast_pair": "roofHeight-higher"
+    },
+    {
+      "prompt": "low hover suv with a panoramic passenger canopy",
+      "parameters": {
+        "length": 5.25,
+        "width": 2.38,
+        "roofHeight": 1.25,
+        "canopyLength": 2.35,
+        "noseTaper": 0.59,
+        "rearHaunch": 1.13
+      },
+      "provenance": "original-forge-authored-contrastive-shape-recipe",
+      "review_status": "parameter-verified-not-render-verified",
+      "learning_objective": "roofHeight",
+      "contrast_pair": "roofHeight-lower"
+    },
+    {
+      "prompt": "hover speedster with an elongated panoramic canopy",
+      "parameters": {
+        "length": 5.1,
+        "width": 2.12,
+        "roofHeight": 1.53,
+        "canopyLength": 2.72,
+        "noseTaper": 0.45,
+        "rearHaunch": 1.11
+      },
+      "provenance": "original-forge-authored-contrastive-shape-recipe",
+      "review_status": "parameter-verified-not-render-verified",
+      "learning_objective": "canopyLength",
+      "contrast_pair": "canopyLength-higher"
+    },
+    {
+      "prompt": "hover speedster with a compact short canopy",
+      "parameters": {
+        "length": 5.1,
+        "width": 2.12,
+        "roofHeight": 1.53,
+        "canopyLength": 1.13,
+        "noseTaper": 0.45,
+        "rearHaunch": 1.11
+      },
+      "provenance": "original-forge-authored-contrastive-shape-recipe",
+      "review_status": "parameter-verified-not-render-verified",
+      "learning_objective": "canopyLength",
+      "contrast_pair": "canopyLength-lower"
+    },
+    {
+      "prompt": "hover racer with a blunt broad nose and rear booster",
+      "parameters": {
+        "length": 4.9,
+        "width": 2.23,
+        "roofHeight": 1.45,
+        "canopyLength": 1.64,
+        "noseTaper": 0.76,
+        "rearHaunch": 1.12
+      },
+      "provenance": "original-forge-authored-contrastive-shape-recipe",
+      "review_status": "parameter-verified-not-render-verified",
+      "learning_objective": "noseTaper",
+      "contrast_pair": "noseTaper-higher"
+    },
+    {
+      "prompt": "hover racer with a sharp pointed nose and rear booster",
+      "parameters": {
+        "length": 4.9,
+        "width": 2.23,
+        "roofHeight": 1.45,
+        "canopyLength": 1.64,
+        "noseTaper": 0.29,
+        "rearHaunch": 1.12
+      },
+      "provenance": "original-forge-authored-contrastive-shape-recipe",
+      "review_status": "parameter-verified-not-render-verified",
+      "learning_objective": "noseTaper",
+      "contrast_pair": "noseTaper-lower"
+    },
+    {
+      "prompt": "hover suv with bulky muscular rear haunch and hidden thrusters",
+      "parameters": {
+        "length": 5.32,
+        "width": 2.38,
+        "roofHeight": 1.82,
+        "canopyLength": 2.14,
+        "noseTaper": 0.57,
+        "rearHaunch": 1.28
+      },
+      "provenance": "original-forge-authored-contrastive-shape-recipe",
+      "review_status": "parameter-verified-not-render-verified",
+      "learning_objective": "rearHaunch",
+      "contrast_pair": "rearHaunch-higher"
+    },
+    {
+      "prompt": "hover suv with slim tapered rear haunch and hidden thrusters",
+      "parameters": {
+        "length": 5.32,
+        "width": 2.38,
+        "roofHeight": 1.82,
+        "canopyLength": 2.14,
+        "noseTaper": 0.57,
+        "rearHaunch": 0.94
+      },
+      "provenance": "original-forge-authored-contrastive-shape-recipe",
+      "review_status": "parameter-verified-not-render-verified",
+      "learning_objective": "rearHaunch",
+      "contrast_pair": "rearHaunch-lower"
     }
-  ]
+  ],
+  "evaluation": {
+    "contrast_axes": [
+      "width",
+      "length",
+      "roofHeight",
+      "canopyLength",
+      "noseTaper",
+      "rearHaunch"
+    ],
+    "pair_count": 6,
+    "notes": "Each paired lesson changes exactly one parameter while holding the other five constant; this tests controllable shape semantics, not independent mesh-generation ability."
+  }
 }
