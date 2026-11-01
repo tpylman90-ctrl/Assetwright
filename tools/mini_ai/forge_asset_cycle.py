@@ -31,10 +31,12 @@ AGENT = "Assetwright-ForgeResearch/0.1 (https://github.com/tpylman90-ctrl/Assetw
 # Keep a small, purpose-driven mechanical/vehicle vocabulary. Human reviewer
 # decides whether a non-vehicle example actually teaches anything relevant.
 TOPICS = {
-    "vehicle": 14, "car": 10, "truck": 12, "motorcycle": 12, "wheel": 9,
-    "engine": 11, "propulsion": 14, "mechanical": 8, "machinery": 8,
-    "machine": 7, "industrial": 4, "aircraft": 12, "sci-fi": 9,
-    "motor": 8, "tire": 9, "tyre": 9, "robot": 7,
+    # Prioritize likely multi-part assemblies over isolated tires and rims.
+    "vehicle": 18, "car": 15, "truck": 15, "motorcycle": 14, "wheel": 2,
+    "engine": 12, "propulsion": 14, "mechanical": 9, "machinery": 11,
+    "machine": 10, "industrial": 8, "aircraft": 12, "sci-fi": 9,
+    "motor": 8, "tire": 2, "tyre": 2, "robot": 14, "generator": 13,
+    "console": 9, "equipment": 8, "device": 7, "apparatus": 9
 }
 VALID_QUERY = re.compile(r"^[a-z0-9 ,/_-]{3,120}$", re.I)
 MAX_DOWNLOAD = 12 * 1024 * 1024
