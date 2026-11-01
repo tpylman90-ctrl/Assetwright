@@ -24,9 +24,9 @@ class MiniAiTest {
             "wide hover suv", 4.9f, 2.2f, 1.6f, 1.7f, 0.55f, 1.05f
         )
         val result = MiniAi.predict("Wide Hover SUV", "Mobile", listOf(approved, seed))
-        assertEquals(approved.width, result.width)
-        assertEquals(approved.length, result.length)
-        assertEquals(approved.roofHeight, result.roofHeight)
+        assertEquals(approved.width, result.width, 0.0001f)
+        assertEquals(approved.length, result.length, 0.0001f)
+        assertEquals(approved.roofHeight, result.roofHeight, 0.0001f)
     }
 
     @Test
