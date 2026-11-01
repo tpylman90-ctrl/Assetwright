@@ -40,7 +40,8 @@ def pending_pairs(pairs:dict)->tuple[dict,dict]:
                 "suggestion_origin":"unverified source mesh object name",
                 "review_state":"needs_multiview_or_author_verified_metadata",
                 "caption":source["caption"][:240],
-                "geometry_extent_ratios":node["extent_ratios"]
+                "geometry_extent_ratios":node["extent_ratios"],
+                "review_preview_artifacts":source.get("review_preview_artifacts",[])
             })
     result={"schema":QUEUE,"tasks":tasks,"provenance":"CC0 mesh descriptions and name-only suggestions"}
     return result,{"schema":"assetwright-component-role-queue-report-v1",
