@@ -40,7 +40,7 @@ TOPICS = {
 }
 VALID_QUERY = re.compile(r"^[a-z0-9 ,/_-]{3,120}$", re.I)
 MAX_DOWNLOAD = 12 * 1024 * 1024
-MAX_ASSETS = 8
+MAX_ASSETS = 24
 OUTPUT_SCHEMA = "assetwright-cc0-shape-study-v1"
 
 
