@@ -38,16 +38,37 @@ jobs:
           sudo apt-get install -y -qq blender
           blender -b --factory-startup --disable-autoexec --python-expr "import bpy; print('BLENDER_READY', bpy.app.version_string)"
 
+      - name: Restore previous CC0 descriptor history
+        uses: actions/cache/restore@v4
+        with:
+          path: local-data/mini-ai/forge-study/dataset.json
+          key: forge-cc0-descriptors-${{ github.run_id }}
+          restore-keys: |
+            forge-cc0-descriptors-
+
       - name: Study selected CC0 models with Poly Haven's official API
         run: |
           python tools/mini_ai/forge_asset_cycle.py \
             --request training/requests/forge_cycle.json \
             --output local-data/mini-ai/forge-study/report.json
 
+      - name: Merge historical geometry descriptors (no source models)
+        run: |
+          python tools/mini_ai/study_dataset.py \
+            --current local-data/mini-ai/forge-study/report.json \
+            --previous local-data/mini-ai/forge-study/dataset.json \
+            --out local-data/mini-ai/forge-study/dataset.json
+
+      - name: Cache derived history for subsequent training cycles
+        uses: actions/cache/save@v4
+        with:
+          path: local-data/mini-ai/forge-study/dataset.json
+          key: forge-cc0-descriptors-${{ github.run_id }}
+
       - name: Train held-out evaluated geometry prior
         run: |
           python tools/mini_ai/shape_prior_train.py \
-            --report local-data/mini-ai/forge-study/report.json \
+            --report local-data/mini-ai/forge-study/dataset.json \
             --out local-data/mini-ai/forge-study/prior
 
       - name: Train source-disjoint component relationship prior
@@ -62,6 +83,7 @@ jobs:
           name: forge-cc0-shape-study
           path: |
             local-data/mini-ai/forge-study/report.json
+            local-data/mini-ai/forge-study/dataset.json
             local-data/mini-ai/forge-study/prior/*.json
             local-data/mini-ai/forge-study/relations/*.json
           retention-days: 30
