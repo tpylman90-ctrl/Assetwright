@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 11,
+  "cycle": 12,
   "max_assets": 12,
   "focus": "vehicle engine mechanical generator machinery industrial",
-  "objective": "Create source-SHA matched CC0 object-caption and geometry pairs, generate Blender three-angle preview images for candidate semantic parts, retain role guesses as unverified, and measure held-out caption-to-mesh learning without changing Android."
+  "objective": "Retry source-grounded CC0 caption/mesh study with passing component-graph Python tests; render original model 3-view reference previews, issue evidence-gated weak role review queue, and train only from matched source-hash pairs."
 }
