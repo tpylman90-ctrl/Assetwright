@@ -1,5 +1,6 @@
 package com.assetwright.app.mini
 
+import com.assetwright.app.BuildConfig
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
@@ -43,7 +44,7 @@ object ForgeReview {
         val json = JSONObject()
             .put("schema", REVIEW_SCHEMA)
             .put("generator", "assetwright-mini-ai")
-            .put("generator_version", "0.6.1")
+            .put("generator_version", BuildConfig.VERSION_NAME)
             .put("prompt", spec.sourcePrompt)
             .put("profile", spec.quality)
             .put("triangle_count", asset.triangleCount)
