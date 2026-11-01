@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 6,
+  "cycle": 7,
   "max_assets": 8,
-  "focus": "mechanical industrial robot machinery vehicle",
-  "objective": "Seek new CC0 geometry not already in the cached descriptor dataset, measure separate subcomponents and retrain heldout component-layout profiles on unique assets."
+  "focus": "mechanical industrial vehicle car engine machinery",
+  "objective": "Build and verify a broad CC0 object description catalog with published dimensions, semantic reference retrieval, and source-level heldout supervised caption-to-coarse-shape priors; preserve all source and label provenance, and keep Android generation unchanged."
 }
