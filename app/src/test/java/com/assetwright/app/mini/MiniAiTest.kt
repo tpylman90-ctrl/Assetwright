@@ -16,6 +16,20 @@ class MiniAiTest {
     }
 
     @Test
+    fun exactApprovedCorrectionOverridesOriginalSeed() {
+        val approved = TrainingExample(
+            "wide hover suv", 6.1f, 2.8f, 1.9f, 2.5f, 0.48f, 1.2f
+        )
+        val seed = TrainingExample(
+            "wide hover suv", 4.9f, 2.2f, 1.6f, 1.7f, 0.55f, 1.05f
+        )
+        val result = MiniAi.predict("Wide Hover SUV", "Mobile", listOf(approved, seed))
+        assertEquals(approved.width, result.width)
+        assertEquals(approved.length, result.length)
+        assertEquals(approved.roofHeight, result.roofHeight)
+    }
+
+    @Test
     fun buildsRealVerticesAndValidGlbEnvelope() {
         val examples = listOf(
             TrainingExample("wide hover suv panoramic canopy",
