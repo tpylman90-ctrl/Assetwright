@@ -10,6 +10,42 @@ from pathlib import Path
 
 SCHEMA="assetwright-description-geometry-catalog-v1"
 
+from semantic_reference_search import words
+
+def caption_agreement(record:dict)->str:
+    """Conservative lexical gate, NOT visual verification of model captions."""
+    caption=record.get("cap3d_generated_caption") or ""
+    if not caption:
+        return "missing"
+    name=set(words(record.get("name","")))
+    described=set(words(
+        record.get("publisher_description","")+" "+" ".join(record.get("tags",[]))))
+    described.update(name)
+    generated=set(words(caption))
+    title_overlap=len(name&generated)
+    description_overlap=len(described&generated)
+    # Material disagreement is an explicit mismatch signal; one material
+    # in the original may not match an entirely different caption material.
+    material_groups=(
+        {"bronze","copper","steel","iron","aluminium","aluminum"},
+        {"porcelain","ceramic","clay","pottery"},
+        {"wood","wooden","timber"},
+        {"plastic","polymer","rubber"},
+    )
+    source_material={i for i,group in enumerate(material_groups)
+                     if group&described}
+    generated_material={i for i,group in enumerate(material_groups)
+                        if group&generated}
+    if source_material and generated_material and not (
+        source_material&generated_material
+    ):
+        return "material_conflict"
+    if title_overlap>=2 or (title_overlap>=1 and description_overlap>=2) or description_overlap>=3:
+        return "lexically_supported_unverified"
+    return "no_lexical_support"
+
+
+
 
 def combine(poly:dict, objaverse:dict)->tuple[dict,dict]:
     if poly.get("schema")!=SCHEMA:
@@ -21,6 +57,8 @@ def combine(poly:dict, objaverse:dict)->tuple[dict,dict]:
         if x.get("license")=="CC0-1.0":
             rows.append(dict(x))
     cap_count=0
+    cap_supported=0
+    cap_quarantined=0
     for x in objaverse.get("records",[]):
         if x.get("object_license")!="CC0-1.0":
             continue
@@ -33,8 +71,13 @@ def combine(poly:dict, objaverse:dict)->tuple[dict,dict]:
         cap_license=x.get("cap3d_caption_license")
         if caption and cap_license!="ODC-BY-1.0":
             continue
+        agreement=caption_agreement(x)
         if caption:
             cap_count+=1
+            if agreement=="lexically_supported_unverified":
+                cap_supported+=1
+            else:
+                cap_quarantined+=1
         rows.append({
             "id":"objaverse_"+uid,
             "source":"Objaverse 1.0",
@@ -44,7 +87,11 @@ def combine(poly:dict, objaverse:dict)->tuple[dict,dict]:
             "source_asset_uid":uid,
             "name":x.get("name",""),
             "publisher_description":x.get("publisher_description",""),
-            "caption_text":caption,
+            # Only conservatively supported automated captions are indexed
+            # for modeling reference retrieval. Retain rejected ones for audit.
+            "caption_text":caption if agreement=="lexically_supported_unverified" else "",
+            "quarantined_caption":caption if caption and agreement!="lexically_supported_unverified" else "",
+            "caption_agreement":agreement,
             "caption_origin":"Cap3D model-generated; not independently verified" if caption else None,
             "caption_license":"ODC-BY-1.0" if caption else None,
             "metadata_license":"ODC-BY-1.0",
@@ -62,6 +109,8 @@ def combine(poly:dict, objaverse:dict)->tuple[dict,dict]:
         "poly_haven_cc0":sum(r["source"]=="Poly Haven" for r in rows),
         "objaverse_verified_cc0":sum(r["source"]=="Objaverse 1.0" for r in rows),
         "objaverse_with_cap3d":cap_count,
+        "cap3d_lexically_supported_for_retrieval":cap_supported,
+        "cap3d_quarantined_from_retrieval":cap_quarantined,
         "with_published_3d_dimensions":sum(r.get("dimension_ratios") is not None for r in rows),
         "with_actual_blender_mesh_features":sum("verified_blender_geometry" in r for r in rows),
         "license_note":"CC0 object rights; Objaverse/Cap3D metadata and generated captions separately ODC-By",
