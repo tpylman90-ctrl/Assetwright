@@ -8,6 +8,7 @@ import com.assetwright.app.mini.MiniAi
 import com.assetwright.app.mini.MiniGeometry
 import com.assetwright.app.mini.MiniPreview
 import com.assetwright.app.mini.TrainingStore
+import com.assetwright.app.mini.VehicleSpec
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -36,6 +37,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -53,6 +55,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.util.Locale
 
 private val Ink = Color(0xFF10151D)
 private val Panel = Color(0xFF19212C)
@@ -80,7 +83,28 @@ private fun AssetwrightScreen() {
     var status by remember { mutableStateOf("Offline Mini AI v0.1: describe a hover SUV, coupe, or racer to generate an editable-spec 3D mesh.") }
     var generatedAsset by remember { mutableStateOf<GeneratedAsset?>(null) }
     val context = LocalContext.current
-    val trainingExamples = remember(context) { TrainingStore.bundled(context) }
+    var localExamples by remember(context) {
+        mutableStateOf(TrainingStore.approved(context))
+    }
+    var acceptedCount by remember(context) { mutableStateOf(localExamples.size) }
+    val trainingExamples = remember(context, localExamples) {
+        localExamples.asReversed() + TrainingStore.bundled(context)
+    }
+    val trainingExport = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/x-ndjson"),
+        onResult = { uri ->
+            if (uri != null) {
+                try {
+                    val output = context.contentResolver.openOutputStream(uri)
+                        ?: error("Unable to open selected file")
+                    output.use { it.write(TrainingStore.approvedJsonl(context).toByteArray()) }
+                    status = "Approved learning examples exported. Copy this file to your home training inbox."
+                } catch (ex: Exception) {
+                    status = "Training export failed: " + (ex.message ?: "unknown error")
+                }
+            }
+        }
+    )
     val exportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("model/gltf-binary"),
         onResult = { uri ->
@@ -263,7 +287,8 @@ private fun AssetwrightScreen() {
                     ) {
                         Text("Generate offline 3D asset", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                     }
-                    if (generatedAsset != null) {
+                    val current = generatedAsset
+                    if (current != null) {
                         OutlinedButton(
                             onClick = { exportLauncher.launch("assetwright-mini-" +
                                 System.currentTimeMillis() + ".glb") },
@@ -272,6 +297,70 @@ private fun AssetwrightScreen() {
                             colors = ButtonDefaults.outlinedButtonColors(contentColor = Teal)
                         ) {
                             Text("Export GLB to device")
+                        }
+                        Card(
+                            shape = RoundedCornerShape(16.dp),
+                            colors = CardDefaults.cardColors(containerColor = Panel)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(7.dp)
+                            ) {
+                                Text("TEACH THE MINI AI", color = Teal,
+                                    fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                Text(
+                                    "Correct the proportions below. When you approve them, " +
+                                        "the AI learns this prompt immediately on your phone.",
+                                    color = TextMuted, fontSize = 12.sp, lineHeight = 17.sp
+                                )
+                                VehicleParameterSlider("Body length", current.spec.length, 3.4f..7.0f) {
+                                    generatedAsset = MiniGeometry.generate(current.spec.copy(length = it))
+                                }
+                                VehicleParameterSlider("Body width", current.spec.width, 1.45f..3.2f) {
+                                    generatedAsset = MiniGeometry.generate(current.spec.copy(width = it))
+                                }
+                                VehicleParameterSlider("Roof height", current.spec.roofHeight, 1.05f..2.30f) {
+                                    generatedAsset = MiniGeometry.generate(current.spec.copy(roofHeight = it))
+                                }
+                                VehicleParameterSlider("Canopy length", current.spec.canopyLength, 0.85f..3.1f) {
+                                    generatedAsset = MiniGeometry.generate(current.spec.copy(canopyLength = it))
+                                }
+                                VehicleParameterSlider("Nose taper", current.spec.noseTaper, 0.25f..0.9f) {
+                                    generatedAsset = MiniGeometry.generate(current.spec.copy(noseTaper = it))
+                                }
+                                VehicleParameterSlider("Rear haunch", current.spec.rearHaunch, 0.9f..1.3f) {
+                                    generatedAsset = MiniGeometry.generate(current.spec.copy(rearHaunch = it))
+                                }
+                                Button(
+                                    onClick = {
+                                        try {
+                                            val count = TrainingStore.approve(context, current.spec)
+                                            localExamples = TrainingStore.approved(context)
+                                            acceptedCount = count
+                                            status = "Approved and learned locally. Your next " +
+                                                "generation can use this corrected design."
+                                        } catch (ex: Exception) {
+                                            status = "Couldn't save feedback: " +
+                                                (ex.message ?: "unknown error")
+                                        }
+                                    },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = ButtonDefaults.buttonColors(containerColor = Teal, contentColor = Ink)
+                                ) {
+                                    Text("Approve design · Teach Mini AI")
+                                }
+                            }
+                        }
+                    }
+                    if (acceptedCount > 0) {
+                        OutlinedButton(
+                            onClick = {
+                                trainingExport.launch("assetwright-approved-examples.jsonl")
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = Teal)
+                        ) {
+                            Text("Export " + acceptedCount + " approved learning examples")
                         }
                     }
                     Text(status, color = TextMuted, fontSize = 12.sp, lineHeight = 17.sp)
@@ -321,6 +410,22 @@ private fun PreviewCard(asset: GeneratedAsset?) {
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun VehicleParameterSlider(
+    label: String,
+    value: Float,
+    range: ClosedFloatingPointRange<Float>,
+    onChange: (Float) -> Unit
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(label, color = TextMain, fontSize = 12.sp)
+            Text(String.format(Locale.US, "%.2f", value), color = TextMuted, fontSize = 12.sp)
+        }
+        Slider(value = value, onValueChange = onChange, valueRange = range)
     }
 }
 
