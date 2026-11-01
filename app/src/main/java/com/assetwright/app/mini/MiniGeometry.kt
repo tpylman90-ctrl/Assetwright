@@ -174,9 +174,10 @@ object MiniGeometry {
         // Engine count is a construction decision, not a body-dimension tweak.
         // Three-engine layouts add a central booster between the two fitted
         // outer drives; one-engine layouts use only the central position.
+        val tripleOffset = maxOf(w * .72f, .54f) // prevent overlap on narrow hulls
         val drivePositions = when (spec.driveCount) {
             1 -> listOf(0f)
-            3 -> listOf(-w * .57f, 0f, w * .57f)
+            3 -> listOf(-tripleOffset, 0f, tripleOffset)
             else -> listOf(-w * .57f, w * .57f)
         }
         val aft = l * .475f
