@@ -40,8 +40,11 @@ jobs:
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0" "platform-tools"
 
-      - name: Build debug APK
-        run: gradle :app:assembleDebug
+      - name: Test GLB training candidate scanner
+        run: python -m unittest discover -s tools/mini_ai -p "test_*.py"
+
+      - name: Test native offline Mini AI and build debug APK
+        run: gradle :app:testDebugUnitTest :app:assembleDebug
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
