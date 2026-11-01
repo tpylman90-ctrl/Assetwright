@@ -77,6 +77,37 @@ Do not publish private prompts, third-party unlicensed GLBs or model weights
 containing sensitive content into this public repository. Larger raw
 datasets should use Git LFS, releases or appropriate dataset storage.
 
+## First process-learning correction (v0.5.1)
+
+An approved example exported from Android showed a process-level contradiction:
+the user's prompt requested **three propulsion engines**, but the saved
+`attach_rear_drive` operation declared just **two housings**. This finding
+motivated a new construction rule independent of the six body dimensions.
+
+Assetwright now interprets explicit **one, two or three engine/thruster/booster**
+requests, constructs that number of rear propulsion housings and associated
+cores and rings, and records the correct count in `ShapeProgram.steps`.
+Three-engine layouts include a center booster with extra rear extension.
+Without a specified count, the two-engine default remains.
+
+The display now reports the constructed engine count. The on-device training
+data and its original prompt were not committed to the public repository;
+the fix and tests use independently authored examples.
+
+The new private-data audit utility can be run on an Android-approved export:
+
+```bash
+python tools/mini_ai/audit_process_feedback.py /path/to/approved.jsonl
+```
+
+It reports discrepancies between explicitly requested component counts and
+the stored procedure. It does **not** inspect the actual mesh and should not
+be treated as a substitute for uploading a Forge review ZIP with a GLB.
+
+This is an initial *rule-driven process correction*, not a model learning
+arbitrary new construction operations from one JSONL example. A generalized
+operation predictor will require more verified, diverse process examples.
+
 ## Limitations
 
 The current model cannot invent arbitrary complex meshes, infer topology
