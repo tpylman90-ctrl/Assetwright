@@ -1,0 +1,115 @@
+{
+  "schema": "assetwright-forge-lessons-v1",
+  "model_type": "reviewed-shape-lessons",
+  "version": 1,
+  "description": "Original, editor-authored parametric design lessons for offline test. These are not derived from or trained on downloaded GLBs.",
+  "licenses": [
+    "Original work by Assetwright"
+  ],
+  "lessons": [
+    {
+      "prompt": "wide hover suv with a panoramic canopy and sculpted side body",
+      "parameters": {
+        "length": 5.65,
+        "width": 2.58,
+        "roofHeight": 1.83,
+        "canopyLength": 2.51,
+        "noseTaper": 0.58,
+        "rearHaunch": 1.21
+      },
+      "provenance": "original-developer-authored-recipe",
+      "review_status": "specification-only-not-render-verified"
+    },
+    {
+      "prompt": "low aerodynamic hover racer with a pointed nose and long rear body",
+      "parameters": {
+        "length": 5.12,
+        "width": 2.22,
+        "roofHeight": 1.31,
+        "canopyLength": 1.54,
+        "noseTaper": 0.36,
+        "rearHaunch": 1.17
+      },
+      "provenance": "original-developer-authored-recipe",
+      "review_status": "specification-only-not-render-verified"
+    },
+    {
+      "prompt": "narrow hover coupe with a swept canopy and tapered front",
+      "parameters": {
+        "length": 4.72,
+        "width": 1.82,
+        "roofHeight": 1.4,
+        "canopyLength": 1.94,
+        "noseTaper": 0.42,
+        "rearHaunch": 1.04
+      },
+      "provenance": "original-developer-authored-recipe",
+      "review_status": "specification-only-not-render-verified"
+    },
+    {
+      "prompt": "rugged armored hover suv with a tall passenger cockpit",
+      "parameters": {
+        "length": 5.45,
+        "width": 2.7,
+        "roofHeight": 2,
+        "canopyLength": 2.42,
+        "noseTaper": 0.66,
+        "rearHaunch": 1.2
+      },
+      "provenance": "original-developer-authored-recipe",
+      "review_status": "specification-only-not-render-verified"
+    },
+    {
+      "prompt": "compact urban hover car with a short body and panoramic greenhouse",
+      "parameters": {
+        "length": 3.83,
+        "width": 1.83,
+        "roofHeight": 1.55,
+        "canopyLength": 1.73,
+        "noseTaper": 0.64,
+        "rearHaunch": 1.05
+      },
+      "provenance": "original-developer-authored-recipe",
+      "review_status": "specification-only-not-render-verified"
+    },
+    {
+      "prompt": "long luxury hover coupe with a low roof and wide rear haunch",
+      "parameters": {
+        "length": 5.57,
+        "width": 2.35,
+        "roofHeight": 1.41,
+        "canopyLength": 2.29,
+        "noseTaper": 0.53,
+        "rearHaunch": 1.23
+      },
+      "provenance": "original-developer-authored-recipe",
+      "review_status": "specification-only-not-render-verified"
+    },
+    {
+      "prompt": "aggressive wide hover speedster with a small racing cockpit",
+      "parameters": {
+        "length": 5.2,
+        "width": 2.47,
+        "roofHeight": 1.24,
+        "canopyLength": 1.25,
+        "noseTaper": 0.31,
+        "rearHaunch": 1.18
+      },
+      "provenance": "original-developer-authored-recipe",
+      "review_status": "specification-only-not-render-verified"
+    },
+    {
+      "prompt": "tall wide hover suv with a long windshield and narrow nose",
+      "parameters": {
+        "length": 5.55,
+        "width": 2.51,
+        "roofHeight": 2.1,
+        "canopyLength": 2.6,
+        "noseTaper": 0.43,
+        "rearHaunch": 1.12
+      },
+      "provenance": "original-developer-authored-recipe",
+      "review_status": "specification-only-not-render-verified"
+    }
+  ]
+}
