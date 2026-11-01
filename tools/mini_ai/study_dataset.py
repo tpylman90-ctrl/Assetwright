@@ -19,6 +19,7 @@ def merge(current: dict, previous: dict | None = None) -> dict:
         raise ValueError("Unrecognized previous study")
     by_hash = {}
     cycles = set()
+    attempted = set()
     for source in (previous, current):
         if source is None:
             continue
@@ -26,7 +27,13 @@ def merge(current: dict, previous: dict | None = None) -> dict:
             cycles.update(i for i in source["cycles"] if type(i) is int and 0<i<=100000)
         if type(source.get("cycle")) is int:
             cycles.add(source["cycle"])
+        for key in source.get("attempted_ids", []):
+            if isinstance(key,str) and key and len(key)<=100:
+                attempted.add(key)
         for item in source.get("assets",[]):
+            key=item.get("id")
+            if isinstance(key,str) and key and len(key)<=100:
+                attempted.add(key)
             if item.get("license") != "CC0-1.0" or item.get("mesh_analysis") != "blender_geometry_inspected":
                 continue
             geometry = item.get("geometry")
@@ -60,6 +67,7 @@ def merge(current: dict, previous: dict | None = None) -> dict:
     return {
         "schema":SCHEMA,"cycle":current.get("cycle"),
         "cycles":sorted(cycles),
+        "attempted_ids":sorted(attempted)[:3000],
         "source":"Poly Haven CC0",
         "assets":[by_hash[k] for k in sorted(by_hash)],
         "source_count":len(by_hash),
