@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 8,
+  "cycle": 9,
   "max_assets": 8,
-  "focus": "vehicle mechanical industrial engineering objects",
-  "objective": "Expand licensed descriptive training library using 16 Objaverse 1.0 metadata shards, accepting only individually verified CC0 objects and attaching ODC-By Cap3D descriptions by exact model UID; also update Poly Haven description-to-shape evaluation."
+  "focus": "vehicle engine mechanical metal geometry",
+  "objective": "Full 160-shard Objaverse CC0-only description ingestion (~800K inspected source records), match ODC-By Cap3D captions by verified UID, combine with 521 Poly Haven CC0 models, and validate searchable corpus; do not ship unverified semantic geometry to Android."
 }
