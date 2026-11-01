@@ -18,6 +18,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from component_graph import build_graph
 from mesh_islands import connected_bounds
+from part_role_proposals import propose
 
 MAX_OBJECTS = 500
 MAX_TRIANGLES = 2_000_000
@@ -90,10 +91,14 @@ def main():
             if len(islands) >= 2:
                 part_boxes.extend(islands)
             else:
-                part_boxes.append({
+                part = {
                     "min": part_min, "max": part_max,
                     "triangles": len(mesh.loop_triangles)
-                })
+                }
+                role = propose(obj.name)
+                if role is not None:
+                    part["role_proposal"] = role
+                part_boxes.append(part)
             area = 0.0
             for tri in mesh.loop_triangles:
                 a, b, c = (points[index] for index in tri.vertices)
