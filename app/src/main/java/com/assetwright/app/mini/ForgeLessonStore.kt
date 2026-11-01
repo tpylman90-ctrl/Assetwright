@@ -77,7 +77,38 @@ object ForgeLessonStore {
                 bounded("rearHaunch", .9f, 1.3f)
             )
         }
+        // Optional, versioned construction supervision. An untrusted GitHub
+        // feed cannot inject code, arbitrary part names or unbounded quantities.
+        if (root.has("semantic_lessons")) parseSemantic(root)
         return version to parsed
+    }
+
+    private fun parseSemantic(root: JSONObject): List<ConstructionLabel> {
+        if (!root.has("semantic_lessons")) return emptyList()
+        val rows = root.getJSONArray("semantic_lessons")
+        require(rows.length() <= 120)
+        val seen = mutableSetOf<String>()
+        return (0 until rows.length()).map { index ->
+            val row = rows.getJSONObject(index)
+            val prompt = row.getString("prompt").trim()
+            val cells = row.getInt("lift_cells")
+            val mount = row.getString("mount")
+            require(prompt.length in 6..240 && MiniAi.supports(prompt))
+            require(seen.add(prompt.lowercase())) { "Duplicate construction lesson" }
+            require(cells in setOf(2, 4, 6))
+            require(mount in setOf("tucked", "exposed"))
+            ConstructionLabel(prompt, cells, mount)
+        }
+    }
+
+    fun semanticLessons(context: Context): List<ConstructionLabel> {
+        val store = file(context)
+        if (!store.baseFile.exists()) return emptyList()
+        return try {
+            val root = JSONObject(store.openRead().bufferedReader().use { it.readText() })
+            validate(root.toString())
+            parseSemantic(root)
+        } catch (_: Exception) { emptyList() }
     }
 
     fun lessons(context: Context): List<TrainingExample> {
