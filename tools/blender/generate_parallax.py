@@ -187,6 +187,56 @@ def quarter_haunch(side,mat):
     return o
 
 
+def race_spear(side,mat):
+    """Original jet-age swept cove: raised fitted sheet, not a straight decal.
+    Runs above the existing mechanical intake without obscuring it.
+    """
+    stations=[
+        (-2.34,1.11,.756,.007),(-2.08,1.30,.850,.043),
+        (-1.61,1.47,.930,.050),(-1.12,1.50,1.025,.036),
+        (-.60,1.48,1.055,.020),(.12,1.56,1.125,.025),
+        (.70,1.68,1.208,.043),(1.32,1.83,1.280,.053),
+        (1.92,1.75,1.225,.044),(2.39,1.48,1.068,.008)]
+    vertices=[];faces=[]
+    for y,x,z,half in stations:
+        vertices.extend([(side*(x-.027),y,z-half),
+                         (side*(x+.012),y,z),
+                         (side*(x-.027),y,z+half)])
+    for j in range(len(stations)-1):
+        for k in range(2):
+            faces.append((j*3+k,j*3+k+1,(j+1)*3+k+1,(j+1)*3+k))
+    if side<0:faces=[tuple(reversed(face)) for face in faces]
+    o=subd(mesh(('Port' if side<0 else 'Starboard')+' racing cove spear',vertices,faces,mat),1)
+    thick=o.modifiers.new('Pressed cove sheet edge','SOLIDIFY');thick.thickness=.015
+    return o
+
+
+def luxury_racing_seat(x,leather,insert,alloy,shell):
+    """Tailored two-place GT-race buckets with real pads, ribs, and bolster edges."""
+    label='Driver' if x<0 else 'Co-driver'
+    box(label+' seat alloy pan',(x,.16,.80),(.425,.63,.13),shell,.048)
+    box(label+' seat ivory cushion',(x,.10,.877),(.325,.48,.085),leather,.04)
+    box(label+' seat formed back',(x,.525,1.085),(.405,.165,.615),shell,.065,(-.16,0,0))
+    box(label+' seat blue inset',(x,.423,1.095),(.265,.057,.445),insert,.025,(-.16,0,0))
+    box(label+' seat ivory head bolster',(x,.57,1.426),(.272,.15,.142),leather,.055)
+    for dx in (-.165,.165):
+        box(label+' cushion side bolster',(x+dx,.07,.925),(.085,.50,.135),leather,.038)
+        box(label+' back side bolster',(x+dx,.405,1.095),(.076,.083,.43),leather,.035,(-.16,0,0))
+    for i in range(5):
+        yy=-.08+i*.084
+        tube(label+' seat cushion seam '+str(i),[(x-.119,yy,.929),(x,yy+.008,.937),
+             (x+.119,yy,.929)],.0055,alloy)
+    for i in range(6):
+        zz=.938+i*.059
+        tube(label+' seat back stitch '+str(i),[(x-.109,.390,zz),(x,.381,zz+.005),
+             (x+.109,.390,zz)],.0045,alloy)
+    for dx in (-.12,.12):
+        box(label+' restraint anchor',(x+dx,.625,1.303),(.052,.054,.055),alloy,.012)
+        tube(label+' shoulder restraint',[(x+dx,.625,1.288),
+             (x+dx*.75,.430,1.14),(x+dx*.52,.247,.970)],.013,insert)
+    return label
+
+
 def center_patch(name,rows,mat,subdivision=2):
     v=[];f=[];n=11
     for y,w,z in rows:
@@ -257,6 +307,10 @@ def build(out,shape_check=False):
     glass=material('08 Smoked sapphire canopy',(.027,.10,.15),.22,.13,0,.66)
     upholstery=material('09 Petrol seat fabric',(.04,.095,.11),.05,.72)
     gold=material('10 Warm brass badge',(.58,.35,.11),.78,.31)
+    ivory_leather=material('11 Ivory tailored seat leather',(.71,.67,.56),.05,.73)
+    navy_leather=material('12 Dark blue racing seat leather',(.034,.073,.116),.04,.64)
+    champagne=material('13 Satin champagne alloy',(.55,.43,.29),.75,.31)
+    instrument=material('14 Blue instrument luminescence',(.18,.63,.84),.13,.23,2.4)
     body=[shoulder(-1,ivory,black),shoulder(1,ivory,black)]
     # Apply the organic control surfaces before cutting true through-body lift wells.
     for ob in body:
@@ -286,6 +340,13 @@ def build(out,shape_check=False):
     for side,label in [(-1,'Port'),(1,'Starboard')]:
         sculpted_rocker(side,teal)
         quarter_haunch(side,ivory)
+        race_spear(side,champagne)
+        # A two-tone jet-age accent sweeps the upper fender above the intake.
+        tube(label+' racing cove shadow line',[
+            (side*1.28,-2.07,.81),(side*1.45,-1.62,.88),
+            (side*1.50,-1.10,.98),(side*1.48,-.57,1.02),
+            (side*1.63,.65,1.16),(side*1.81,1.32,1.23),
+            (side*1.71,1.94,1.18)],.0075,teal)
         tube(label+' rear haunch inset seam',[(side*1.31,.76,1.225),(side*1.53,1.08,1.325),
              (side*1.69,1.46,1.48),(side*1.62,1.92,1.42),(side*1.43,2.35,1.205)],.009,teal)
         tube(label+' canopy compression seal',[(side*w,y,z+.006) for y,w,z,p in CANOPY],.026,black)
@@ -330,6 +391,10 @@ def build(out,shape_check=False):
         for i in range(7):
             x=tx-.22+i*.073
             box(label+' drive stator',(x,2.59,.68),(.018,.19,.20),silver,.006)
+        ellipse_shell(label+' drive machined throat',tx,.68,
+            [(2.73,.287,.138),(2.78,.302,.147),(2.815,.310,.151)],champagne,32)
+        ellipse_shell(label+' drive deep ion collar',tx,.68,
+            [(2.65,.19,.092),(2.685,.20,.099),(2.705,.192,.094)],violet,32)
         # Four integrated vertical lift ducts, with open wells and recessed stator fans.
         for pos,x,y,r,top in [('Fore',1.03,-1.70,.295,.94),('Aft',1.20,1.31,.35,1.28)]:
             x*=side;bottom=.21 if pos=='Fore' else .28
@@ -348,17 +413,48 @@ def build(out,shape_check=False):
     for idx in (1,6):
         y,w,edge,peak=CANOPY[idx]
         tube('Canopy formed arch '+str(idx),[(w*math.sin(t),y,edge+(peak-edge)*max(0,1-abs(math.sin(t))**4)+.008) for t in [-math.pi/2+math.pi*i/18 for i in range(19)]],.018,teal)
-    # Two fitted seats, restrained interior detail and a compact holographic dashboard.
+    # Jet-age GT-race cockpit, not a lounge: tailored low buckets, purpose-built
+    # competition instruments and premium satin metal with an original console.
     for x in (-.265,.265):
-        box('Seat fitted base',(x,.14,.79),(.40,.57,.13),upholstery,.065)
-        box('Seat shell back',(x,.52,1.08),(.43,.16,.61),teal,.075,(-.17,0,0))
-        box('Seat back pad',(x,.425,1.08),(.31,.055,.43),upholstery,.05,(-.17,0,0))
-        box('Seat head restraint',(x,.60,1.42),(.25,.13,.16),upholstery,.045)
-        for dx in (-.145,.145):box('Seat side bolster',(x+dx,.12,.86),(.085,.48,.14),teal,.04)
-    box('Dashboard inner bridge',(0,-.71,1.075),(1.01,.17,.16),teal,.04)
-    box('Dashboard luminous display',(0,-.61,1.18),(.72,.035,.12),black,.018,(-.18,0,0))
-    for i in range(9):box('Dashboard telemetry',(-.29+i*.073,-.585,1.18),(.038,.009,.045+(i%3)*.017),white,.003)
-    tube('Driver yoke',[(-.38,-.38,1.04),(-.36,-.40,1.15),(-.14,-.40,1.15),(-.12,-.38,1.04)],.021,black)
+        luxury_racing_seat(x,ivory_leather,navy_leather,champagne,teal)
+    box('Cockpit center tunnel',(0,.03,.785),(.135,1.29,.15),teal,.048)
+    box('Cockpit champagne console spine',(0,-.075,.874),(.145,.74,.042),champagne,.018)
+    box('Cockpit padded armrest',(0,.46,.919),(.177,.345,.082),ivory_leather,.035)
+    box('Cockpit drive selector pedestal',(0,-.245,.922),(.120,.156,.085),teal,.021)
+    cylinder('Cockpit drive mode rotary dial',(0,-.245,.978),.051,.024,champagne,24)
+    cylinder('Cockpit drive mode center',(0,-.245,.996),.027,.013,black,20)
+    for i in range(4):
+        yy=-.07+i*.095
+        box('Cockpit console toggle',(0,yy,.914),(.071,.021,.033),silver,.009)
+    for side,label in [(-1,'Port'),(1,'Starboard')]:
+        box(label+' cabin sculpted doorpad',(side*.576,.12,.883),(.077,1.28,.205),navy_leather,.055)
+        box(label+' cabin leather arm rest',(side*.535,.32,.962),(.126,.57,.073),ivory_leather,.028)
+        tube(label+' cabin brightwork',[(side*.565,-.46,1.017),(side*.560,.02,1.035),
+            (side*.565,.55,1.030)],.009,champagne)
+        for yy in (-.35,-.24,-.13):
+            box(label+' cabin acoustic perforation',(side*.526,yy,.912),(.011,.025,.031),silver,.005)
+    box('Dashboard sculpted competition bridge',(0,-.72,1.063),(1.01,.20,.162),teal,.060)
+    box('Dashboard champagne cockpit brow',(0,-.647,1.169),(.91,.045,.060),champagne,.020)
+    box('Dashboard driver binnacle',(-.275,-.594,1.204),(.48,.047,.195),black,.042)
+    for i,(cx,r) in enumerate([(-.388,.086),(-.212,.066)]):
+        cylinder('Dashboard analogue blue gauge '+str(i),(cx,-.560,1.197),r,.023,instrument,32,'Y')
+        cylinder('Dashboard gauge bezel '+str(i),(cx,-.538,1.197),r*1.08,.016,champagne,32,'Y')
+        cylinder('Dashboard black dial '+str(i),(cx,-.525,1.197),r*.76,.012,black,32,'Y')
+        tube('Dashboard illuminated needle '+str(i),[(cx,-.511,1.197),
+            (cx+r*.49,-.509,1.221)],.006,instrument)
+    box('Dashboard passenger character sweep',(.280,-.605,1.148),(.37,.08,.073),ivory_leather,.025)
+    box('Dashboard central telemetry',(.062,-.565,1.168),(.131,.015,.072),instrument,.008)
+    for i in range(5):
+        box('Dashboard tactile switch '+str(i),(.106+i*.045,-.566,1.122),(.024,.019,.014),champagne,.004)
+    # Small period-evocative half-ring competition steering wheel.
+    wheel_x=-.265
+    wheel_points=[(wheel_x+.146*math.cos(a),-.390,1.130+.146*math.sin(a))
+                  for a in [math.tau*i/24 for i in range(24)]]
+    tube('Driver polished competition steering rim',wheel_points,.016,champagne,True)
+    cylinder('Driver steering leather hub',(wheel_x,-.400,1.130),.042,.061,navy_leather,24,'Y')
+    for a in (math.pi/2,math.pi*7/6,math.pi*11/6):
+        tube('Driver steering alloy spoke',[(wheel_x,-.386,1.130),
+            (wheel_x+.133*math.cos(a),-.386,1.130+.133*math.sin(a))],.013,silver)
     tube('Hood central inset',[(0,-2.85,.69),(0,-2.40,.75),(0,-1.78,.85),(0,-1.12,.96)],.012,teal)
     text=bpy.data.curves.new('Parallax badge glyphs','FONT');text.body='PARALLAX';text.align_x='CENTER';text.size=.075;text.extrude=.001
     ob=bpy.data.objects.new('Parallax hood identification',text);bpy.context.collection.objects.link(ob);ob.location=(0,-2.02,.83);ob.data.materials.append(gold)
@@ -392,7 +488,9 @@ def build(out,shape_check=False):
     views=[('hero_3q',(8,-10,5.6),(0,-.05,.95),8.6),('front',(0,-12,1.2),(0,0,1),5.2),
            ('side',(12,-.1,1.35),(0,-.1,1),7.2),('rear_3q',(8,10,4.8),(0,.3,.9),8.3),
            ('rear',(0,12,1.2),(0,0,1),5.2),('top',(0,-.1,12),(0,-.1,0),9.1),
-           ('cockpit',(3,-3,3.7),(0,-.05,1.15),3.3),('chase',(0,10,4.4),(0,0,.9),7.7)]
+           ('cockpit',(3,-3,3.7),(0,-.05,1.15),3.3),('chase',(0,10,4.4),(0,0,.9),7.7),
+           ('interior_open',(2.35,-1.58,3.05),(0,.05,1.08),2.55),
+           ('instruments',(1.12,-1.85,1.92),(-.18,-.47,1.17),1.58)]
     if shape_check:
         scene.render.engine='BLENDER_WORKBENCH';scene.display.shading.light='STUDIO';scene.display.shading.color_type='MATERIAL';scene.display.shading.show_cavity=True;scene.display.shading.show_shadows=False
         scene.render.resolution_x=960;scene.render.resolution_y=720
@@ -421,8 +519,15 @@ def build(out,shape_check=False):
             if d.users==0:bpy.data.meshes.remove(d)
     # Save the source with a useful hero camera; studio objects are never exported.
     cam.location=views[0][1];cam.data.ortho_scale=views[0][3];aim(cam,views[0][2]);bpy.ops.wm.save_as_mainfile(filepath=os.path.abspath(os.path.join(out,'parallax_01.blend')))
+    glazing=[o for o in objects if 'Canopy smoked sapphire glazing' in o.name]
     for name,loc,target,scale in views:
-        cam.location=loc;cam.data.ortho_scale=scale;aim(cam,target);scene.render.filepath=os.path.abspath(os.path.join(out,'parallax_01_'+name+'.png'));bpy.ops.render.render(write_still=True)
+        # Cutaway views only: actual Blender vehicle geometry remains unchanged.
+        # Hide just the glass, not the seals or cabin structure, for inspection.
+        for o in glazing:o.hide_render=name in ('interior_open','instruments')
+        cam.location=loc;cam.data.ortho_scale=scale;aim(cam,target)
+        scene.render.filepath=os.path.abspath(os.path.join(out,'parallax_01_'+name+'.png'))
+        bpy.ops.render.render(write_still=True)
+    for o in glazing:o.hide_render=False
     proxy=[]
     for y,w,length,z,height in [(-2.10,1.15,1.7,.52,.50),(-.35,1.44,2.1,.70,.90),(1.65,1.65,2.0,.78,.85)]:
         proxy.append(box('COLLISION Parallax hull',(0,y,z),(w*2,length,height),black,0))
@@ -430,12 +535,17 @@ def build(out,shape_check=False):
     collision,_=stats(proxy);export(os.path.join(out,'parallax_01_collision.glb'),proxy)
     for o in proxy:bpy.data.objects.remove(o,do_unlink=True)
     record={'asset_id':'parallax_01_hover_coupe','display_name':'Parallax / 01',
-      'generator':'Parallax v2: contoured rocker trench, tapered deep intakes, fused shoulder-to-haunch transitions and swept lower aero blade',
-      'blender_version':bpy.app.version_string, 'prompt':'An original two-seat hover coupe designed by Forge without a reference image: broad porcelain titanium shoulders, midnight petrol belly, a continuous smoked sapphire canopy, four through-body lift ducts, swept split tail fins, flattened oval rear drives, violet field illumination and restrained ice-white front lights.',
+      'generator':'Parallax v3: Corvette-SS-era jet-age hover racing silhouette and tailored competition GT cabin',
+      'blender_version':bpy.app.version_string, 'prompt':'Create an original Parallax two-seat jet-age hover racer. Its existing sculpted silhouette recalls late-1950s American competition roadsters, especially the photographed 1957 Corvette SS XP-64, without replicating protected marks or exact bodywork. Preserve long porcelain shoulders, the blue canopy, four vertical lift ducts and paired rear drives. Add fitted sweeping racing coves, compact luxurious competition seating, period-inspired circular driver gauges, a polished competition steering rim, a tailored two-seat center console, subdued champagne brightwork and richer jet-derived drive interiors. Keep the racer athletic and elegant, never a lounge-style luxury sedan.',
       'negative_prompt':'No wheels, no primitive boxes as the main body, no weapons, no paid provider assets, no studio geometry in exports.',
        'v2_surface_design':['continuous concave rocker control mesh','swept dark lower aero blade',
                             'deep tapered side intake with backing plenum','loaded shoulder-to-rear haunch control surfaces',
                             'formed rear quarter fairing and molded trailing shoulder'],
+       'v3_reference_direction':'Original hover racer with broad jet-age cues from 1957 American competition roadsters, not an exact replica',
+       'v3_assemblies':['fitted racing cove spears','rear drive machined throats',
+                         'tailored two-seat competition buckets','center console and selector',
+                         'retro-futurist analogue driver instruments','competition wheel',
+                         'premium cabin side upholstery and brightwork'],
       'reference_images':[], 'axis_convention':{'forward':'-Y','right':'+X','up':'+Z'},
       'game_target':{'engine':'Godot','triangle_budget':120000,'triangle_count':total,
                       'assembly_triangles':groups,'top_meshes':heavy[:20],
