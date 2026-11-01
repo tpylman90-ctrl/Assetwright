@@ -56,7 +56,7 @@ class MiniAiTest {
             val instruction = ShapeProgram.steps(spec).single {
                 it.operation == "attach_rear_drive"
             }
-            assertEquals(expectedCount.toDouble(), instruction.parameters["housings"])
+            assertEquals(expectedCount.toDouble(), instruction.parameters.getValue("housings"), 0.0)
             if (expectedCount == 3) {
                 assertTrue(asset.parts.any { it.name == "Central booster housing" })
                 val driveLocations = houses.map { housing ->
