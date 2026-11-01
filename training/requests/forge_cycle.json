@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 7,
+  "cycle": 8,
   "max_assets": 8,
-  "focus": "mechanical industrial vehicle car engine machinery",
-  "objective": "Build and verify a broad CC0 object description catalog with published dimensions, semantic reference retrieval, and source-level heldout supervised caption-to-coarse-shape priors; preserve all source and label provenance, and keep Android generation unchanged."
+  "focus": "vehicle mechanical industrial engineering objects",
+  "objective": "Expand licensed descriptive training library using 16 Objaverse 1.0 metadata shards, accepting only individually verified CC0 objects and attaching ODC-By Cap3D descriptions by exact model UID; also update Poly Haven description-to-shape evaluation."
 }
