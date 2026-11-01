@@ -47,6 +47,19 @@ class ForgeAssetCycleTests(unittest.TestCase):
         chosen = selected_assets(data, "vehicle mechanical", 2)
         self.assertEqual({key for key, _ in chosen}, {"engine", "truck"})
 
+    def test_exclude_previous_sources_to_enable_continuous_new_studies(self):
+        catalog = {
+            "covered_car": {"type": 2, "name": "Covered Car", "category": "Vehicles",
+                            "tags": ["car"]},
+            "old_tyre": {"type": 2, "name": "Old Tyre", "category": "Vehicles",
+                          "tags": ["tyre"]},
+            "new_generator": {"type": 2, "name": "Mechanical Generator",
+                              "category": "Industrial", "tags": ["machine"]}
+        }
+        candidates = selected_assets(catalog, "vehicle mechanical", 2,
+                                     exclude_ids={"covered_car", "old_tyre"})
+        self.assertEqual([key for key, _ in candidates], ["new_generator"])
+
     def test_dont_invent_mesh_feature_ratios(self):
         self.assertEqual(normalized_dimensions([2, 4, 8]), [0.25, 0.5, 1.0])
         self.assertIsNone(normalized_dimensions([1, 0, 3]))
