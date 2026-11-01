@@ -1,0 +1,794 @@
+[
+  {
+    "prompt": "rugged hover suv",
+    "length": 5.35,
+    "width": 2.36,
+    "roofHeight": 1.87,
+    "canopyLength": 2.45,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "rugged hover suv with wide body",
+    "length": 5.35,
+    "width": 2.7,
+    "roofHeight": 1.87,
+    "canopyLength": 2.45,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.21
+  },
+  {
+    "prompt": "rugged hover suv with narrow and slender frame",
+    "length": 5.35,
+    "width": 2.08,
+    "roofHeight": 1.87,
+    "canopyLength": 2.45,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.12
+  },
+  {
+    "prompt": "rugged hover suv with long extended nose",
+    "length": 6.01,
+    "width": 2.36,
+    "roofHeight": 1.87,
+    "canopyLength": 2.45,
+    "noseTaper": 0.51,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "rugged hover suv with compact short wheelbase",
+    "length": 4.8,
+    "width": 2.36,
+    "roofHeight": 1.87,
+    "canopyLength": 2.27,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "rugged hover suv with tall roomy cockpit",
+    "length": 5.35,
+    "width": 2.36,
+    "roofHeight": 2.13,
+    "canopyLength": 2.59,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "rugged hover suv with low roof and racing canopy",
+    "length": 5.35,
+    "width": 2.36,
+    "roofHeight": 1.72,
+    "canopyLength": 2.33,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "rugged hover suv with panoramic elongated canopy",
+    "length": 5.35,
+    "width": 2.36,
+    "roofHeight": 1.97,
+    "canopyLength": 2.93,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "rugged hover suv with pointed sharp front end",
+    "length": 5.35,
+    "width": 2.36,
+    "roofHeight": 1.87,
+    "canopyLength": 2.45,
+    "noseTaper": 0.41,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "rugged hover suv with bulky broad rear haunch",
+    "length": 5.35,
+    "width": 2.43,
+    "roofHeight": 1.87,
+    "canopyLength": 2.45,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.28
+  },
+  {
+    "prompt": "rugged hover suv with luxury passenger cabin",
+    "length": 5.35,
+    "width": 2.36,
+    "roofHeight": 1.97,
+    "canopyLength": 2.75,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "rugged hover suv with hidden repulsors and sculpted body",
+    "length": 5.35,
+    "width": 2.36,
+    "roofHeight": 1.87,
+    "canopyLength": 2.45,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "rugged hover suv with heavy armored shell",
+    "length": 5.35,
+    "width": 2.56,
+    "roofHeight": 1.96,
+    "canopyLength": 2.45,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "rugged hover suv with aerodynamic slim silhouette",
+    "length": 5.35,
+    "width": 2.24,
+    "roofHeight": 1.75,
+    "canopyLength": 2.45,
+    "noseTaper": 0.53,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "rugged hover suv with extended rear chassis",
+    "length": 5.8,
+    "width": 2.36,
+    "roofHeight": 1.87,
+    "canopyLength": 2.45,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.24
+  },
+  {
+    "prompt": "rugged hover suv with wide body and low roof and racing canopy",
+    "length": 5.35,
+    "width": 2.7,
+    "roofHeight": 1.72,
+    "canopyLength": 2.33,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.21
+  },
+  {
+    "prompt": "rugged hover suv with long extended nose and pointed sharp front end",
+    "length": 6.01,
+    "width": 2.36,
+    "roofHeight": 1.87,
+    "canopyLength": 2.45,
+    "noseTaper": 0.33,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "rugged hover suv with tall roomy cockpit and luxury passenger cabin",
+    "length": 5.35,
+    "width": 2.36,
+    "roofHeight": 2.23,
+    "canopyLength": 2.89,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "rugged hover suv with panoramic elongated canopy and heavy armored shell",
+    "length": 5.35,
+    "width": 2.56,
+    "roofHeight": 2.06,
+    "canopyLength": 2.93,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "rugged hover suv with bulky broad rear haunch and extended rear chassis",
+    "length": 5.8,
+    "width": 2.43,
+    "roofHeight": 1.87,
+    "canopyLength": 2.45,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.36
+  },
+  {
+    "prompt": "rugged hover suv with hidden repulsors and sculpted body and narrow and slender frame",
+    "length": 5.35,
+    "width": 2.08,
+    "roofHeight": 1.87,
+    "canopyLength": 2.45,
+    "noseTaper": 0.59,
+    "rearHaunch": 1.14
+  },
+  {
+    "prompt": "rugged hover suv with aerodynamic slim silhouette and compact short wheelbase",
+    "length": 4.8,
+    "width": 2.24,
+    "roofHeight": 1.75,
+    "canopyLength": 2.27,
+    "noseTaper": 0.53,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "sleek hover coupe",
+    "length": 4.55,
+    "width": 2.06,
+    "roofHeight": 1.46,
+    "canopyLength": 1.9,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "sleek hover coupe with wide body",
+    "length": 4.55,
+    "width": 2.4,
+    "roofHeight": 1.46,
+    "canopyLength": 1.9,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.14
+  },
+  {
+    "prompt": "sleek hover coupe with narrow and slender frame",
+    "length": 4.55,
+    "width": 1.78,
+    "roofHeight": 1.46,
+    "canopyLength": 1.9,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.05
+  },
+  {
+    "prompt": "sleek hover coupe with long extended nose",
+    "length": 5.21,
+    "width": 2.06,
+    "roofHeight": 1.46,
+    "canopyLength": 1.9,
+    "noseTaper": 0.48,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "sleek hover coupe with compact short wheelbase",
+    "length": 4,
+    "width": 2.06,
+    "roofHeight": 1.46,
+    "canopyLength": 1.72,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "sleek hover coupe with tall roomy cockpit",
+    "length": 4.55,
+    "width": 2.06,
+    "roofHeight": 1.72,
+    "canopyLength": 2.04,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "sleek hover coupe with low roof and racing canopy",
+    "length": 4.55,
+    "width": 2.06,
+    "roofHeight": 1.31,
+    "canopyLength": 1.78,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "sleek hover coupe with panoramic elongated canopy",
+    "length": 4.55,
+    "width": 2.06,
+    "roofHeight": 1.56,
+    "canopyLength": 2.38,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "sleek hover coupe with pointed sharp front end",
+    "length": 4.55,
+    "width": 2.06,
+    "roofHeight": 1.46,
+    "canopyLength": 1.9,
+    "noseTaper": 0.38,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "sleek hover coupe with bulky broad rear haunch",
+    "length": 4.55,
+    "width": 2.13,
+    "roofHeight": 1.46,
+    "canopyLength": 1.9,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.21
+  },
+  {
+    "prompt": "sleek hover coupe with luxury passenger cabin",
+    "length": 4.55,
+    "width": 2.06,
+    "roofHeight": 1.56,
+    "canopyLength": 2.2,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "sleek hover coupe with hidden repulsors and sculpted body",
+    "length": 4.55,
+    "width": 2.06,
+    "roofHeight": 1.46,
+    "canopyLength": 1.9,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.11
+  },
+  {
+    "prompt": "sleek hover coupe with heavy armored shell",
+    "length": 4.55,
+    "width": 2.26,
+    "roofHeight": 1.55,
+    "canopyLength": 1.9,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "sleek hover coupe with aerodynamic slim silhouette",
+    "length": 4.55,
+    "width": 1.94,
+    "roofHeight": 1.34,
+    "canopyLength": 1.9,
+    "noseTaper": 0.5,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "sleek hover coupe with extended rear chassis",
+    "length": 5,
+    "width": 2.06,
+    "roofHeight": 1.46,
+    "canopyLength": 1.9,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.17
+  },
+  {
+    "prompt": "sleek hover coupe with wide body and low roof and racing canopy",
+    "length": 4.55,
+    "width": 2.4,
+    "roofHeight": 1.31,
+    "canopyLength": 1.78,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.14
+  },
+  {
+    "prompt": "sleek hover coupe with long extended nose and pointed sharp front end",
+    "length": 5.21,
+    "width": 2.06,
+    "roofHeight": 1.46,
+    "canopyLength": 1.9,
+    "noseTaper": 0.3,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "sleek hover coupe with tall roomy cockpit and luxury passenger cabin",
+    "length": 4.55,
+    "width": 2.06,
+    "roofHeight": 1.82,
+    "canopyLength": 2.34,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "sleek hover coupe with panoramic elongated canopy and heavy armored shell",
+    "length": 4.55,
+    "width": 2.26,
+    "roofHeight": 1.65,
+    "canopyLength": 2.38,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "sleek hover coupe with bulky broad rear haunch and extended rear chassis",
+    "length": 5,
+    "width": 2.13,
+    "roofHeight": 1.46,
+    "canopyLength": 1.9,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.29
+  },
+  {
+    "prompt": "sleek hover coupe with hidden repulsors and sculpted body and narrow and slender frame",
+    "length": 4.55,
+    "width": 1.78,
+    "roofHeight": 1.46,
+    "canopyLength": 1.9,
+    "noseTaper": 0.56,
+    "rearHaunch": 1.07
+  },
+  {
+    "prompt": "sleek hover coupe with aerodynamic slim silhouette and compact short wheelbase",
+    "length": 4,
+    "width": 1.94,
+    "roofHeight": 1.34,
+    "canopyLength": 1.72,
+    "noseTaper": 0.5,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "aggressive hover racer",
+    "length": 4.78,
+    "width": 2.25,
+    "roofHeight": 1.32,
+    "canopyLength": 1.6,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "aggressive hover racer with wide body",
+    "length": 4.78,
+    "width": 2.59,
+    "roofHeight": 1.32,
+    "canopyLength": 1.6,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.23
+  },
+  {
+    "prompt": "aggressive hover racer with narrow and slender frame",
+    "length": 4.78,
+    "width": 1.97,
+    "roofHeight": 1.32,
+    "canopyLength": 1.6,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.14
+  },
+  {
+    "prompt": "aggressive hover racer with long extended nose",
+    "length": 5.44,
+    "width": 2.25,
+    "roofHeight": 1.32,
+    "canopyLength": 1.6,
+    "noseTaper": 0.36,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "aggressive hover racer with compact short wheelbase",
+    "length": 4.23,
+    "width": 2.25,
+    "roofHeight": 1.32,
+    "canopyLength": 1.42,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "aggressive hover racer with tall roomy cockpit",
+    "length": 4.78,
+    "width": 2.25,
+    "roofHeight": 1.58,
+    "canopyLength": 1.74,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "aggressive hover racer with low roof and racing canopy",
+    "length": 4.78,
+    "width": 2.25,
+    "roofHeight": 1.17,
+    "canopyLength": 1.48,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "aggressive hover racer with panoramic elongated canopy",
+    "length": 4.78,
+    "width": 2.25,
+    "roofHeight": 1.42,
+    "canopyLength": 2.08,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "aggressive hover racer with pointed sharp front end",
+    "length": 4.78,
+    "width": 2.25,
+    "roofHeight": 1.32,
+    "canopyLength": 1.6,
+    "noseTaper": 0.26,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "aggressive hover racer with bulky broad rear haunch",
+    "length": 4.78,
+    "width": 2.32,
+    "roofHeight": 1.32,
+    "canopyLength": 1.6,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.3
+  },
+  {
+    "prompt": "aggressive hover racer with luxury passenger cabin",
+    "length": 4.78,
+    "width": 2.25,
+    "roofHeight": 1.42,
+    "canopyLength": 1.9,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "aggressive hover racer with hidden repulsors and sculpted body",
+    "length": 4.78,
+    "width": 2.25,
+    "roofHeight": 1.32,
+    "canopyLength": 1.6,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.2
+  },
+  {
+    "prompt": "aggressive hover racer with heavy armored shell",
+    "length": 4.78,
+    "width": 2.45,
+    "roofHeight": 1.41,
+    "canopyLength": 1.6,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "aggressive hover racer with aerodynamic slim silhouette",
+    "length": 4.78,
+    "width": 2.13,
+    "roofHeight": 1.2,
+    "canopyLength": 1.6,
+    "noseTaper": 0.38,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "aggressive hover racer with extended rear chassis",
+    "length": 5.23,
+    "width": 2.25,
+    "roofHeight": 1.32,
+    "canopyLength": 1.6,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.26
+  },
+  {
+    "prompt": "aggressive hover racer with wide body and low roof and racing canopy",
+    "length": 4.78,
+    "width": 2.59,
+    "roofHeight": 1.17,
+    "canopyLength": 1.48,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.23
+  },
+  {
+    "prompt": "aggressive hover racer with long extended nose and pointed sharp front end",
+    "length": 5.44,
+    "width": 2.25,
+    "roofHeight": 1.32,
+    "canopyLength": 1.6,
+    "noseTaper": 0.18,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "aggressive hover racer with tall roomy cockpit and luxury passenger cabin",
+    "length": 4.78,
+    "width": 2.25,
+    "roofHeight": 1.68,
+    "canopyLength": 2.04,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "aggressive hover racer with panoramic elongated canopy and heavy armored shell",
+    "length": 4.78,
+    "width": 2.45,
+    "roofHeight": 1.51,
+    "canopyLength": 2.08,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "aggressive hover racer with bulky broad rear haunch and extended rear chassis",
+    "length": 5.23,
+    "width": 2.32,
+    "roofHeight": 1.32,
+    "canopyLength": 1.6,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.38
+  },
+  {
+    "prompt": "aggressive hover racer with hidden repulsors and sculpted body and narrow and slender frame",
+    "length": 4.78,
+    "width": 1.97,
+    "roofHeight": 1.32,
+    "canopyLength": 1.6,
+    "noseTaper": 0.44,
+    "rearHaunch": 1.16
+  },
+  {
+    "prompt": "aggressive hover racer with aerodynamic slim silhouette and compact short wheelbase",
+    "length": 4.23,
+    "width": 2.13,
+    "roofHeight": 1.2,
+    "canopyLength": 1.42,
+    "noseTaper": 0.38,
+    "rearHaunch": 1.18
+  },
+  {
+    "prompt": "fast swept hover speedster",
+    "length": 5.18,
+    "width": 2.03,
+    "roofHeight": 1.37,
+    "canopyLength": 1.5,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.07
+  },
+  {
+    "prompt": "fast swept hover speedster with wide body",
+    "length": 5.18,
+    "width": 2.37,
+    "roofHeight": 1.37,
+    "canopyLength": 1.5,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.12
+  },
+  {
+    "prompt": "fast swept hover speedster with narrow and slender frame",
+    "length": 5.18,
+    "width": 1.75,
+    "roofHeight": 1.37,
+    "canopyLength": 1.5,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.03
+  },
+  {
+    "prompt": "fast swept hover speedster with long extended nose",
+    "length": 5.84,
+    "width": 2.03,
+    "roofHeight": 1.37,
+    "canopyLength": 1.5,
+    "noseTaper": 0.32,
+    "rearHaunch": 1.07
+  },
+  {
+    "prompt": "fast swept hover speedster with compact short wheelbase",
+    "length": 4.63,
+    "width": 2.03,
+    "roofHeight": 1.37,
+    "canopyLength": 1.32,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.07
+  },
+  {
+    "prompt": "fast swept hover speedster with tall roomy cockpit",
+    "length": 5.18,
+    "width": 2.03,
+    "roofHeight": 1.63,
+    "canopyLength": 1.64,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.07
+  },
+  {
+    "prompt": "fast swept hover speedster with low roof and racing canopy",
+    "length": 5.18,
+    "width": 2.03,
+    "roofHeight": 1.22,
+    "canopyLength": 1.38,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.07
+  },
+  {
+    "prompt": "fast swept hover speedster with panoramic elongated canopy",
+    "length": 5.18,
+    "width": 2.03,
+    "roofHeight": 1.47,
+    "canopyLength": 1.98,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.07
+  },
+  {
+    "prompt": "fast swept hover speedster with pointed sharp front end",
+    "length": 5.18,
+    "width": 2.03,
+    "roofHeight": 1.37,
+    "canopyLength": 1.5,
+    "noseTaper": 0.22,
+    "rearHaunch": 1.07
+  },
+  {
+    "prompt": "fast swept hover speedster with bulky broad rear haunch",
+    "length": 5.18,
+    "width": 2.1,
+    "roofHeight": 1.37,
+    "canopyLength": 1.5,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.19
+  },
+  {
+    "prompt": "fast swept hover speedster with luxury passenger cabin",
+    "length": 5.18,
+    "width": 2.03,
+    "roofHeight": 1.47,
+    "canopyLength": 1.8,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.07
+  },
+  {
+    "prompt": "fast swept hover speedster with hidden repulsors and sculpted body",
+    "length": 5.18,
+    "width": 2.03,
+    "roofHeight": 1.37,
+    "canopyLength": 1.5,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.09
+  },
+  {
+    "prompt": "fast swept hover speedster with heavy armored shell",
+    "length": 5.18,
+    "width": 2.23,
+    "roofHeight": 1.46,
+    "canopyLength": 1.5,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.07
+  },
+  {
+    "prompt": "fast swept hover speedster with aerodynamic slim silhouette",
+    "length": 5.18,
+    "width": 1.91,
+    "roofHeight": 1.25,
+    "canopyLength": 1.5,
+    "noseTaper": 0.34,
+    "rearHaunch": 1.07
+  },
+  {
+    "prompt": "fast swept hover speedster with extended rear chassis",
+    "length": 5.63,
+    "width": 2.03,
+    "roofHeight": 1.37,
+    "canopyLength": 1.5,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.15
+  },
+  {
+    "prompt": "fast swept hover speedster with wide body and low roof and racing canopy",
+    "length": 5.18,
+    "width": 2.37,
+    "roofHeight": 1.22,
+    "canopyLength": 1.38,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.12
+  },
+  {
+    "prompt": "fast swept hover speedster with long extended nose and pointed sharp front end",
+    "length": 5.84,
+    "width": 2.03,
+    "roofHeight": 1.37,
+    "canopyLength": 1.5,
+    "noseTaper": 0.14,
+    "rearHaunch": 1.07
+  },
+  {
+    "prompt": "fast swept hover speedster with tall roomy cockpit and luxury passenger cabin",
+    "length": 5.18,
+    "width": 2.03,
+    "roofHeight": 1.73,
+    "canopyLength": 1.94,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.07
+  },
+  {
+    "prompt": "fast swept hover speedster with panoramic elongated canopy and heavy armored shell",
+    "length": 5.18,
+    "width": 2.23,
+    "roofHeight": 1.56,
+    "canopyLength": 1.98,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.07
+  },
+  {
+    "prompt": "fast swept hover speedster with bulky broad rear haunch and extended rear chassis",
+    "length": 5.63,
+    "width": 2.1,
+    "roofHeight": 1.37,
+    "canopyLength": 1.5,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.27
+  },
+  {
+    "prompt": "fast swept hover speedster with hidden repulsors and sculpted body and narrow and slender frame",
+    "length": 5.18,
+    "width": 1.75,
+    "roofHeight": 1.37,
+    "canopyLength": 1.5,
+    "noseTaper": 0.4,
+    "rearHaunch": 1.05
+  },
+  {
+    "prompt": "fast swept hover speedster with aerodynamic slim silhouette and compact short wheelbase",
+    "length": 4.63,
+    "width": 1.91,
+    "roofHeight": 1.25,
+    "canopyLength": 1.32,
+    "noseTaper": 0.34,
+    "rearHaunch": 1.07
+  }
+]
