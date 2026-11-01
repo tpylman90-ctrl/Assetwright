@@ -1,6 +1,13 @@
 package com.assetwright.app
 
 import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
+import com.assetwright.app.mini.GeneratedAsset
+import com.assetwright.app.mini.GlbWriter
+import com.assetwright.app.mini.MiniAi
+import com.assetwright.app.mini.MiniGeometry
+import com.assetwright.app.mini.MiniPreview
+import com.assetwright.app.mini.TrainingStore
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -70,7 +77,26 @@ private fun AssetwrightScreen() {
     var prompt by remember { mutableStateOf("") }
     var selectedImage by remember { mutableStateOf<Uri?>(null) }
     var selectedQuality by remember { mutableStateOf("Mobile") }
-    var status by remember { mutableStateOf("Cloud generation is not connected yet. Add a prompt or reference image to prepare a request.") }
+    var status by remember { mutableStateOf("Offline Mini AI v0.1: describe a hover SUV, coupe, or racer to generate an editable-spec 3D mesh.") }
+    var generatedAsset by remember { mutableStateOf<GeneratedAsset?>(null) }
+    val context = LocalContext.current
+    val trainingExamples = remember(context) { TrainingStore.bundled(context) }
+    val exportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("model/gltf-binary"),
+        onResult = { uri ->
+            val asset = generatedAsset
+            if (uri != null && asset != null) {
+                try {
+                    val output = context.contentResolver.openOutputStream(uri)
+                        ?: error("Could not open export destination")
+                    output.use { it.write(GlbWriter.encode(asset)) }
+                    status = "GLB exported successfully. Ready to import into Godot."
+                } catch (ex: Exception) {
+                    status = "Export failed: " + (ex.message ?: "unknown error")
+                }
+            }
+        }
+    )
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -122,7 +148,7 @@ private fun AssetwrightScreen() {
             }
 
             item {
-                PreviewCard()
+                PreviewCard(generatedAsset)
             }
 
             item {
@@ -134,7 +160,7 @@ private fun AssetwrightScreen() {
                     ) {
                         Box(modifier = Modifier.fillMaxWidth().height(126.dp).padding(15.dp)) {
                             if (prompt.isBlank()) {
-                                Text("Example: a compact sci-fi cargo drone with twin side engines, teal status lights, and worn alloy panels", color = TextMuted, fontSize = 14.sp, lineHeight = 20.sp)
+                                Text("Example: a wide hover SUV with a panoramic canopy and muscular rear body", color = TextMuted, fontSize = 14.sp, lineHeight = 20.sp)
                             }
                             BasicTextField(
                                 value = prompt,
@@ -162,6 +188,10 @@ private fun AssetwrightScreen() {
                             }
                         }
                     }
+                    Text(
+                        "Reference images are not processed by the offline mini AI yet.",
+                        color = TextMuted, fontSize = 11.sp
+                    )
                     Text(
                         "${prompt.length}/1000 characters",
                         modifier = Modifier.align(Alignment.End),
@@ -209,14 +239,19 @@ private fun AssetwrightScreen() {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Button(
                         onClick = {
-                            val inputType = when {
-                                prompt.isNotBlank() && selectedImage != null -> "text and reference image"
-                                selectedImage != null -> "reference image"
-                                else -> "text prompt"
+                            try {
+                                val spec = MiniAi.predict(prompt, selectedQuality, trainingExamples)
+                                val built = MiniGeometry.generate(spec)
+                                generatedAsset = built
+                                status = "Generated offline: " + spec.title + " • " +
+                                    built.triangleCount + " triangles. Drag the model to rotate it." +
+                                    if (selectedImage != null) " Reference image not yet used." else ""
+                            } catch (ex: Exception) {
+                                generatedAsset = null
+                                status = ex.message ?: "Could not generate this asset."
                             }
-                            status = "Request prepared for the $selectedQuality target using $inputType. Cloud generation is not connected yet."
                         },
-                        enabled = prompt.isNotBlank() || selectedImage != null,
+                        enabled = prompt.isNotBlank(),
                         modifier = Modifier.fillMaxWidth().height(54.dp),
                         shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -226,7 +261,18 @@ private fun AssetwrightScreen() {
                             disabledContentColor = TextMuted
                         )
                     ) {
-                        Text("Generate game asset", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                        Text("Generate offline 3D asset", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    }
+                    if (generatedAsset != null) {
+                        OutlinedButton(
+                            onClick = { exportLauncher.launch("assetwright-mini-" +
+                                System.currentTimeMillis() + ".glb") },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(14.dp),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = Teal)
+                        ) {
+                            Text("Export GLB to device")
+                        }
                     }
                     Text(status, color = TextMuted, fontSize = 12.sp, lineHeight = 17.sp)
                     Spacer(Modifier.height(18.dp))
@@ -237,62 +283,43 @@ private fun AssetwrightScreen() {
 }
 
 @Composable
-private fun PreviewCard() {
+private fun PreviewCard(asset: GeneratedAsset?) {
     Card(
-        modifier = Modifier.fillMaxWidth().height(220.dp),
+        modifier = Modifier.fillMaxWidth().height(255.dp),
         shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(containerColor = Panel)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Canvas(modifier = Modifier.fillMaxSize().padding(24.dp)) {
-                val cx = size.width / 2f
-                val cy = size.height / 2f - 5f
-                val w = size.width * 0.22f
-                val h = size.height * 0.27f
-                val top = Path().apply {
-                    moveTo(cx, cy - h)
-                    lineTo(cx + w, cy - h / 2)
-                    lineTo(cx, cy)
-                    lineTo(cx - w, cy - h / 2)
-                    close()
-                }
-                val left = Path().apply {
-                    moveTo(cx - w, cy - h / 2)
-                    lineTo(cx, cy)
-                    lineTo(cx, cy + h)
-                    lineTo(cx - w, cy + h / 2)
-                    close()
-                }
-                val right = Path().apply {
-                    moveTo(cx + w, cy - h / 2)
-                    lineTo(cx, cy)
-                    lineTo(cx, cy + h)
-                    lineTo(cx + w, cy + h / 2)
-                    close()
-                }
-                drawPath(top, Color(0xFF2B806F))
-                drawPath(left, Color(0xFF1D5C55))
-                drawPath(right, Color(0xFF38B99A))
-                drawPath(top, Teal.copy(alpha = 0.7f), style = Stroke(width = 2.dp.toPx()))
-                drawPath(left, Teal.copy(alpha = 0.45f), style = Stroke(width = 2.dp.toPx()))
-                drawPath(right, Teal.copy(alpha = 0.7f), style = Stroke(width = 2.dp.toPx()))
+            if (asset != null) {
+                MiniPreview(asset, Modifier.fillMaxSize())
+            } else {
+                Text(
+                    "◇",
+                    modifier = Modifier.align(Alignment.Center),
+                    color = Teal, fontSize = 80.sp
+                )
             }
+            Text(
+                "OFFLINE MINI AI  •  V0.1",
+                modifier = Modifier.align(Alignment.TopStart).padding(16.dp),
+                color = Teal, fontSize = 10.sp,
+                fontWeight = FontWeight.Bold, letterSpacing = 1.sp
+            )
             Column(
-                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 16.dp),
+                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Text("3D PREVIEW", color = TextMuted, fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.3.sp)
-                Text("Your generated model will appear here", color = TextMuted, fontSize = 12.sp)
+                Text(
+                    if (asset == null) "3D PREVIEW" else asset.spec.title.uppercase(),
+                    color = TextMain, fontSize = 11.sp, fontWeight = FontWeight.Bold
+                )
+                Text(
+                    if (asset == null) "Describe a hover vehicle to create a real mesh"
+                    else "Drag to rotate  ·  " + asset.triangleCount + " triangles  ·  GLB export",
+                    color = TextMuted, fontSize = 11.sp
+                )
             }
-            Text(
-                "GAME ASSET",
-                modifier = Modifier.align(Alignment.TopStart).padding(16.dp),
-                color = Teal,
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.sp
-            )
         }
     }
 }
