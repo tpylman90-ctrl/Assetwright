@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 3,
+  "cycle": 4,
   "max_assets": 8,
-  "focus": "vehicle engine wheel mechanical industrial",
-  "objective": "Retry bounded CC0 real-geometry training after fixing Blender-source preference and format fallback; fit held-out validated shape prior, keep third-party meshes ephemeral."
+  "focus": "vehicle engine mechanical machinery generator industrial",
+  "objective": "Extract source-level CC0 component spatial graphs (anonymous part bounds and proximity) via Blender; accumulate derived-only geometry history and evaluate two-prototype layout prior. Never deploy unverified relationships to Android."
 }
