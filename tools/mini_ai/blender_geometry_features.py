@@ -15,6 +15,9 @@ import sys
 from mathutils import Vector
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from component_graph import build_graph
+
 MAX_OBJECTS = 500
 MAX_TRIANGLES = 2_000_000
 FEATURE_SCHEMA = "assetwright-geometry-descriptor-v1"
@@ -52,6 +55,7 @@ def main():
     total_surface = 0.0
     triangle_areas = []
     part_sizes = []
+    part_boxes = []
     mesh_types = {}
     for obj in objects:
         evaluated = obj.evaluated_get(dg)
@@ -66,10 +70,18 @@ def main():
                 raise ValueError("Triangle budget exceeded")
             matrix = obj.matrix_world
             points = [matrix @ v.co for v in mesh.vertices]
+            part_min = [float("inf")] * 3
+            part_max = [-float("inf")] * 3
             for p in points:
                 for axis in range(3):
+                    part_min[axis] = min(part_min[axis], p[axis])
+                    part_max[axis] = max(part_max[axis], p[axis])
                     min_bound[axis] = min(min_bound[axis], p[axis])
                     max_bound[axis] = max(max_bound[axis], p[axis])
+            part_boxes.append({
+                "min": part_min, "max": part_max,
+                "triangles": len(mesh.loop_triangles)
+            })
             area = 0.0
             for tri in mesh.loop_triangles:
                 a, b, c = (points[index] for index in tri.vertices)
@@ -116,6 +128,7 @@ def main():
         "mesh_parts": len(objects),
         "triangles": total_triangles,
         "vertices": total_vertices,
+        "component_graph": build_graph(part_boxes, min_bound, max_bound),
     }, sort_keys=True))
     print("ASSETWRIGHT_GEOMETRY_EXTRACTED", json.dumps({
         "triangles": total_triangles, "mesh_parts": len(objects)
