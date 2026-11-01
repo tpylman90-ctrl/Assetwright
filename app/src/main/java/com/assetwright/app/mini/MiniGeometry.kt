@@ -95,6 +95,17 @@ private class MeshBuilder {
         })
     }
 
+    fun cylinderX(name: String, color: Int, x0: Float, x1: Float,
+                  y: Float, z: Float, radius: Float, segments: Int) {
+        loft(name, color, listOf(x0, x1).map { x ->
+            (0 until segments).map { i ->
+                val angle = i * 2.0 * PI / segments
+                Vec3(x, y + radius * cos(angle).toFloat(),
+                    z + radius * sin(angle).toFloat())
+            }
+        })
+    }
+
     fun discZ(name: String, color: Int, x: Float, y: Float,
               z0: Float, z1: Float, radius: Float, segments: Int) {
         loft(name, color, listOf(z0, z1).map { z ->
@@ -212,13 +223,27 @@ object MiniGeometry {
                 aft + extension + .032f, .81f, r * .5f, 20)
         }
 
-        // Lift repulsors are independent of propulsion count.
+        // Learned semantic construction plan controls lift-unit quantity and
+        // mount exposure without changing engine count or primary body shape.
+        val foreAft = when (spec.liftCount) {
+            2 -> listOf(0.0f)
+            6 -> listOf(-.32f, 0f, .32f)
+            else -> listOf(-.28f, .31f)
+        }
+        val mountOffset = if (spec.liftMount == "exposed") .98f else .64f
         for (side in listOf(-1f, 1f)) {
-            for (position in listOf(-.28f, .31f)) {
-                m.discZ("Underslung repulsor", ENGINE, side * w * .70f,
-                    l * position, .29f, .39f, .19f, 16)
-                m.discZ("Repulsor field", LIGHT, side * w * .70f,
-                    l * position, .275f, .29f, .135f, 16)
+            val padX = side * w * mountOffset
+            for (position in foreAft) {
+                val padY = l * position
+                m.discZ("Underslung repulsor", ENGINE, padX,
+                    padY, .29f, .39f, .19f, 16)
+                m.discZ("Repulsor field", LIGHT, padX,
+                    padY, .275f, .29f, .135f, 16)
+                // Real mesh bracket spans pad and underbody instead of a
+                // floating, visually separate hover unit.
+                m.cylinderX("Repulsor mount bracket", UNDERBODY,
+                    side * w * .38f, padX,
+                    padY, .41f, .085f, 12)
             }
         }
 
