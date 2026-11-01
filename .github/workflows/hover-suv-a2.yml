@@ -1,0 +1,60 @@
+name: Hover Racing SUV A2 surfacing study
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "tools/geometry/generate_hover_suv_a2.py"
+      - ".github/workflows/hover-suv-a2.yml"
+permissions:
+  contents: read
+concurrency:
+  group: hover-suv-a2-surface-review
+  cancel-in-progress: true
+jobs:
+  surface-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install free surface generation and offscreen renderer
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libegl1 libgl1 libopengl0 libosmesa6
+          python -m pip install numpy scipy trimesh Pillow vtk
+      - name: Build A2 mesh and review angles
+        env:
+          ASSETWRIGHT_OUTPUT_DIR: generated/hover_suv_a2
+          LIBGL_ALWAYS_SOFTWARE: "1"
+        run: |
+          python tools/geometry/generate_hover_suv_a2.py
+      - name: Validate deliverables and geometry budget
+        run: |
+          python - <<'PY'
+          import pathlib, json, trimesh
+          p=pathlib.Path('generated/hover_suv_a2')
+          for name in ['assetwright_hover_suv_a2_surface_pass.glb',
+                       'assetwright_hover_suv_a2_front_3q.png',
+                       'assetwright_hover_suv_a2_rear_3q.png',
+                       'assetwright_hover_suv_a2_side.png',
+                       'assetwright_hover_suv_a2_top.png',
+                       'assetwright_hover_suv_a2_review_sheet.png',
+                       'assetwright_hover_suv_a2_record.json']:
+              assert (p/name).is_file() and (p/name).stat().st_size>0,name
+          record=json.loads((p/'assetwright_hover_suv_a2_record.json').read_text())
+          scene=trimesh.load(p/'assetwright_hover_suv_a2_surface_pass.glb',force='scene')
+          triangles=sum(len(mesh.faces) for mesh in scene.geometry.values())
+          assert triangles==record['geometry_triangles'],(triangles,record)
+          assert triangles <= 120000,triangles
+          print(f'Validated {triangles} triangles across {len(scene.geometry)} meshes.')
+          PY
+      - name: Publish A2 review package
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-hover-suv-a2-surface-review
+          path: generated/hover_suv_a2/
+          retention-days: 3
+          if-no-files-found: error
