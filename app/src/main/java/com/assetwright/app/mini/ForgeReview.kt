@@ -94,7 +94,7 @@ object ForgeReview {
         val notes = json.getString("notes")
         require(notes.isNotBlank() && notes.length <= MAX_FEEDBACK)
         val obj = json.getJSONObject("target")
-        require(obj.keySet() == fields.toSet()) { "Correction must specify exactly six geometry parameters" }
+        require(obj.keys().asSequence().toSet() == fields.toSet()) { "Correction must specify exactly six geometry parameters" }
         val floats = fields.associateWith { key ->
             val number = obj.getDouble(key)
             require(number.isFinite()) { "Invalid value: " + key }
