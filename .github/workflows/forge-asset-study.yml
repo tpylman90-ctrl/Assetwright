@@ -74,7 +74,7 @@ jobs:
       - name: Train source-disjoint component relationship prior
         run: |
           python tools/mini_ai/relation_prior_train.py \
-            --report local-data/mini-ai/forge-study/report.json \
+            --report local-data/mini-ai/forge-study/dataset.json \
             --out local-data/mini-ai/forge-study/relations
 
       - name: Publish downloadable research report
