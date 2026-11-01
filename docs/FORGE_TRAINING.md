@@ -9,6 +9,38 @@ connect to ChatGPT/GitHub by itself. The user selects exactly which files to
 share for an assistant review. No API key, conversation content or model is sent
 anywhere automatically.
 
+## Forge Review 02 — v0.6.1 low cockpit and exposed-unit geometry
+
+A user-exported v0.6 Forge ZIP contained a real, hash-verified GLB with
+1,694 triangles and 22 mesh parts. The prompt required two engines and four
+exposed repulsors. Both the exported operation sequence and the actual GLB
+matched these component counts, including four mounting-bracket meshes.
+
+Visual and geometric inspection exposed two remaining deficiencies:
+
+- The canopy's peak rose only slightly above the fuselage top. The body
+  construction used a fixed upper bulge near 1.25 m, independent of the
+  user-requested low roof height (e.g. 1.34 m).
+- Outboard repulsors were positioned near the widest shoulder, making the
+  explicitly exposed mounting style barely distinguishable from the tucked one.
+
+The hull upper profile now adapts to the requested roof height, guaranteeing
+at least roughly 0.25 m of greenhouse emergence from the main body in the
+supported range. The keel, front light, and drive vertical positions follow
+the adjusted hull center. Exposed lift pads are offset beyond the widest body
+silhouette, with thicker support arms. The two/three-engine planner and
+2/4/6 repulsor counts are unaffected.
+
+A new mesh-based unit test evaluates multiple low-roof settings, measures
+actual canopy and body vertex extents, and tests that exposed pads sit beyond
+the hull's maximum lateral extent. This is a code-level geometry fix. It is
+**not yet a visual review of the newly generated v0.6.1 GLB**; the Android
+build must be tested and a fresh review ZIP compared to the original.
+
+This review also found that older Forge ZIPs mislabeled their generator as
+version 0.5 even when the app was v0.6. v0.6.1 corrects the review metadata
+for future model provenance.
+
 ## First geometry-quality review (v0.5.2)
 
 An uploaded, user-exported Forge ZIP was independently decoded and inspected.
