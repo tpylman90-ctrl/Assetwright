@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets
  */
 object TrainingStore {
     private const val FILE_NAME = "approved_mini_ai_v1.json"
+    private const val HOME_FILE = "home_mini_ai_pack_v1.json"
     private const val MAX_EXAMPLES = 500
 
     fun bundled(context: Context): List<TrainingExample> {
@@ -29,9 +30,42 @@ object TrainingStore {
         return parseExamples(JSONArray(source))
     }
 
-    /** Most recently accepted local examples take precedence on ties. */
+    /** Most recent local corrections win, then home-trained examples, then seeds. */
     fun trainingSet(context: Context): List<TrainingExample> =
-        approved(context).asReversed() + bundled(context)
+        approved(context).asReversed() + home(context).asReversed() + bundled(context)
+
+    fun home(context: Context): List<TrainingExample> {
+        val file = File(context.filesDir, HOME_FILE)
+        if (!file.exists()) return emptyList()
+        val data = JSONObject(AtomicFile(file).openRead().bufferedReader().use { it.readText() })
+        return parseExamples(data.getJSONArray("examples"))
+    }
+
+    /**
+     * Imports a locally trained and explicitly selected model pack.
+     * Does not accept arbitrary GLBs or download/upload anything.
+     */
+    @Synchronized
+    fun importHomePack(context: Context, source: String): Int {
+        require(source.length in 2..350_000) { "Invalid or oversized training pack" }
+        val data = JSONObject(source)
+        require(data.getString("schema") == "assetwright-mini-ai-pack-v1")
+        require(data.getString("model_type") == "approved-example-memory")
+        val examples = parseExamples(data.getJSONArray("examples"))
+        require(examples.size in 1..MAX_EXAMPLES)
+        require(data.getInt("approved_count") == examples.size)
+        require(examples.all { MiniAi.supports(it.prompt) })
+        val file = AtomicFile(File(context.filesDir, HOME_FILE))
+        val output = file.startWrite()
+        try {
+            output.write(source.toByteArray(StandardCharsets.UTF_8))
+            file.finishWrite(output)
+        } catch (error: Exception) {
+            file.failWrite(output)
+            throw error
+        }
+        return examples.size
+    }
 
     @Synchronized
     fun approve(context: Context, spec: VehicleSpec): Int {
