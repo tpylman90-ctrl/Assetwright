@@ -43,7 +43,7 @@ object ForgeReview {
         val json = JSONObject()
             .put("schema", REVIEW_SCHEMA)
             .put("generator", "assetwright-mini-ai")
-            .put("generator_version", "0.2")
+            .put("generator_version", "0.5")
             .put("prompt", spec.sourcePrompt)
             .put("profile", spec.quality)
             .put("triangle_count", asset.triangleCount)
@@ -57,13 +57,16 @@ object ForgeReview {
             zip.putNextEntry(ZipEntry("review.json"))
             zip.write(json.toString(2).toByteArray(Charsets.UTF_8))
             zip.closeEntry()
+            zip.putNextEntry(ZipEntry("shape_program.json"))
+            zip.write(ShapeProgram.toJson(spec).toString(2).toByteArray(Charsets.UTF_8))
+            zip.closeEntry()
             zip.putNextEntry(ZipEntry("model.glb"))
             zip.write(glb)
             zip.closeEntry()
             zip.putNextEntry(ZipEntry("README.txt"))
             zip.write(
                 ("Assetwright Forge review bundle. You selected this export for review.\n" +
-                 "Contains the generated GLB, its parameters, prompt and your comments.\n" +
+                 "Contains GLB, procedural shape recipe, parameters, prompt and comments.\n" +
                  "No model is trained or uploaded merely by creating this file.\n")
                     .toByteArray(Charsets.UTF_8)
             )
