@@ -31,6 +31,19 @@ class SourceGeometryTests(unittest.TestCase):
             self.assertFalse(valid_url(url))
         self.assertTrue(valid_url("https://dl.polyhaven.org/models/foo.blend"))
 
+    def test_blend_fallback_not_crowded_out_by_multiple_fbx_lods(self):
+        sources = {
+            "1k_fbx": {"url": "https://dl.polyhaven.org/assets/model_1k.fbx", "size": 700},
+            "2k_fbx": {"url": "https://dl.polyhaven.org/assets/model_2k.fbx", "size": 1000},
+            "4k_fbx": {"url": "https://dl.polyhaven.org/assets/model_4k.fbx", "size": 1500},
+            "1k_blend": {"url": "https://dl.polyhaven.org/assets/model_1k.blend", "size": 3200},
+            "2k_blend": {"url": "https://dl.polyhaven.org/assets/model_2k.blend", "size": 7200},
+        }
+        chosen = file_choices(sources)
+        self.assertEqual([x["format"] for x in chosen[:2]], ["blend", "fbx"])
+        self.assertEqual(chosen[0]["size"], 3200)
+        self.assertEqual(chosen[1]["size"], 700)
+
     def test_zip_cannot_escape_destination_and_only_mesh_extracted(self):
         with tempfile.TemporaryDirectory() as tmp:
             folder = Path(tmp)
