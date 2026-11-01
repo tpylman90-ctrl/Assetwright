@@ -60,7 +60,10 @@ object GlbWriter {
             var maxX = Float.NEGATIVE_INFINITY
             var maxY = Float.NEGATIVE_INFINITY
             var maxZ = Float.NEGATIVE_INFINITY
-            for (v in part.vertices) {
+            // Procedural source is Z-up. glTF is Y-up: (x, y, z) -> (x, z, -y).
+            // This is a proper rotation (not a reflection), so winding is preserved.
+            for (original in part.vertices) {
+                val v = Vec3(original.x, original.z, -original.y)
                 require(v.x.isFinite() && v.y.isFinite() && v.z.isFinite())
                 binary.leFloat(v.x)
                 binary.leFloat(v.y)
@@ -78,8 +81,8 @@ object GlbWriter {
             val normalsStart = binary.size()
             for (n in normals(part)) {
                 binary.leFloat(n.x)
-                binary.leFloat(n.y)
                 binary.leFloat(n.z)
+                binary.leFloat(-n.y)
             }
             val normalView = addView(normalsStart, binary.size() - normalsStart, 34962)
             val normalAccessor = accessors.size
