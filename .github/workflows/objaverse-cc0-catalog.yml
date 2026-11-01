@@ -1,0 +1,54 @@
+name: Forge Licensed Objaverse Description Library
+
+on:
+  push:
+    paths:
+      - "training/requests/forge_cycle.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  statuses: write
+
+concurrency:
+  group: forge-objaverse-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  catalog:
+    name: Filter object-level licenses and join verified CC0 captions
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Test source license filtering and cross-source caption joins
+        run: |
+          python -m unittest discover -s tools/mini_ai -p "test_*.py"
+      - name: Build licensed 3D description catalog
+        run: |
+          python tools/mini_ai/objaverse_cc0_catalog.py \
+            --out local-data/mini-ai/objaverse/verified_cc0_catalog.json \
+            --report local-data/mini-ai/objaverse/coverage_report.json \
+            --shard-start 0 \
+            --shards 16 \
+            --cap3d
+      - name: Upload licensed caption research artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-objaverse-cc0-description-catalog
+          path: local-data/mini-ai/objaverse/*.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Mark verified catalog study
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
+            -f state=success \
+            -f context="forge/objaverse-cc0-captions" \
+            -f description="Individually verified CC0 objects with ODC-By caption provenance" \
+            -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
