@@ -70,6 +70,36 @@ class MiniAiTest {
     }
 
     @Test
+    fun smoothNoseAndFittedCanopyKeepFrontLightInsideHull() {
+        val seed = TrainingExample(
+            "hover vehicle with panoramic canopy",
+            4.8f, 2.2f, 1.52f, 1.8f, .55f, 1.1f
+        )
+        val spec = MiniAi.predict(seed.prompt, "Mobile", listOf(seed))
+        val asset = MiniGeometry.generate(spec)
+        val shell = asset.parts.first { it.name == "Sculpted continuous body" }
+        val ringSize = spec.radialSegments
+        assertEquals(10 * ringSize, shell.vertices.size)
+        val halfWidths = (0 until 6).map { station ->
+            shell.vertices.subList(station * ringSize, (station + 1) * ringSize)
+                .maxOf { kotlin.math.abs(it.x) }
+        }
+        assertTrue("Nose profile should expand continuously", 
+            halfWidths.zipWithNext().all { (a, b) -> b > a })
+        val noseHalfWidth = halfWidths.first()
+        val light = asset.parts.first { it.name == "Continuous front light" }
+        assertTrue("Light must stay inside front cap", light.vertices.all {
+            kotlin.math.abs(it.x) < noseHalfWidth
+        })
+        assertTrue("Light must sit just forward of the front cap",
+            light.vertices.all { it.y < shell.vertices.first().y })
+        val canopy = asset.parts.first { it.name == "Bonded panoramic canopy" }
+        assertEquals(8 * ringSize, canopy.vertices.size)
+        assertTrue("Canopy lower perimeter should intersect the hull",
+            canopy.vertices.any { it.z <= 1.03f })
+    }
+
+    @Test
     fun buildsRealVerticesAndValidGlbEnvelope() {
         val examples = listOf(
             TrainingExample("wide hover suv panoramic canopy",
