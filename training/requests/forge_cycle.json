@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 2,
+  "cycle": 3,
   "max_assets": 8,
   "focus": "vehicle engine wheel mechanical industrial",
-  "objective": "Use Poly Haven CC0 mesh source variants (GLB/FBX/OBJ/Blend/ZIP); extract evaluated Blender geometry descriptors, fit held-out validated shape prior; no raw asset files or private user data in public Git."
+  "objective": "Retry bounded CC0 real-geometry training after fixing Blender-source preference and format fallback; fit held-out validated shape prior, keep third-party meshes ephemeral."
 }
