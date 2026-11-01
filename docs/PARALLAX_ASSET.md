@@ -131,3 +131,41 @@ the 120k/45k/20k caps remain. Inspect cockpit component intersections,
 canopy clearance, front/side/3/4 continuity, and material legibility before
 approving for reuse. This is a modeling iteration, not a validated Godot
 driving test or automatic ML model training.
+
+
+## V4 cabin reconstruction: organic surfaces and bonded dash
+
+User review of the V3 `interior_open` and `instruments` renders identified
+two high-priority structural problems: the seats were conspicuously assembled
+from disconnected beveled rectangular blocks, and the black dashboard hovered
+above a separate blue bridge with no visible bulkhead mounting. **Exterior
+surfacing is approved; keep the V3 body, four lift ducts, spear trim, and rear
+drive assemblies unchanged.**
+
+The V4 generator replaces those cabin objects with mechanically connected,
+editable control meshes:
+
+- Seats are built from progressive elliptical stations with contoured
+  leather cushions, a separate curved structural seat shell, rounded integral
+  headrests, shaped thigh/shoulder bolsters and fitted flat harness ribbons.
+  Trim remains restrained; stitching no longer serves as substitute geometry.
+- A nine-station closed dashboard cross-section spans the full cockpit width.
+  Its forward and lower faces land on the internal cockpit floor/bulkhead;
+  tapering outer stations blend into the interior side walls instead of
+  terminating as a floating horizontal box.
+- A recessed driver instrument nacelle has two independent fitted circular
+  hybrid gauge faces. The steering rim is attached by a column to the dash.
+- The narrow console is an organically formed longitudinal body with an
+  integrated padded armrest and selector. Both door-side upholstered panels
+  are profile surfaces, not bevelled blocks.
+- The existing `interior_open` and `instruments` camera outputs remain
+  dedicated real-mesh cutaway renders with canopy glass hidden for inspection
+  *only*; saved and exported vehicle meshes retain the canopy.
+
+**Required verification after CI:** Evaluate under 120,000 LOD0, 45,000 LOD1,
+20,000 LOD2 triangles; inspect side/hero/rear exterior to verify no visual
+regression. Check seat shell-to-pad layering, shoulder-belt embedment,
+dash-to-inner-sill mounting, instrument visibility, steering-column attachment,
+console clearance and canopy clearance in the close-up cutaway. The source
+revision does not establish visual correctness until those Blender renders
+are inspected; no Godot interior-camera test has been completed.
