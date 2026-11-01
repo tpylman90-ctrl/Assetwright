@@ -23,6 +23,7 @@ import urllib.parse
 import urllib.request
 
 from import_glb import inspect_glb
+from source_geometry import file_choices, inspect_with_blender
 
 API = "https://api.polyhaven.com"
 SOURCE = "Poly Haven"
@@ -187,15 +188,25 @@ def catalog_asset(asset_id: str, entry: dict, try_geometry: bool) -> dict:
     if try_geometry:
         try:
             files = api_json("/files/" + asset_id)
-            candidate = candidate_glb(files)
-            if candidate is None:
-                result["mesh_analysis"] = "no_supported_small_glb"
+            candidates = file_choices(files)
+            result["compatible_source_files"] = len(candidates)
+            result["available_formats"] = sorted({choice["format"] for choice in candidates})
+            if not candidates:
+                result["mesh_analysis"] = "no_supported_small_source"
             else:
-                url, size, checksum = candidate
-                with tempfile.TemporaryDirectory(prefix="assetwright_study_") as work:
-                    glb = Path(work) / "candidate.glb"
-                    result["geometry"] = read_glb(url, size, checksum, glb)
-                    result["mesh_analysis"] = "glb_structure_inspected"
+                # Try at most 3 official variants; unsuitable or corrupted
+                # sources cannot prevent other assets from being studied.
+                errors = []
+                for candidate in candidates[:3]:
+                    try:
+                        result["geometry"] = inspect_with_blender(candidate)
+                        result["mesh_analysis"] = "blender_geometry_inspected"
+                        break
+                    except (OSError, ValueError, RuntimeError) as error:
+                        errors.append(str(error)[:160])
+                if result["mesh_analysis"] != "blender_geometry_inspected":
+                    result["mesh_analysis"] = "source_conversion_failed"
+                    result["source_errors"] = errors
         except (OSError, ValueError, urllib.error.URLError) as error:
             result["mesh_analysis"] = "glb_unavailable"
             result["error"] = str(error)[:260]
@@ -220,12 +231,12 @@ def run_cycle(request: dict, *, fetch_geometry: bool = True) -> dict:
         "license": "CC0-1.0",
         "source_count": len(result),
         "geometry_inspected_count": sum(
-            x["mesh_analysis"] == "glb_structure_inspected" for x in result),
+            x["mesh_analysis"] == "blender_geometry_inspected" for x in result),
         "assets": result,
         "model_training_performed": False,
         "android_model_updated": False,
-        "note": "Candidate geometry descriptors for human/Forge review. "
-                "No Android learning pack is promoted from unreviewed assets.",
+        "note": "Validated CC0 Blender shape descriptors for a separate"
+                " unsupervised shape-prior experiment. No Android model updated.",
     }
 
 
@@ -241,9 +252,9 @@ def main() -> None:
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print("Assetwright study cycle", req["cycle"])
     print("Source metadata records:", result["source_count"])
-    print("Actual GLBs structurally inspected:", result["geometry_inspected_count"])
+    print("3D meshes analyzed through Blender:", result["geometry_inspected_count"])
     print("Study report:", args.output)
-    print("No Android training weights were modified; Forge review is required.")
+    print("Android model unchanged; geometry-prior training is separate.")
 
 
 if __name__ == "__main__":
