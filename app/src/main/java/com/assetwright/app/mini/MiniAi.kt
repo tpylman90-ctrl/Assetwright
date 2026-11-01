@@ -64,6 +64,11 @@ object MiniAi {
             "The offline Mini AI currently supports hover vehicles, SUVs, coupes, and racers."
         }
         val query = tokens(prompt).filterNot { it in ignored }.toSet()
+        // An explicitly approved correction for the same prompt must be
+        // reproduced exactly, rather than diluted by the synthetic seed set.
+        val exact = examples.firstOrNull {
+            it.prompt.trim().equals(prompt.trim(), ignoreCase = true)
+        }
         val nearest = examples.map { example ->
             val sample = tokens(example.prompt).filterNot { it in ignored }.toSet()
             val intersection = query.intersect(sample).size.toFloat()
@@ -73,6 +78,7 @@ object MiniAi {
         }.filter { it.second > 0f }.sortedByDescending { it.second }.take(4)
 
         fun estimate(selector: (TrainingExample) -> Float, default: Float): Float {
+            if (exact != null) return selector(exact)
             if (nearest.isEmpty()) return default
             val total = nearest.sumOf { (it.second * it.second).toDouble() }.toFloat()
             val prediction = nearest.sumOf {
