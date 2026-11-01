@@ -53,7 +53,7 @@ def read_request(path: Path) -> dict:
         raise ValueError("Invalid cycle number")
     count = data.get("max_assets", 4)
     if type(count) is not int or not 1 <= count <= MAX_ASSETS:
-        raise ValueError("max_assets must be between 1 and 8")
+        raise ValueError("max_assets must be between 1 and 24")
     focus = data.get("focus", "mechanical vehicle shape references")
     if not isinstance(focus, str) or not VALID_QUERY.fullmatch(focus):
         raise ValueError("Invalid research focus")
