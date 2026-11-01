@@ -4,6 +4,9 @@ on:
   push:
     paths:
       - "training/requests/forge_cycle.json"
+      - "tools/mini_ai/merge_reference_catalogs.py"
+      - "tools/mini_ai/test_merge_reference_catalogs.py"
+      - ".github/workflows/objaverse-cc0-catalog.yml"
   workflow_dispatch:
 
 permissions:
