@@ -51,7 +51,8 @@ jobs:
           python tools/mini_ai/descriptive_catalog.py \
             --out local-data/mini-ai/forge-study/descriptive_catalog.json \
             --report local-data/mini-ai/forge-study/descriptive_catalog_report.json \
-            --history local-data/mini-ai/forge-study/dataset.json
+            --history local-data/mini-ai/forge-study/dataset.json \
+            --previews-dir local-data/mini-ai/forge-study/review_previews
 
       - name: Index 3D descriptions and study relevant references
         run: |
@@ -135,6 +136,7 @@ jobs:
             local-data/mini-ai/forge-study/dataset.json
             local-data/mini-ai/forge-study/grounded_description_coverage.json
             local-data/mini-ai/forge-study/grounded_pairs/*.json
+            local-data/mini-ai/forge-study/review_previews/**/*.png
             local-data/mini-ai/forge-study/caption_mesh_prior/*.json
             local-data/mini-ai/forge-study/prior/*.json
             local-data/mini-ai/forge-study/relations/*.json
