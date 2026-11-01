@@ -8,6 +8,13 @@ from home_train import validate, predict, train_once, SEED
 
 
 class HomeTrainingTests(unittest.TestCase):
+    def test_all_bundled_seed_examples_match_android_geometry_bounds(self):
+        seeds = json.loads(SEED.read_text(encoding="utf-8"))
+        self.assertEqual(len(seeds), 88)
+        for index, seed in enumerate(seeds):
+            with self.subTest(index=index, prompt=seed["prompt"]):
+                self.assertEqual(validate(seed)["prompt"], seed["prompt"].strip())
+
     def test_reject_invalid_dimensions(self):
         with self.assertRaises(ValueError):
             validate({"prompt": "hover racer", "length": float("nan")})
