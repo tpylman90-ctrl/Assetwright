@@ -18,7 +18,7 @@ jobs:
   study:
     name: Collect and inspect licensed shape references
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 25
     steps:
       - name: Check out Assetwright code and review request
         uses: actions/checkout@v4
@@ -32,17 +32,31 @@ jobs:
         run: |
           python -m unittest discover -s tools/mini_ai -p "test_*.py"
 
+      - name: Install free Blender for mesh feature extraction
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq blender
+          blender -b --factory-startup --disable-autoexec --python-expr "import bpy; print('BLENDER_READY', bpy.app.version_string)"
+
       - name: Study selected CC0 models with Poly Haven's official API
         run: |
           python tools/mini_ai/forge_asset_cycle.py \
             --request training/requests/forge_cycle.json \
             --output local-data/mini-ai/forge-study/report.json
 
+      - name: Train held-out evaluated geometry prior
+        run: |
+          python tools/mini_ai/shape_prior_train.py \
+            --report local-data/mini-ai/forge-study/report.json \
+            --out local-data/mini-ai/forge-study/prior
+
       - name: Publish downloadable research report
         uses: actions/upload-artifact@v4
         with:
           name: forge-cc0-shape-study
-          path: local-data/mini-ai/forge-study/report.json
+          path: |
+            local-data/mini-ai/forge-study/report.json
+            local-data/mini-ai/forge-study/prior/*.json
           retention-days: 30
           if-no-files-found: error
 
@@ -54,5 +68,5 @@ jobs:
           gh api -X POST "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
             -f state=success \
             -f context="forge/cc0-shape-study" \
-            -f description="CC0 geometry research report available; no Android weight training" \
+            -f description="CC0 Blender geometry/prior study available; Android unchanged" \
             -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
