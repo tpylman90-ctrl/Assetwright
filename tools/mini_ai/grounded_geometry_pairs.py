@@ -32,7 +32,8 @@ def valid_geometry(item:dict)->bool:
     return True
 
 
-def match(catalog:dict, research:dict)->tuple[dict,dict]:
+def match(catalog:dict, research:dict,
+          current:dict|None=None)->tuple[dict,dict]:
     if catalog.get("schema")!="assetwright-description-geometry-catalog-v1":
         raise ValueError("Unrecognized description catalog")
     if research.get("schema")!="assetwright-cc0-shape-study-v1":
@@ -49,6 +50,25 @@ def match(catalog:dict, research:dict)->tuple[dict,dict]:
             by_id[key]=None
         elif key not in by_id:
             by_id[key]=item
+    # Current-run previews are linked only if their exact geometry hash
+    # equals the cumulative training record's original source mesh.
+    previews={}
+    if isinstance(current,dict) and current.get("schema")=="assetwright-cc0-shape-study-v1":
+        for item in current.get("assets",[]):
+            geom=item.get("geometry") if isinstance(item,dict) else None
+            if not isinstance(geom,dict):
+                continue
+            views=geom.get("review_preview_views")
+            identifier=item.get("id")
+            if not isinstance(identifier,str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,100}",identifier):
+                continue
+            if not isinstance(views,list) or not views:
+                continue
+            allowed={"three_quarter","side","top"}
+            names=[name for name in views if name in allowed]
+            if names:
+                previews[identifier]=(geom.get("source_sha256"),[
+                    f"review_previews/{identifier}/{name}.png" for name in names])
     used_sha=set()
     rows=[]
     for row in catalog.get("records",[]):
@@ -83,6 +103,9 @@ def match(catalog:dict, research:dict)->tuple[dict,dict]:
             "component_graph":mesh.get("component_graph"),
             "semantic_part_labels_status":"not_verified",
             "verified_component_roles":[],
+            "review_preview_artifacts":(
+                previews[id][1] if id in previews and previews[id][0]==sha else []
+            ),
         }
         rows.append(pairs)
         if len(rows)>=MAX_PAIRS:
@@ -96,15 +119,21 @@ def match(catalog:dict, research:dict)->tuple[dict,dict]:
         "with_spatial_graph":sum(isinstance(p.get("component_graph"),dict)
                                  and p["component_graph"].get("part_count",0)>=2 for p in rows),
         "with_verified_component_roles":0,
+        "pairs_with_rendered_multiview_evidence":sum(
+            bool(p["review_preview_artifacts"]) for p in rows
+        ),
         "note":"Publisher caption + exact Poly Haven source object + Blender mesh SHA. No inferred part identity."
     }
     return {"schema":SCHEMA,"pairs":rows},report
 
 
-def run(catalog_file:Path,study_file:Path,out:Path,report_file:Path)->dict:
+def run(catalog_file:Path,study_file:Path,out:Path,report_file:Path,
+        current_report:Path|None=None)->dict:
     catalog=json.loads(catalog_file.read_text(encoding="utf-8"))
     research=json.loads(study_file.read_text(encoding="utf-8"))
-    matches,report=match(catalog,research)
+    fresh=(json.loads(current_report.read_text(encoding="utf-8"))
+           if current_report is not None and current_report.is_file() else None)
+    matches,report=match(catalog,research,fresh)
     out.parent.mkdir(parents=True,exist_ok=True)
     report_file.parent.mkdir(parents=True,exist_ok=True)
     out.write_text(json.dumps(matches,ensure_ascii=False,separators=(",",":"))+"\n",encoding="utf-8")
@@ -119,5 +148,6 @@ if __name__=="__main__":
     cli.add_argument("--study",type=Path,required=True)
     cli.add_argument("--out",type=Path,required=True)
     cli.add_argument("--report",type=Path,required=True)
+    cli.add_argument("--current-report",type=Path)
     x=cli.parse_args()
-    run(x.catalog,x.study,x.out,x.report)
+    run(x.catalog,x.study,x.out,x.report,x.current_report)
