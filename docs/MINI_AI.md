@@ -1,4 +1,4 @@
-# Assetwright Mini AI — offline Android v0.1
+# Assetwright Mini AI — offline Android v0.1/v0.2
 
 This is the **first working foundation**, not a general-purpose learned text-to-3D
 model. It deliberately has a narrow supported family: hover SUVs, coupes, racers
@@ -65,6 +65,12 @@ Run its tests with:
 ```bash
 python -m unittest discover -s tools/mini_ai -p 'test_*.py'
 ```
+
+## On-device corrections and private home training (v0.2)
+
+The Android app now has sliders for six shape parameters and an opt-in **Approve design · Teach Mini AI** button. Approved prompt/parameter examples persist in private device storage and are used on the next generation, with exact prompt corrections taking precedence over synthetic seeds. The companion **offline home training watcher** prepares a quality-gated example-memory pack from user-exported approval records; Android can import the resulting approved pack manually. This is not neural network fine-tuning or automatic geometry understanding from GLBs.
+
+See [training setup and privacy](MINI_AI_TRAINING.md) for instructions and limitations.
 
 ## Planned next gates
 
