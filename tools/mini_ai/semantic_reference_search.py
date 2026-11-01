@@ -31,7 +31,7 @@ def words(text:str)->list[str]:
 def record_text(row:dict)->str:
     return " ".join([
         row.get("name",""),row.get("name",""),
-        row.get("publisher_description",""),
+        row.get("publisher_description",""),row.get("caption_text",""),
         row.get("category","")," ".join(row.get("tags",[]) or []),
         " ".join(" ".join(str(v) for v in (value if isinstance(value,list) else [value]))
                  for value in (row.get("facets") or {}).values())
@@ -75,7 +75,8 @@ def search(idx:dict,query:str,top:int=5)->list[dict]:
             results.append({
                 "id":row["id"],"name":row["name"],
                 "category":row["category"],"source_page":row["source_page"],
-                "description":row["publisher_description"][:360],
+                "description":(row.get("publisher_description") or row.get("caption_text",""))[:360],
+                "description_origin":row.get("caption_origin") if row.get("caption_text") else row.get("description_origin","publisher_metadata"),
                 "geometry_verified":bool(row.get("verified_blender_geometry")),
                 "score":round(score,5)})
     results.sort(key=lambda r:(-r["score"],r["id"]))
@@ -88,7 +89,7 @@ def demo(source:Path,out:Path,queries:list[str])->dict:
         raise ValueError("Wrong caption corpus")
     i=index(corpus["records"])
     data={"schema":"assetwright-reference-retrieval-demo-v1",
-          "source":"Poly Haven CC0",
+          "source":corpus.get("source","CC0 catalog"),
           "total_indexed":len(corpus["records"]),
           "disclaimer":"Textual relevance only, not verified matching mesh components",
           "queries":[{"prompt":query,"matches":search(i,query)}
