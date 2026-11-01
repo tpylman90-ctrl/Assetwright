@@ -1,8 +1,8 @@
 {
   "schema": "assetwright-forge-lessons-v1",
   "model_type": "reviewed-shape-lessons",
-  "version": 2,
-  "description": "Original Forge-authored vehicle shape recipes: eight initial style examples and twelve parameter-controlled contrast lessons. Bounds and contrast invariants are CI checked; visual mesh quality is not yet verified.",
+  "version": 3,
+  "description": "Forge lessons v3: original parameter shape recipes plus bounded, original labeled construction supervision for hover-unit counts and mount style. No third-party semantic labels inferred from source geometry.",
   "licenses": [
     "Original work by Assetwright"
   ],
@@ -303,5 +303,115 @@
     ],
     "pair_count": 6,
     "notes": "Each paired lesson changes exactly one parameter while holding the other five constant; this tests controllable shape semantics, not independent mesh-generation ability."
-  }
+  },
+  "semantic_lessons": [
+    {
+      "prompt": "hover aircraft with two hidden magnetic repulsors",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "hover sport utility with two flush lift pads",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "futuristic hover racer fitted with two recessed hover units",
+      "lift_cells": 2,
+      "mount": "tucked",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "hover aircraft with two visible magnetic repulsors",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "hover sport utility with two outboard lift pads",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "futuristic hover racer fitted with two outrigger hover units",
+      "lift_cells": 2,
+      "mount": "exposed",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "hover aircraft with four hidden magnetic repulsors",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "hover sport utility with four flush lift pads",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "futuristic hover racer fitted with four recessed hover units",
+      "lift_cells": 4,
+      "mount": "tucked",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "hover aircraft with four visible magnetic repulsors",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "hover sport utility with four outboard lift pads",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "futuristic hover racer fitted with four outrigger hover units",
+      "lift_cells": 4,
+      "mount": "exposed",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "hover aircraft with six hidden magnetic repulsors",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "hover sport utility with six flush lift pads",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "futuristic hover racer fitted with six recessed hover units",
+      "lift_cells": 6,
+      "mount": "tucked",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "hover aircraft with six visible magnetic repulsors",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "hover sport utility with six outboard lift pads",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "forge-original-reviewed-construction-recipe"
+    },
+    {
+      "prompt": "futuristic hover racer fitted with six outrigger hover units",
+      "lift_cells": 6,
+      "mount": "exposed",
+      "origin": "forge-original-reviewed-construction-recipe"
+    }
+  ]
 }
