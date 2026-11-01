@@ -6,7 +6,9 @@
 
 Assetwright targets game-ready assets with mobile-friendly mesh budgets and Godot-ready GLB output. It is not a 3D-printing workflow.
 
-The active Blender path is the hosted GitHub Actions workflow, which runs on GitHub's Ubuntu runner and stores the GLB and preview as a three-day artifact. This keeps generation moving without the creator's PC. The current generator is a procedural cargo-drone demo; prompt-driven geometry and Android integration are future steps. A private Windows runner remains an optional higher-detail path for later. See [the hosted Blender demo](docs/BLENDER_CI.md) and [the private workbench notes](docs/PRIVATE_BLENDER_WORKBENCH.md).
+**Offline Mini AI v0.1** is now wired into the Android generation screen: it predicts hover-vehicle shape parameters from 88 original labeled examples, constructs native 3D geometry, provides a touch-rotatable preview, and saves binary GLB. The first version covers hover SUVs, coupes and racers; it is an example-based predictor plus a procedural mesher, **not** a general neural text-to-3D generator. Reference images are not processed yet. See [Mini AI](docs/MINI_AI.md) for design and validation limits.
+
+The existing Blender workflows remain available through GitHub Actions for Mantis, Parallax and other higher-detail procedural models. They are distinct from the Android generator. See [hosted Blender demo](docs/BLENDER_CI.md) and [private workbench notes](docs/PRIVATE_BLENDER_WORKBENCH.md).
 
 ## Android app
 
