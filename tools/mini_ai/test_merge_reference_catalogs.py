@@ -16,7 +16,7 @@ class CombinedCatalogTests(unittest.TestCase):
              "records":[{"uid":"0"*32,"name":"Mechanical engine","object_license":"CC0-1.0",
                          "metadata_license":"ODC-BY-1.0",
                          "publisher_description":"Engine assembly",
-                         "cap3d_generated_caption":"Metal motor with curved housing and a dark intake",
+                         "cap3d_generated_caption":"Mechanical engine motor with curved housing and a dark intake",
                          "cap3d_caption_license":"ODC-BY-1.0",
                          "cap3d_source":"https://huggingface.co/datasets/tiange/Cap3D",
                          "metadata_source":"https://huggingface.co/datasets/allenai/objaverse",
@@ -32,6 +32,21 @@ class CombinedCatalogTests(unittest.TestCase):
         matches=search(index(merged["records"]),"curved motor housing",top=2)
         self.assertEqual(matches[0]["id"],"objaverse_"+"0"*32)
         self.assertIn("model-generated",matches[0]["description_origin"])
+
+    def test_wrong_material_is_not_indexed_as_verified_reference(self):
+        poly={"schema":"assetwright-description-geometry-catalog-v1","records":[]}
+        obj={"schema":"assetwright-objaverse-verified-cc0-captions-v1","records":[
+            {"uid":"e"*32,"name":"Bronze bell","object_license":"CC0-1.0",
+             "metadata_license":"ODC-BY-1.0",
+             "publisher_description":"A cast bronze Roman bell",
+             "cap3d_generated_caption":"A small white ceramic bell",
+             "cap3d_caption_license":"ODC-BY-1.0"}]}
+        merged,report=combine(poly,obj)
+        self.assertEqual(report["objaverse_with_cap3d"],1)
+        self.assertEqual(report["cap3d_quarantined_from_retrieval"],1)
+        self.assertEqual(merged["records"][0]["caption_agreement"],"material_conflict")
+        self.assertEqual(merged["records"][0]["caption_text"],"")
+        self.assertIn("ceramic",merged["records"][0]["quarantined_caption"])
 
     def test_mislabeled_generated_caption_fails_closed(self):
         poly={"schema":"assetwright-description-geometry-catalog-v1","records":[]}
