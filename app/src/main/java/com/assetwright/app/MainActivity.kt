@@ -374,6 +374,7 @@ private fun AssetwrightScreen() {
                                 generatedAsset = built
                                 pendingForgeProposal = null
                                 status = "Generated offline: " + spec.title + " • " +
+                                    spec.driveCount + " engines • " +
                                     built.triangleCount + " triangles. Drag the model to rotate it." +
                                     if (selectedImage != null) " Reference image not yet used." else ""
                             } catch (ex: Exception) {
@@ -692,7 +693,8 @@ private fun PreviewCard(asset: GeneratedAsset?) {
                 )
                 Text(
                     if (asset == null) "Describe a hover vehicle to create a real mesh"
-                    else "Drag to rotate  ·  " + asset.triangleCount + " triangles  ·  GLB export",
+                    else "Drag to rotate  ·  " + asset.spec.driveCount + " engines  ·  " +
+                        asset.triangleCount + " triangles  ·  GLB export",
                     color = TextMuted, fontSize = 11.sp
                 )
             }
