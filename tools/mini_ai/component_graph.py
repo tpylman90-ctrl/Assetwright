@@ -37,7 +37,7 @@ def build_graph(parts: list[dict], overall_min: list[float], overall_max: list[f
         if any(t < 0 for t in extents):
             continue
         center = [(x+y)/2 for x,y in zip(a,b)]
-        usable.append((index, triangles, a, b, extents, center, part.get("role_proposal"))))
+        usable.append((index, triangles, a, b, extents, center, part.get("role_proposal")))
     if not usable:
         return {"schema": SCHEMA, "part_count": 0, "nodes": [],
                 "edges": [], "pair_count": 0, "note": "No valid mesh-object bounding boxes"}
