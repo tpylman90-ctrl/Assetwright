@@ -12,8 +12,8 @@ The user needs only to ask in a ChatGPT conversation with GitHub connected.
    request (or can be manually dispatched with `workflow_dispatch`).
 4. The action uses **Poly Haven's official public API** with an identifying
    User-Agent. It selects at most 8 mechanical/vehicle-related CC0 models,
-   examines metadata (mesh budgets, bounding ratios), and attempts to
-   inspect small, explicitly linked .glb variants if available.
+   examines metadata and extracts normalized geometry descriptors from
+   supported, explicitly linked Blender/FBX/OBJ/GLB/ZIP source files.
 5. The compact report is uploaded as the `forge-cc0-shape-study` Actions
    artifact. No downloaded GLB is committed into GitHub. No credentials.
 6. Forge can examine the report during the same conversation, improve
@@ -47,6 +47,54 @@ The user can request a new interactive training cycle whenever desired.
 - Not every Poly Haven model is a vehicle. Semantic suitability needs
   independent review; unrelated object geometry is not silently injected
   into the hover-vehicle predictor.
+
+## Cycle 2 — real geometry feature extraction and shape-prior fitting
+
+The updated research workflow supports Blender-native .blend projects, .fbx,
+.obj, .glb, and ZIP archives containing one of those formats. It uses the
+official Poly Haven file listing, never invents download URLs, enforces a
+32 MiB per-download cap and bounded archive extraction, and processes each
+model in temporary GitHub runner storage with Blender scripts disabled.
+
+The Blender process measures eight **dimensionless** descriptors:
+
+- Sorted bounding-box axis ratios (orientation invariant)
+- Relative mesh-object count
+- Triangle-count fraction
+- Vertices-per-triangle ratio
+- Largest mesh component's triangle share
+- Surface area normalized by object dimensions
+- Median triangle area normalized by object dimensions
+
+These features are geometric measurements. They do not preserve an entire
+mesh, identify wheels or doors reliably, or represent the actual modeling
+steps used by the source artist. Model names and raw scene data aren't
+included in the derived descriptor.
+
+A separate pure-Python geometric learner fits two geometry prototypes
+(k-means centroids) against those features, reserves a source-disjoint
+validation set, and compares held-out reconstruction distance against a
+one-centroid baseline. The study publishes a training report and compact
+candidate prior when at least four distinct models are valid.
+
+A candidate prior is promoted to a **validated study artifact** only when
+its held-out error doesn't exceed the baseline. It is **not** promoted to
+Android, because broad real-world object geometry cannot yet be mapped
+reliably onto the vehicle builder's six controllable parameters or new
+construction operations.
+
+The next stage is labeling reliable component types and their spatial
+relationships, then training a semantic part-layout/operation predictor.
+Only after that predictor passes meaningful vehicle-specific validation
+should its output format be connected to Android.
+
+### Recorded model-study outputs
+
+GitHub Actions uploads only derived JSON reports:
+`report.json`, `evaluation.json`, optionally
+`candidate_prior.json` and `validated_prior.json`.
+Third-party source mesh files and textures remain in temporary runner
+directories and are never committed or shipped with the Android APK.
 
 ## How to repeat
 
