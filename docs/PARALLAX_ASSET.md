@@ -52,3 +52,38 @@ workflow passed or that the new side profile is attractive. Check the newly gene
 side, hero three-quarter, top and rear three-quarter renders, then inspect whether the
 recesses are open and the aft haunch blends properly. Geometry, LOD, export and Godot
 readiness must be verified from the new workflow outputs.
+
+
+## V2 polygon optimization (after the 125,908-triangle failed build)
+
+The V2 sculptural side-body pass initially exceeded the 120,000-triangle ceiling
+by 5,908 triangles. In that build the evaluated mesh breakdown was:
+
+| Assembly group | Evaluated triangles before optimization |
+| --- | ---: |
+| Body | 83,604 |
+| Cockpit | 21,524 |
+| Propulsion and lighting | 20,780 |
+| **Total** | **125,908** |
+
+The corrective pass reduces the twin ceramic shoulder meshes from three
+subdivision levels to two. This retains their V2 control sections, haunch
+profiles and the concave side-rocker trench while reducing their subdivision
+quads by approximately 75% (about 40,000 fewer triangles across both
+shoulders, before accounting for Boolean cuts and other evaluated modifiers).
+Default radial lift-shell and rear-drive ellipse resolution is reduced from
+64 to 48 samples to avoid allocating excess geometry to small machined rings.
+The hard-surface helper also enables Auto Smooth before weighted-normal
+evaluation when the Blender version exposes that property.
+
+The generator now writes the 20 heaviest evaluated meshes to the
+`PARALLAX_BUDGET` CI output and records them in the training JSON for targeted
+future optimization. The 120,000-triangle evaluated-mesh limit still runs
+before expensive renders and exports.
+
+**Validation requirement:** These are source-code changes, not verified
+export counts. Read the fresh GitHub Actions log and inspect the side,
+hero three-quarter, rear three-quarter, and top rendered meshes. If a
+reduction noticeably facets a reflection or weakens the sculpted shoulder
+line, distribute resolution around that curvature instead of raising
+subdivision indiscriminately.
