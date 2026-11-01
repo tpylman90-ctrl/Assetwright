@@ -86,7 +86,7 @@ private fun AssetwrightScreen() {
     var prompt by remember { mutableStateOf("") }
     var selectedImage by remember { mutableStateOf<Uri?>(null) }
     var selectedQuality by remember { mutableStateOf("Mobile") }
-    var status by remember { mutableStateOf("Offline Mini AI v0.1: describe a hover SUV, coupe, or racer to generate an editable-spec 3D mesh.") }
+    var status by remember { mutableStateOf("Offline Mini AI v0.5: create vehicles, teach shape corrections locally, and optionally receive Forge lessons.") }
     var generatedAsset by remember { mutableStateOf<GeneratedAsset?>(null) }
     var forgeRequest by remember { mutableStateOf("") }
     var pendingForgeProposal by remember { mutableStateOf<ForgeProposal?>(null) }
@@ -676,7 +676,7 @@ private fun PreviewCard(asset: GeneratedAsset?) {
                 )
             }
             Text(
-                "OFFLINE MINI AI  •  V0.1",
+                "OFFLINE MINI AI  •  V0.5",
                 modifier = Modifier.align(Alignment.TopStart).padding(16.dp),
                 color = Teal, fontSize = 10.sp,
                 fontWeight = FontWeight.Bold, letterSpacing = 1.sp
