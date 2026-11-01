@@ -19,6 +19,8 @@ from pathlib import Path
 import re
 import time
 
+from library_queue import scan_once
+
 REPO = Path(__file__).resolve().parents[2]
 SEED = REPO / "app/src/main/assets/mini_ai/training_examples.json"
 DEFAULT_INBOX = REPO / "local-data/mini-ai/inbox"
@@ -184,9 +186,20 @@ def main() -> None:
     if args.poll_seconds < 10:
         parser.error("--poll-seconds must be >= 10")
     previous = None
+    previous_library = None
+    library_folder = REPO / "local-data/mini-ai/library-inbox"
+    library_index = REPO / "local-data/mini-ai/candidates.jsonl"
     while True:
         try:
-            # Avoid repeated retraining when nothing in the inbox has changed.
+            # Independently catalog only properly licensed, reviewed GLBs.
+            # Candidate metadata never enters the parameter trainer implicitly.
+            library_files = sorted(library_folder.rglob("*")) if library_folder.exists() else []
+            library_state = tuple((str(p), p.stat().st_mtime_ns, p.stat().st_size)
+                                  for p in library_files if p.is_file())
+            if library_state != previous_library:
+                print(json.dumps(scan_once(library_folder, library_index), indent=2), flush=True)
+                previous_library = library_state
+            # Avoid repeated retraining when nothing in the feedback inbox has changed.
             paths = sorted(args.inbox.glob("*.jsonl")) if args.inbox.exists() else []
             state = hashlib.sha256()
             for path in paths:
