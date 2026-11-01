@@ -91,27 +91,95 @@ def subd(o,level):
 SECTIONS=[
  (-3.00,.48,.15,.60,.33),(-2.93,.69,.15,.63,.30),(-2.65,1.08,.18,.69,.28),
  (-2.10,1.34,.34,.77,.29),(-1.50,1.47,.50,.85,.31),(-1.02,1.50,.61,.92,.33),
- (-.35,1.46,.64,.95,.35),(.40,1.53,.64,1.01,.39),(1.00,1.68,.58,1.10,.42),
- (1.42,1.75,.47,1.16,.44),(1.92,1.67,.30,1.12,.44),(2.40,1.47,.20,1.00,.44),
- (2.67,1.25,.18,.85,.44),(2.72,1.20,.18,.81,.45)]
+ (-.35,1.46,.64,.95,.35),(.40,1.57,.64,1.01,.39),(1.00,1.73,.58,1.12,.42),
+ (1.42,1.85,.47,1.19,.45),(1.92,1.78,.30,1.17,.49),(2.40,1.51,.20,1.02,.58),
+ (2.67,1.27,.18,.88,.64),(2.72,1.20,.18,.85,.64)]
 CANOPY=[(-1.24,.51,.93,1.00),(-1.18,.56,.97,1.10),(-.92,.61,.99,1.37),
  (-.52,.63,1.01,1.60),(-.13,.64,1.03,1.69),(.35,.63,1.06,1.70),
  (.70,.59,1.10,1.56),(1.02,.52,1.14,1.34),(1.15,.47,1.16,1.20)]
 
 
-def shoulder(side,mat):
-    v=[];f=[];n=12
+def shoulder(side,mat,channel_mat):
+    """Sculpted body with a true concave rocker trench and a loaded rear shoulder.
+    The dark recess is an actual strip of the continuous control mesh, not
+    a floating black decal or a straight pipe glued over a capsule.
+    """
+    v=[];f=[];n=16
     for y,w,inner,top,bot in SECTIONS:
-        points=[(inner,bot+.07),(inner,top-.09),(inner+.025,top-.025),
-                (inner+.12,top+.035),(w-.25,top+.10),(w-.10,top+.075),
-                (w-.025,top-.01),(w,top-.17),(w-.025,bot+.15),
-                (w-.09,bot+.035),(w-.20,bot-.005),(inner+.06,bot+.015)]
+        span=w-inner
+        rear_crest=.069*math.exp(-((y-1.46)/.78)**2)
+        points=[
+            (inner,bot+.075), (inner,top-.09), (inner+.025,top-.03),
+            (inner+.12,top+.035), (inner+span*.58,top+.10),
+            (inner+span*.77,top+.135+rear_crest),
+            (w-.105,top+.10+rear_crest),
+            (w-.035,top+.015+rear_crest*.35),
+            (w+.014,top-.12), (w-.002,bot+.32),
+            (w-.080,bot+.265), (w-.18,bot+.20),
+            (w-.205,bot+.16), (w-.075,bot+.085),
+            (w-.12,bot+.008), (inner+.06,bot+.015)]
         v.extend((side*x,y,z) for x,z in points)
     for j in range(len(SECTIONS)-1):
         for i in range(n):f.append((j*n+i,j*n+(i+1)%n,(j+1)*n+(i+1)%n,(j+1)*n+i))
     f.extend([tuple(reversed(range(n))),tuple(range((len(SECTIONS)-1)*n,len(SECTIONS)*n))])
     if side<0:f=[tuple(reversed(face)) for face in f]
-    return subd(mesh(('Port' if side<0 else 'Starboard')+' sculpted ceramic shoulder',v,f,mat),3)
+    o=mesh(('Port' if side<0 else 'Starboard')+' sculpted ceramic shoulder',v,f,mat)
+    o.data.materials.append(channel_mat)
+    for j in range(len(SECTIONS)-1):
+        mid_y=(SECTIONS[j][0]+SECTIONS[j+1][0])*.5
+        if -2.4<mid_y<2.48:
+            for k in (10,11):o.data.polygons[j*n+k].material_index=1
+    return subd(o,3)
+
+
+def side_intake_cutter(name,side,mat):
+    """Closed tapered cutter: long leading knife edge, deep center, rising aft exit."""
+    sections=[(-.86,.685,.735),(-.69,.61,.82),(-.35,.565,.89),
+              (.19,.565,.94),(.56,.605,.91),(.80,.72,.79)]
+    v=[];f=[]
+    for y,lo,hi in sections:
+        v.extend([(side*1.19,y,lo),(side*2.10,y,lo),
+                  (side*2.10,y,hi),(side*1.19,y,hi)])
+    f.append((3,2,1,0))
+    for j in range(len(sections)-1):
+        for i in range(4):
+            f.append((j*4+i,j*4+(i+1)%4,(j+1)*4+(i+1)%4,(j+1)*4+i))
+    f.append(tuple(range((len(sections)-1)*4,len(sections)*4)))
+    if side<0:f=[tuple(reversed(q)) for q in f]
+    return mesh(name,v,f,mat,False)
+
+
+def sculpted_rocker(side,mat):
+    """Deep, swept lower aerodynamic blade following each lower shoulder."""
+    v=[];f=[];sections=SECTIONS[3:13]
+    for y,w,inner,top,bot in sections:
+        sweep=.055*math.sin((y+2.1)/4.8*math.pi)
+        x=w-.095;z=bot+.045+sweep
+        v.extend((side*xx,y,zz) for xx,zz in [
+            (x-.095,z+.09),(x+.023,z+.027),
+            (x+.033,z-.020),(x-.070,z-.075)])
+    for j in range(len(sections)-1):
+        for i in range(4):f.append((j*4+i,j*4+(i+1)%4,(j+1)*4+(i+1)%4,(j+1)*4+i))
+    f.extend([(3,2,1,0),tuple(range((len(sections)-1)*4,len(sections)*4))])
+    if side<0:f=[tuple(reversed(q)) for q in f]
+    return subd(mesh(('Port' if side<0 else 'Starboard')+' swept undercut rocker',v,f,mat),1)
+
+
+def quarter_haunch(side,mat):
+    """Fitted compound-curved rear shoulder fairing, tapered flush at both ends."""
+    stations=[(.72,1.31,1.20,.016),(1.05,1.52,1.29,.065),
+              (1.43,1.69,1.45,.103),(1.91,1.62,1.39,.087),
+              (2.37,1.42,1.18,.014)]
+    v=[];f=[]
+    for y,x,z,halfwidth in stations:
+        for offset,height in [(-halfwidth,-.025),(0,.015),(halfwidth,-.025)]:
+            v.append((side*(x+offset),y,z+height))
+    for j in range(len(stations)-1):
+        for k in range(2):f.append((j*3+k,j*3+k+1,(j+1)*3+k+1,(j+1)*3+k))
+    if side<0:f=[tuple(reversed(q)) for q in f]
+    o=subd(mesh(('Port' if side<0 else 'Starboard')+' formed rear haunch',v,f,mat),1)
+    thick=o.modifiers.new('Fairing bonded edge','SOLIDIFY');thick.thickness=.030
+    return o
 
 
 def center_patch(name,rows,mat,subdivision=2):
@@ -171,7 +239,7 @@ def build(out,shape_check=False):
     glass=material('08 Smoked sapphire canopy',(.027,.10,.15),.22,.13,0,.66)
     upholstery=material('09 Petrol seat fabric',(.04,.095,.11),.05,.72)
     gold=material('10 Warm brass badge',(.58,.35,.11),.78,.31)
-    body=[shoulder(-1,ivory),shoulder(1,ivory)]
+    body=[shoulder(-1,ivory,black),shoulder(1,ivory,black)]
     # Apply the organic control surfaces before cutting true through-body lift wells.
     for ob in body:
         apply(ob,ob.modifiers[0])
@@ -180,9 +248,8 @@ def build(out,shape_check=False):
             cutter=cylinder('TEMP lift aperture',(side*x,y,.8),r,2.5,black,64)
             m=ob.modifiers.new(label+' lift well aperture','BOOLEAN');m.operation='DIFFERENCE';m.solver='EXACT';m.object=cutter
             apply(ob,m);bpy.data.objects.remove(cutter,do_unlink=True)
-        cutter=box('TEMP side air pocket',(side*1.51,.05,.745),(.34,1.10,.25),black,.055)
-        for mod in list(cutter.modifiers):apply(cutter,mod)
-        m=ob.modifiers.new('Recessed side intake','BOOLEAN');m.operation='DIFFERENCE';m.solver='EXACT';m.object=cutter
+        cutter=side_intake_cutter('TEMP tapered side intake',side,black)
+        m=ob.modifiers.new('Deep tapered side intake','BOOLEAN');m.operation='DIFFERENCE';m.solver='EXACT';m.object=cutter
         apply(ob,m);bpy.data.objects.remove(cutter,do_unlink=True)
         b=ob.modifiers.new('Lift aperture edge break' ,'BEVEL');b.width=.009;b.segments=2;b.limit_method='ANGLE';b.angle_limit=.7
     # A continuous dark belly supplies a real cockpit floor and a tapered, raised tail.
@@ -199,17 +266,33 @@ def build(out,shape_check=False):
     center_patch('Rear dorsal spine',[(.96,.11,1.22),(1.10,.12,1.28),(1.65,.10,1.31),(2.20,.075,1.19),(2.62,.055,.98)],teal,2)
     canopy_surface(glass)
     for side,label in [(-1,'Port'),(1,'Starboard')]:
+        sculpted_rocker(side,teal)
+        quarter_haunch(side,ivory)
+        tube(label+' rear haunch inset seam',[(side*1.31,.76,1.225),(side*1.53,1.08,1.325),
+             (side*1.69,1.46,1.48),(side*1.62,1.92,1.42),(side*1.43,2.35,1.205)],.009,teal)
         tube(label+' canopy compression seal',[(side*w,y,z+.006) for y,w,z,p in CANOPY],.026,black)
         tube(label+' ceramic canopy sill',[(side*(w+.036),y,z-.025) for y,w,z,p in CANOPY],.018,ivory)
-        box(label+' side intake inner wall',(side*1.355,.05,.745),(.018,.91,.15),black,.015)
-        for yy in (-.28,.02,.32):
-            box(label+' side intake stator',(side*1.40,yy,.745),(.075,.022,.16),silver,.008)
-        tube(label+' side intake field line',[(side*1.38,-.38,.745),(side*1.38,.44,.745)],.008,violet)
+        # The open intake has a recessed backing tray, leaned splitters and a
+        # continuous upper lip; the geometry follows the actual tapered cut.
+        box(label+' intake shadow plenum',(side*1.174,-.025,.735),(.045,1.32,.31),black,.025)
+        for yy,height in [(-.53,.15),(-.23,.245),(.12,.275),(.46,.24)]:
+            box(label+' canted intake splitter',(side*1.37,yy,.73),(.20,.028,height),silver,.010,(-.12,0,-.17))
+        tube(label+' sculpted intake eyebrow',[(side*1.50,-.80,.76),(side*1.49,-.63,.855),
+            (side*1.49,-.30,.93),(side*1.53,.23,.98),(side*1.62,.67,.94)],.027,teal)
+        tube(label+' lower intake sill',[(side*1.48,-.70,.58),(side*1.49,-.35,.54),
+            (side*1.52,.20,.54),(side*1.61,.70,.66)],.022,silver)
+        tube(label+' recessed intake field core',[(side*1.21,-.53,.615),
+            (side*1.21,-.16,.60),(side*1.21,.30,.61),(side*1.21,.60,.69)],.011,violet)
         # Headlamps sit in molded front corner channels.
         lamp=[(side*.76,-2.70,.77),(side*.98,-2.53,.82),(side*1.15,-2.24,.86)]
         tube(label+' front lamp recess',lamp,.034,black);tube(label+' front lamp emitter',[(x,y-.006,z+.018) for x,y,z in lamp],.012,white)
         # Continuous lower accent traces the actual side chine and the forward pitch.
-        tube(label+' lower field inlay',[(side*1.05,-2.30,.39),(side*1.40,-1.40,.42),(side*1.40,-.20,.48),(side*1.63,1.25,.56),(side*1.43,2.23,.59)],.014,violet)
+        rocker_trace=[(side*1.18,-2.10,.37),(side*1.39,-1.50,.40),
+                      (side*1.40,-.35,.45),(side*1.51,.42,.49),
+                      (side*1.67,1.14,.55),(side*1.68,1.86,.63),
+                      (side*1.43,2.38,.72)]
+        tube(label+' recessed rocker shadow lip',rocker_trace,.030,black)
+        tube(label+' lower energy filament',[(x+side*.022,y,z+.005) for x,y,z in rocker_trace],.011,violet)
         tube(label+' rear lamp recess',[(side*.74,2.47,1.02),(side*1.10,2.47,1.04),(side*1.39,2.26,1.10)],.032,black)
         tube(label+' rear tail lamp',[(side*.74,2.485,1.035),(side*1.10,2.485,1.055),(side*1.39,2.275,1.115)],.011,amber)
         # Solid roots and a thin trailing tip create a swept split tail, not add-on boxes.
@@ -327,9 +410,12 @@ def build(out,shape_check=False):
     collision,_=stats(proxy);export(os.path.join(out,'parallax_01_collision.glb'),proxy)
     for o in proxy:bpy.data.objects.remove(o,do_unlink=True)
     record={'asset_id':'parallax_01_hover_coupe','display_name':'Parallax / 01',
-      'generator':'Original procedural Blender control surfaces, integrated lift wells and split drive v1',
+      'generator':'Parallax v2: contoured rocker trench, tapered deep intakes, fused shoulder-to-haunch transitions and swept lower aero blade',
       'blender_version':bpy.app.version_string, 'prompt':'An original two-seat hover coupe designed by Forge without a reference image: broad porcelain titanium shoulders, midnight petrol belly, a continuous smoked sapphire canopy, four through-body lift ducts, swept split tail fins, flattened oval rear drives, violet field illumination and restrained ice-white front lights.',
       'negative_prompt':'No wheels, no primitive boxes as the main body, no weapons, no paid provider assets, no studio geometry in exports.',
+       'v2_surface_design':['continuous concave rocker control mesh','swept dark lower aero blade',
+                            'deep tapered side intake with backing plenum','loaded shoulder-to-rear haunch control surfaces',
+                            'formed rear quarter fairing and molded trailing shoulder'],
       'reference_images':[], 'axis_convention':{'forward':'-Y','right':'+X','up':'+Z'},
       'game_target':{'engine':'Godot','triangle_budget':120000,'triangle_count':total,'assembly_triangles':groups,'lods':lods,'collision_triangles':collision},
       'materials':'Portable glTF PBR color/metal/roughness/emission factors; transparent canopy. Smart-projected UVs. No high-to-low or AO baking.',
