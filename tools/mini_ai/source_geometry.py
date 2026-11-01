@@ -10,6 +10,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import shutil
 import stat
 import subprocess
 import tempfile
@@ -166,7 +167,8 @@ def unpack_source(archive: Path, destination: Path) -> Path:
         return source
 
 
-def inspect_with_blender(candidate: dict, *, blender: str = "blender") -> dict:
+def inspect_with_blender(candidate: dict, *, blender: str = "blender",
+                         preview_dir: Path | None = None) -> dict:
     """Only descriptor leaves the ephemeral workdir. No model is persisted."""
     with tempfile.TemporaryDirectory(prefix="assetwright_source_") as tmp:
         folder = Path(tmp)
@@ -175,10 +177,14 @@ def inspect_with_blender(candidate: dict, *, blender: str = "blender") -> dict:
         if candidate["format"] == "zip":
             source = unpack_source(source, folder)
         output = folder / "geometry.json"
+        preview_tmp = folder / "review_previews"
+        args = [blender, "--background", "--threads", "2", "--factory-startup",
+                "--disable-autoexec", "--python", str(BLENDER_SCRIPT),
+                "--", str(source), str(output)]
+        if preview_dir is not None:
+            args.append(str(preview_tmp))
         result = subprocess.run(
-            [blender, "--background", "--threads", "2", "--factory-startup",
-             "--disable-autoexec", "--python", str(BLENDER_SCRIPT),
-             "--", str(source), str(output)],
+            args,
             capture_output=True, text=True, timeout=BLENDER_TIMEOUT,
             check=False
         )
@@ -192,5 +198,17 @@ def inspect_with_blender(candidate: dict, *, blender: str = "blender") -> dict:
         if (not isinstance(features, list) or len(features) != FEATURE_COUNT
             or any(type(v) not in (int, float) or not 0 <= v <= 1 for v in features)):
             raise ValueError("Invalid Blender feature vector")
+        previews = []
+        if preview_dir is not None:
+            for name in ("three_quarter", "side", "top"):
+                img = preview_tmp / (name + ".png")
+                if not img.is_file() or not 100 <= img.stat().st_size <= 2*1024*1024:
+                    continue
+                if img.open("rb").read(8) != b"\x89PNG\r\n\x1a\n":
+                    continue
+                preview_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(img, preview_dir / img.name)
+                previews.append(name)
         return {**data, **provenance, "source_format": source.suffix[1:],
-                "geometry_method": "blender-headless-v1"}
+                "geometry_method": "blender-headless-v1",
+                "review_preview_views": previews}
