@@ -37,6 +37,7 @@ class StudyDatasetTests(unittest.TestCase):
         result=merge(new,old)
         self.assertEqual(result["source_count"],3)
         self.assertEqual(result["cycles"],[4,5])
+        self.assertEqual(result["attempted_ids"],["asset1","asset2","asset3"])
         self.assertTrue(all(a["license"]=="CC0-1.0" for a in result["assets"]))
         self.assertNotIn("unneeded_prompt",str(result))
         self.assertNotIn("unneeded_original_path",str(result))
