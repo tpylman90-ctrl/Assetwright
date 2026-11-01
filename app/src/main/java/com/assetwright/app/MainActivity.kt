@@ -2,6 +2,8 @@ package com.assetwright.app
 
 import android.net.Uri
 import androidx.compose.ui.platform.LocalContext
+import com.assetwright.app.mini.ForgeProposal
+import com.assetwright.app.mini.ForgeReview
 import com.assetwright.app.mini.GeneratedAsset
 import com.assetwright.app.mini.GlbWriter
 import com.assetwright.app.mini.MiniAi
@@ -82,6 +84,8 @@ private fun AssetwrightScreen() {
     var selectedQuality by remember { mutableStateOf("Mobile") }
     var status by remember { mutableStateOf("Offline Mini AI v0.1: describe a hover SUV, coupe, or racer to generate an editable-spec 3D mesh.") }
     var generatedAsset by remember { mutableStateOf<GeneratedAsset?>(null) }
+    var forgeRequest by remember { mutableStateOf("") }
+    var pendingForgeProposal by remember { mutableStateOf<ForgeProposal?>(null) }
     val context = LocalContext.current
     var localExamples by remember(context) {
         mutableStateOf(TrainingStore.approved(context))
@@ -138,6 +142,42 @@ private fun AssetwrightScreen() {
                     status = "GLB exported successfully. Ready to import into Godot."
                 } catch (ex: Exception) {
                     status = "Export failed: " + (ex.message ?: "unknown error")
+                }
+            }
+        }
+    )
+
+    val forgeExport = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/zip"),
+        onResult = { uri ->
+            val asset = generatedAsset
+            if (uri != null && asset != null) {
+                try {
+                    val data = ForgeReview.reviewBundle(asset, forgeRequest)
+                    val out = context.contentResolver.openOutputStream(uri)
+                        ?: error("Unable to create review bundle")
+                    out.use { it.write(data) }
+                    status = "Saved private Forge review bundle. Attach the ZIP in our ChatGPT conversation for 3D analysis."
+                } catch (ex: Exception) {
+                    status = "Forge review export failed: " + (ex.message ?: "unknown error")
+                }
+            }
+        }
+    )
+    val forgeImport = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument(),
+        onResult = { uri ->
+            val current = generatedAsset
+            if (uri != null && current != null) {
+                try {
+                    val source = context.contentResolver.openInputStream(uri)
+                        ?.bufferedReader()?.use { it.readText() }
+                        ?: error("Could not read proposed correction")
+                    pendingForgeProposal = ForgeReview.parseProposal(source, current)
+                    status = "Forge proposal loaded for preview. Confirm the correction before teaching the AI."
+                } catch (ex: Exception) {
+                    pendingForgeProposal = null
+                    status = "Forge proposal rejected: " + (ex.message ?: "unknown error")
                 }
             }
         }
@@ -288,6 +328,7 @@ private fun AssetwrightScreen() {
                                 val spec = MiniAi.predict(prompt, selectedQuality, trainingExamples)
                                 val built = MiniGeometry.generate(spec)
                                 generatedAsset = built
+                                pendingForgeProposal = null
                                 status = "Generated offline: " + spec.title + " • " +
                                     built.triangleCount + " triangles. Drag the model to rotate it." +
                                     if (selectedImage != null) " Reference image not yet used." else ""
@@ -318,6 +359,88 @@ private fun AssetwrightScreen() {
                             colors = ButtonDefaults.outlinedButtonColors(contentColor = Teal)
                         ) {
                             Text("Export GLB to device")
+                        }
+                        Card(
+                            shape = RoundedCornerShape(16.dp),
+                            colors = CardDefaults.cardColors(containerColor = Panel)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Text("FORGE AI REVIEW", color = Teal,
+                                    fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                                Text(
+                                    "Describe what is wrong with the model. Export a private ZIP " +
+                                        "containing the real GLB, current geometry and your instructions. " +
+                                        "Then attach it in our ChatGPT conversation.",
+                                    color = TextMuted, fontSize = 12.sp, lineHeight = 17.sp
+                                )
+                                BasicTextField(
+                                    value = forgeRequest,
+                                    onValueChange = { forgeRequest = it.take(2000) },
+                                    modifier = Modifier.fillMaxWidth()
+                                        .height(68.dp)
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .background(PanelRaised)
+                                        .padding(12.dp),
+                                    textStyle = MaterialTheme.typography.bodyMedium.copy(color = TextMain),
+                                    cursorBrush = androidx.compose.ui.graphics.SolidColor(Teal),
+                                    decorationBox = { inner ->
+                                        if (forgeRequest.isBlank()) {
+                                            Box {
+                                                Text("Example: Rear too narrow; canopy needs a longer, lower profile.",
+                                                    color = TextMuted, fontSize = 12.sp)
+                                                inner()
+                                            }
+                                        } else inner()
+                                    }
+                                )
+                                OutlinedButton(
+                                    onClick = {
+                                        forgeExport.launch(
+                                            "assetwright-forge-review-" +
+                                                System.currentTimeMillis() + ".zip"
+                                        )
+                                    },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Teal)
+                                ) {
+                                    Text("Export Forge review ZIP")
+                                }
+                                OutlinedButton(
+                                    onClick = {
+                                        forgeImport.launch(arrayOf("application/json", "text/plain"))
+                                    },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = ButtonDefaults.outlinedButtonColors(contentColor = TextMain)
+                                ) {
+                                    Text("Import Forge correction")
+                                }
+                                val proposal = pendingForgeProposal
+                                if (proposal != null) {
+                                    Text(proposal.notes, color = TextMain, fontSize = 12.sp)
+                                    Button(
+                                        onClick = {
+                                            val present = generatedAsset
+                                            if (present != null &&
+                                                ForgeReview.matchesSource(proposal, present)) {
+                                                generatedAsset = MiniGeometry.generate(proposal.target)
+                                                pendingForgeProposal = null
+                                                status = "Forge correction applied to preview only. " +
+                                                    "Inspect it; tap Approve design to teach Mini AI."
+                                            } else {
+                                                pendingForgeProposal = null
+                                                status = "Model has changed. Export a fresh review bundle."
+                                            }
+                                        },
+                                        modifier = Modifier.fillMaxWidth(),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = Teal, contentColor = Ink
+                                        )
+                                    ) { Text("Apply Forge correction to preview") }
+                                }
+                            }
                         }
                         Card(
                             shape = RoundedCornerShape(16.dp),
