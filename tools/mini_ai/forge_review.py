@@ -21,7 +21,7 @@ from import_glb import inspect_glb
 
 SCHEMA = "assetwright-forge-review-v1"
 PROPOSAL_SCHEMA = "assetwright-forge-proposal-v1"
-EXPECTED_ENTRIES = {"review.json", "model.glb", "README.txt"}
+EXPECTED_ENTRIES = {"review.json", "shape_program.json", "model.glb", "README.txt"}
 MAX_BUNDLE = 30 * 1024 * 1024
 MAX_GLB = 20 * 1024 * 1024
 PARAMS = tuple(DIMENSIONS)
@@ -46,6 +46,13 @@ def inspect_bundle(bundle: Path) -> tuple[dict, bytes]:
         if info.file_size > 24_000:
             raise ValueError("Review metadata too large")
         meta = json.loads(archive.read("review.json").decode("utf-8"))
+        if "shape_program.json" in names:
+            program = json.loads(archive.read("shape_program.json").decode("utf-8"))
+            if program.get("schema") != "assetwright-shape-program-v1" or not isinstance(program.get("operation_sequence"), list):
+                raise ValueError("Invalid procedural shape program")
+            if len(program["operation_sequence"]) > 40:
+                raise ValueError("Unexpectedly complex shape program")
+            meta["shape_program"] = program
         glb = archive.read("model.glb")
     if not isinstance(meta, dict) or meta.get("schema") != SCHEMA:
         raise ValueError("Unsupported Forge review schema")
