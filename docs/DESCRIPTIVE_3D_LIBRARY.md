@@ -87,6 +87,19 @@ The full-license scan and merged reference index are implemented in:
 `tools/mini_ai/merge_reference_catalogs.py`, and
 `.github/workflows/objaverse-cc0-catalog.yml`.
 
+The complete verified full scan processed 798,759 Objaverse annotations,
+selected 3,465 individual CC0 assets, and joined 3,068 Cap3D captions by
+exact UID. Combined with Poly Haven, that creates 3,986 CC0 model records.
+A conservative agreement gate found only 296 generated captions with strong
+lexical support from publisher metadata. It quarantines the remaining
+2,772 from automatic reference retrieval (including some plausible
+descriptions), rather than training on unverified claims. Quarantined
+captions remain separately marked for future mesh or human review.
+
+All Cap3D text, including the accepted subset, retains its separate
+ODC-By data attribution. Publisher metadata is given priority. **No
+Cap3D caption is treated as a verified geometric assembly label.**
+
 Both this collection and the Poly Haven reference catalog remain separate
 from Android runtime weights. Text matches are not verified modeling
 recipes. These data make it easier to find real, varied geometry references
