@@ -171,16 +171,30 @@ object MiniGeometry {
             Vec3(-w * .48f, front, .90f), Vec3(w * .48f, front, .90f),
             Vec3(w * .48f, front, .95f), Vec3(-w * .48f, front, .95f))
 
-        // Two fitted, compact rear propulsion outlets; not disjoint side wings.
+        // Engine count is a construction decision, not a body-dimension tweak.
+        // Three-engine layouts add a central booster between the two fitted
+        // outer drives; one-engine layouts use only the central position.
+        val drivePositions = when (spec.driveCount) {
+            1 -> listOf(0f)
+            3 -> listOf(-w * .57f, 0f, w * .57f)
+            else -> listOf(-w * .57f, w * .57f)
+        }
+        val aft = l * .475f
+        for ((index, x) in drivePositions.withIndex()) {
+            val centralBooster = spec.driveCount == 3 && index == 1
+            val r = if (centralBooster) .28f else .24f
+            val extension = if (centralBooster) .39f else .30f
+            val name = if (centralBooster) "Central booster" else "Rear drive"
+            m.cylinderY("$name housing", ENGINE, x, aft - .10f,
+                aft + extension, .81f, r, 20)
+            m.cylinderY("$name core", UNDERBODY, x, aft + extension,
+                aft + extension + .015f, .81f, r * .75f, 20)
+            m.cylinderY("$name energy ring", LIGHT, x, aft + extension + .015f,
+                aft + extension + .032f, .81f, r * .5f, 20)
+        }
+
+        // Lift repulsors are independent of propulsion count.
         for (side in listOf(-1f, 1f)) {
-            val x = side * w * .57f
-            val aft = l * .475f
-            m.cylinderY("Rear drive housing", ENGINE, x, aft - .10f,
-                aft + .30f, .81f, .24f, 20)
-            m.cylinderY("Recessed drive core", UNDERBODY, x, aft + .30f,
-                aft + .315f, .81f, .18f, 20)
-            m.cylinderY("Drive energy ring", LIGHT, x, aft + .315f,
-                aft + .332f, .81f, .12f, 20)
             for (position in listOf(-.28f, .31f)) {
                 m.discZ("Underslung repulsor", ENGINE, side * w * .70f,
                     l * position, .29f, .39f, .19f, 16)
