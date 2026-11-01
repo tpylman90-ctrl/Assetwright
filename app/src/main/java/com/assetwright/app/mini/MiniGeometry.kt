@@ -56,6 +56,27 @@ private class MeshBuilder {
                 triangles.addAll(listOf(0, i + 1, i))
                 triangles.addAll(listOf(end, end + i, end + i + 1))
             }
+            // Ensure the closed shape has outward-facing surfaces. Rings oriented
+            // along -Y or +Z have different initial winding; signed volume catches
+            // both and corrects the triangulation before normals are calculated.
+            var volumeSix = 0.0
+            for (index in triangles.indices step 3) {
+                val a = verts[triangles[index]]
+                val b = verts[triangles[index + 1]]
+                val c = verts[triangles[index + 2]]
+                volumeSix += (
+                    a.x * (b.y * c.z - b.z * c.y) +
+                    a.y * (b.z * c.x - b.x * c.z) +
+                    a.z * (b.x * c.y - b.y * c.x)
+                ).toDouble()
+            }
+            if (volumeSix < 0.0) {
+                for (index in triangles.indices step 3) {
+                    val tmp = triangles[index + 1]
+                    triangles[index + 1] = triangles[index + 2]
+                    triangles[index + 2] = tmp
+                }
+            }
         }
         result += MeshPart(name, color, verts, triangles)
     }
