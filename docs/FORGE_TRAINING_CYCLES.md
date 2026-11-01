@@ -96,6 +96,40 @@ GitHub Actions uploads only derived JSON reports:
 Third-party source mesh files and textures remain in temporary runner
 directories and are never committed or shipped with the Android APK.
 
+## Cycle 4 — component relationships (experimental)
+
+The Blender study now extracts an **anonymous component proximity graph**
+alongside the eight whole-object measurements. For each source scene, the
+graph represents up to 24 substantive mesh objects, their normalized
+bounding-size/position descriptors, and up to 200 pairs. Each pair records
+relative size, center distance, AABB gap and whether bounding boxes overlap,
+are nearby or are separated. Names, raw vertices, textures and the source
+Blender files are not retained.
+
+**These are geometric observations, not verified physical attachment
+labels.** An AABB overlap does not prove two actual meshes touch, and a
+single Blender mesh object can contain multiple disconnected parts.
+The original vehicle's construction order is unknown.
+
+A separately tested **component-layout prior** learns two prototypes from
+those graph summaries. It requires at least four distinct multi-part models,
+holds out **entire source models** rather than individual part edges, and
+compares its reconstruction error against a one-profile baseline.
+If there is insufficient data or worse validation performance, the model is
+not promoted. This is not a neural network or a semantic part identifier.
+
+Only derived CC0 geometry summaries are cached between training runs.
+Data is deduplicated by actual source-file SHA-256, so repeating a cycle on
+the same downloaded files does not falsely increase training sample count.
+The latest per-cycle report, cumulative descriptor dataset, overall shape
+prior and spatial-layout prior are downloadable GitHub Action artifacts.
+
+**What remains before Android deployment:** human-verified component-role
+labels, spatial attachment targets, a learnable operation representation,
+and tests confirming generated mesh connectivity and visual improvements.
+The training feed containing approved six-dimensional vehicle recipes is
+separate and remains untouched by this experimental part-layout prior.
+
 ## How to repeat
 
 Ask Forge: **"Run another Assetwright training cycle. Focus on vehicle body
