@@ -1,0 +1,58 @@
+name: Forge CC0 Asset Study
+
+on:
+  push:
+    paths:
+      - "training/requests/forge_cycle.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  statuses: write
+
+concurrency:
+  group: forge-study-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  study:
+    name: Collect and inspect licensed shape references
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check out Assetwright code and review request
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Verify offline safety tests
+        run: |
+          python -m unittest discover -s tools/mini_ai -p "test_*.py"
+
+      - name: Study selected CC0 models with Poly Haven's official API
+        run: |
+          python tools/mini_ai/forge_asset_cycle.py \
+            --request training/requests/forge_cycle.json \
+            --output local-data/mini-ai/forge-study/report.json
+
+      - name: Publish downloadable research report
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-cc0-shape-study
+          path: local-data/mini-ai/forge-study/report.json
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Publish study run URL
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
+            -f state=success \
+            -f context="forge/cc0-shape-study" \
+            -f description="CC0 geometry research report available; no Android weight training" \
+            -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
