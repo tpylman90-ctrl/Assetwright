@@ -61,6 +61,39 @@ caption/geometry pairs, component-role labels, attachment constraints,
 and actual generated-mesh evaluation. Published bounding dimensions are
 a useful first grounding signal but do not encode contours or topology.
 
+## Objaverse 1.0 + Cap3D CC0 extension
+
+Assetwright now also provides a bounded, separately tested importer that
+reads Objaverse 1.0's official 160 metadata shards from Hugging Face.
+The metadata dataset itself is **ODC-By**, and every object has an
+individual license. The importer accepts only a source annotation whose
+per-object license is **explicitly CC0** (currently the official Objaverse
+dataset card lists approximately 3,500 CC0 objects out of 800K+).
+All other licenses, including CC-BY, CC-BY-SA and any noncommercial license,
+are excluded from this strict CC0 research feed.
+
+For each qualifying UID, the importer preserves the original title, source
+description, tags, original source URL when present, source-model UID,
+license record and metadata attribution. When available, it joins the
+independently published Cap3D generated description by exact UID. Those
+captions retain a **separate ODC-By license and Cap3D source attribution**.
+The caption is clearly labeled machine-generated and unverified; no
+visual assertion, actual mesh link or part/joint label is inferred from it.
+
+The first 16-shard pilot verified 80,000 metadata records, identified
+366 individually CC0 objects and matched 326 to Cap3D captions.
+The full-license scan and merged reference index are implemented in:
+`tools/mini_ai/objaverse_cc0_catalog.py`,
+`tools/mini_ai/merge_reference_catalogs.py`, and
+`.github/workflows/objaverse-cc0-catalog.yml`.
+
+Both this collection and the Poly Haven reference catalog remain separate
+from Android runtime weights. Text matches are not verified modeling
+recipes. These data make it easier to find real, varied geometry references
+and to curate the labeled operations necessary for later 3D construction
+training. Any new direct mesh-training stage must confirm asset-specific
+rights, source identity and correspondence to each caption.
+
 ## Future larger library sources
 
 Objaverse 1.0 offers hundreds of thousands of annotated objects, and Cap3D
