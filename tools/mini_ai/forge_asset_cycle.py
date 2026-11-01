@@ -90,9 +90,13 @@ def relevance(item: dict, focus: str) -> int:
     return score
 
 
-def selected_assets(catalog: dict, focus: str, limit: int) -> list[tuple[str, dict]]:
+def selected_assets(catalog: dict, focus: str, limit: int,
+                    exclude_ids: set[str] | None = None) -> list[tuple[str, dict]]:
     candidates = []
+    excluded = exclude_ids or set()
     for key, item in catalog.items():
+        if key in excluded:
+            continue
         if not re.fullmatch("[A-Za-z0-9_-]{1,100}", key):
             continue
         if not isinstance(item, dict) or item.get("type") != 2:
@@ -215,9 +219,11 @@ def catalog_asset(asset_id: str, entry: dict, try_geometry: bool) -> dict:
     return result
 
 
-def run_cycle(request: dict, *, fetch_geometry: bool = True) -> dict:
+def run_cycle(request: dict, *, fetch_geometry: bool = True,
+              exclude_ids: set[str] | None = None) -> dict:
     catalog = api_json("/assets?t=models")
-    matches = selected_assets(catalog, request["focus"], request["max_assets"])
+    matches = selected_assets(catalog, request["focus"], request["max_assets"],
+                              exclude_ids=exclude_ids)
     result = []
     for index, (asset_id, entry) in enumerate(matches):
         result.append(catalog_asset(asset_id, entry, fetch_geometry))
@@ -247,9 +253,22 @@ def main() -> None:
     parser.add_argument("--request", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--metadata-only", action="store_true")
+    parser.add_argument("--history", type=Path,
+                        help="Existing cached descriptor study; skip previously attempted IDs")
     args = parser.parse_args()
     req = read_request(args.request)
-    result = run_cycle(req, fetch_geometry=not args.metadata_only)
+    excluded = set()
+    if args.history is not None and args.history.is_file():
+        old = json.loads(args.history.read_text(encoding="utf-8"))
+        if old.get("schema") != OUTPUT_SCHEMA:
+            raise ValueError("Unexpected study history format")
+        excluded = set(old.get("attempted_ids", []))
+        if not all(isinstance(k,str) and re.fullmatch("[A-Za-z0-9_-]{1,100}",k)
+                   for k in excluded):
+            raise ValueError("Corrupted attempted source IDs")
+    result = run_cycle(req, fetch_geometry=not args.metadata_only,
+                       exclude_ids=excluded)
+    result["previously_attempted_assets_skipped"] = len(excluded)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print("Assetwright study cycle", req["cycle"])
