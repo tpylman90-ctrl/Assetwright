@@ -1,0 +1,80 @@
+name: Parallax 01 original hover coupe
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "tools/blender/generate_parallax.py"
+      - ".github/workflows/parallax-asset.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: parallax-original-asset
+  cancel-in-progress: true
+
+jobs:
+  build-parallax:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Blender
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes blender libegl1 libgl1 python3-numpy
+          blender --version
+
+      - name: Build original Parallax hover coupe
+        run: |
+          blender --background --factory-startup --python-exit-code 1 \
+            --python tools/blender/generate_parallax.py \
+            -- --output-dir generated/parallax
+          test -s generated/parallax/parallax_01.glb
+          test -s generated/parallax/parallax_01_hero_3q.png
+          test -s generated/parallax/parallax_01_lod1.glb
+          test -s generated/parallax/parallax_01_lod2.glb
+          test -s generated/parallax/parallax_01_collision.glb
+          test -s generated/parallax/parallax_01_rear_3q.png
+          test -s generated/parallax/parallax_01_chase.png
+          python3 -m json.tool generated/parallax/parallax_01_training_record.json > /dev/null
+          python3 - <<'PY'
+          import json, os, struct
+          root = "generated/parallax"
+          record = json.load(open(root + "/parallax_01_training_record.json"))
+          target = record["game_target"]
+          checks = [
+              ("parallax_01.glb", target["triangle_count"], 120000),
+              ("parallax_01_lod1.glb", target["lods"]["LOD1"], 45000),
+              ("parallax_01_lod2.glb", target["lods"]["LOD2"], 20000),
+              ("parallax_01_collision.glb", target["collision_triangles"], 1000),
+          ]
+          for name, expected, budget in checks:
+              raw = open(root + "/" + name, "rb").read()
+              magic, version, total = struct.unpack_from("<4sII", raw)
+              assert magic == b"glTF" and version == 2 and total == len(raw), name
+              length, kind = struct.unpack_from("<II", raw, 12)
+              assert kind == 0x4e4f534a, name
+              data = json.loads(raw[20:20+length])
+              triangles = 0
+              for mesh in data.get("meshes", []):
+                  for primitive in mesh["primitives"]:
+                      assert primitive.get("mode", 4) == 4, name
+                      accessor = data["accessors"][primitive["indices"]]
+                      triangles += accessor["count"] // 3
+              assert 0 < triangles == expected <= budget, (name, triangles, expected)
+              assert not any(n.get("name") == "Preview floor" for n in data.get("nodes", []))
+              print(name, triangles, "triangles;", len(raw), "bytes")
+          PY
+
+      - name: Upload Parallax model, review views, and training record
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-parallax-01
+          path: generated/parallax/
+          if-no-files-found: error
+          retention-days: 3
