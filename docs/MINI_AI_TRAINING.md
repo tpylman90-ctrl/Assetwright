@@ -1,4 +1,6 @@
-# Assetwright Mini AI: private automatic learning loop (v0.2)
+# Assetwright Mini AI: private automatic learning loop (v0.2–v0.4)
+
+**Update:** A Windows Task Scheduler installer, paired Android folder sync and periodic Android pack import are now available. Follow [background training setup](BACKGROUND_TRAINING.md) for the newer unattended workflow. The manual steps below remain supported as a fallback.
 
 ## What is actually automatic
 
