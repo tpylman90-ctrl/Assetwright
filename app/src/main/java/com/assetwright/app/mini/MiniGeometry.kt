@@ -130,6 +130,12 @@ object MiniGeometry {
         val m = MeshBuilder()
         val l = spec.length
         val w = spec.width * 0.5f
+        // A roofHeight is the finished vehicle's roof line, not just a
+        // nominal upper limit. Preserve at least .26 m of visible greenhouse
+        // over the shell, including at the minimum supported roof height.
+        val hullCenterZ = minOf(.80f, spec.roofHeight - .46f)
+        val hullUpperRadius = minOf(.27f, spec.roofHeight - hullCenterZ - .26f)
+        val hullLowerRadius = .38f
         // Denser, continuous nose-to-shoulder transition. Previously the nose
         // factor jumped from 0.55 to 1.0 between adjacent stations, causing
         // an abrupt flare on every exported vehicle.
@@ -151,7 +157,9 @@ object MiniGeometry {
                 Vec3(
                     width * side,
                     l * t,
-                    0.81f + (0.39f + 0.04f * profile) * top
+                    hullCenterZ + if (top >= 0f)
+                        hullUpperRadius * top * (.94f + .06f * profile)
+                    else hullLowerRadius * top
                 )
             }
         }
@@ -160,8 +168,10 @@ object MiniGeometry {
         // A low central keel remains inside the body silhouette.
         m.loft("Underside keel", UNDERBODY, listOf(-0.35f, 0.35f).map { t ->
             listOf(
-                Vec3(-w * .65f, l * t, .48f), Vec3(w * .65f, l * t, .48f),
-                Vec3(w * .57f, l * t, .69f), Vec3(-w * .57f, l * t, .69f)
+                Vec3(-w * .65f, l * t, hullCenterZ - .32f),
+                Vec3(w * .65f, l * t, hullCenterZ - .32f),
+                Vec3(w * .57f, l * t, hullCenterZ - .11f),
+                Vec3(-w * .57f, l * t, hullCenterZ - .11f)
             )
         })
 
@@ -182,7 +192,7 @@ object MiniGeometry {
                 val angle = i * 2.0 * PI / spec.radialSegments
                 val side = cos(angle).toFloat()
                 val top = sin(angle).toFloat()
-                val lowerFoot = 1.03f
+                val lowerFoot = hullCenterZ + .10f
                 val z = lowerFoot + .08f * minOf(top, 0f) +
                     (roof - lowerFoot).coerceAtLeast(0f) * maxOf(top, 0f) * taper
                 Vec3(w * .78f * taper * side, center + span * t, z)
@@ -195,10 +205,10 @@ object MiniGeometry {
         val noseHalfWidth = w * .38f * spec.noseTaper
         val front = -l * .500f - .012f
         m.panel("Continuous front light", LIGHT,
-            Vec3(-noseHalfWidth * .68f, front, .90f),
-            Vec3(noseHalfWidth * .68f, front, .90f),
-            Vec3(noseHalfWidth * .68f, front, .97f),
-            Vec3(-noseHalfWidth * .68f, front, .97f))
+            Vec3(-noseHalfWidth * .68f, front, hullCenterZ + .09f),
+            Vec3(noseHalfWidth * .68f, front, hullCenterZ + .09f),
+            Vec3(noseHalfWidth * .68f, front, hullCenterZ + .16f),
+            Vec3(-noseHalfWidth * .68f, front, hullCenterZ + .16f))
 
         // Engine count is a construction decision, not a body-dimension tweak.
         // Three-engine layouts add a central booster between the two fitted
@@ -210,17 +220,18 @@ object MiniGeometry {
             else -> listOf(-w * .57f, w * .57f)
         }
         val aft = l * .475f
+        val driveZ = hullCenterZ + .01f
         for ((index, x) in drivePositions.withIndex()) {
             val centralBooster = spec.driveCount == 3 && index == 1
             val r = if (centralBooster) .28f else .24f
             val extension = if (centralBooster) .39f else .30f
             val name = if (centralBooster) "Central booster" else "Rear drive"
             m.cylinderY("$name housing", ENGINE, x, aft - .10f,
-                aft + extension, .81f, r, 20)
+                aft + extension, driveZ, r, 20)
             m.cylinderY("$name core", UNDERBODY, x, aft + extension,
-                aft + extension + .015f, .81f, r * .75f, 20)
+                aft + extension + .015f, driveZ, r * .75f, 20)
             m.cylinderY("$name energy ring", LIGHT, x, aft + extension + .015f,
-                aft + extension + .032f, .81f, r * .5f, 20)
+                aft + extension + .032f, driveZ, r * .5f, 20)
         }
 
         // Learned semantic construction plan controls lift-unit quantity and
@@ -230,7 +241,9 @@ object MiniGeometry {
             6 -> listOf(-.32f, 0f, .32f)
             else -> listOf(-.28f, .31f)
         }
-        val mountOffset = if (spec.liftMount == "exposed") .98f else .64f
+        // An exposed repulsor must extend beyond even the widest rear
+        // haunch; 0.98*w left the entire pad under the broad shell.
+        val mountOffset = if (spec.liftMount == "exposed") 1.45f else .64f
         for (side in listOf(-1f, 1f)) {
             val padX = side * w * mountOffset
             for (position in foreAft) {
@@ -243,7 +256,7 @@ object MiniGeometry {
                 // floating, visually separate hover unit.
                 m.cylinderX("Repulsor mount bracket", UNDERBODY,
                     side * w * .38f, padX,
-                    padY, .41f, .085f, 12)
+                    padY, .41f, if (spec.liftMount == "exposed") .13f else .085f, 12)
             }
         }
 
