@@ -43,7 +43,7 @@ object ForgeReview {
         val json = JSONObject()
             .put("schema", REVIEW_SCHEMA)
             .put("generator", "assetwright-mini-ai")
-            .put("generator_version", "0.5")
+            .put("generator_version", "0.6.1")
             .put("prompt", spec.sourcePrompt)
             .put("profile", spec.quality)
             .put("triangle_count", asset.triangleCount)
