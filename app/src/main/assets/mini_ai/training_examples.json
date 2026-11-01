@@ -177,7 +177,7 @@
     "roofHeight": 1.87,
     "canopyLength": 2.45,
     "noseTaper": 0.59,
-    "rearHaunch": 1.36
+    "rearHaunch": 1.3
   },
   {
     "prompt": "rugged hover suv with hidden repulsors and sculpted body and narrow and slender frame",
@@ -545,7 +545,7 @@
     "width": 2.25,
     "roofHeight": 1.32,
     "canopyLength": 1.6,
-    "noseTaper": 0.18,
+    "noseTaper": 0.25,
     "rearHaunch": 1.18
   },
   {
@@ -573,7 +573,7 @@
     "roofHeight": 1.32,
     "canopyLength": 1.6,
     "noseTaper": 0.44,
-    "rearHaunch": 1.38
+    "rearHaunch": 1.3
   },
   {
     "prompt": "aggressive hover racer with hidden repulsors and sculpted body and narrow and slender frame",
@@ -671,7 +671,7 @@
     "width": 2.03,
     "roofHeight": 1.37,
     "canopyLength": 1.5,
-    "noseTaper": 0.22,
+    "noseTaper": 0.25,
     "rearHaunch": 1.07
   },
   {
@@ -743,7 +743,7 @@
     "width": 2.03,
     "roofHeight": 1.37,
     "canopyLength": 1.5,
-    "noseTaper": 0.14,
+    "noseTaper": 0.25,
     "rearHaunch": 1.07
   },
   {
