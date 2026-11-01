@@ -1,0 +1,68 @@
+name: Hover Racing SUV A1 first pass
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "tools/blender/generate_hover_suv_a1.py"
+      - ".github/workflows/hover-suv-a1.yml"
+permissions:
+  contents: read
+concurrency:
+  group: hover-suv-a1
+  cancel-in-progress: true
+jobs:
+  build-hover-suv:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install free Blender runner
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes blender libegl1 libgl1 python3-numpy
+          blender --version
+      - name: Generate A1 from approved design brief
+        run: |
+          blender --background --factory-startup --python-exit-code 1 \
+            --python tools/blender/generate_hover_suv_a1.py \
+            -- --output-dir generated/hover_suv_a1
+          for file in hover_suv_a1.glb hover_suv_a1.blend \
+             hover_suv_a1_lod1.glb hover_suv_a1_lod2.glb \
+             hover_suv_a1_hero_3q.png hover_suv_a1_rear_3q.png \
+             hover_suv_a1_front.png hover_suv_a1_side.png \
+             hover_suv_a1_top.png hover_suv_a1_rear.png \
+             hover_suv_a1_record.json; do
+            test -s "generated/hover_suv_a1/$file"
+          done
+      - name: Verify actual GLB triangle budgets
+        run: |
+          python3 - <<'PY'
+          import json,struct,pathlib
+          root=pathlib.Path("generated/hover_suv_a1")
+          record=json.loads((root/"hover_suv_a1_record.json").read_text())
+          for name,cap in [("hover_suv_a1.glb",120000),
+                           ("hover_suv_a1_lod1.glb",45000),
+                           ("hover_suv_a1_lod2.glb",20000)]:
+              binary=(root/name).read_bytes()
+              magic,ver,length=struct.unpack_from("<4sII",binary)
+              assert magic==b"glTF" and ver==2 and length==len(binary),name
+              json_len,chunk_type=struct.unpack_from("<II",binary,12)
+              assert chunk_type==0x4E4F534A
+              manifest=json.loads(binary[20:20+json_len])
+              tri=sum(manifest["accessors"][p["indices"]]["count"]//3
+                      for m in manifest.get("meshes",[])
+                      for p in m.get("primitives",[])
+                      if p.get("mode",4)==4 and "indices" in p)
+              print(name,tri,"triangles (cap",cap,")")
+              assert 0<tri<=cap,(name,tri,cap)
+              if name=="hover_suv_a1.glb":
+                  assert tri==record["evaluated_lod0_triangles"],(tri,record)
+          PY
+      - name: Upload model and all review renders
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-hover-suv-a1
+          path: generated/hover_suv_a1/
+          if-no-files-found: error
+          retention-days: 3
