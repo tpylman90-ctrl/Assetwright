@@ -26,10 +26,13 @@ data class VehicleSpec(
     val noseTaper: Float,
     val rearHaunch: Float,
     val quality: String,
-    val sourcePrompt: String
+    val sourcePrompt: String,
+    val constructionPlan: ConstructionPlan? = null
 ) {
     /** Component-count intent is independent of the six learned body dimensions. */
     val driveCount: Int get() = MiniAi.driveCount(sourcePrompt)
+    val liftCount: Int get() = constructionPlan?.liftCells ?: 4
+    val liftMount: String get() = constructionPlan?.mount ?: "tucked"
 
     val radialSegments: Int get() = when (quality) {
         "High detail" -> 32
