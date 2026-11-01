@@ -315,9 +315,11 @@ def shaped_dash(name,mat):
     Longitudinal sections curl into the existing inner sills: no floating bridge.
     """
     vs=[];fs=[]
-    cross=[(-1.12,.770),(-1.115,.915),(-1.080,1.049),
+    # The low front and rear returns enter the cockpit floor at z~0.48,
+    # making the dash a supported bulkhead, not a disconnected floating slab.
+    cross=[(-1.12,.505),(-1.115,.915),(-1.080,1.049),
            (-.985,1.119),(-.805,1.174),(-.685,1.157),
-           (-.640,1.093),(-.670,.905),(-.820,.790)]
+           (-.640,1.093),(-.670,.785),(-.820,.505)]
     xs=[-.64,-.622,-.54,-.40,-.20,0,.20,.40,.54,.622,.64]
     N=len(cross)
     for x in xs:
