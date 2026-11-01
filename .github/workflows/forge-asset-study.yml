@@ -17,7 +17,7 @@ concurrency:
 jobs:
   study:
     name: Collect and inspect licensed shape references
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - name: Check out Assetwright code and review request
