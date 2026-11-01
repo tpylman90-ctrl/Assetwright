@@ -174,7 +174,8 @@ def read_glb(url: str, expected_size: int | None, expected_md5: str | None, dest
     return inspect_glb(destination)
 
 
-def catalog_asset(asset_id: str, entry: dict, try_geometry: bool) -> dict:
+def catalog_asset(asset_id: str, entry: dict, try_geometry: bool,
+                  preview_dir: Path | None = None) -> dict:
     dimension_ratios = normalized_dimensions(entry.get("dimensions"))
     result = {
         "id": asset_id,
@@ -205,7 +206,10 @@ def catalog_asset(asset_id: str, entry: dict, try_geometry: bool) -> dict:
                 errors = []
                 for candidate in candidates[:3]:
                     try:
-                        result["geometry"] = inspect_with_blender(candidate)
+                        result["geometry"] = inspect_with_blender(
+                            candidate,
+                            preview_dir=(preview_dir / asset_id) if preview_dir is not None else None
+                        )
                         result["mesh_analysis"] = "blender_geometry_inspected"
                         break
                     except (OSError, ValueError, RuntimeError) as error:
@@ -220,13 +224,14 @@ def catalog_asset(asset_id: str, entry: dict, try_geometry: bool) -> dict:
 
 
 def run_cycle(request: dict, *, fetch_geometry: bool = True,
-              exclude_ids: set[str] | None = None) -> dict:
+              exclude_ids: set[str] | None = None,
+              preview_dir: Path | None = None) -> dict:
     catalog = api_json("/assets?t=models")
     matches = selected_assets(catalog, request["focus"], request["max_assets"],
                               exclude_ids=exclude_ids)
     result = []
     for index, (asset_id, entry) in enumerate(matches):
-        result.append(catalog_asset(asset_id, entry, fetch_geometry))
+        result.append(catalog_asset(asset_id, entry, fetch_geometry, preview_dir))
         if index + 1 < len(matches):
             time.sleep(.4)  # avoid bursts on third-party API
     return {
@@ -253,6 +258,8 @@ def main() -> None:
     parser.add_argument("--request", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--metadata-only", action="store_true")
+    parser.add_argument("--previews-dir", type=Path,
+                        help="Optional 3-view PNG-only evidence for mesh role review")
     parser.add_argument("--history", type=Path,
                         help="Existing cached descriptor study; skip previously attempted IDs")
     args = parser.parse_args()
@@ -267,7 +274,7 @@ def main() -> None:
                    for k in excluded):
             raise ValueError("Corrupted attempted source IDs")
     result = run_cycle(req, fetch_geometry=not args.metadata_only,
-                       exclude_ids=excluded)
+                       exclude_ids=excluded, preview_dir=args.previews_dir)
     result["previously_attempted_assets_skipped"] = len(excluded)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
