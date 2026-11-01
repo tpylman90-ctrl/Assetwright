@@ -30,6 +30,46 @@ class MiniAiTest {
     }
 
     @Test
+    fun explicitEngineCountsChangeConstructionAndExportedRecipe() {
+        val samples = listOf(
+            "a hover coupe with one rear engine" to 1,
+            "a hover racer with twin thrusters" to 2,
+            "a hover vehicle with three engines" to 3,
+            "a hoover suv with 3 rear boosters" to 3,
+            "a hover coupe with engines x3" to 3,
+            "a hover racer with no engine count given" to 2
+        )
+        val baseline = listOf(
+            TrainingExample("hover coupe", 4.8f, 2.3f, 1.5f, 1.8f, 0.5f, 1.1f)
+        )
+        for ((prompt, expectedCount) in samples) {
+            val spec = MiniAi.predict(prompt, "Mobile", baseline)
+            assertEquals("Incorrect engine count for " + prompt, expectedCount, spec.driveCount)
+            val asset = MiniGeometry.generate(spec)
+            val houses = asset.parts.filter { it.name.endsWith("housing") }
+            val cores = asset.parts.filter { it.name.endsWith("core") }
+            val energy = asset.parts.filter { it.name.endsWith("energy ring") }
+            assertEquals("Engine geometry mismatch for " + prompt, expectedCount, houses.size)
+            assertEquals(expectedCount, cores.size)
+            assertEquals(expectedCount, energy.size)
+            assertEquals(4, asset.parts.count { it.name == "Underslung repulsor" })
+            val instruction = ShapeProgram.steps(spec).single {
+                it.operation == "attach_rear_drive"
+            }
+            assertEquals(expectedCount.toDouble(), instruction.parameters["housings"])
+            if (expectedCount == 3) {
+                assertTrue(asset.parts.any { it.name == "Central booster housing" })
+                val driveLocations = houses.map { housing ->
+                    housing.vertices.map { it.x }.average()
+                }.sorted()
+                assertTrue(driveLocations[0] < -.1)
+                assertEquals(0.0, driveLocations[1], 0.001)
+                assertTrue(driveLocations[2] > .1)
+            }
+        }
+    }
+
+    @Test
     fun buildsRealVerticesAndValidGlbEnvelope() {
         val examples = listOf(
             TrainingExample("wide hover suv panoramic canopy",
