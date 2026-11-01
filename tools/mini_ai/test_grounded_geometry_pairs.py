@@ -46,6 +46,23 @@ class GroundedPairsTest(unittest.TestCase):
         _,report=match(c,history)
         self.assertEqual(report["verified_text_mesh_pairs"],1)
 
+    def test_previews_only_link_to_same_exact_mesh_checksum(self):
+        cat=captions("engine_A")
+        history={"schema":"assetwright-cc0-shape-study-v1",
+                 "assets":[rec("engine_A","a"*64)]}
+        correct=rec("engine_A","a"*64)
+        correct["geometry"]["review_preview_views"]=["side","top","three_quarter"]
+        current={"schema":"assetwright-cc0-shape-study-v1","assets":[correct]}
+        result,report=match(cat,history,current)
+        self.assertEqual(report["pairs_with_rendered_multiview_evidence"],1)
+        self.assertEqual(len(result["pairs"][0]["review_preview_artifacts"]),3)
+        wrong=rec("engine_A","b"*64)
+        wrong["geometry"]["review_preview_views"]=["side"]
+        result,report=match(cat,history,{
+            "schema":"assetwright-cc0-shape-study-v1","assets":[wrong]})
+        self.assertEqual(report["pairs_with_rendered_multiview_evidence"],0)
+        self.assertEqual(result["pairs"][0]["review_preview_artifacts"],[])
+
     def test_missing_mesh_features_or_publisher_description_is_rejected(self):
         cat=captions("mesh")
         cat["records"][0]["publisher_description"]=""
