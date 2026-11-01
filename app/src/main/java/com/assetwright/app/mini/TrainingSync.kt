@@ -96,9 +96,15 @@ object TrainingSync {
         val file = folder(context)?.findFile(PACK_FILE) ?: return null
         if (!file.isFile || !file.canRead()) return null
         val bytes = context.contentResolver.openInputStream(file.uri)?.use { input ->
-            val raw = input.readNBytes(MAX_PACK_BYTES + 1)
-            require(raw.size <= MAX_PACK_BYTES) { "Training pack exceeds size limit" }
-            raw
+            val collector = ByteArrayOutputStream()
+            val buffer = ByteArray(8192)
+            while (true) {
+                val count = input.read(buffer)
+                if (count < 0) break
+                collector.write(buffer, 0, count)
+                require(collector.size() <= MAX_PACK_BYTES) { "Training pack exceeds size limit" }
+            }
+            collector.toByteArray()
         } ?: return null
         val digest = MessageDigest.getInstance("SHA-256").digest(bytes)
             .joinToString("") { "%02x".format(it.toInt() and 255) }
