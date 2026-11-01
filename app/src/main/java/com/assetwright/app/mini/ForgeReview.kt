@@ -1,5 +1,6 @@
 package com.assetwright.app.mini
 
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.security.MessageDigest
@@ -46,7 +47,7 @@ object ForgeReview {
             .put("prompt", spec.sourcePrompt)
             .put("profile", spec.quality)
             .put("triangle_count", asset.triangleCount)
-            .put("mesh_parts", asset.parts.map { it.name })
+            .put("mesh_parts", JSONArray(asset.parts.map { it.name }))
             .put("parameters", parameters(spec))
             .put("model_sha256", sha256(glb))
             .put("requested_changes", requestedChanges)
