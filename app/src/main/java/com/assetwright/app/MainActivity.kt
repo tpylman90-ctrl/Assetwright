@@ -10,6 +10,7 @@ import com.assetwright.app.mini.MiniAi
 import com.assetwright.app.mini.MiniGeometry
 import com.assetwright.app.mini.MiniPreview
 import com.assetwright.app.mini.TrainingStore
+import com.assetwright.app.mini.TrainingSync
 import com.assetwright.app.mini.VehicleSpec
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -44,6 +45,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -87,6 +89,9 @@ private fun AssetwrightScreen() {
     var forgeRequest by remember { mutableStateOf("") }
     var pendingForgeProposal by remember { mutableStateOf<ForgeProposal?>(null) }
     val context = LocalContext.current
+    var pairedTrainingFolder by remember(context) {
+        mutableStateOf(TrainingSync.configured(context))
+    }
     var localExamples by remember(context) {
         mutableStateOf(TrainingStore.approved(context))
     }
@@ -115,6 +120,40 @@ private fun AssetwrightScreen() {
             }
         }
     )
+    val trainingFolderPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocumentTree(),
+        onResult = { uri ->
+            if (uri != null) {
+                try {
+                    TrainingSync.connect(context, uri)
+                    pairedTrainingFolder = true
+                    val new = TrainingSync.importIfChanged(context)
+                    if (new != null) homeExamples = TrainingStore.home(context)
+                    status = "Private training folder connected. Approved corrections " +
+                        "will be written here, and new validated model packs checked automatically."
+                } catch (ex: Exception) {
+                    status = "Could not pair training folder: " +
+                        (ex.message ?: "unknown error")
+                }
+            }
+        }
+    )
+    LaunchedEffect(context, pairedTrainingFolder) {
+        if (pairedTrainingFolder) {
+            try {
+                TrainingSync.schedule(context)
+                val imported = TrainingSync.importIfChanged(context)
+                if (imported != null) {
+                    homeExamples = TrainingStore.home(context)
+                    status = "Synced " + imported + " approved home learning examples."
+                }
+            } catch (ex: Exception) {
+                status = "Training folder needs attention: " +
+                    (ex.message ?: "unknown error")
+            }
+        }
+    }
+
     val trainingExport = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("application/x-ndjson"),
         onResult = { uri ->
@@ -483,6 +522,14 @@ private fun AssetwrightScreen() {
                                             acceptedCount = count
                                             status = "Approved and learned locally. Your next " +
                                                 "generation can use this corrected design."
+                                            if (pairedTrainingFolder) {
+                                                try {
+                                                    TrainingSync.publishApproved(context)
+                                                    status += " Shared with the chosen local sync folder."
+                                                } catch (ex: Exception) {
+                                                    status += " Training sync failed; local learning was saved."
+                                                }
+                                            }
                                         } catch (ex: Exception) {
                                             status = "Couldn't save feedback: " +
                                                 (ex.message ?: "unknown error")
@@ -495,6 +542,30 @@ private fun AssetwrightScreen() {
                                 }
                             }
                         }
+                    }
+                    OutlinedButton(
+                        onClick = { trainingFolderPicker.launch(null) },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Teal)
+                    ) {
+                        Text(if (pairedTrainingFolder) "Change private training sync folder"
+                            else "Enable background training folder sync")
+                    }
+                    if (pairedTrainingFolder) {
+                        Text(
+                            "Approved examples are shared only with your chosen folder. " +
+                                "A separate trusted LAN sync tool can replicate it to your PC.",
+                            color = TextMuted, fontSize = 12.sp
+                        )
+                        OutlinedButton(
+                            onClick = {
+                                TrainingSync.disconnect(context)
+                                pairedTrainingFolder = false
+                                status = "Training folder disconnected. Local learning data kept."
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = TextMuted)
+                        ) { Text("Disable background folder sync") }
                     }
                     OutlinedButton(
                         onClick = { homeImport.launch(arrayOf("application/json", "text/plain", "application/octet-stream")) },
