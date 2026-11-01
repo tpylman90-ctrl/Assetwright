@@ -28,6 +28,9 @@ data class VehicleSpec(
     val quality: String,
     val sourcePrompt: String
 ) {
+    /** Component-count intent is independent of the six learned body dimensions. */
+    val driveCount: Int get() = MiniAi.driveCount(sourcePrompt)
+
     val radialSegments: Int get() = when (quality) {
         "High detail" -> 32
         "Balanced" -> 24
@@ -36,6 +39,30 @@ data class VehicleSpec(
 }
 
 object MiniAi {
+    private val engineWords = "engines?|thrusters?|boosters?|drives?"
+    private val modifierWords = "(?:(?:rear|main|central|primary|propulsion)\\s+)?"
+    private val numberBefore = Regex(
+        "\\b(1|2|3|one|two|three|single|twin|dual|triple)\\s+" +
+            modifierWords + "(?:" + engineWords + ")\\b",
+        RegexOption.IGNORE_CASE
+    )
+    private val numberAfter = Regex(
+        "\\b(?:" + engineWords + ")\\s*(?:x\\s*|:\\s*)?(1|2|3)\\b",
+        RegexOption.IGNORE_CASE
+    )
+
+    /** First process-learning rule: honor explicit propulsion-unit counts. */
+    fun driveCount(prompt: String): Int {
+        val number = numberBefore.find(prompt)?.groupValues?.get(1)
+            ?: numberAfter.find(prompt)?.groupValues?.get(1)
+            ?: return 2
+        return when (number.lowercase()) {
+            "1", "one", "single" -> 1
+            "3", "three", "triple" -> 3
+            else -> 2
+        }
+    }
+
     private val ignored = setOf(
         "a", "an", "the", "with", "and", "for", "of", "some", "make", "create",
         "build", "design", "me", "my", "that", "has", "is", "on", "in", "it",
