@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 4,
+  "cycle": 5,
   "max_assets": 8,
   "focus": "vehicle engine mechanical machinery generator industrial",
-  "objective": "Extract source-level CC0 component spatial graphs (anonymous part bounds and proximity) via Blender; accumulate derived-only geometry history and evaluate two-prototype layout prior. Never deploy unverified relationships to Android."
+  "objective": "Detect disconnected geometry islands inside Blender mesh objects, deduplicate across historical CC0 studies, and evaluate source-heldout component proximity priors without modifying Android."
 }
