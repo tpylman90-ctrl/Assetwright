@@ -46,10 +46,13 @@ object DeviceShapeTrainer {
             TrainingStore.bundled(context)
         val base = MiniAi.predict(prompt, quality, examples)
         // Explicit corrections and exact reviewed Forge lessons take priority.
-        if (local.any { it.prompt.trim().equals(prompt.trim(), ignoreCase = true) } ||
+        val shaped = if (local.any { it.prompt.trim().equals(prompt.trim(), ignoreCase = true) } ||
             forge.any { it.prompt.trim().equals(prompt.trim(), ignoreCase = true) })
-            return base
-        return AdaptiveShapeModel.predict(base, AdaptiveShapeModel.read(context))
+            base
+        else AdaptiveShapeModel.predict(base, AdaptiveShapeModel.read(context))
+        // Semantic construction is independent of the six-dimensional body
+        // predictor; exact approved dimensions cannot erase component intent.
+        return shaped.copy(constructionPlan = ConstructionTrainingStore.infer(context, prompt))
     }
 }
 
