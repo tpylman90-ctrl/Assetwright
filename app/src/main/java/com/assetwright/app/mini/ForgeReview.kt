@@ -71,6 +71,10 @@ object ForgeReview {
         return out.toByteArray()
     }
 
+    fun matchesSource(proposal: ForgeProposal, current: GeneratedAsset): Boolean =
+        proposal.prompt == current.spec.sourcePrompt &&
+            proposal.sourceSha256 == sha256(GlbWriter.encode(current))
+
     /** Parse into a previewable proposal; do NOT admit to learning memory. */
     fun parseProposal(jsonText: String, current: GeneratedAsset): ForgeProposal {
         require(jsonText.length in 2..16000) { "Invalid or oversized correction" }
