@@ -95,6 +95,7 @@ jobs:
           python tools/mini_ai/grounded_geometry_pairs.py \
             --catalog local-data/mini-ai/forge-study/grounded_descriptions.json \
             --study local-data/mini-ai/forge-study/dataset.json \
+            --current-report local-data/mini-ai/forge-study/report.json \
             --out local-data/mini-ai/forge-study/grounded_pairs/pairs.json \
             --report local-data/mini-ai/forge-study/grounded_pairs/coverage.json
 
