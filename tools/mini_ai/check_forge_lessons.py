@@ -48,6 +48,30 @@ def validate(raw: dict) -> int:
                 raise ValueError("Invalid parameter number: " + name)
             if not low <= value <= high:
                 raise ValueError("Out-of-bounds parameter: " + name)
+    semantic = raw.get("semantic_lessons", [])
+    if not isinstance(semantic, list) or len(semantic) > 120:
+        raise ValueError("Invalid semantic lesson list")
+    semantic_seen = set()
+    for lesson in semantic:
+        if not isinstance(lesson, dict):
+            raise ValueError("Invalid semantic lesson")
+        prompt = lesson.get("prompt")
+        count = lesson.get("lift_cells")
+        mount = lesson.get("mount")
+        origin = lesson.get("origin")
+        if not isinstance(prompt, str) or not 6 <= len(prompt) <= 240:
+            raise ValueError("Invalid construction prompt")
+        if not any(k in prompt.lower() for k in ("hover", "hoover", "suv", "racer", "coupe")):
+            raise ValueError("Unsupported semantic construction domain")
+        if prompt.casefold() in semantic_seen:
+            raise ValueError("Duplicate semantic lesson")
+        semantic_seen.add(prompt.casefold())
+        if type(count) is not int or count not in (2, 4, 6):
+            raise ValueError("Invalid semantic lift cell count")
+        if mount not in ("tucked", "exposed"):
+            raise ValueError("Unknown semantic mounting role")
+        if origin != "forge-original-reviewed-construction-recipe":
+            raise ValueError("Missing verified original-construction provenance")
     return len(lessons)
 
 
