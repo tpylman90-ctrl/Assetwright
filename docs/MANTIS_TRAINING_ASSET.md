@@ -109,3 +109,12 @@ Adds the second open rectangular frame bay visible behind the reference cockpit.
 Complete rear drive, fin, guard, service-fitting and lift-cell assemblies move rearward by 0.72 units after the compact-drive shaping stage. Their hardware is translated without stretching. Both equipment pods move rearward by 0.36 units, retaining their relative spacing. The deck, longer chassis rails, rear frame ties, electronics and collision envelopes follow the longer layout. Front suspension, nose and front lift positions are preserved. Rear lift centers are now (±0.86, 2.44, 0.64) in Blender coordinates; the bay aft roof crossbar is at Y=1.41, Z=2.07.
 
 Review cameras recenter and widen to fit the longer silhouette at the original 4:3 image aspect ratio. The training record stores the bay length and assembly offsets. The local evaluated shape check reports 116,572 triangles; final exported LOD counts come from each build's record. Godot driving, LOD-transition review and high-to-low baking remain uncompleted.
+
+
+## Tank-root arms and wider rear stance v10
+
+Rebuilds the forward suspension in final coordinates. The root pivots are now mounted at the forward side-tank carriers at (±1.36, 0.58, 1.14); elbows are at (±1.20, -0.95, 1.03), and wrists remain above the front cells at (±1.30, -2.468, 0.59). Paired forged links have deeper cross-sections, substantial clevis cheeks and larger pivot bearings. Hydraulic barrels and piston radii increase to 0.072 and 0.036. The earlier front-root clevises, thin cover overlays and post-generation arm-shortening warp are removed.
+
+The rear structure progressively widens by up to 24 percent. Side tanks translate 0.24 units outward on each side and grow 12 percent taller around their panel center. The compact drive assemblies move 0.14 units outward; rear hover cells, saddles and fins move outward as rigid assemblies so circular hardware remains circular. The extra rectangular rear frame bay is preserved. Front hover-cell centers stay unchanged; rear cell centers are now (±1.10, 2.44, 0.64). Collision envelopes and the machine-readable stance record follow the new mounts and width.
+
+The full-detail and LOD budgets remain enforced by the existing workflow. This changes geometry and assembly placement; Godot driving and LOD-transition tests remain outstanding.

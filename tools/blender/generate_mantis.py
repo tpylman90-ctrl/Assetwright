@@ -234,7 +234,13 @@ def build(output_dir):
     # Translate complete rear modules after compact-drive shaping; never stretch hardware.
     rear_bay_length=.72
     pod_shift=rear_bay_length*.5
+    rear_width_gain=.24
+    tank_outset=.24
+    tank_height_gain=1.12
+    engine_outset=.14
     aft_modules=set()
+    arm_modules=set()
+    pod_modules=set()
     def remember_aft(before):
         aft_modules.update(set(bpy.context.scene.objects)-before)
 
@@ -304,26 +310,40 @@ def build(output_dir):
         # Low-profile collars keep the extra bay readable without a dense bolt cluster.
         cyl(label+" rear bay aft corner",aft_top,.070,.14,black,"X",16)
         cyl(label+" rear bay corner pin",(aft_top[0]+side*.08,aft_top[1],aft_top[2]),.025,.025,gold,"X",8)
-        # Long close-set arms, clevis gaps, paired links and telescoping hydraulics.
-        root=pt(.85,-.70,1.12); elbow=pt(1.12,-1.64,.88); wrist=pt(1.30,-2.91,.59)
+        # Tank-carrier roots, thick forged paired webs and larger hydraulic cylinders.
+        # Author these in final coordinates so the end cells stay circular and fixed.
+        before_arms=set(bpy.context.scene.objects)
+        root=pt(1.12+tank_outset,.58,1.14)
+        elbow=pt(1.20,-.95,1.03)
+        wrist=pt(1.30,-2.468,.59)
         for name,u,v in (("upper link",root,elbow),("forward link",elbow,wrist)):
-            for dx in (-.065,.065):
+            for dx in (-.11,.11):
                 u1=(u[0]+dx,u[1],u[2]); v1=(v[0]+dx,v[1],v[2])
                 direction=Vector(v1)-Vector(u1)
-                web=loft(label+" "+name+" forged web",[(0,.045,.065,-.065),
-                    (direction.length*.16,.075,.075,-.075),
-                    (direction.length*.72,.055,.060,-.060),
-                    (direction.length,.036,.05,-.05)],black)
+                web=loft(label+" "+name+" forged web",[
+                    (0,.060,.105,-.105),
+                    (direction.length*.14,.080,.145,-.145),
+                    (direction.length*.70,.070,.120,-.120),
+                    (direction.length,.052,.085,-.085)],olive)
                 web.rotation_euler=direction.to_track_quat("Y","Z").to_euler()
                 web.location=Vector(u1)
-            rod(label+" hydraulic barrel",(u[0],u[1],u[2]+.10),tuple(Vector(u).lerp(Vector(v),.58)+Vector((0,0,.10))),.048,gold,24)
-            rod(label+" polished piston",tuple(Vector(u).lerp(Vector(v),.54)+Vector((0,0,.10))),(v[0],v[1],v[2]+.10),.024,titanium,24)
-            rod(label+" return hose",(u[0]-side*.09,u[1],u[2]+.04),(v[0]-side*.09,v[1],v[2]+.04),.014,dark,12)
-        for q,r in ((root,.15),(elbow,.13),(wrist,.105)): joint(label+" suspension pivot",q,side,r)
-        panel(label+" arm triangular cover",[pt(.94,-.83,1.16),pt(1.21,-1.58,.96),pt(1.20,-1.75,.88),pt(.96,-1.40,.93)],(0,0,.035),olive)
-        rod(label+" lower wishbone",pt(.83,-.66,.78),pt(1.30,-2.91,.50),.034,titanium,20)
-        rod(label+" cell gimbal spindle",wrist,pt(1.30,-2.91,.42),.075,black,24)
-        make_hover_cell(side*1.30,-2.91,.29,.83,label+" forward lift",(olive,black,titanium,glow,gold))
+            raised=Vector((0,0,.19))
+            rod(label+" hydraulic barrel",Vector(u)+raised,Vector(u).lerp(Vector(v),.58)+raised,.072,gold,24)
+            rod(label+" polished piston",Vector(u).lerp(Vector(v),.54)+raised,Vector(v)+raised,.036,titanium,24)
+            rod(label+" return hose",Vector(u)+Vector((-side*.19,0,.05)),Vector(v)+Vector((-side*.19,0,.05)),.022,dark,12)
+        for q,r in ((root,.205),(elbow,.17),(wrist,.13)):
+            joint(label+" suspension pivot",q,side,r)
+        # A large clevis is anchored to the forward tank carrier and the side sill.
+        for xx in (1.12+tank_outset-.20,1.12+tank_outset+.20):
+            panel(label+" tank-root clevis cheek",[
+                pt(xx,.38,.92),pt(xx,.80,.91),pt(xx,.84,1.25),
+                pt(xx,.60,1.38),pt(xx,.36,1.28)],(side*.055,0,0),black,.018)
+        beam_between(label+" tank-root carrier",pt(.82,.70,.80),pt(1.12+tank_outset,.65,.92),.13,titanium,.18,.02)
+        rod(label+" lower wishbone",pt(1.10,.70,.80),pt(1.30,-2.468,.50),.060,black,20)
+        rod(label+" cell gimbal spindle",wrist,pt(1.30,-2.468,.42),.095,black,24)
+        make_hover_cell(side*1.30,-2.468,.29,.83,label+" forward lift",(olive,black,titanium,glow,gold))
+        arm_modules.update(set(bpy.context.scene.objects)-before_arms)
+        before_pods=set(bpy.context.scene.objects)
         # Cross-section shells taper into a chamfered front and a pinched aft cap.
         # Outer hatches are cut into the shell, not laid over an unbroken box face.
         for idx,y in enumerate((.65+pod_shift,1.48+pod_shift)):
@@ -358,6 +378,7 @@ def build(output_dir):
             box(label+" rear pod vent bed",pt(1.426,yy,1.15),(.014,.16,.21),dark,.012)
             for zz in (1.08,1.14,1.20):
                 box(label+" recessed vent louver",pt(1.437,yy,zz),(.018,.125,.018),black,.004)
+        pod_modules.update(set(bpy.context.scene.objects)-before_pods)
         before_aft=set(bpy.context.scene.objects)
         # Exposed rear turbine: open annular wall, recessed core and swept vanes.
         tx=side*.57
@@ -390,11 +411,6 @@ def build(output_dir):
     # Secondary engineered forms from the reference close-ups.
     for side,label in ((-1,"Port"),(1,"Starboard")):
         def pt(x,y,z): return (side*x,y,z)
-        # Layered forward-link armor follows the linkage slope, leaving pistons exposed.
-        panel(label+" forward link armored web",[pt(1.18,-1.80,.90),pt(1.36,-2.67,.65),pt(1.39,-2.79,.56),pt(1.25,-2.22,.64),pt(1.16,-1.85,.78)],(side*.035,0,0),olive)
-        panel(label+" forward link inset",[pt(1.224,-1.94,.81),pt(1.355,-2.61,.63),pt(1.31,-2.32,.67)],(side*.012,0,0),gold,.005)
-        for y,z,x in ((-1.94,.83,1.23),(-2.56,.65,1.35)):
-            cyl(label+" web attachment",pt(x,y,z),.025,.035,titanium,"X",8)
         # Triangular gussets and paired mounting ears reinforce the cage intersections.
         for y in (-.98,1.12+rear_bay_length):
             panel(label+" sill triangular gusset",[pt(.69,y,1.19),pt(.69,y+.26,1.19),pt(.69,y+.19,.99)],(side*.035,0,0),black)
@@ -466,10 +482,6 @@ def build(output_dir):
             rod(label+" toggle",(x,y,1.13),(x,y-.012,1.165),.008,gold,8)
         box(label+" pedal tread",(side*.17,-.65,.84),(.16,.19,.025),titanium,.012,(.25,0,0))
         for y in (-.71,-.65,-.59): box(label+" pedal grip groove",(side*.17,y,.861),(.12,.015,.008),dark,.002)
-        # A formed clevis wraps each front suspension root instead of a floating axle.
-        for yy in (-.78,-.63):
-            panel(label+" suspension root mounting ear",[(side*.68,yy,1.02),(side*.89,yy,1.03),(side*.94,yy,1.20),(side*.77,yy,1.29)],(0,.035,0),olive,.012)
-        rod(label+" pivot locking pin",(side*.89,-.83,1.12),(side*.89,-.56,1.12),.026,titanium,16)
         before_aft=set(bpy.context.scene.objects)
         # Connected bent service lines with couplers, offset from the frame tubes.
         pts=[(side*.78,.72,1.40),(side*.85,.97,1.52),(side*.86,1.24,1.54),(side*.78,1.53,1.60)]
@@ -492,23 +504,6 @@ def build(output_dir):
     box("Harness metal clasp",(0,-.065,1.113),(.075,.045,.012),gold,.008)
     for x in (-.18,.18):
         for y in (-.13,.05,.23): box("Seat stitch",(x,y,1.117),(.009,.07,.004),olive_light,0)
-
-    # Shorten only the front suspension reach about its fixed root; retain circular cells.
-    def arm_y(y): return -.70+(y+.70)*.80
-    bpy.context.view_layer.update()
-    arm_tags=("upper link","forward link","hydraulic barrel","polished piston","return hose",
-              "suspension pivot","arm triangular cover","lower wishbone","cell gimbal spindle",
-              "forward lift","web attachment")
-    for ob in list(bpy.context.scene.objects):
-        if ob.type!="MESH" or not any(t in ob.name for t in arm_tags): continue
-        if "forward lift" in ob.name:
-            ob.location.y+=.442  # rigid translation preserves circular rim and fastener spacing
-        elif "suspension pivot" in ob.name:
-            ob.location.y=arm_y(ob.location.y)
-        else:
-            world=ob.matrix_world.copy(); inv=world.inverted()
-            for v in ob.data.vertices:
-                q=world@v.co; q.y=arm_y(q.y); v.co=inv@q
 
     before_aft=set(bpy.context.scene.objects)
     # Rear-facing mechanical detail is authored for the chase camera, not only the hero view.
@@ -588,6 +583,48 @@ def build(output_dir):
     # translation. Circular rims and relative mounting distances remain unchanged.
     for ob in aft_modules:
         ob.location.y+=rear_bay_length
+
+    # Widen the rear structure progressively, while translating complete machinery
+    # assemblies rigidly so bearings, turbine collars and lift discs remain circular.
+    def width_factor(y):
+        return 1+rear_width_gain*max(0,min(1,(y+.70)/2.11))
+    structure_tags=("sill","cage","roof","rear bay","rear diagonal","rear deck brace",
+                    "crossmember","gusset","cockpit floor diagonal","rear triangulated rail")
+    engine_width_tags=engine_tags+("barrel","terminal collar","lower engine guard","diffuser vane")
+    bpy.context.view_layer.update()
+    for ob in list(bpy.context.scene.objects):
+        if ob in arm_modules or ob.type not in ("MESH","FONT"): continue
+        side=-1 if ob.name.startswith("Port ") else 1 if ob.name.startswith("Starboard ") else 0
+        if ob in pod_modules:
+            ob.location.x+=side*tank_outset
+            if ob.type=="MESH":
+                world=ob.matrix_world.copy(); inv=world.inverted()
+                for v in ob.data.vertices:
+                    q=world@v.co; q.z=1.125+(q.z-1.125)*tank_height_gain;v.co=inv@q
+            elif ob.type=="FONT":
+                # The serial's local Y lies along world Z on its side panel.
+                ob.scale.y*=tank_height_gain
+                ob.location.z=1.125+(ob.location.z-1.125)*tank_height_gain
+            continue
+        if side and any(tag in ob.name for tag in ("aft lift","integrated lift saddle","lift cradle cheek","stabilizer","fin ")):
+            ob.location.x+=side*tank_outset
+            continue
+        if side and any(tag in ob.name for tag in engine_width_tags):
+            ob.location.x+=side*engine_outset
+            continue
+        if side and any(tag in ob.name for tag in ("coolant hose","hose coupling","rear electrical junction","junction captive")):
+            ob.location.x+=side*.18
+            continue
+        # Cage joint bearings are shifted as solid parts, rather than scaled ellipses.
+        if "cage junction" in ob.name or "rear bay aft corner" in ob.name or "rear bay corner pin" in ob.name:
+            ob.location.x*=width_factor(ob.location.y)
+            continue
+        if ob.type=="MESH" and (any(tag in ob.name for tag in structure_tags) or ob.name in
+            ("Rear equipment deck","Open cockpit recessed floor","Rear electronics spine","Electronics heat sink",
+             "Rear bridge instrument enclosure","Rear bridge recessed plate")):
+            world=ob.matrix_world.copy(); inv=world.inverted()
+            for v in ob.data.vertices:
+                q=world@v.co; q.x*=width_factor(q.y);v.co=inv@q
 
     # Convert lettering too, so exports, triangle accounting and LODs share one mesh set.
     for ob in list(bpy.context.scene.objects):
@@ -766,14 +803,14 @@ def build(output_dir):
 
     # Low-poly compound collision proxy: broad hull, arm envelopes, and four lift pods.
     collision_objects=[]
-    collision_objects.append(box("COLLISION_MainHull",(0,.70+rear_bay_length*.5,1.30),(1.50,4.0+rear_bay_length,1.80),dark,0))
+    collision_objects.append(box("COLLISION_MainHull",(0,.70+rear_bay_length*.5,1.30),(1.50*(1+rear_width_gain),4.0+rear_bay_length,1.80),dark,0))
     for side,label in ((-1,"Port"),(1,"Starboard")):
         collision_objects.append(beam_between("COLLISION_"+label+"Nose",(side*.13,-3.40,.49),(side*.52,-1.05,1.17),.35,dark,.30,0))
-        collision_objects.append(box("COLLISION_"+label+"EquipmentPods",(side*1.12,1.06+pod_shift,1.12),(.72,1.65,.72),dark,0))
-        collision_objects.append(beam_between("COLLISION_"+label+"Arm",(side*.85,-.70,1.12),(side*1.30,-2.468,.45),.34,dark,.34,0))
+        collision_objects.append(box("COLLISION_"+label+"EquipmentPods",(side*(1.12+tank_outset),1.06+pod_shift,1.12),(.72,1.65,.72*tank_height_gain),dark,0))
+        collision_objects.append(beam_between("COLLISION_"+label+"Arm",(side*(1.12+tank_outset),.58,1.14),(side*1.30,-2.468,.45),.44,dark,.44,0))
         bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.50,depth=.25,location=(side*1.30,-2.468,.29))
         collision_objects.append(bpy.context.object); collision_objects[-1].name="COLLISION_"+label+"FrontLift"
-        bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.29,depth=.17,location=(side*.86,1.72+rear_bay_length,.64))
+        bpy.ops.mesh.primitive_cylinder_add(vertices=12,radius=.29,depth=.17,location=(side*(.86+tank_outset),1.72+rear_bay_length,.64))
         collision_objects.append(bpy.context.object); collision_objects[-1].name="COLLISION_"+label+"RearLift"
         collision_objects[-1].data.materials.append(dark)
     bpy.ops.object.select_all(action="DESELECT")
@@ -790,13 +827,14 @@ def build(output_dir):
     record={
       "asset_id":"mantis_mk1_hover_racer",
       "display_name":"Mantis / MK I",
-      "generator":"Assetwright procedural Blender extended rear rectangular cage bay v9",
+      "generator":"Assetwright procedural Blender tank-root heavy arms and wider rear chassis v10",
+      "stance":{"rear_width_gain":rear_width_gain,"tank_outset":tank_outset,"tank_height_gain":tank_height_gain,"engine_outset":engine_outset,"arm_root":[1.12+tank_outset,.58,1.14],"front_cell":[1.30,-2.468,.29],"rear_cell":[.86+tank_outset,1.72+rear_bay_length,.64]},
       "rear_frame_bay":{"length":rear_bay_length,"front_y":.69,"aft_y":.69+rear_bay_length,"pod_shift_y":pod_shift,"drive_shift_y":rear_bay_length},
       "reference":"User-provided MANTIS / MK I concept and wireframe sheets; source image is not redistributed by this build.",
-      "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that extend mostly forward close beside the split nose and terminate in layered circular hover repulsor cells. Extend the rear exoskeleton with a second open rectangular frame bay behind the seat, with parallel upper rails and an aft crossbar before the sloping rear engine supports. Keep the rear drive, fins and tucked lift cells together beyond that bay. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells tucked tightly beneath the rear chassis. Shorten front suspension reach by 20 percent about the original root. Emphasize layered exhaust petals, recessed combustion rings, center cones, under-engine guards and rear service fittings for the driving camera. Use an open triangulated chassis, long split tapered nose, descending cheek panels, close-set articulated arms, and exposed hollow turbine nozzles. Avoid a solid central hull. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
+      "prompt":"Create a game-ready experimental exposed-frame hover speedster called Mantis / MK I. Use a low forward-swept profile and a rigid angular exoskeleton with olive-drab armor plates, black structural tubing, brushed titanium fittings, and amber caution hardware. Build twin articulated mantis-like front arms that extend mostly forward close beside the split nose and terminate in layered circular hover repulsor cells. Extend the rear exoskeleton with a second open rectangular frame bay behind the seat, with parallel upper rails and an aft crossbar before the sloping rear engine supports. Keep the rear drive, fins and tucked lift cells together beyond that bay. Keep the single-seat cockpit open, with an exposed seat, harness, compact instrument panel, and a skeletal roll/canopy cage. Add modular armored side equipment pods with visible panel seams, vents, latches, and 01 markings. Place a paired visible turbine cluster at the rear, with concentric machined rings, stator vanes, and amber cores. Add swept tail fins and two smaller aft hover cells tucked tightly beneath the rear chassis. Mount thick forged suspension links at the forward side-tank carriers, with substantial root bearings, clevises and larger hydraulic cylinders. Widen the rear chassis and use taller side tanks with a broad rear stance. Preserve the front hover-cell positions and circular rear machinery. Emphasize layered exhaust petals, recessed combustion rings, center cones, under-engine guards and rear service fittings for the driving camera. Use an open triangulated chassis, long split tapered nose, descending cheek panels, close-set articulated arms, and exposed hollow turbine nozzles. Avoid a solid central hull. Show believable mechanical connections, exposed actuators, hoses, fasteners, and layered armor; preserve the open-frame silhouette and separate readable parts. Export a textured GLB for a real-time game.",
       "negative_prompt":"No enclosed car body, no conventional wheels or tires, no landing legs, no smooth one-piece shell, no low-poly toy appearance, no omitted front arms, no missing hover cells, no opaque canopy, no unsupported floating details, no text outside modeled markings.",
       "game_target":{"engine":"Godot","format":"GLB","intended_use":"Real-time hover-racing game asset","triangle_budget_target":120000,"triangle_count":triangle_count,"assembly_triangles":assembly_triangles,"lods":{"LOD0":triangle_count,"LOD1":lod1_triangles,"LOD2":lod2_triangles},"collision_triangles":collision_triangles,"texture_policy":"Embedded albedo, roughness and authored micro-normal maps; high-to-low normal, AO and curvature baking not implemented"},
-      "feature_labels":["open_exoskeleton","extended_rear_rectangular_bay","twin_forward_articulated_arms","front_hover_cells","open_single_seat_cockpit","skeletal_canopy_frame","modular_side_pods","paired_rear_turbines","swept_tail_fins","aft_hover_cells","olive_metal_materials","mechanical_hardware"],
+      "feature_labels":["open_exoskeleton","extended_rear_rectangular_bay","tank_anchored_heavy_arms","wide_rear_chassis","twin_forward_articulated_arms","front_hover_cells","open_single_seat_cockpit","skeletal_canopy_frame","modular_side_pods","paired_rear_turbines","swept_tail_fins","aft_hover_cells","olive_metal_materials","mechanical_hardware"],
       "axis_convention":{"forward":"-Y","right":"+X","up":"+Z"},
       "views":["hero_3q","front","side","rear","top","cockpit_detail","drive_detail","rear_3q","chase"],
       "files":["mantis_mk1.blend","mantis_mk1.glb","mantis_mk1_lod1.glb","mantis_mk1_lod2.glb","mantis_mk1_collision.glb","mantis_mk1_review_board.png"],
