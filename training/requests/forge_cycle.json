@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 10,
-  "max_assets": 24,
-  "focus": "vehicle engine mechanical machinery generator industrial panel wheel",
-  "objective": "Study 24 new CC0 Blender meshes, join authoritative publisher descriptions by exact source object ID and SHA-256, extract weak component-name role candidates for visual review, and train caption-to-actual-mesh descriptors only if 32+ independent verified pairs exist; no Android deployment."
+  "cycle": 11,
+  "max_assets": 12,
+  "focus": "vehicle engine mechanical generator machinery industrial",
+  "objective": "Create source-SHA matched CC0 object-caption and geometry pairs, generate Blender three-angle preview images for candidate semantic parts, retain role guesses as unverified, and measure held-out caption-to-mesh learning without changing Android."
 }
