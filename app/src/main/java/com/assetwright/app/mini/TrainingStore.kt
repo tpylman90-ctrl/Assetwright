@@ -131,12 +131,21 @@ object TrainingStore {
         require(ex.rearHaunch.isFinite() && ex.rearHaunch in 0.9f..1.3f)
     }
 
-    private fun json(ex: TrainingExample): JSONObject = JSONObject()
-        .put("prompt", ex.prompt)
-        .put("length", ex.length.toDouble())
-        .put("width", ex.width.toDouble())
-        .put("roofHeight", ex.roofHeight.toDouble())
-        .put("canopyLength", ex.canopyLength.toDouble())
-        .put("noseTaper", ex.noseTaper.toDouble())
-        .put("rearHaunch", ex.rearHaunch.toDouble())
+    private fun json(ex: TrainingExample): JSONObject {
+        val spec = VehicleSpec(
+            title = "Hover Vehicle", length = ex.length, width = ex.width,
+            roofHeight = ex.roofHeight, canopyLength = ex.canopyLength,
+            noseTaper = ex.noseTaper, rearHaunch = ex.rearHaunch,
+            quality = "Mobile", sourcePrompt = ex.prompt
+        )
+        return JSONObject()
+            .put("prompt", ex.prompt)
+            .put("length", ex.length.toDouble())
+            .put("width", ex.width.toDouble())
+            .put("roofHeight", ex.roofHeight.toDouble())
+            .put("canopyLength", ex.canopyLength.toDouble())
+            .put("noseTaper", ex.noseTaper.toDouble())
+            .put("rearHaunch", ex.rearHaunch.toDouble())
+            .put("construction_recipe", ShapeProgram.toJson(spec))
+    }
 }
