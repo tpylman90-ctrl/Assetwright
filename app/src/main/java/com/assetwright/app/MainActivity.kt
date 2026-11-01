@@ -87,9 +87,30 @@ private fun AssetwrightScreen() {
         mutableStateOf(TrainingStore.approved(context))
     }
     var acceptedCount by remember(context) { mutableStateOf(localExamples.size) }
-    val trainingExamples = remember(context, localExamples) {
-        localExamples.asReversed() + TrainingStore.bundled(context)
+    var homeExamples by remember(context) {
+        mutableStateOf(TrainingStore.home(context))
     }
+    val trainingExamples = remember(context, localExamples, homeExamples) {
+        localExamples.asReversed() + homeExamples.asReversed() + TrainingStore.bundled(context)
+    }
+    val homeImport = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument(),
+        onResult = { uri ->
+            if (uri != null) {
+                try {
+                    val source = context.contentResolver.openInputStream(uri)
+                        ?.bufferedReader()?.use { it.readText() }
+                        ?: error("Unable to read the selected model pack")
+                    val count = TrainingStore.importHomePack(context, source)
+                    homeExamples = TrainingStore.home(context)
+                    status = "Imported " + count + " approved home training examples. " +
+                        "They will influence the next offline generation."
+                } catch (ex: Exception) {
+                    status = "Model pack was not accepted: " + (ex.message ?: "unknown error")
+                }
+            }
+        }
+    )
     val trainingExport = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("application/x-ndjson"),
         onResult = { uri ->
@@ -351,6 +372,17 @@ private fun AssetwrightScreen() {
                                 }
                             }
                         }
+                    }
+                    OutlinedButton(
+                        onClick = { homeImport.launch(arrayOf("application/json", "text/plain", "application/octet-stream")) },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = TextMain)
+                    ) {
+                        Text("Import home-trained model pack")
+                    }
+                    if (homeExamples.isNotEmpty()) {
+                        Text("Home training: " + homeExamples.size + " approved examples active",
+                            color = TextMuted, fontSize = 12.sp)
                     }
                     if (acceptedCount > 0) {
                         OutlinedButton(
