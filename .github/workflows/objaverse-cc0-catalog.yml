@@ -18,7 +18,7 @@ jobs:
   catalog:
     name: Filter object-level licenses and join verified CC0 captions
     runs-on: ubuntu-24.04
-    timeout-minutes: 22
+    timeout-minutes: 28
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -33,8 +33,22 @@ jobs:
             --out local-data/mini-ai/objaverse/verified_cc0_catalog.json \
             --report local-data/mini-ai/objaverse/coverage_report.json \
             --shard-start 0 \
-            --shards 16 \
+            --shards 160 \
             --cap3d
+      - name: Index Poly Haven catalog and combine attribution-safe 3D descriptions
+        run: |
+          python tools/mini_ai/descriptive_catalog.py \
+            --out local-data/mini-ai/objaverse/poly_haven_catalog.json \
+            --report local-data/mini-ai/objaverse/poly_haven_coverage.json
+          python tools/mini_ai/merge_reference_catalogs.py \
+            --poly local-data/mini-ai/objaverse/poly_haven_catalog.json \
+            --objaverse local-data/mini-ai/objaverse/verified_cc0_catalog.json \
+            --out local-data/mini-ai/objaverse/merged_reference_catalog.json \
+            --report local-data/mini-ai/objaverse/merged_reference_coverage.json
+          python tools/mini_ai/semantic_reference_search.py \
+            --catalog local-data/mini-ai/objaverse/merged_reference_catalog.json \
+            --out local-data/mini-ai/objaverse/combined_reference_search_demo.json
+
       - name: Upload licensed caption research artifact
         uses: actions/upload-artifact@v4
         with:
