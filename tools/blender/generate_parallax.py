@@ -211,31 +211,181 @@ def race_spear(side,mat):
     return o
 
 
-def luxury_racing_seat(x,leather,insert,alloy,shell):
-    """Tailored two-place GT-race buckets with real pads, ribs, and bolster edges."""
+
+def elliptical_formed_part(name,sections,mat,orientation='Y',resolution=14):
+    """Closed, low-cost organically tapered mesh formed from editable elliptical stations.
+    Sections are (along_axis, lateral_radius, vertical_or_depth_radius, transverse_center).
+    For Y the fourth value is Z center; for Z it is Y center.
+    """
+    verts=[];faces=[]
+    for station,width,depth,center in sections:
+        for i in range(resolution):
+            angle=math.tau*i/resolution
+            if orientation=='Y':
+                verts.append((width*math.cos(angle),station,center+depth*math.sin(angle)))
+            else:
+                verts.append((width*math.cos(angle),center+depth*math.sin(angle),station))
+    for j in range(len(sections)-1):
+        for i in range(resolution):
+            faces.append((j*resolution+i,j*resolution+(i+1)%resolution,
+                          (j+1)*resolution+(i+1)%resolution,(j+1)*resolution+i))
+    faces.append(tuple(reversed(range(resolution))))
+    faces.append(tuple(range((len(sections)-1)*resolution,len(sections)*resolution)))
+    return subd(mesh(name,verts,faces,mat),1)
+
+
+def tapered_seat_cushion(name,x,sections,mat,orientation='Y',resolution=14):
+    """Organic cushioned shell with all geometry authored relative to a seat center."""
+    v=[];f=[]
+    for along,radial,thick,center in sections:
+        for i in range(resolution):
+            a=math.tau*i/resolution
+            if orientation=='Y':
+                v.append((x+radial*math.cos(a),along,center+thick*math.sin(a)))
+            else:
+                v.append((x+radial*math.cos(a),center+thick*math.sin(a),along))
+    for j in range(len(sections)-1):
+        for i in range(resolution):
+            f.append((j*resolution+i,j*resolution+(i+1)%resolution,
+                      (j+1)*resolution+(i+1)%resolution,(j+1)*resolution+i))
+    f.extend([tuple(reversed(range(resolution))),
+              tuple(range((len(sections)-1)*resolution,len(sections)*resolution))])
+    return subd(mesh(name,v,f,mat),1)
+
+
+def racing_strap(name,points,width,mat):
+    """Flat belt ribbon with a fitted profile, rather than floating round tubing."""
+    vertices=[];faces=[]
+    for x,y,z in points:
+        vertices.extend([(x-width*.5,y,z),(x+width*.5,y,z)])
+    for k in range(len(points)-1):
+        faces.append((2*k,2*k+1,2*k+3,2*k+2))
+    obj=mesh(name,vertices,faces,mat,False)
+    solid=obj.modifiers.new('Woven belt thickness','SOLIDIFY');solid.thickness=.007
+    return obj
+
+
+def formed_racing_seat(x,leather,insert,alloy,shell):
+    """Soft ellipsoidal stations shape the base, wraparound back and headrest."""
     label='Driver' if x<0 else 'Co-driver'
-    box(label+' seat alloy pan',(x,.16,.80),(.425,.63,.13),shell,.048)
-    box(label+' seat ivory cushion',(x,.10,.877),(.325,.48,.085),leather,.04)
-    box(label+' seat formed back',(x,.525,1.085),(.405,.165,.615),shell,.065,(-.16,0,0))
-    box(label+' seat blue inset',(x,.423,1.095),(.265,.057,.445),insert,.025,(-.16,0,0))
-    box(label+' seat ivory head bolster',(x,.57,1.426),(.272,.15,.142),leather,.055)
-    for dx in (-.165,.165):
-        box(label+' cushion side bolster',(x+dx,.07,.925),(.085,.50,.135),leather,.038)
-        box(label+' back side bolster',(x+dx,.405,1.095),(.076,.083,.43),leather,.035,(-.16,0,0))
-    for i in range(5):
-        yy=-.08+i*.084
-        tube(label+' seat cushion seam '+str(i),[(x-.119,yy,.929),(x,yy+.008,.937),
-             (x+.119,yy,.929)],.0055,alloy)
-    for i in range(6):
-        zz=.938+i*.059
-        tube(label+' seat back stitch '+str(i),[(x-.109,.390,zz),(x,.381,zz+.005),
-             (x+.109,.390,zz)],.0045,alloy)
-    for dx in (-.12,.12):
-        box(label+' restraint anchor',(x+dx,.625,1.303),(.052,.054,.055),alloy,.012)
-        tube(label+' shoulder restraint',[(x+dx,.625,1.288),
-             (x+dx*.75,.430,1.14),(x+dx*.52,.247,.970)],.013,insert)
+    tapered_seat_cushion(label+' continuous formed underpan',x,[
+        (-.29,.11,.048,.827),(-.24,.200,.065,.834),
+        (-.08,.222,.080,.829),(.20,.219,.080,.835),
+        (.40,.184,.070,.863),(.47,.088,.045,.864)],shell)
+    tapered_seat_cushion(label+' contoured leather base',x,[
+        (-.245,.070,.030,.890),(-.20,.153,.057,.894),
+        (-.01,.158,.064,.893),(.24,.153,.061,.905),
+        (.40,.103,.035,.917)],leather)
+    tapered_seat_cushion(label+' continuous sculpted back shell',x,[
+        (.875,.128,.050,.337),(.94,.190,.077,.375),
+        (1.13,.213,.082,.484),(1.30,.190,.071,.553),
+        (1.43,.162,.061,.568),(1.50,.081,.038,.574)],shell,'Z')
+    tapered_seat_cushion(label+' tailored central back pad',x,[
+        (.915,.083,.021,.305),(1.00,.135,.051,.327),
+        (1.15,.137,.053,.413),(1.31,.128,.046,.493),
+        (1.395,.084,.026,.526)],insert,'Z')
+    tapered_seat_cushion(label+' rounded head cushion',x,[
+        (1.405,.083,.025,.531),(1.435,.137,.067,.544),
+        (1.490,.142,.070,.558),(1.533,.092,.041,.565)],leather,'Z')
+    for sign in (-1,1):
+        wing_x=x+sign*.163
+        tapered_seat_cushion(label+' formed thigh bolster '+str(sign),wing_x,[
+            (-.21,.028,.023,.917),(-.12,.052,.063,.923),
+            (.09,.054,.067,.929),(.27,.049,.059,.944),
+            (.405,.025,.022,.946)],leather)
+        tapered_seat_cushion(label+' wraparound shoulder bolster '+str(sign),wing_x,[
+            (.95,.035,.018,.315),(1.05,.058,.053,.348),
+            (1.24,.064,.054,.469),(1.37,.048,.035,.531),
+            (1.415,.020,.018,.547)],leather,'Z')
+        racing_strap(label+' inset shoulder belt '+str(sign),[
+            (x+sign*.102,.555,1.405),(x+sign*.102,.500,1.32),
+            (x+sign*.076,.425,1.15),(x+sign*.058,.330,1.035),
+            (x+sign*.036,.285,.967)],.031,insert)
+        box(label+' belt upper anchor '+str(sign),
+            (x+sign*.105,.605,1.415),(.052,.045,.037),alloy,.010)
+    for i in range(3):
+        yy=-.07+i*.112
+        tube(label+' subtle seat upholstery seam '+str(i),[
+            (x-.104,yy,.954),(x,yy+.006,.962),(x+.104,yy,.954)],.0035,alloy)
     return label
 
+
+def shaped_dash(name,mat):
+    """One continuous dashboard/bulkhead, with feet bonded to the cockpit floor.
+    Longitudinal sections curl into the existing inner sills: no floating bridge.
+    """
+    vs=[];fs=[]
+    cross=[(-1.12,.770),(-1.115,.915),(-1.080,1.049),
+           (-.985,1.119),(-.805,1.174),(-.685,1.157),
+           (-.640,1.093),(-.670,.905),(-.820,.790)]
+    xs=[-.64,-.622,-.54,-.40,-.20,0,.20,.40,.54,.622,.64]
+    N=len(cross)
+    for x in xs:
+        edge=max(0, (abs(x)-.39)/.25)
+        for y,z in cross:
+            # Taper the dash outer tips down into the side walls.
+            vs.append((x,y+.018*edge,z-.135*edge))
+    for j in range(len(xs)-1):
+        for k in range(N):
+            fs.append((j*N+k,j*N+(k+1)%N,(j+1)*N+(k+1)%N,(j+1)*N+k))
+    fs.extend([tuple(reversed(range(N))),
+               tuple(range((len(xs)-1)*N,len(xs)*N))])
+    return subd(mesh(name,vs,fs,mat),1)
+
+
+def contoured_door_side(side,mat):
+    """Fitted curved interior kick panel with integrated armrest shelf."""
+    outline=[
+        (-.68,.535,.806,.975),(-.54,.555,.795,1.010),
+        (-.21,.579,.799,1.028),(.16,.588,.804,1.035),
+        (.47,.566,.816,1.037),(.74,.527,.825,.994)]
+    vs=[];fs=[]
+    # Per-station, U-shaped five point span: longitudinal rounded side-pad.
+    for y,x,zlow,zhigh in outline:
+        for xx,zz in [(x-.047,zlow),(x-.064,zlow+.045),
+                      (x-.070,zhigh-.067),(x-.045,zhigh),
+                      (x+.009,zhigh-.042),(x+.020,zlow+.036)]:
+            vs.append((side*xx,y,zz))
+    N=6
+    for j in range(len(outline)-1):
+        for i in range(N):
+            fs.append((j*N+i,j*N+(i+1)%N,(j+1)*N+(i+1)%N,(j+1)*N+i))
+    fs.extend([tuple(reversed(range(N))),
+               tuple(range((len(outline)-1)*N,len(outline)*N))])
+    if side<0:fs=[tuple(reversed(face)) for face in fs]
+    return subd(mesh(('Port' if side<0 else 'Starboard')+' contoured cockpit interior wall',
+                     vs,fs,mat),1)
+
+
+def competition_gauge_pod(x,z,black,alloy,glow):
+    """A small recessed dual gauge pod seated into the continuous dashboard."""
+    # Low-profile black formed binnacle embedded in its upper aft-facing wall.
+    ellipse_shell('Integrated driver dial enclosure',x,z,[
+        (-.760,.258,.140),(-.684,.248,.135),(-.603,.231,.125),
+        (-.575,.211,.114)],black,32)
+    for idx,(cx,r) in enumerate([(-.365,.072),(-.194,.064)]):
+        cylinder('Integrated dial dark recess '+str(idx),
+                 (cx,-.565,1.135),r,.017,black,28,'Y')
+        cylinder('Integrated dial champagne rim '+str(idx),
+                 (cx,-.552,1.135),r*1.01,.011,alloy,28,'Y')
+        cylinder('Integrated dial smoked blue face '+str(idx),
+                 (cx,-.539,1.135),r*.83,.009,glow,28,'Y')
+        tube('Integrated dial needle '+str(idx),[
+            (cx,-.531,1.135),(cx+r*.45,-.524,1.156)],.004,alloy)
+
+
+def fitted_cockpit_console(mat,leather,alloy):
+    """A single narrow console blending down into the floor between the seats."""
+    tapered_seat_cushion('Cockpit flowing center console',0,[
+        (-.635,.065,.044,.816),(-.50,.090,.079,.830),
+        (-.29,.103,.091,.831),(-.05,.105,.094,.829),
+        (.24,.113,.091,.825),(.54,.095,.080,.827),
+        (.70,.054,.044,.823)],mat)
+    tapered_seat_cushion('Cockpit tapered padded center armrest',0,[
+        (.22,.047,.024,.906),(.31,.083,.035,.912),
+        (.48,.087,.047,.912),(.61,.052,.024,.906)],leather)
+    cylinder('Cockpit inset selector bezel',(0,-.297,.939),.054,.018,alloy,24)
+    cylinder('Cockpit inset selector knob',(0,-.297,.951),.030,.022,mat,20)
 
 def center_patch(name,rows,mat,subdivision=2):
     v=[];f=[];n=11
@@ -413,48 +563,35 @@ def build(out,shape_check=False):
     for idx in (1,6):
         y,w,edge,peak=CANOPY[idx]
         tube('Canopy formed arch '+str(idx),[(w*math.sin(t),y,edge+(peak-edge)*max(0,1-abs(math.sin(t))**4)+.008) for t in [-math.pi/2+math.pi*i/18 for i in range(19)]],.018,teal)
-    # Jet-age GT-race cockpit, not a lounge: tailored low buckets, purpose-built
-    # competition instruments and premium satin metal with an original console.
-    for x in (-.265,.265):
-        luxury_racing_seat(x,ivory_leather,navy_leather,champagne,teal)
-    box('Cockpit center tunnel',(0,.03,.785),(.135,1.29,.15),teal,.048)
-    box('Cockpit champagne console spine',(0,-.075,.874),(.145,.74,.042),champagne,.018)
-    box('Cockpit padded armrest',(0,.46,.919),(.177,.345,.082),ivory_leather,.035)
-    box('Cockpit drive selector pedestal',(0,-.245,.922),(.120,.156,.085),teal,.021)
-    cylinder('Cockpit drive mode rotary dial',(0,-.245,.978),.051,.024,champagne,24)
-    cylinder('Cockpit drive mode center',(0,-.245,.996),.027,.013,black,20)
-    for i in range(4):
-        yy=-.07+i*.095
-        box('Cockpit console toggle',(0,yy,.914),(.071,.021,.033),silver,.009)
+    # Cockpit V4: fitted control meshes replace isolated beveled block volumes.
+    # The dashboard is a full structural fairing anchored at y=-1.12, with
+    # continuous returns into the side walls; instruments are inset aft.
+    shaped_dash('Cockpit integrated jet-age dashboard shell',teal)
     for side,label in [(-1,'Port'),(1,'Starboard')]:
-        box(label+' cabin sculpted doorpad',(side*.576,.12,.883),(.077,1.28,.205),navy_leather,.055)
-        box(label+' cabin leather arm rest',(side*.535,.32,.962),(.126,.57,.073),ivory_leather,.028)
-        tube(label+' cabin brightwork',[(side*.565,-.46,1.017),(side*.560,.02,1.035),
-            (side*.565,.55,1.030)],.009,champagne)
-        for yy in (-.35,-.24,-.13):
-            box(label+' cabin acoustic perforation',(side*.526,yy,.912),(.011,.025,.031),silver,.005)
-    box('Dashboard sculpted competition bridge',(0,-.72,1.063),(1.01,.20,.162),teal,.060)
-    box('Dashboard champagne cockpit brow',(0,-.647,1.169),(.91,.045,.060),champagne,.020)
-    box('Dashboard driver binnacle',(-.275,-.594,1.204),(.48,.047,.195),black,.042)
-    for i,(cx,r) in enumerate([(-.388,.086),(-.212,.066)]):
-        cylinder('Dashboard analogue blue gauge '+str(i),(cx,-.560,1.197),r,.023,instrument,32,'Y')
-        cylinder('Dashboard gauge bezel '+str(i),(cx,-.538,1.197),r*1.08,.016,champagne,32,'Y')
-        cylinder('Dashboard black dial '+str(i),(cx,-.525,1.197),r*.76,.012,black,32,'Y')
-        tube('Dashboard illuminated needle '+str(i),[(cx,-.511,1.197),
-            (cx+r*.49,-.509,1.221)],.006,instrument)
-    box('Dashboard passenger character sweep',(.280,-.605,1.148),(.37,.08,.073),ivory_leather,.025)
-    box('Dashboard central telemetry',(.062,-.565,1.168),(.131,.015,.072),instrument,.008)
-    for i in range(5):
-        box('Dashboard tactile switch '+str(i),(.106+i*.045,-.566,1.122),(.024,.019,.014),champagne,.004)
-    # Small period-evocative half-ring competition steering wheel.
+        contoured_door_side(side,navy_leather)
+        tube(label+' cockpit armrest metal inset',[
+            (side*.515,-.52,.982),(side*.520,-.23,1.005),
+            (side*.521,.18,1.012),(side*.523,.52,1.007)],.008,champagne)
+    for x in (-.265,.265):
+        formed_racing_seat(x,ivory_leather,navy_leather,champagne,teal)
+    fitted_cockpit_console(teal,ivory_leather,champagne)
+    competition_gauge_pod(-.278,1.135,black,champagne,instrument)
+    # The steering column is physically attached to the aft-facing binnacle.
+    tube('Driver anchored steering column',[
+        (-.265,-.584,1.10),(-.265,-.502,1.11),(-.265,-.420,1.131)],.022,silver)
     wheel_x=-.265
-    wheel_points=[(wheel_x+.146*math.cos(a),-.390,1.130+.146*math.sin(a))
+    wheel_points=[(wheel_x+.138*math.cos(a),-.379,1.130+.138*math.sin(a))
                   for a in [math.tau*i/24 for i in range(24)]]
-    tube('Driver polished competition steering rim',wheel_points,.016,champagne,True)
-    cylinder('Driver steering leather hub',(wheel_x,-.400,1.130),.042,.061,navy_leather,24,'Y')
+    tube('Driver slim heritage competition wheel',wheel_points,.012,champagne,True)
+    cylinder('Driver leather steering hub',(wheel_x,-.390,1.130),.037,.038,navy_leather,24,'Y')
     for a in (math.pi/2,math.pi*7/6,math.pi*11/6):
-        tube('Driver steering alloy spoke',[(wheel_x,-.386,1.130),
-            (wheel_x+.133*math.cos(a),-.386,1.130+.133*math.sin(a))],.013,silver)
+        tube('Driver mounted steering spoke',[(wheel_x,-.375,1.13),
+             (wheel_x+.129*math.cos(a),-.375,1.13+.129*math.sin(a))],.0085,silver)
+    tube('Passenger flowing dash reveal',[(.055,-.642,1.137),(.25,-.646,1.143),
+         (.46,-.657,1.112),(.60,-.702,1.035)],.008,champagne)
+    for i in range(4):
+        box('Cockpit recessed tactile toggles '+str(i),
+             (.06+i*.037,-.615,1.082),(.018,.022,.014),champagne,.004)
     tube('Hood central inset',[(0,-2.85,.69),(0,-2.40,.75),(0,-1.78,.85),(0,-1.12,.96)],.012,teal)
     text=bpy.data.curves.new('Parallax badge glyphs','FONT');text.body='PARALLAX';text.align_x='CENTER';text.size=.075;text.extrude=.001
     ob=bpy.data.objects.new('Parallax hood identification',text);bpy.context.collection.objects.link(ob);ob.location=(0,-2.02,.83);ob.data.materials.append(gold)
@@ -535,7 +672,7 @@ def build(out,shape_check=False):
     collision,_=stats(proxy);export(os.path.join(out,'parallax_01_collision.glb'),proxy)
     for o in proxy:bpy.data.objects.remove(o,do_unlink=True)
     record={'asset_id':'parallax_01_hover_coupe','display_name':'Parallax / 01',
-      'generator':'Parallax v3: Corvette-SS-era jet-age hover racing silhouette and tailored competition GT cabin',
+      'generator':'Parallax v4: organically lofted seats, bonded dashboard and cutaway cockpit detailing',
       'blender_version':bpy.app.version_string, 'prompt':'Create an original Parallax two-seat jet-age hover racer. Its existing sculpted silhouette recalls late-1950s American competition roadsters, especially the photographed 1957 Corvette SS XP-64, without replicating protected marks or exact bodywork. Preserve long porcelain shoulders, the blue canopy, four vertical lift ducts and paired rear drives. Add fitted sweeping racing coves, compact luxurious competition seating, period-inspired circular driver gauges, a polished competition steering rim, a tailored two-seat center console, subdued champagne brightwork and richer jet-derived drive interiors. Keep the racer athletic and elegant, never a lounge-style luxury sedan.',
       'negative_prompt':'No wheels, no primitive boxes as the main body, no weapons, no paid provider assets, no studio geometry in exports.',
        'v2_surface_design':['continuous concave rocker control mesh','swept dark lower aero blade',
@@ -546,6 +683,11 @@ def build(out,shape_check=False):
                          'tailored two-seat competition buckets','center console and selector',
                          'retro-futurist analogue driver instruments','competition wheel',
                          'premium cabin side upholstery and brightwork'],
+       'v4_cockpit_rebuild':['station-lofted cushion and integrated headrest',
+                             'contoured seat backs and side bolsters','flat shoulder belts',
+                             'continuous full-depth dashboard/bulkhead',
+                             'embedded cockpit gauge pod and mounted steering column',
+                             'one-piece formed center console','formed cabin door-side pads'],
       'reference_images':[], 'axis_convention':{'forward':'-Y','right':'+X','up':'+Z'},
       'game_target':{'engine':'Godot','triangle_budget':120000,'triangle_count':total,
                       'assembly_triangles':groups,'top_meshes':heavy[:20],
