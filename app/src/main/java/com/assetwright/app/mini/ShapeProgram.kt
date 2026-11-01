@@ -33,7 +33,7 @@ object ShapeProgram {
         )),
         Step("loft_keel", "undercarriage", listOf("hull"), emptyMap()),
         Step("attach_rear_drive", "propulsion", listOf("hull"), mapOf(
-            "housings" to 2.0, "rear_haunch" to spec.rearHaunch.toDouble()
+            "housings" to spec.driveCount.toDouble(), "rear_haunch" to spec.rearHaunch.toDouble()
         )),
         Step("attach_repulsors", "hover_units", listOf("undercarriage"), mapOf(
             "repulsors" to 4.0
