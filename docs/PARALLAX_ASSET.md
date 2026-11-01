@@ -87,3 +87,47 @@ hero three-quarter, rear three-quarter, and top rendered meshes. If a
 reduction noticeably facets a reflection or weakens the sculpted shoulder
 line, distribute resolution around that curvature instead of raising
 subdivision indiscriminately.
+
+
+## V3 direction: 1957-inspired jet-age competition hover racer
+
+**Design correction from the visual review:** Parallax is not a soft luxury lounge
+coupe. Its existing long nose, rounded front fenders, slim greenhouse and
+twin rear propulsion ports unexpectedly evoke the 1957 Chevrolet Corvette SS
+XP-64 racing prototype. Use that period of competition-roadster design as
+historical visual inspiration **without reproducing the Corvette's bodywork,
+badges, sponsors, racing number or manufacturer identity**. Parallax keeps its
+original white porcelain-titanium / deep petrol / smoked sapphire scheme,
+four through-body hover ducts, and twin electric propulsion outlets.
+
+**Exterior V3 modeling decisions**
+- Preserve the already approved front/rear 3/4 shape and the deeply shaped V2
+  undercut rocker rather than adding a large spoiler or modern wedge nose.
+- Add an original, smooth, fitted jet-age racing cove on each shoulder, with
+  continuous longitudinal curvature and a controlled champagne-alloy highlight.
+- Enrich the twin rear drive throats with layered machined collars and recessed
+  violet field elements. Keep them compact, not industrial exhaust funnels.
+- Keep the flowing tail shoulder, small swept stabilizers, and clean lift
+  duct apertures. Surface and body mass outrank bolts and random vents.
+
+**Cabin V3:** Two compact, low GT competition buckets with separate sculpted
+shells, tailored ivory cushions, deep-blue pads, raised bolsters, restraint
+anchors and individual seam bands. A bonded center tunnel and armrest hold
+a rotary mode selector and tactile switchgear. The driver receives two
+round digital-analogue hybrid gauges beneath a formed dashboard brow and a
+small polished competition steering rim; the passenger has a softer swept
+dash fascia. Satin champagne alloy and understated upholstered side panels
+add luxury without sacrificing the purposeful racing packaging.
+
+**Critical review views:** The generator now emits `interior_open` and
+`instruments` in addition to the eight exterior views. In those two
+renders only, the canopy glass is hidden to reveal actual mesh geometry.
+The saved vehicle source and exported GLB retain the complete canopy.
+
+**Budget and validation:** The last independently verified V2 run produced
+82,222 triangles at LOD0, 26,577 at LOD1, 10,712 at LOD2 and 48 for
+collision. V3 counts and aesthetics must be validated with the new workflow;
+the 120k/45k/20k caps remain. Inspect cockpit component intersections,
+canopy clearance, front/side/3/4 continuity, and material legibility before
+approving for reuse. This is a modeling iteration, not a validated Godot
+driving test or automatic ML model training.
