@@ -9,6 +9,29 @@ connect to ChatGPT/GitHub by itself. The user selects exactly which files to
 share for an assistant review. No API key, conversation content or model is sent
 anywhere automatically.
 
+## First geometry-quality review (v0.5.2)
+
+An uploaded, user-exported Forge ZIP was independently decoded and inspected.
+The model was a small 18-component hover vehicle with a smooth lofted hull,
+glazed greenhouse, two drives and four lift repulsors. This analysis found
+geometry issues that numeric prompt lessons alone could not correct:
+
+- A sudden forward-body width change from applying full nose taper to some
+  rings and no taper to the next ring.
+- Front light endpoints extending beyond the actual narrow front cap.
+- A raised glass perimeter that did not fully fit inside the hull shoulder.
+
+The Android generator was corrected using a continuous front-width easing
+function, added front and canopy loft stations, a lower canopy mounting edge,
+and a light panel fitted inside the actual nose half-width. A new Kotlin test
+checks those invariants. These are **source-code modeling improvements**, not
+neural updates or proof that a particular rendered shape looks better.
+The revised build still requires visual review on Android.
+
+As with all Forge review bundles, no privately shared GLB or original prompt
+was committed to the public repository. Only generalized shape construction
+changes and synthetic test cases were published.
+
 ## 1. Export the review package from Android
 
 1. Generate a supported vehicle in Assetwright.
