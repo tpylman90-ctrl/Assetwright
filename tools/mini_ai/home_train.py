@@ -25,6 +25,7 @@ REPO = Path(__file__).resolve().parents[2]
 SEED = REPO / "app/src/main/assets/mini_ai/training_examples.json"
 DEFAULT_INBOX = REPO / "local-data/mini-ai/inbox"
 DEFAULT_OUT = REPO / "local-data/mini-ai/trained"
+DEFAULT_SYNC = REPO / "local-data/mini-ai/sync"
 DIMENSIONS = {
     "length": (3.4, 7.0, 4.8),
     "width": (1.45, 3.2, 2.05),
@@ -64,11 +65,11 @@ def validate(data: dict) -> dict:
     return result
 
 
-def read_inbox(folder: Path) -> list[dict]:
-    if not folder.exists():
-        return []
+def read_inbox(folder: Path, sync_folder: Path | None = None) -> list[dict]:
     records: dict[str, dict] = {}
-    for path in sorted(folder.glob("*.jsonl")):
+    local_files = sorted(folder.glob("*.jsonl")) if folder.exists() else []
+    synced_files = sorted(sync_folder.glob("approved*.jsonl")) if sync_folder is not None and sync_folder.exists() else []
+    for path in local_files + synced_files:
         if path.stat().st_size > 4 * 1024 * 1024:
             raise ValueError(f"Training export too large: {path.name}")
         for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
@@ -130,9 +131,9 @@ def write_json(path: Path, data: dict) -> None:
     temp.replace(path)
 
 
-def train_once(inbox: Path, output: Path) -> dict:
+def train_once(inbox: Path, output: Path, sync_folder: Path | None = None) -> dict:
     seed = [validate(x) for x in json.loads(SEED.read_text(encoding="utf-8"))]
-    review = read_inbox(inbox)
+    review = read_inbox(inbox, sync_folder)
     if not review:
         return {"status": "no_approved_feedback", "message": "Put Android-approved *.jsonl files in the local inbox."}
     # Split synthetic seed examples before considering imported feedback.
@@ -173,6 +174,10 @@ def train_once(inbox: Path, output: Path) -> dict:
     write_json(output / "candidate_pack.json", pack)
     if passed:
         write_json(output / "approved_pack.json", pack)
+        if sync_folder is not None:
+            # Synced to Android only through a user-configured local folder.
+            # No network transport is built into this process.
+            write_json(sync_folder / "approved_pack.json", pack)
     return report
 
 
@@ -180,6 +185,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--inbox", type=Path, default=DEFAULT_INBOX)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUT)
+    parser.add_argument("--sync-dir", type=Path, default=DEFAULT_SYNC)
     parser.add_argument("--watch", action="store_true", help="Continuously check local inbox for new approved records")
     parser.add_argument("--poll-seconds", type=int, default=60)
     args = parser.parse_args()
@@ -201,13 +207,15 @@ def main() -> None:
                 previous_library = library_state
             # Avoid repeated retraining when nothing in the feedback inbox has changed.
             paths = sorted(args.inbox.glob("*.jsonl")) if args.inbox.exists() else []
+            if args.sync_dir.exists():
+                paths += sorted(args.sync_dir.glob("approved*.jsonl"))
             state = hashlib.sha256()
             for path in paths:
                 state.update(path.name.encode("utf-8"))
                 state.update(hashlib.sha256(path.read_bytes()).digest())
             digest = state.hexdigest()
             if digest != previous:
-                result = train_once(args.inbox, args.output)
+                result = train_once(args.inbox, args.output, args.sync_dir)
                 print(json.dumps(result, indent=2), flush=True)
                 previous = digest
         except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as error:
