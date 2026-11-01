@@ -99,9 +99,11 @@ directories and are never committed or shipped with the Android APK.
 ## Cycle 4 — component relationships (experimental)
 
 The Blender study now extracts an **anonymous component proximity graph**
-alongside the eight whole-object measurements. For each source scene, the
-graph represents up to 24 substantive mesh objects, their normalized
-bounding-size/position descriptors, and up to 200 pairs. Each pair records
+alongside the eight whole-object measurements. It inspects mesh-object
+boundaries and also splits sufficiently large disconnected vertex islands
+within merged Blender meshes. For each source scene, the graph represents
+up to 24 geometric subcomponents, their normalized bounding-size/position
+descriptors, and up to 200 pairs. Each pair records
 relative size, center distance, AABB gap and whether bounding boxes overlap,
 are nearby or are separated. Names, raw vertices, textures and the source
 Blender files are not retained.
