@@ -38,6 +38,26 @@ class HomeTrainingTests(unittest.TestCase):
             self.assertEqual((out / "approved_pack.json").exists(),
                              report["status"] == "promoted")
 
+    def test_synced_approved_feedback_is_read_and_gated(self):
+        example = json.loads(SEED.read_text(encoding="utf-8"))[4]
+        record = dict(example, schema="assetwright-approved-example-v1",
+                      approved_by_user=True, origin="android-corrected-vehicle")
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            sync = root / "sync"
+            sync.mkdir()
+            (sync / "approved-phone.jsonl").write_text(
+                json.dumps(record) + "\n", encoding="utf-8")
+            report = train_once(root / "empty_inbox", root / "trained", sync)
+            self.assertEqual(report["approved_user_examples"], 1)
+            self.assertIn(report["status"], ("promoted", "rejected_regression"))
+            if report["status"] == "promoted":
+                pack = json.loads((sync / "approved_pack.json").read_text(encoding="utf-8"))
+                self.assertEqual(pack["approved_count"], 1)
+                self.assertEqual(pack["model_type"], "approved-example-memory")
+            else:
+                self.assertFalse((sync / "approved_pack.json").exists())
+
     def test_unapproved_record_rejected(self):
         example = json.loads(SEED.read_text(encoding="utf-8"))[2]
         with tempfile.TemporaryDirectory() as d:
