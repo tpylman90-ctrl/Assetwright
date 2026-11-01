@@ -35,8 +35,14 @@ object ShapeProgram {
         Step("attach_rear_drive", "propulsion", listOf("hull"), mapOf(
             "housings" to spec.driveCount.toDouble(), "rear_haunch" to spec.rearHaunch.toDouble()
         )),
-        Step("attach_repulsors", "hover_units", listOf("undercarriage"), mapOf(
-            "repulsors" to 4.0
+        Step("attach_repulsor_mounts", "mount_brackets",
+            listOf("undercarriage"), mapOf(
+                "brackets" to spec.liftCount.toDouble(),
+                "outboard" to if (spec.liftMount == "exposed") 1.0 else 0.0
+            )),
+        Step("attach_repulsors", "hover_units", listOf("mount_brackets"), mapOf(
+            "repulsors" to spec.liftCount.toDouble(),
+            "mount_outboard" to if (spec.liftMount == "exposed") 1.0 else 0.0
         )),
         Step("attach_light_strip", "lighting", listOf("hull"), emptyMap())
     )
