@@ -41,6 +41,9 @@ def apply(o,mod):
 
 def soften(o,width=.025,segments=3):
     b=o.modifiers.new('Manufactured edge radius','BEVEL');b.width=width;b.segments=segments
+    # Blender 4.0 requires Auto Smooth before evaluating weighted normals.
+    if hasattr(o.data,'use_auto_smooth'):
+        o.data.use_auto_smooth=True
     o.modifiers.new('Weighted face normals','WEIGHTED_NORMAL')
     return o
 
@@ -67,7 +70,7 @@ def cylinder(name,loc,r,depth,mat,vertices=48,axis='Z'):
     return o
 
 
-def radial_shell(name,x,y,profile,mat,n=64):
+def radial_shell(name,x,y,profile,mat,n=48):
     v=[];f=[]
     for z,r in profile:v.extend((x+r*math.cos(i*math.tau/n),y+r*math.sin(i*math.tau/n),z) for i in range(n))
     for j in range(len(profile)-1):
@@ -75,7 +78,7 @@ def radial_shell(name,x,y,profile,mat,n=64):
     return mesh(name,v,f,mat)
 
 
-def ellipse_shell(name,x,z,profile,mat,n=64):
+def ellipse_shell(name,x,z,profile,mat,n=48):
     v=[];f=[]
     for y,rx,rz in profile:v.extend((x+rx*math.cos(i*math.tau/n),y,z+rz*math.sin(i*math.tau/n)) for i in range(n))
     for j in range(len(profile)-1):
@@ -129,7 +132,9 @@ def shoulder(side,mat,channel_mat):
         mid_y=(SECTIONS[j][0]+SECTIONS[j+1][0])*.5
         if -2.4<mid_y<2.48:
             for k in (10,11):o.data.polygons[j*n+k].material_index=1
-    return subd(o,3)
+    # Keep the V2 control sections: level 2 saves approximately 40k triangles
+    # across the twin shoulders, with 64 samples around each cross-section.
+    return subd(o,2)
 
 
 def side_intake_cutter(name,side,mat):
@@ -214,6 +219,19 @@ def stats(objects):
         group='body' if any(t in o.name.lower() for t in ('ceramic','hood','keel','spine','fin')) else 'cockpit' if any(t in o.name.lower() for t in ('canopy','seat','dash','telemetry','yoke')) else 'propulsion_lighting'
         groups[group]=groups.get(group,0)+count
     return total,groups
+
+
+def detail_budget(objects):
+    """Rank evaluated object costs to guide future silhouette-preserving LOD work."""
+    dg=bpy.context.evaluated_depsgraph_get()
+    entries=[]
+    for o in objects:
+        evaluated=o.evaluated_get(dg)
+        m=evaluated.to_mesh()
+        count=sum(max(0,len(poly.vertices)-2) for poly in m.polygons)
+        evaluated.to_mesh_clear()
+        entries.append({'object':o.name,'triangles':count})
+    return sorted(entries,key=lambda item:item['triangles'],reverse=True)
 
 
 def select(objects):
@@ -354,7 +372,9 @@ def build(out,shape_check=False):
         if hasattr(o.data,'use_auto_smooth'):
             o.data.use_auto_smooth=True;o.data.auto_smooth_angle=math.radians(50)
     total,groups=stats(objects)
-    print('PARALLAX_BUDGET',json.dumps({'total':total,'assemblies':groups}),flush=True)
+    heavy=detail_budget(objects)
+    print('PARALLAX_BUDGET',json.dumps({'total':total,'assemblies':groups,
+                                      'top_meshes':heavy[:20]}),flush=True)
     if not 0<total<=120000:raise RuntimeError('Parallax exceeds 120k triangle budget: '+str(total))
     scene=bpy.context.scene
     scene.render.engine='BLENDER_EEVEE_NEXT' if bpy.app.version>=(4,2,0) else 'BLENDER_EEVEE'
@@ -417,7 +437,11 @@ def build(out,shape_check=False):
                             'deep tapered side intake with backing plenum','loaded shoulder-to-rear haunch control surfaces',
                             'formed rear quarter fairing and molded trailing shoulder'],
       'reference_images':[], 'axis_convention':{'forward':'-Y','right':'+X','up':'+Z'},
-      'game_target':{'engine':'Godot','triangle_budget':120000,'triangle_count':total,'assembly_triangles':groups,'lods':lods,'collision_triangles':collision},
+      'game_target':{'engine':'Godot','triangle_budget':120000,'triangle_count':total,
+                      'assembly_triangles':groups,'top_meshes':heavy[:20],
+                      'lods':lods,'collision_triangles':collision},
+      'geometry_optimization':{'shoulder_subdivision':2,'lift_ring_segments':48,
+                                'rear_ellipse_segments':48,'budget_scope':'evaluated mesh before renders'},
       'materials':'Portable glTF PBR color/metal/roughness/emission factors; transparent canopy. Smart-projected UVs. No high-to-low or AO baking.',
       'views':[v[0] for v in views], 'validation_scope':'Evaluated/export budgets and static mesh artifacts; no engine driving or LOD-transition validation.',
       'license':'Original procedural geometry; repository distribution license not yet declared.'}
