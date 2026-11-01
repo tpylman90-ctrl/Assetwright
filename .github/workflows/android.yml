@@ -3,6 +3,8 @@ name: Android APK
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'training/requests/**'
   workflow_dispatch:
 
 permissions:
