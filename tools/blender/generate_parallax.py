@@ -317,9 +317,10 @@ def shaped_dash(name,mat):
     vs=[];fs=[]
     # The low front and rear returns enter the cockpit floor at z~0.48,
     # making the dash a supported bulkhead, not a disconnected floating slab.
-    cross=[(-1.12,.505),(-1.115,.915),(-1.080,1.049),
-           (-.985,1.119),(-.805,1.174),(-.685,1.157),
-           (-.640,1.093),(-.670,.785),(-.820,.505)]
+    # Lower, tighter dash crown: angled upper face instead of a bulbous dome.
+    cross=[(-1.12,.505),(-1.115,.845),(-1.080,.972),
+           (-.995,1.054),(-.840,1.108),(-.721,1.098),
+           (-.652,1.020),(-.685,.743),(-.820,.505)]
     xs=[-.64,-.622,-.54,-.40,-.20,0,.20,.40,.54,.622,.64]
     N=len(cross)
     for x in xs:
@@ -360,20 +361,23 @@ def contoured_door_side(side,mat):
 
 
 def competition_gauge_pod(x,z,black,alloy,glow):
-    """A small recessed dual gauge pod seated into the continuous dashboard."""
-    # Low-profile black formed binnacle embedded in its upper aft-facing wall.
-    ellipse_shell('Integrated driver dial enclosure',x,z,[
-        (-.760,.258,.140),(-.684,.248,.135),(-.603,.231,.125),
-        (-.575,.211,.114)],black,32)
-    for idx,(cx,r) in enumerate([(-.365,.072),(-.194,.064)]):
-        cylinder('Integrated dial dark recess '+str(idx),
-                 (cx,-.565,1.135),r,.017,black,28,'Y')
-        cylinder('Integrated dial champagne rim '+str(idx),
-                 (cx,-.552,1.135),r*1.01,.011,alloy,28,'Y')
-        cylinder('Integrated dial smoked blue face '+str(idx),
-                 (cx,-.539,1.135),r*.83,.009,glow,28,'Y')
-        tube('Integrated dial needle '+str(idx),[
-            (cx,-.531,1.135),(cx+r*.45,-.524,1.156)],.004,alloy)
+    """Closed, inset oval fascia: no freestanding tunnel or black arch.
+    Gauge bezels mount directly onto the aft-facing formed dash panel.
+    """
+    tapered_seat_cushion('Driver flush sculpted dial fascia',x,[
+        (-.704,.095,.046,z),(-.674,.208,.092,z),
+        (-.640,.226,.105,z),(-.615,.194,.091,z)],black)
+    for idx,(cx,r) in enumerate([(-.363,.067),(-.195,.061)]):
+        cylinder('Driver inset instrument '+str(idx),
+                 (cx,-.602,z),r,.014,black,28,'Y')
+        cylinder('Driver machined instrument bezel '+str(idx),
+                 (cx,-.588,z),r*1.02,.012,alloy,28,'Y')
+        cylinder('Driver illuminated dial '+str(idx),
+                 (cx,-.577,z),r*.79,.009,glow,28,'Y')
+        cylinder('Driver dark dial hub '+str(idx),
+                 (cx,-.568,z),r*.16,.006,black,16,'Y')
+        tube('Driver instrument pointer '+str(idx),[
+            (cx,-.561,z),(cx+r*.43,-.559,z+.020)],.0038,alloy)
 
 
 def fitted_cockpit_console(mat,leather,alloy):
@@ -577,10 +581,10 @@ def build(out,shape_check=False):
     for x in (-.265,.265):
         formed_racing_seat(x,ivory_leather,navy_leather,champagne,teal)
     fitted_cockpit_console(teal,ivory_leather,champagne)
-    competition_gauge_pod(-.278,1.135,black,champagne,instrument)
+    competition_gauge_pod(-.278,1.042,black,champagne,instrument)
     # The steering column is physically attached to the aft-facing binnacle.
     tube('Driver anchored steering column',[
-        (-.265,-.584,1.10),(-.265,-.502,1.11),(-.265,-.420,1.131)],.022,silver)
+        (-.265,-.616,1.040),(-.265,-.526,1.070),(-.265,-.420,1.131)],.022,silver)
     wheel_x=-.265
     wheel_points=[(wheel_x+.138*math.cos(a),-.379,1.130+.138*math.sin(a))
                   for a in [math.tau*i/24 for i in range(24)]]
@@ -674,7 +678,7 @@ def build(out,shape_check=False):
     collision,_=stats(proxy);export(os.path.join(out,'parallax_01_collision.glb'),proxy)
     for o in proxy:bpy.data.objects.remove(o,do_unlink=True)
     record={'asset_id':'parallax_01_hover_coupe','display_name':'Parallax / 01',
-      'generator':'Parallax v4: organically lofted seats, bonded dashboard and cutaway cockpit detailing',
+      'generator':'Parallax v4.1: organic cabin with low dash and flush integrated driver instruments',
       'blender_version':bpy.app.version_string, 'prompt':'Create an original Parallax two-seat jet-age hover racer. Its existing sculpted silhouette recalls late-1950s American competition roadsters, especially the photographed 1957 Corvette SS XP-64, without replicating protected marks or exact bodywork. Preserve long porcelain shoulders, the blue canopy, four vertical lift ducts and paired rear drives. Add fitted sweeping racing coves, compact luxurious competition seating, period-inspired circular driver gauges, a polished competition steering rim, a tailored two-seat center console, subdued champagne brightwork and richer jet-derived drive interiors. Keep the racer athletic and elegant, never a lounge-style luxury sedan.',
       'negative_prompt':'No wheels, no primitive boxes as the main body, no weapons, no paid provider assets, no studio geometry in exports.',
        'v2_surface_design':['continuous concave rocker control mesh','swept dark lower aero blade',
