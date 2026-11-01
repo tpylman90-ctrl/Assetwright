@@ -59,6 +59,29 @@ back is **manual in this version**, pending a properly paired private LAN sync
 service. Do not expose an unauthenticated home model-training endpoint to the
 internet. If a new pack fails validation, retain the previous approved pack.
 
+## Automatically intake approved CC0 model libraries
+
+The same home watcher also checks `local-data/mini-ai/library-inbox/` for
+GLB files. Each file needs a manually verified adjacent sidecar named
+`example.glb.license.json`:
+
+```json
+{
+  "source_url": "https://example.org/original-asset",
+  "license": "CC0-1.0",
+  "reviewed_by_user": true,
+  "confirmed_training_allowed": true,
+  "asset_family": "vehicle",
+  "description": "Wide armored futuristic ground vehicle"
+}
+```
+
+Once both files exist, the watcher automatically records GLB hashes, geometry
+statistics, license provenance and descriptions in
+`local-data/mini-ai/candidates.jsonl`. Missing or disallowed licenses are
+reported as blocked. No files are automatically downloaded, and these remain
+**untrained candidates** until geometry labels and validation are available.
+
 ## Imported GLB libraries
 
 The existing `tools/mini_ai/import_glb.py` scans the structure and reports
