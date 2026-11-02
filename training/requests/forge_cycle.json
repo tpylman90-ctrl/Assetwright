@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 14,
-  "max_assets": 10,
-  "focus": "vehicle engine mechanical machinery industrial",
-  "objective": "Verify grounded Blender image and role-review pipeline with early linked run status, source-specific multiview previews, exact license/hash joins and heldout caption-mesh training gate."
+  "cycle": 15,
+  "max_assets": 12,
+  "focus": "vehicle engine mechanical machinery industrial generator",
+  "objective": "Recover real CC0 geometry after GPU preview failure by separating Blender descriptor extraction and optional three-angle render passes under Xvfb/EGL; generate SHA-grounded caption-mesh pairs and candidate review highlights without inventing labels."
 }
