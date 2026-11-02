@@ -1,0 +1,67 @@
+{
+  "schema": "assetwright-original-glb-visual-review-v1",
+  "source_run": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41381711593",
+  "source_artifact": "assetwright-real-glb-generator-benchmark",
+  "reviewer": "Forge visual critique of four-view rendering",
+  "scope": "Original procedural baseline and roof-plus candidates, not licensed third-party models",
+  "review_status": "negative_design_references_only",
+  "reviews": [
+    {
+      "case": "racer_exposed",
+      "variant": "baseline",
+      "source_glb_sha256": "6e7e8dfefca4d33b2d0a0a7f0671f96b47df74b54fceb8ec8336b3bd18e6a7f9",
+      "verdict": "not_production_quality",
+      "observations": [
+        "overly rounded dome-like greenhouse rather than integrated cockpit",
+        "straight tubular external mount supports",
+        "insufficient body-to-cabin surface-flow detail",
+        "engines appear mounted rather than integrated"
+      ],
+      "human_final_approval": false,
+      "allowed_for_training": false
+    },
+    {
+      "case": "racer_exposed",
+      "variant": "roof_plus",
+      "source_glb_sha256": "224b30c551df469dfd6e6ff83e72e2193cae54634e660cd225f4d224d530bfc9",
+      "verdict": "not_production_quality",
+      "observations": [
+        "overly rounded dome-like greenhouse rather than integrated cockpit",
+        "straight tubular external mount supports",
+        "insufficient body-to-cabin surface-flow detail",
+        "engines appear mounted rather than integrated"
+      ],
+      "human_final_approval": false,
+      "allowed_for_training": false
+    },
+    {
+      "case": "coupe_exposed",
+      "variant": "baseline",
+      "source_glb_sha256": "61764023b4fc75e070fc5183144d2753c3c6397a57b336ddf81227afbf4dde11",
+      "verdict": "not_production_quality",
+      "observations": [
+        "overly rounded dome-like greenhouse rather than integrated cockpit",
+        "straight tubular external mount supports",
+        "insufficient body-to-cabin surface-flow detail",
+        "engines appear mounted rather than integrated"
+      ],
+      "human_final_approval": false,
+      "allowed_for_training": false
+    },
+    {
+      "case": "coupe_exposed",
+      "variant": "roof_plus",
+      "source_glb_sha256": "27aee6038660cde6bf1ec644791ab4240124b6aecafc03dc495d65d5a2bee6b5",
+      "verdict": "not_production_quality",
+      "observations": [
+        "overly rounded dome-like greenhouse rather than integrated cockpit",
+        "straight tubular external mount supports",
+        "insufficient body-to-cabin surface-flow detail",
+        "engines appear mounted rather than integrated"
+      ],
+      "human_final_approval": false,
+      "allowed_for_training": false
+    }
+  ],
+  "note": "Negative design critiques are authored observations, NOT independently verified ground-truth labels; they cannot auto-promote models or private weights."
+}
