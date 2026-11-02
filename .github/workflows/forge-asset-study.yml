@@ -23,6 +23,16 @@ jobs:
       - name: Check out Assetwright code and review request
         uses: actions/checkout@v4
 
+      - name: Link running Forge study to GitHub commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}" \
+            -f state=pending \
+            -f context="forge/cc0-shape-study" \
+            -f description="Forge source-matched mesh and preview study running" \
+            -f target_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
