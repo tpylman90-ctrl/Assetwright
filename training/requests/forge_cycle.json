@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 16,
-  "max_assets": 12,
-  "focus": "mechanical metal industrial vehicle engine machinery",
-  "objective": "Expand source-SHA-grounded CC0 caption/mesh training; generate optional source-part highlights and apply visually reviewed weak-label rejections from the audited disposition ledger. Preserve Android unchanged."
+  "cycle": 17,
+  "max_assets": 8,
+  "focus": "vehicle mechanical engine machinery industrial metal",
+  "objective": "Exercise Forge self-training research loop v1: sample new independently CC0-verified mesh pairs, retrain caption-to-8-geometry-descriptor candidate, select or retain research champion against source-separated holdout and previous incumbent, exclude pseudo-labels and private user data; do not alter Android runtime."
 }
