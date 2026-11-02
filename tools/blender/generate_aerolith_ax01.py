@@ -45,7 +45,9 @@ def mesh(name,verts,faces,mat,smooth=True, uv=False):
     d.materials.append(mat)
     o=bpy.data.objects.new(name,d);bpy.context.collection.objects.link(o)
     for f in d.polygons:f.use_smooth=smooth
-    if uv:
+    # Every exported mesh, including tiny manually constructed intake fins,
+    # has usable UVs. Blender primitives already generate UVs by default.
+    if not d.uv_layers:
         uvs=d.uv_layers.new(name="PBR_UV")
         for poly in d.polygons:
             for lidx in poly.loop_indices:
@@ -420,7 +422,7 @@ def png_rgba(path,pixels,width,height):
 def paint_maps(outdir):
     # Three real UV PBR maps; little-wear flecks in a repeatable manufacturing
     # finish, without simply relying on lighting to invent texture.
-    size=512
+    size=1024
     base=bytearray(size*size*4)
     orm=bytearray(size*size*4)
     normal=bytearray(size*size*4)
@@ -500,7 +502,7 @@ def create_lod(objects,path,level):
         bpy.context.collection.objects.link(dup)
         for modifier in dup.modifiers:
             if modifier.type=="SUBSURF":
-                modifier.levels=1 if level==1 else 0
+                modifier.levels=0
                 modifier.render_levels=modifier.levels
         copies.append(dup)
     export(path,copies)
@@ -575,7 +577,7 @@ def main():
       "source":"fully original Blender procedural generation",
       "lod0_triangles":count,"lod1_triangles":lod1,"lod2_triangles":lod2,
       "surface_objects":sum(ob.type=="MESH" for ob in objects),
-      "pbr_texture_resolution":512,"materials":len(bpy.data.materials),
+      "pbr_texture_resolution":1024,"materials":len(bpy.data.materials),
       "master_glb_bytes":glb.stat().st_size,"visual_quality_approved":False}
     (outdir/"aerolith_ax01_record.json").write_text(json.dumps(record,indent=2))
     studio(outdir,brief,args.quick)
