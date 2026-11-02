@@ -79,6 +79,36 @@ class SourceGeometryTests(unittest.TestCase):
             self.assertEqual(result["source_format"], "blend")
             self.assertEqual(result["source_sha256"], "a" * 64)
 
+    def test_preview_renderer_timeout_keeps_extracted_real_mesh_data(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as tmp:
+            candidate = {"format": "blend", "url": "https://dl.polyhaven.org/model.blend",
+                         "size": 4, "md5": None}
+            calls = []
+            def fake_download(_, destination):
+                destination.write_bytes(b"test")
+                return {"source_sha256": "c" * 64, "source_bytes": 4}
+            def fake_blender(argv, **kwargs):
+                calls.append(argv)
+                if len(calls) == 2:
+                    raise subprocess.TimeoutExpired(argv, 120)
+                Path(argv[-1]).write_text(json.dumps({
+                    "schema": "assetwright-geometry-descriptor-v1",
+                    "features": [.1, .2, .3, .4, .5, .6, .7, .8],
+                    "mesh_parts": 2, "triangles": 100
+                }))
+                return type("Completed", (), {
+                    "returncode": 0, "stdout": "", "stderr": ""
+                })()
+            with patch("source_geometry.download", side_effect=fake_download), \
+                 patch("source_geometry.subprocess.run", side_effect=fake_blender):
+                result = inspect_with_blender(candidate,preview_dir=Path(tmp)/"png")
+            self.assertEqual(result["source_sha256"], "c" * 64)
+            self.assertEqual(result["features"][0], .1)
+            self.assertEqual(result["review_preview_views"], [])
+            self.assertEqual(len(calls), 2)
+            self.assertEqual(len(calls[0]), len(calls[1]) - 1)
+
     def test_reject_bad_extraction_vector(self):
         candidate = {"format": "glb", "url": "https://dl.polyhaven.org/model.glb",
                      "size": None, "md5": None}
