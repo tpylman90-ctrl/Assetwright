@@ -17,6 +17,16 @@ data class TrainingExample(
     val rearHaunch: Float
 )
 
+/** Experimental design controls for measured, visually reviewed vehicle variants.
+ * Defaults retain the previously shipped generator silhouette.
+ * Not yet learned from prompts or remotely deployable as geometry operations.
+ */
+data class VehicleDesignControls(
+    val canopySquareness: Float = 0f,
+    val shoulderDefinition: Float = 0f,
+    val fairedRepulsorMounts: Float = 0f
+)
+
 data class VehicleSpec(
     val title: String,
     val length: Float,
@@ -27,7 +37,8 @@ data class VehicleSpec(
     val rearHaunch: Float,
     val quality: String,
     val sourcePrompt: String,
-    val constructionPlan: ConstructionPlan? = null
+    val constructionPlan: ConstructionPlan? = null,
+    val designControls: VehicleDesignControls = VehicleDesignControls()
 ) {
     /** Component-count intent is independent of the six learned body dimensions. */
     val driveCount: Int get() = MiniAi.driveCount(sourcePrompt)
