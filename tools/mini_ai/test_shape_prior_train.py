@@ -55,6 +55,16 @@ class ShapePriorTests(unittest.TestCase):
         self.assertGreaterEqual(evaluation["baseline_mean_squared_distance"], 0)
         self.assertGreaterEqual(evaluation["trained_mean_squared_distance"], 0)
 
+    def test_cumulative_studies_above_fifty_fit_without_old_capacity_error(self):
+        study = {"schema":"assetwright-cc0-shape-study-v1", "cycle":18,
+                 "assets":[source_asset(i+1,
+                     [.20 + (i % 4)*.08, .48] + [.25]*6)
+                     for i in range(75)]}
+        evaluation, model = fit(study)
+        self.assertEqual(evaluation["licensed_geometry_examples"],75)
+        self.assertIsNotNone(model)
+        self.assertEqual(len(model["centroids"]),2)
+
     def test_not_enough_actual_meshes_never_claims_training(self):
         evaluation, model = fit(report(3))
         self.assertEqual(evaluation["status"], "insufficient_data")
