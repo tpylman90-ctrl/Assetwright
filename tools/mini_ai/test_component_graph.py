@@ -74,6 +74,11 @@ class ComponentGraphTests(unittest.TestCase):
         self.assertEqual(len(model["centroids"][0]),8)
         self.assertFalse(model["android_deployable"])
 
+    def test_layout_training_accepts_bounded_dataset_over_fifty_models(self):
+        report,model=fit(sample_study(75))
+        self.assertEqual(report["licensed_multi_part_models"],75)
+        self.assertIsNotNone(model)
+
     def test_model_only_written_when_enough_real_assets(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp)
