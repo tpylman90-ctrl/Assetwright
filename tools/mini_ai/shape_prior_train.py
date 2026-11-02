@@ -13,7 +13,7 @@ from pathlib import Path
 SCHEMA = "assetwright-geometry-prior-v1"
 DIMS = 8
 MIN_ASSETS = 4
-MAX_ASSETS = 50
+MAX_ASSETS = 200
 
 
 def validate_rows(report: dict) -> list[dict]:
