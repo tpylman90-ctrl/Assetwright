@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 12,
-  "max_assets": 12,
+  "cycle": 13,
+  "max_assets": 10,
   "focus": "vehicle engine mechanical generator machinery industrial",
-  "objective": "Retry source-grounded CC0 caption/mesh study with passing component-graph Python tests; render original model 3-view reference previews, issue evidence-gated weak role review queue, and train only from matched source-hash pairs."
+  "objective": "Verify corrected metadata vs Blender preview CLI wiring; inspect ten new official CC0 meshes, publish checksum-matched descriptions and actual multi-angle reference PNGs, create weak role review tasks without automatic semantic approvals."
 }
