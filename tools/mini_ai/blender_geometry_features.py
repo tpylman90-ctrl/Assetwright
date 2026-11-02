@@ -59,6 +59,7 @@ def main():
     triangle_areas = []
     part_sizes = []
     part_boxes = []
+    part_owners = []
     mesh_types = {}
     for obj in objects:
         evaluated = obj.evaluated_get(dg)
@@ -91,6 +92,10 @@ def main():
             )
             if len(islands) >= 2:
                 part_boxes.extend(islands)
+                # Disconnected islands cannot be singled out by object
+                # color; do not pretend a whole-object highlight identifies
+                # any one disconnected fragment.
+                part_owners.extend([None] * len(islands))
             else:
                 part = {
                     "min": part_min, "max": part_max,
@@ -100,6 +105,7 @@ def main():
                 if role is not None:
                     part["role_proposal"] = role
                 part_boxes.append(part)
+                part_owners.append(obj)
             area = 0.0
             for tri in mesh.loop_triangles:
                 a, b, c = (points[index] for index in tri.vertices)
@@ -133,6 +139,7 @@ def main():
         round(min(total_surface / (largest * largest * 20), 1), 6),
         round(min(med_area / (largest * largest), 1), 6),
     ]
+    graph = build_graph(part_boxes, min_bound, max_bound)
     # Never write raw model names/paths, textures or scene metadata.
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps({
@@ -146,7 +153,7 @@ def main():
         "mesh_parts": len(objects),
         "triangles": total_triangles,
         "vertices": total_vertices,
-        "component_graph": build_graph(part_boxes, min_bound, max_bound),
+        "component_graph": graph,
     }, sort_keys=True))
     if preview_dir is not None:
         # Preview only; never include original mesh files or raw scene paths.
@@ -183,6 +190,36 @@ def main():
                 scene.render.filepath = str(preview_dir/(label+".png"))
                 bpy.ops.render.render(write_still=True)
             print("ASSETWRIGHT_REVIEW_PREVIEWS",3)
+            # At most three name-derived component suggestions receive
+            # a true source-object highlight. The graph identifies the
+            # corresponding original source_part_index, not an arbitrary
+            # review-time object-list index.
+            highlighted = {}
+            scene.display.shading.color_type = "OBJECT"
+            for obj in objects:
+                obj.color = (.65,.69,.74,1.0)
+            for node in graph["nodes"]:
+                if len(highlighted)>=3:
+                    break
+                if "weak_role_proposal" not in node:
+                    continue
+                part_idx = node["source_part_index"]
+                target = part_owners[part_idx]
+                if target is None:
+                    continue
+                target.color = (1.0,.32,.08,1.0)
+                label = "component_%d_three_quarter" % node["id"]
+                offset = Vector((1.6,-2.1,1.15)).normalized() * size * 2.5
+                camera.location = center+offset
+                camera.rotation_euler = (center-camera.location).to_track_quat("-Z","Y").to_euler()
+                scene.render.filepath = str(preview_dir/(label+".png"))
+                bpy.ops.render.render(write_still=True)
+                target.color = (.65,.69,.74,1.0)
+                highlighted[str(node["id"])] = label
+            (preview_dir/"component_views.json").write_text(
+                json.dumps(highlighted,sort_keys=True),encoding="utf-8"
+            )
+            print("ASSETWRIGHT_COMPONENT_HIGHLIGHTS",len(highlighted))
         except Exception as error:
             print("ASSETWRIGHT_PREVIEW_UNAVAILABLE",str(error)[:180])
     print("ASSETWRIGHT_GEOMETRY_EXTRACTED", json.dumps({
