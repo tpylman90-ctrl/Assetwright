@@ -25,6 +25,7 @@ jobs:
     env:
       ANDROID_HOME: /usr/local/lib/android/sdk
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ASSETWRIGHT_BENCHMARK_OUT: ${{ github.workspace }}/local-data/generator-benchmark
       ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
@@ -59,6 +60,23 @@ jobs:
         run: |
           set -o pipefail
           gradle :app:testDebugUnitTest :app:assembleDebug --stacktrace 2>&1 | tee gradle-build.log
+
+      - name: Independent quality audit of 16 actual generated GLBs
+        run: |
+          python tools/mini_ai/generator_quality_loop.py \
+            --source local-data/generator-benchmark \
+            --out local-data/generator-results/evaluation.json
+
+      - name: Upload original generated benchmark GLBs and evaluation
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-real-glb-generator-benchmark
+          path: |
+            local-data/generator-benchmark/*.glb
+            local-data/generator-benchmark/*.json
+            local-data/generator-results/*.json
+          if-no-files-found: error
+          retention-days: 21
 
       - name: Publish concise failure diagnostics
         if: failure()
