@@ -199,16 +199,39 @@ def inspect_with_blender(candidate: dict, *, blender: str = "blender",
             or any(type(v) not in (int, float) or not 0 <= v <= 1 for v in features)):
             raise ValueError("Invalid Blender feature vector")
         previews = []
+        component_previews = {}
         if preview_dir is not None:
-            for name in ("three_quarter", "side", "top"):
-                img = preview_tmp / (name + ".png")
+            requests = {name: name+".png" for name in ("three_quarter", "side", "top")}
+            manifest = preview_tmp / "component_views.json"
+            if manifest.is_file() and manifest.stat().st_size < 2048:
+                declared = json.loads(manifest.read_text(encoding="utf-8"))
+                if isinstance(declared,dict):
+                    for node_id,basename in declared.items():
+                        if (not isinstance(node_id,str) or not node_id.isdigit() or
+                            not isinstance(basename,str) or
+                            basename != "component_"+node_id+"_three_quarter" or
+                            int(node_id) not in range(24)):
+                            continue
+                        if len(component_previews)>=3:
+                            break
+                        requests[basename] = basename+".png"
+                        component_previews[node_id] = basename
+            successful = set()
+            for key, filename in requests.items():
+                img = preview_tmp / filename
                 if not img.is_file() or not 100 <= img.stat().st_size <= 2*1024*1024:
                     continue
-                if img.open("rb").read(8) != b"\x89PNG\r\n\x1a\n":
-                    continue
+                with img.open("rb") as src:
+                    if src.read(8) != b"\x89PNG\r\n\x1a\n":
+                        continue
                 preview_dir.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(img, preview_dir / img.name)
-                previews.append(name)
+                successful.add(key)
+            previews = [name for name in ("three_quarter", "side", "top")
+                        if name in successful]
+            component_previews = {k:v for k,v in component_previews.items()
+                                  if v in successful}
         return {**data, **provenance, "source_format": source.suffix[1:],
                 "geometry_method": "blender-headless-v1",
-                "review_preview_views": previews}
+                "review_preview_views": previews,
+                "component_review_views": component_previews}
