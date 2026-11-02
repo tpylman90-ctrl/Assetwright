@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 17,
+  "cycle": 18,
   "max_assets": 8,
-  "focus": "vehicle mechanical engine machinery industrial metal",
-  "objective": "Exercise Forge self-training research loop v1: sample new independently CC0-verified mesh pairs, retrain caption-to-8-geometry-descriptor candidate, select or retain research champion against source-separated holdout and previous incumbent, exclude pseudo-labels and private user data; do not alter Android runtime."
+  "focus": "vehicle engine machinery industrial metal mechanical",
+  "objective": "Exercise second automatic research training cycle against restored cached research champion: source-verified CC0 pairs only, no generated pseudo-labels, accept challenger only if independent holdout improves by >=1% with >=2 new training sources; otherwise retain incumbent."
 }
