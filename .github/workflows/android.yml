@@ -12,6 +12,12 @@ on:
       - 'settings.gradle.kts'
       - 'build.gradle.kts'
       - '.github/workflows/android.yml'
+      - 'tools/mini_ai/generated_glb_critic.py'
+      - 'tools/mini_ai/generator_quality_loop.py'
+      - 'tools/mini_ai/vehicle_design_critic.py'
+      - 'tools/mini_ai/test_generated_glb_critic.py'
+      - 'tools/mini_ai/test_vehicle_design_critic.py'
+      - 'training/reviews/vehicle_visual_feedback.json'
   workflow_dispatch:
 
 permissions:
@@ -61,7 +67,7 @@ jobs:
           set -o pipefail
           gradle :app:testDebugUnitTest :app:assembleDebug --stacktrace 2>&1 | tee gradle-build.log
 
-      - name: Independent quality audit of 16 actual generated GLBs
+      - name: Independent structural and design-proxy audit of 28 actual generated GLBs
         run: |
           python tools/mini_ai/generator_quality_loop.py \
             --source local-data/generator-benchmark \
