@@ -181,16 +181,23 @@ def inspect_with_blender(candidate: dict, *, blender: str = "blender",
         args = [blender, "--background", "--threads", "2", "--factory-startup",
                 "--disable-autoexec", "--python", str(BLENDER_SCRIPT),
                 "--", str(source), str(output)]
-        if preview_dir is not None:
-            args.append(str(preview_tmp))
+        # Always extract the verified numeric descriptors FIRST, in a pure
+        # headless pass without any GPU/rendering work. Rendering can require
+        # system EGL/DRI libraries and must never turn good mesh data into an
+        # unusable training example.
         result = subprocess.run(
-            args,
-            capture_output=True, text=True, timeout=BLENDER_TIMEOUT,
+            args, capture_output=True, text=True, timeout=BLENDER_TIMEOUT,
             check=False
         )
         if result.returncode != 0 or not output.exists():
-            raise ValueError("Blender geometry extraction failed: " +
-                             (result.stderr or result.stdout)[-350:].replace("\n", " "))
+            lines=(result.stderr + "\n" + result.stdout).splitlines()
+            important=[line.strip() for line in lines
+                       if any(k in line.lower() for k in (
+                           "error", "traceback", "exception", "libegl", "unsupported",
+                           "failed to", "cannot open"
+                       ))]
+            diagnosis=" | ".join(important[-5:]) or " | ".join(lines[-5:])
+            raise ValueError("Blender geometry extraction failed: " + diagnosis[-900:])
         data = json.loads(output.read_text(encoding="utf-8"))
         if data.get("schema") != GEOMETRY_SCHEMA:
             raise ValueError("Unexpected Blender descriptor schema")
@@ -201,6 +208,13 @@ def inspect_with_blender(candidate: dict, *, blender: str = "blender",
         previews = []
         component_previews = {}
         if preview_dir is not None:
+            # Optional independent Blender process. If rendering crashes, the
+            # already validated numeric data stays usable.
+            try:
+                subprocess.run(args + [str(preview_tmp)], capture_output=True,
+                               text=True, timeout=BLENDER_TIMEOUT, check=False)
+            except (OSError, subprocess.TimeoutExpired):
+                pass
             requests = {name: name+".png" for name in ("three_quarter", "side", "top")}
             manifest = preview_tmp / "component_views.json"
             if manifest.is_file() and manifest.stat().st_size < 2048:
