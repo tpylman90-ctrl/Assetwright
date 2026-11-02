@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 13,
+  "cycle": 14,
   "max_assets": 10,
-  "focus": "vehicle engine mechanical generator machinery industrial",
-  "objective": "Verify corrected metadata vs Blender preview CLI wiring; inspect ten new official CC0 meshes, publish checksum-matched descriptions and actual multi-angle reference PNGs, create weak role review tasks without automatic semantic approvals."
+  "focus": "vehicle engine mechanical machinery industrial",
+  "objective": "Verify grounded Blender image and role-review pipeline with early linked run status, source-specific multiview previews, exact license/hash joins and heldout caption-mesh training gate."
 }
