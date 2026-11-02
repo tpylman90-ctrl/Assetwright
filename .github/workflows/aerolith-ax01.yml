@@ -1,0 +1,72 @@
+name: AEROLITH AX-01 original vehicle studio
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/blender/generate_aerolith_ax01.py'
+      - '.github/workflows/aerolith-ax01.yml'
+permissions:
+  contents: write
+concurrency:
+  group: aerolith-ax01
+  cancel-in-progress: true
+jobs:
+  build-original-craft:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install free Blender
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y blender libegl1 libgl1 python3-numpy
+          blender --version
+      - name: Generate original Aerolith, models and studio views
+        run: |
+          mkdir -p generated/aerolith_ax01
+          blender --background --factory-startup --python-exit-code 1 \
+            --python tools/blender/generate_aerolith_ax01.py \
+            -- --output-dir generated/aerolith_ax01 2>&1 | tee generated/aerolith_ax01/blender.log
+          grep ASSETWRIGHT_AEROLITH_EXPORT_OK generated/aerolith_ax01/blender.log
+          for suffix in hero rear_3q side top front rear; do
+            test -s "generated/aerolith_ax01/aerolith_ax01_$suffix.png"
+          done
+          for suffix in glb blend; do test -s "generated/aerolith_ax01/aerolith_ax01.$suffix"; done
+      - name: Independent exported-GLB audit
+        run: |
+          python3 tools/mini_ai/pbr_asset_audit.py \
+            generated/aerolith_ax01/aerolith_ax01.glb \
+            --output generated/aerolith_ax01/pbr_audit.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('generated/aerolith_ax01')
+          r=json.loads((root/'aerolith_ax01_record.json').read_text())
+          a=json.loads((root/'pbr_audit.json').read_text())
+          assert r['model']['original_geometry']
+          assert 0<r['lod0_triangles']<=170000
+          assert 0<a['triangles']==r['lod0_triangles']
+          assert a['geometry_has_uvs'] and a['geometry_has_normals']
+          assert a['has_pbr_textures'],a['materials']
+          print('AEROLITH_AX01_AUDIT_OK')
+          PY
+      - name: Upload original editable Blender master and review
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-aerolith-ax01
+          path: generated/aerolith_ax01/
+          if-no-files-found: error
+          retention-days: 7
+      - name: Publish direct PNG and GLB downloads
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="aerolith-$(echo "$GITHUB_SHA" | cut -c1-10)"
+          gh release create "$tag" generated/aerolith_ax01/aerolith_ax01*.glb \
+            generated/aerolith_ax01/aerolith_ax01*.png \
+            generated/aerolith_ax01/*audit.json \
+            generated/aerolith_ax01/*record.json \
+            --title "AEROLITH AX-01 — Original Concept Vehicle ($tag)" \
+            --notes "Original procedural Blender mesh, PBR maps and six studio views. A0 model for visual review; not yet approved as production quality." \
+            --target "$GITHUB_SHA"
