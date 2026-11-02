@@ -143,3 +143,39 @@ The original 4-view comparisons are preserved in
 `training/reviews/vehicle_visual_feedback.json` with exact GLB hashes.
 Those are *Forge-authored negative design assessments*, not ground truth
 labels, and cannot be used as automatic training data.
+
+
+## Design-quality experiment verified — 28 original generated GLBs
+
+Run [41451924250](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41451924250)
+successfully compiled the Android mesher and independently evaluated all
+**28 original GLBs** from four representative hover vehicles. All 28
+passed the structural geometry gate. No new generated outputs or private
+training weights were promoted.
+
+The conservative two-feature design proxy improved for each new
+`integrated_aero` candidate:
+
+| Metric | Existing vehicle | Aero prototype |
+|---|---:|---:|
+| Upper canopy crown width / max cabin half-width | 0.38268 | 0.70711 |
+| Repulsor mount cross-section stations | 2 | 5 |
+| Satisfied design proxy checks | 0/2 | 2/2 |
+
+The code nominated all four `integrated_aero` outputs for **visual
+review**, but these measurements are narrow technical proxies and are not
+artistic approval. An independent orthographic 3/4 comparison found the
+silhouette improvement visibly modest. The body surfaces, rear propulsion,
+and cockpit/body transition remain visually basic.
+
+Accordingly, the exact shortlisted GLB SHA-256s have also been recorded
+in `training/reviews/vehicle_visual_feedback.json` as *not production
+quality*. These evaluations cannot become automatically accepted
+supervised modeling examples. The existing Android default generator
+uses zero-valued experimental controls and remains visually unchanged.
+
+Next research and modeling tasks: add connected body feature geometry
+instead of decorative overlays, integrate the nacelles into the rear hull
+and use multiple real reference views to teach/propose meaningful silhouette
+changes before retraining design preferences. Do not optimize roof and
+support proxies alone.
