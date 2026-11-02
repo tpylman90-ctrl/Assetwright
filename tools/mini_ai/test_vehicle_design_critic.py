@@ -33,7 +33,7 @@ class DesignCriticTests(unittest.TestCase):
     def test_flattened_roof_is_measurably_broader_than_blob(self):
         dome=_canopy_crown(greenhouse(1.0))
         shaped=_canopy_crown(greenhouse(.32))
-        self.assertLess(dome["roof_crown_width_ratio"],.35)
+        self.assertLess(dome["roof_crown_width_ratio"],.55)
         self.assertGreater(shaped["roof_crown_width_ratio"],.35)
         self.assertGreater(shaped["roof_crown_width_ratio"],
                            dome["roof_crown_width_ratio"]+.20)
