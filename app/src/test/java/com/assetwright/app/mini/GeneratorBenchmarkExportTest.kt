@@ -52,7 +52,16 @@ class GeneratorBenchmarkExportTest {
                 "nose_sculpt" to original.copy(
                     noseTaper = (original.noseTaper - .07f).coerceAtLeast(.27f)),
                 "wider_haunch" to original.copy(
-                    rearHaunch = (original.rearHaunch + .045f).coerceAtMost(1.3f))
+                    rearHaunch = (original.rearHaunch + .045f).coerceAtMost(1.3f)),
+                "sculpted_canopy" to original.copy(
+                    designControls = VehicleDesignControls(canopySquareness = .85f)),
+                "faired_mounts" to original.copy(
+                    designControls = VehicleDesignControls(fairedRepulsorMounts = 1f)),
+                "integrated_aero" to original.copy(
+                    designControls = VehicleDesignControls(
+                        canopySquareness = .85f,
+                        shoulderDefinition = .80f,
+                        fairedRepulsorMounts = 1f))
             )
             for ((variant, spec) in variations) {
                 val stem = scenario.id + "__" + variant
@@ -77,6 +86,6 @@ class GeneratorBenchmarkExportTest {
                 wrote++
             }
         }
-        assertTrue("Incorrect number of generated GLB samples", wrote == 16)
+        assertTrue("Incorrect number of generated GLB samples", wrote == 28)
     }
 }
