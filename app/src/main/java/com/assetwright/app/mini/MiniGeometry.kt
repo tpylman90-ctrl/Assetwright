@@ -3,6 +3,8 @@ package com.assetwright.app.mini
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.math.abs
+import kotlin.math.pow
 
 data class Vec3(val x: Float, val y: Float, val z: Float) {
     operator fun minus(other: Vec3) = Vec3(x - other.x, y - other.y, z - other.z)
@@ -136,6 +138,9 @@ object MiniGeometry {
         val hullCenterZ = minOf(.80f, spec.roofHeight - .46f)
         val hullUpperRadius = minOf(.27f, spec.roofHeight - hullCenterZ - .26f)
         val hullLowerRadius = .38f
+        val shoulderSculpt = spec.designControls.shoulderDefinition.coerceIn(0f, 1f)
+        val roofSquareness = spec.designControls.canopySquareness.coerceIn(0f, 1f)
+        val mountFairing = spec.designControls.fairedRepulsorMounts.coerceIn(0f, 1f)
         // Denser, continuous nose-to-shoulder transition. Previously the nose
         // factor jumped from 0.55 to 1.0 between adjacent stations, causing
         // an abrupt flare on every exported vehicle.
@@ -153,12 +158,14 @@ object MiniGeometry {
                 val frontProgress = ((t + 0.50f) / 0.45f).coerceIn(0f, 1f)
                 val eased = frontProgress * frontProgress * (3f - 2f * frontProgress)
                 val frontShape = spec.noseTaper + (1f - spec.noseTaper) * eased
-                val width = w * profile * frontShape
+                val shoulderVolume = shoulderSculpt * .065f * abs(side) * eased
+                val width = w * profile * frontShape * (1f + shoulderVolume)
                 Vec3(
                     width * side,
                     l * t,
                     hullCenterZ + if (top >= 0f)
-                        hullUpperRadius * top * (.94f + .06f * profile)
+                        hullUpperRadius * top * (.94f + .06f * profile) +
+                            shoulderSculpt * .055f * abs(side) * top
                     else hullLowerRadius * top
                 )
             }
@@ -193,8 +200,14 @@ object MiniGeometry {
                 val side = cos(angle).toFloat()
                 val top = sin(angle).toFloat()
                 val lowerFoot = hullCenterZ + .10f
+                // The baseline uses a near-elliptical greenhouse. The
+                // experimental exponent flattens its upper crown into a
+                // wider aerodynamic roof without changing the specified peak.
+                val crown = maxOf(top, 0f).toDouble().pow(
+                    (1f - .69f * roofSquareness).toDouble()
+                ).toFloat()
                 val z = lowerFoot + .08f * minOf(top, 0f) +
-                    (roof - lowerFoot).coerceAtLeast(0f) * maxOf(top, 0f) * taper
+                    (roof - lowerFoot).coerceAtLeast(0f) * crown * taper
                 Vec3(w * .78f * taper * side, center + span * t, z)
             }
         }
@@ -254,9 +267,33 @@ object MiniGeometry {
                     padY, .275f, .29f, .135f, 16)
                 // Real mesh bracket spans pad and underbody instead of a
                 // floating, visually separate hover unit.
-                m.cylinderX("Repulsor mount bracket", UNDERBODY,
-                    side * w * .38f, padX,
-                    padY, .41f, if (spec.liftMount == "exposed") .13f else .085f, 12)
+                if (mountFairing > 0f) {
+                    // Five profiled sections: thick root, swept transition,
+                    // and tight lift-cell collar. Unlike the previous two-ring
+                    // cylinder, the cross section tapers toward the pad and
+                    // rises smoothly to blend into the underside.
+                    val x0 = side * w * .38f
+                    val steps = listOf(0f, .20f, .46f, .76f, 1f)
+                    m.loft("Repulsor mount bracket", UNDERBODY, steps.map { t ->
+                        val rootWeight = (1f - t) * (1f - t)
+                        val broadness = .12f + mountFairing * .14f * rootWeight
+                        val height = .092f + mountFairing * .075f * rootWeight
+                        val z = .40f + mountFairing * .035f *
+                            sin((PI * t).toFloat())
+                        (0 until 12).map { i ->
+                            val theta = i * 2.0 * PI / 12
+                            Vec3(
+                                x0 + (padX - x0) * t,
+                                padY + broadness * cos(theta).toFloat(),
+                                z + height * sin(theta).toFloat()
+                            )
+                        }
+                    })
+                } else {
+                    m.cylinderX("Repulsor mount bracket", UNDERBODY,
+                        side * w * .38f, padX,
+                        padY, .41f, if (spec.liftMount == "exposed") .13f else .085f, 12)
+                }
             }
         }
 
