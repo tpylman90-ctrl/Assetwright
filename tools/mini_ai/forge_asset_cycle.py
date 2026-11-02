@@ -213,7 +213,7 @@ def catalog_asset(asset_id: str, entry: dict, try_geometry: bool,
                         result["mesh_analysis"] = "blender_geometry_inspected"
                         break
                     except (OSError, ValueError, RuntimeError) as error:
-                        errors.append(str(error)[:160])
+                        errors.append(str(error)[:700])
                 if result["mesh_analysis"] != "blender_geometry_inspected":
                     result["mesh_analysis"] = "source_conversion_failed"
                     result["source_errors"] = errors
