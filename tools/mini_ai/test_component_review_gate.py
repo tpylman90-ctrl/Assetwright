@@ -35,6 +35,28 @@ class ComponentReviewGateTests(unittest.TestCase):
         self.assertEqual(stats["approved_semantic_labels"],0)
         self.assertEqual(tasks["tasks"][0]["suggested_role"],"engine")
 
+    def test_visual_review_rejection_blocks_known_false_role_from_future_queue(self):
+        samples=examples()
+        first=pending_pairs(samples)[0]["tasks"][0]
+        dispositions={
+            "schema":"assetwright-component-role-dispositions-v1",
+            "dispositions":[{
+                "source_mesh_sha256":first["source_mesh_sha256"],
+                "graph_component_id":first["graph_component_id"],
+                "proposed_role":first["suggested_role"],
+                "decision":"rejected",
+                "review_evidence":{"preview_sha256":"e"*64}
+            }]
+        }
+        queue,info=pending_pairs(samples,dispositions)
+        self.assertEqual(info["weak_role_candidates"],0)
+        self.assertEqual(info["rejected_by_actual_image_review"],1)
+        self.assertEqual(info["approved_semantic_labels"],0)
+        dispositions["dispositions"][0]["source_mesh_sha256"]="f"*64
+        queue,info=pending_pairs(samples,dispositions)
+        self.assertEqual(info["weak_role_candidates"],1)
+        self.assertEqual(info["rejected_by_actual_image_review"],0)
+
     def test_real_source_sha_graph_node_evidence_are_required(self):
         source=examples()
         task=pending_pairs(source)[0]["tasks"][0]
