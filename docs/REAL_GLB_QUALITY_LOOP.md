@@ -102,3 +102,44 @@ preferences.
 
 Source: https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41381711593
 Artifact: `assetwright-real-glb-generator-benchmark`
+
+
+## Experiment: design-oriented geometry controls (not production defaults)
+
+The four-view racer/coupe benchmark exposed two clear shortcomings:
+- the canopy crown remains a rounded blob even when raised;
+- exposed repulsor supports are uniform straight cylinders.
+
+The generator now has three **experimental design control dimensions**,
+initialized to zero in ordinary VehicleSpec values:
+- `canopySquareness` — raises the upper elliptical side profile toward a
+  flattened, broader aerodynamic roof without increasing its peak height;
+- `shoulderDefinition` — subtly shapes shoulder volume and crown;
+- `fairedRepulsorMounts` — replaces two-endpoint cylindrical arms with
+  smoothly tapered, five-station cross sections.
+
+The official Android benchmark exports seven versions per vehicle (28 real
+GLBs): original four variations plus `sculpted_canopy`,
+`faired_mounts` and `integrated_aero`. Because all experiment controls
+default to zero, no design change is silently activated in normal
+phone generation.
+
+A second, independently computed measurement pass uses actual GLB vertex
+positions to check the *roof crown width ratio* and the *number of distinct
+arm cross-sections*. These are interpretable geometry proxies directly
+motivated by previously reviewed failures, not an AI vision model or a
+claim to evaluate attractiveness. Raising the same rounded canopy does
+not satisfy the flatter-roof proxy; simply moving a pipe does not satisfy
+the profiled-arm proxy.
+
+For the current controlled benchmark, a model is nominated for visual
+review only when it passes all previous structural checks, increases
+these explicit shape proxies, and does not materially reduce the structural
+score. Only human-reviewed examples may become supervised modeling
+lessons. No visual-proxy score is automatically promoted to private
+training weights or Android deployment.
+
+The original 4-view comparisons are preserved in
+`training/reviews/vehicle_visual_feedback.json` with exact GLB hashes.
+Those are *Forge-authored negative design assessments*, not ground truth
+labels, and cannot be used as automatic training data.
