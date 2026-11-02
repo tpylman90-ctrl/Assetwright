@@ -56,12 +56,18 @@ class GroundedPairsTest(unittest.TestCase):
         result,report=match(cat,history,current)
         self.assertEqual(report["pairs_with_rendered_multiview_evidence"],1)
         self.assertEqual(len(result["pairs"][0]["review_preview_artifacts"]),3)
+        correct["geometry"]["component_review_views"]={"1":"component_1_three_quarter"}
+        current={"schema":"assetwright-cc0-shape-study-v1","assets":[correct]}
+        result,report=match(cat,history,current)
+        self.assertEqual(result["pairs"][0]["component_review_artifacts"]["1"],
+                         "review_previews/engine_A/component_1_three_quarter.png")
         wrong=rec("engine_A","b"*64)
         wrong["geometry"]["review_preview_views"]=["side"]
         result,report=match(cat,history,{
             "schema":"assetwright-cc0-shape-study-v1","assets":[wrong]})
         self.assertEqual(report["pairs_with_rendered_multiview_evidence"],0)
         self.assertEqual(result["pairs"][0]["review_preview_artifacts"],[])
+        self.assertEqual(result["pairs"][0]["component_review_artifacts"],{})
 
     def test_missing_mesh_features_or_publisher_description_is_rejected(self):
         cat=captions("mesh")
