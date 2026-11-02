@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 15,
+  "cycle": 16,
   "max_assets": 12,
-  "focus": "vehicle engine mechanical machinery industrial generator",
-  "objective": "Recover real CC0 geometry after GPU preview failure by separating Blender descriptor extraction and optional three-angle render passes under Xvfb/EGL; generate SHA-grounded caption-mesh pairs and candidate review highlights without inventing labels."
+  "focus": "mechanical metal industrial vehicle engine machinery",
+  "objective": "Expand source-SHA-grounded CC0 caption/mesh training; generate optional source-part highlights and apply visually reviewed weak-label rejections from the audited disposition ledger. Preserve Android unchanged."
 }
