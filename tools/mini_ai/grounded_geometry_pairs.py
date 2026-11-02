@@ -66,9 +66,20 @@ def match(catalog:dict, research:dict,
                 continue
             allowed={"three_quarter","side","top"}
             names=[name for name in views if name in allowed]
-            if names:
+            node_views = {}
+            highlights=geom.get("component_review_views")
+            if isinstance(highlights,dict):
+                for node_id,basename in highlights.items():
+                    if (isinstance(node_id,str) and node_id.isdigit() and
+                        int(node_id) < 24 and
+                        basename=="component_"+node_id+"_three_quarter"):
+                        node_views[node_id] = (
+                            f"review_previews/{identifier}/{basename}.png"
+                        )
+            if names or node_views:
                 previews[identifier]=(geom.get("source_sha256"),[
-                    f"review_previews/{identifier}/{name}.png" for name in names])
+                    f"review_previews/{identifier}/{name}.png" for name in names],
+                    node_views)
     used_sha=set()
     rows=[]
     for row in catalog.get("records",[]):
@@ -105,6 +116,9 @@ def match(catalog:dict, research:dict,
             "verified_component_roles":[],
             "review_preview_artifacts":(
                 previews[id][1] if id in previews and previews[id][0]==sha else []
+            ),
+            "component_review_artifacts":(
+                previews[id][2] if id in previews and previews[id][0]==sha else {}
             ),
         }
         rows.append(pairs)
