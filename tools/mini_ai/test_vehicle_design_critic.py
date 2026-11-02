@@ -8,7 +8,7 @@ def greenhouse(exponent:float):
     # One annular ring at two longitudinal stations, with z-up mapped to
     # glTF Y-up and arbitrary longitudinal glTF Z positions.
     points=[]
-    for longitude in (-.12,.12):
+    for longitude in (-.12,0,.12):
         for i in range(16):
             angle=i*2*math.pi/16
             x=.9*math.cos(angle)
