@@ -74,3 +74,31 @@ geometry beyond the six existing body parameters.
 - `tools/mini_ai/generator_quality_loop.py`
 - `tools/mini_ai/test_generated_glb_critic.py`
 - `.github/workflows/android.yml`
+
+
+## First verified native-GLB benchmark — GitHub run 41381711593
+
+The app's JVM export test produced **16 actual GLBs** from four fixed
+original hovercraft descriptions, and the independent Python topology
+critic successfully checked all 16. All 16 passed structural QA; no
+candidate was admitted into model training or deployed to Android.
+
+- Exposed racer: baseline score 0.890405; raised-roof candidate 0.977071,
+  with canopy clearance increasing from 0.26755 to 0.39755 metres.
+- Exposed coupe: baseline score 0.888317; raised-roof candidate 0.934766,
+  with canopy clearance increasing from 0.25886 to 0.32853 metres.
+- Hidden SUV: baseline kept; all four candidates structurally valid.
+- Tucked SUV: baseline kept; all four candidates structurally valid.
+
+The human-visible research comparison is still needed: high structural
+scores do not make the vehicle look professionally sculpted. In an
+independent approximate 3/4 render of the GLBs, both raised-canopy
+changes were visually modest despite increased numeric clearance.
+The current vehicle shell still has prominent straight mount arms and a
+simple cockpit silhouette. Those aesthetics are outside the automated
+critic. We must introduce real design-review labels and visual metrics
+before using any of these structural score deltas to train modeling
+preferences.
+
+Source: https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41381711593
+Artifact: `assetwright-real-glb-generator-benchmark`
