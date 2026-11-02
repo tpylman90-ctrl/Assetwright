@@ -25,6 +25,8 @@ def _mesh_points(doc:dict,blob:bytes,name:str)->list[list[tuple]]:
 
 
 def _canopy_crown(points:list[tuple])->dict:
+    if not points:
+        return {"roof_crown_width_ratio":0., "sample_count":0}
     # Native GLB Y is up, -Z is fore/aft. Measure broadness of upper
     # cross sections near the greenhouse center, not only top height.
     length=max(p[2] for p in points)-min(p[2] for p in points)
