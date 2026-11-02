@@ -15,7 +15,7 @@ from shape_prior_train import mean, train_centroids, evaluate
 SCHEMA = "assetwright-component-layout-prior-v1"
 DIMS = 8
 MIN_MODELS = 4
-MAX_MODELS = 50
+MAX_MODELS = 200
 
 
 def summarize(graph: dict) -> list[float]:
