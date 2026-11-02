@@ -51,8 +51,7 @@ jobs:
           python tools/mini_ai/descriptive_catalog.py \
             --out local-data/mini-ai/forge-study/descriptive_catalog.json \
             --report local-data/mini-ai/forge-study/descriptive_catalog_report.json \
-            --history local-data/mini-ai/forge-study/dataset.json \
-            --previews-dir local-data/mini-ai/forge-study/review_previews
+            --history local-data/mini-ai/forge-study/dataset.json
 
       - name: Index 3D descriptions and study relevant references
         run: |
@@ -71,7 +70,8 @@ jobs:
           python tools/mini_ai/forge_asset_cycle.py \
             --request training/requests/forge_cycle.json \
             --output local-data/mini-ai/forge-study/report.json \
-            --history local-data/mini-ai/forge-study/dataset.json
+            --history local-data/mini-ai/forge-study/dataset.json \
+            --previews-dir local-data/mini-ai/forge-study/review_previews
 
       - name: Merge historical geometry descriptors (no source models)
         run: |
