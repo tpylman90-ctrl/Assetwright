@@ -61,7 +61,67 @@
       ],
       "human_final_approval": false,
       "allowed_for_training": false
+    },
+    {
+      "case": "racer_exposed",
+      "variant": "integrated_aero",
+      "source_glb_sha256": "17c2e9ba5eaa400e4407a7ed5b89a4b48a61accf40bfc0ce3965b637873ed582",
+      "verdict": "improved_design_proxy_but_not_production_quality",
+      "observations": [
+        "flatter canopy and tapered mount profiles are present but subtle in the full silhouette",
+        "main body still has simplistic panel transitions and insufficient cabin-to-fuselage sculpting",
+        "rear propulsion and exposed mount integration need more detailed geometric construction"
+      ],
+      "source_run": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41451924250",
+      "reviewed_by": "Forge independent mesh comparison",
+      "human_final_approval": false,
+      "allowed_for_training": false
+    },
+    {
+      "case": "coupe_exposed",
+      "variant": "integrated_aero",
+      "source_glb_sha256": "7754ab8acbd86e3afe0759605d97287f1f286f801efc5bf62842cfcd7f15c0d7",
+      "verdict": "improved_design_proxy_but_not_production_quality",
+      "observations": [
+        "flatter canopy and tapered mount profiles are present but subtle in the full silhouette",
+        "main body still has simplistic panel transitions and insufficient cabin-to-fuselage sculpting",
+        "rear propulsion and exposed mount integration need more detailed geometric construction"
+      ],
+      "source_run": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41451924250",
+      "reviewed_by": "Forge independent mesh comparison",
+      "human_final_approval": false,
+      "allowed_for_training": false
+    },
+    {
+      "case": "suv_hidden",
+      "variant": "integrated_aero",
+      "source_glb_sha256": "5d269719d3909e90e49c46db4f13ca98a4d9e6742f8eaedc178b1c3101aa87d0",
+      "verdict": "improved_design_proxy_but_not_production_quality",
+      "observations": [
+        "flatter canopy and tapered mount profiles are present but subtle in the full silhouette",
+        "main body still has simplistic panel transitions and insufficient cabin-to-fuselage sculpting",
+        "rear propulsion and exposed mount integration need more detailed geometric construction"
+      ],
+      "source_run": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41451924250",
+      "reviewed_by": "Forge independent mesh comparison",
+      "human_final_approval": false,
+      "allowed_for_training": false
+    },
+    {
+      "case": "suv_tucked",
+      "variant": "integrated_aero",
+      "source_glb_sha256": "690750e25688346ad2be72febf21acbcd94e9ad0f2bbd0085e68a18ece0054a9",
+      "verdict": "improved_design_proxy_but_not_production_quality",
+      "observations": [
+        "flatter canopy and tapered mount profiles are present but subtle in the full silhouette",
+        "main body still has simplistic panel transitions and insufficient cabin-to-fuselage sculpting",
+        "rear propulsion and exposed mount integration need more detailed geometric construction"
+      ],
+      "source_run": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41451924250",
+      "reviewed_by": "Forge independent mesh comparison",
+      "human_final_approval": false,
+      "allowed_for_training": false
     }
   ],
-  "note": "Negative design critiques are authored observations, NOT independently verified ground-truth labels; they cannot auto-promote models or private weights."
+  "note": "These authored observations are negative or pending design-review records, never self-generated positive training labels. A measured proxy improvement does not imply finished game-asset quality."
 }
