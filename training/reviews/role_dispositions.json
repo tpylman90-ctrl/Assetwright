@@ -1,0 +1,23 @@
+{
+  "schema": "assetwright-component-role-dispositions-v1",
+  "purpose": "Auditable Forge review decisions for weak imported mesh-name proposals, not Android training examples",
+  "dispositions": [
+    {
+      "source_object_id": "water_manhole_cover",
+      "source_mesh_sha256": "8d9b34325302e82a42daedcefe62a6e6091c1f686e1f666eb6a267b04bc3b33f",
+      "graph_component_id": 1,
+      "proposed_role": "body",
+      "decision": "rejected",
+      "reason": "Highlighted source geometry is the perimeter ring of a water manhole cover. The generic 'body' label lacks reliable transferable vehicle-component meaning.",
+      "review_evidence": {
+        "study_run": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41365409242",
+        "artifact": "forge-cc0-shape-study",
+        "preview_path": "review_previews/water_manhole_cover/component_1_three_quarter.png",
+        "preview_sha256": "e144a98119f1784a2b4fd68be837ca4c5d8ab2e08a9a88ece2f03d8c44617c4e"
+      },
+      "reviewed_by": "Forge",
+      "review_method": "visually inspected source-matched highlighted Blender preview",
+      "review_status": "rejected_no_semantic_training"
+    }
+  ]
+}
