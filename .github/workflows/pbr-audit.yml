@@ -1,0 +1,19 @@
+name: High-fidelity GLB audit tests
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/mini_ai/pbr_asset_audit.py'
+      - 'tools/mini_ai/test_pbr_asset_audit.py'
+      - '.github/workflows/pbr-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pbr-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate auditor and fixture contracts
+        run: python3 -m unittest tools/mini_ai/test_pbr_asset_audit.py -v
