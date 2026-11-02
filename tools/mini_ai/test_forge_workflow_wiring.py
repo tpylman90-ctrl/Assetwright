@@ -17,6 +17,17 @@ class WorkflowWiringTests(unittest.TestCase):
         self.assertIn("forge_asset_cycle.py", study)
         self.assertIn("--previews-dir local-data/mini-ai/forge-study/review_previews", study)
 
+    def test_research_champion_is_persisted_without_publishing_to_android(self):
+        text = WORKFLOW.read_text(encoding="utf-8")
+        self.assertIn("self_training_loop.py", text)
+        self.assertIn("forge-research-champion-", text)
+        self.assertIn("actions/cache/restore@v4", text)
+        self.assertIn("actions/cache/save@v4", text)
+        self.assertIn("self-training/*.json", text)
+        self.assertLess(text.index("Ground descriptions against inspected"),
+                        text.index("Self-training controller"))
+        self.assertNotIn("git push", text)
+
     def test_review_remains_separate_from_training_and_android(self):
         text = WORKFLOW.read_text(encoding="utf-8")
         self.assertIn("component_review_gate.py", text)
