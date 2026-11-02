@@ -1,7 +1,7 @@
 {
   "schema": "assetwright-forge-training-request-v1",
-  "cycle": 18,
+  "cycle": 19,
   "max_assets": 8,
-  "focus": "vehicle engine machinery industrial metal mechanical",
-  "objective": "Exercise second automatic research training cycle against restored cached research champion: source-verified CC0 pairs only, no generated pseudo-labels, accept challenger only if independent holdout improves by >=1% with >=2 new training sources; otherwise retain incumbent."
+  "focus": "vehicle mechanical machine generator industrial engine",
+  "objective": "Re-run after fixing secondary prior cap to >=200 samples; evaluate challenger on verified CC0 source heldout against persisted research champion and keep previous model on regression. No AI-generated labels or private Android training data."
 }
