@@ -47,6 +47,37 @@ label. No description-only Objaverse record silently becomes a mesh
 example. Metadata and generated Cap3D captions preserve their separate
 ODC-By attribution.
 
+## Verified Cycle 15 results
+
+GitHub Actions run 41365409242 passed 73 offline tests. Of 12 newly
+selected official CC0 models, Blender inspected 11 successfully. After
+source-hash deduplication, the cumulative dataset contains 35 matched
+publisher-description/actual-mesh examples; 31 have multi-part geometry
+graphs and 11 recent pairs have full-model three-view Blender previews.
+
+The first actual-caption-to-Blender-geometry descriptor model passed
+its 26-model training / 9-model independent holdout test:
+
+- Mean squared error baseline: 0.04035088
+- Mean squared error trained: 0.03215817
+- Relative improvement: 20.304%
+
+This model learns only eight coarse numeric source-mesh measurements.
+It does **not** yet learn editable body topology, true mechanical joining,
+or realistic arbitrary text-to-mesh generation. It is not deployed to Android.
+
+One source-name-derived semantic proposal appeared: a highlighted
+"body" node on the CC0 water manhole cover. Visual inspection revealed
+that the highlighted piece was a perimeter ring. As a transferable
+vehicle construction label, "body" was rejected, with the original mesh
+hash and preview image SHA-256 recorded in
+`training/reviews/role_dispositions.json`. Future queues exclude that
+exact false-positive node and preserve the remaining unverified candidates.
+No third-party semantic component labels have yet been approved.
+
+The detailed study and PNG previews are retained under the GitHub Actions
+artifact named `forge-cc0-shape-study` for run 41365409242.
+
 ## Remaining work
 
 Source-specific multiview rendering and actual evidence-based labeling
