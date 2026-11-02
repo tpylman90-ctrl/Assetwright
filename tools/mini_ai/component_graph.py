@@ -48,6 +48,7 @@ def build_graph(parts: list[dict], overall_min: list[float], overall_max: list[f
     for node_id, (_, triangles, a, b, extents, center, weak_role) in enumerate(selected):
         node = {
             "id": node_id,
+            "source_part_index": selected[node_id][0],
             "triangle_fraction": round(triangles/total, 6),
             "extent_ratios": [round(v/scale, 6) for v in sorted(extents)],
             "center_radius": round(math.sqrt(sum(
