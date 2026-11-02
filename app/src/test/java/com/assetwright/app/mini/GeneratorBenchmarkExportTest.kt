@@ -73,7 +73,7 @@ class GeneratorBenchmarkExportTest {
                     "\"roof_height\":" + spec.roofHeight + "," +
                     "\"source_glb_sha256\":\"" + digest + "\"," +
                     "\"expected_engine\":\"android-native-MiniGeometry\"}"
-                Files.writeString(root.resolve(stem + ".json"), target)
+                Files.write(root.resolve(stem + ".json"), target.toByteArray(Charsets.UTF_8))
                 wrote++
             }
         }
