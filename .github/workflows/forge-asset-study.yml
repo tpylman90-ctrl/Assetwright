@@ -45,7 +45,7 @@ jobs:
       - name: Install free Blender for mesh feature extraction
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq blender
+          sudo apt-get install -y -qq blender libegl1 libgl1-mesa-dri libopengl0 xvfb xauth
           blender -b --factory-startup --disable-autoexec --python-expr "import bpy; print('BLENDER_READY', bpy.app.version_string)"
 
       - name: Restore previous CC0 descriptor history
@@ -77,7 +77,7 @@ jobs:
 
       - name: Study selected CC0 models with Poly Haven's official API
         run: |
-          python tools/mini_ai/forge_asset_cycle.py \
+          xvfb-run -a -s "-screen 0 1280x1024x24" python tools/mini_ai/forge_asset_cycle.py \
             --request training/requests/forge_cycle.json \
             --output local-data/mini-ai/forge-study/report.json \
             --history local-data/mini-ai/forge-study/dataset.json \
