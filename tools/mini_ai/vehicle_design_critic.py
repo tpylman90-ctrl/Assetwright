@@ -68,7 +68,7 @@ def analyze(path:Path)->dict:
         "roof_crown_width_ratio":0., "sample_count":0}
     mounts=_arm_stations(arms)
     checks={
-        "non_spherical_upper_roof":roof["roof_crown_width_ratio"]>=.35,
+        "non_spherical_upper_roof":roof["roof_crown_width_ratio"]>=.55,
         "profiled_mounts_not_two_station_rods":mounts["mount_section_count_min"]>=4
     }
     return {
