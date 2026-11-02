@@ -114,7 +114,8 @@ jobs:
           python tools/mini_ai/component_review_gate.py \
             --pairs local-data/mini-ai/forge-study/grounded_pairs/pairs.json \
             --out local-data/mini-ai/forge-study/grounded_pairs/review_queue.json \
-            --report local-data/mini-ai/forge-study/grounded_pairs/review_report.json
+            --report local-data/mini-ai/forge-study/grounded_pairs/review_report.json \
+            --dispositions training/reviews/role_dispositions.json
 
       - name: Train source-heldout caption to Blender mesh descriptors
         run: |
