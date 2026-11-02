@@ -17,11 +17,29 @@ SCHEMA="assetwright-reviewed-component-roles-v1"
 QUEUE="assetwright-component-role-review-queue-v1"
 
 
-def pending_pairs(pairs:dict)->tuple[dict,dict]:
+def pending_pairs(pairs:dict,dispositions:dict|None=None)->tuple[dict,dict]:
     if pairs.get("schema")!="assetwright-grounded-text-mesh-pairs-v1":
         raise ValueError("Unknown grounded geometry pair schema")
+    rejected=set()
+    if dispositions is not None:
+        if dispositions.get("schema")!="assetwright-component-role-dispositions-v1":
+            raise ValueError("Unknown reviewed disposition schema")
+        for entry in dispositions.get("dispositions",[]):
+            if not isinstance(entry,dict) or entry.get("decision")!="rejected":
+                continue
+            sha=entry.get("source_mesh_sha256")
+            node=entry.get("graph_component_id")
+            role=entry.get("proposed_role")
+            preview=entry.get("review_evidence")
+            if (isinstance(sha,str) and HEX64.fullmatch(sha) and
+                type(node) is int and node>=0 and role in ALLOWED and
+                isinstance(preview,dict) and
+                isinstance(preview.get("preview_sha256"),str) and
+                HEX64.fullmatch(preview["preview_sha256"])):
+                rejected.add((sha,node,role))
     tasks=[]
     mesh_count=0
+    rejected_count=0
     for source in pairs.get("pairs",[]):
         graph=source.get("component_graph")
         if not isinstance(graph,dict):
@@ -30,6 +48,9 @@ def pending_pairs(pairs:dict)->tuple[dict,dict]:
         for node in graph.get("nodes",[]):
             role=node.get("weak_role_proposal")
             if not validate_proposal(role):
+                continue
+            if (source["source_mesh_sha256"],node["id"],role["candidate_role"]) in rejected:
+                rejected_count+=1
                 continue
             tasks.append({
                 "source_object_id":source["source_object_id"],
@@ -50,6 +71,7 @@ def pending_pairs(pairs:dict)->tuple[dict,dict]:
     return result,{"schema":"assetwright-component-role-queue-report-v1",
                    "grounded_model_graphs":mesh_count,
                    "weak_role_candidates":len(tasks),
+                   "rejected_by_actual_image_review":rejected_count,
                    "approved_semantic_labels":0,
                    "note":"No semantic labels approved from mesh names or bounding-box overlap alone"}
 
@@ -112,10 +134,13 @@ def approve(pairs:dict,manifest:dict)->tuple[dict,dict]:
     }
 
 
-def run(source:Path,out:Path,report:Path,manifest:Path|None=None)->dict:
+def run(source:Path,out:Path,report:Path,manifest:Path|None=None,
+        dispositions_path:Path|None=None)->dict:
     pairs=json.loads(source.read_text(encoding="utf-8"))
     if manifest is None:
-        data,info=pending_pairs(pairs)
+        dispositions=(json.loads(dispositions_path.read_text(encoding="utf-8"))
+                      if dispositions_path is not None and dispositions_path.is_file() else None)
+        data,info=pending_pairs(pairs,dispositions)
     else:
         annotations=json.loads(manifest.read_text(encoding="utf-8"))
         data,info=approve(pairs,annotations)
@@ -133,5 +158,6 @@ if __name__=="__main__":
     cli.add_argument("--out",type=Path,required=True)
     cli.add_argument("--report",type=Path,required=True)
     cli.add_argument("--reviews",type=Path)
+    cli.add_argument("--dispositions",type=Path)
     args=cli.parse_args()
-    run(args.pairs,args.out,args.report,args.reviews)
+    run(args.pairs,args.out,args.report,args.reviews,args.dispositions)
