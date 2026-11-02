@@ -12,9 +12,10 @@ from pathlib import Path
 import re
 
 from generated_glb_critic import inspect, evaluate
+from vehicle_design_critic import analyze as assess_design
 
 SCHEMA="assetwright-generator-quality-loop-v1"
-STEM=re.compile(r"^[a-z0-9_]+__(baseline|roof_plus|nose_sculpt|wider_haunch)$")
+STEM=re.compile(r"^[a-z0-9_]+__(baseline|roof_plus|nose_sculpt|wider_haunch|sculpted_canopy|faired_mounts|integrated_aero)$")
 MAX_CASES=12
 MAX_VARIANTS=60
 MIN_DELTA=.005
@@ -47,10 +48,16 @@ def run(folder:Path,out:Path)->dict:
             raise ValueError("Generated GLB checksum does not match target")
         audit=inspect(glb)
         score=evaluate(audit,target)
+        design=assess_design(glb)
+        if design["model_sha256"]!=actual:
+            raise ValueError("Visual proxy/audit SHA disagreement")
         row={
             "case":case,"variant":variant,"file":glb.name,
             "source_sha256":actual,
             "score":score["score"],"passed":score["passed"],
+            "design_proxy_score":design["proxy_quality_score"],
+            "design_proxy_checks":design["checks"],
+            "design_proxy_metrics":design["metrics"],
             "checks":score["checks"],"measurements":score["measurements"],
             "invalid_triangles":audit["invalid_triangles"],
             "nonmanifold_edges":audit["nonmanifold_edges"]
@@ -65,14 +72,19 @@ def run(folder:Path,out:Path)->dict:
         if len(baselines)!=1:
             raise ValueError("Every controlled case requires exactly one baseline")
         baseline=baselines[0]
-        valid=sorted((r for r in rows if r["passed"]),key=lambda x:(-x["score"],x["variant"]))
+        # A quantitative height increase alone no longer wins: the new
+        # design candidate must improve at least one specific shape proxy.
+        valid=sorted((r for r in rows if r["passed"]),
+                     key=lambda x:(-x["design_proxy_score"],-x["score"],x["variant"]))
         best=valid[0] if valid else None
         if not baseline["passed"]:
             # No procedural parameter edits can self-approve a broken
             # incumbent. Require external code review before promotion.
             decision="baseline_failed_manual_review"
             selected=None
-        elif best and best["variant"]!="baseline" and best["score"]>=baseline["score"]+MIN_DELTA:
+        elif (best and best["variant"]!="baseline" and
+              best["design_proxy_score"]>=baseline["design_proxy_score"]+.25 and
+              best["score"]>=baseline["score"]-.05):
             selected=best
             decision="candidate_for_human_visual_review"
         else:
@@ -81,6 +93,8 @@ def run(folder:Path,out:Path)->dict:
         summaries.append({
             "case":case,"decision":decision,
             "baseline_score":baseline["score"],
+            "baseline_design_proxy_score":baseline["design_proxy_score"],
+            "selected_design_proxy_score":selected["design_proxy_score"] if selected else None,
             "selected_variant":selected["variant"] if selected else None,
             "selected_glb":selected["file"] if selected else None,
             "selected_sha256":selected["source_sha256"] if selected else None,
@@ -97,7 +111,7 @@ def run(folder:Path,out:Path)->dict:
         "promoted_to_training":0,
         "android_model_updated":False,
         "private_assets_uploaded":False,
-        "benchmark_critic_limits":"Checks topology, counts, bounds and bracket placement; not appearance, originality, rights or true mechanical quality.",
+        "benchmark_critic_limits":"Measures structural safety plus narrow canopy-width and arm-section shape proxies. Not true aesthetic judgment, actual part integration, originality, rights or mechanical quality.",
         "results":summaries,
         "candidates":outcomes
     }
