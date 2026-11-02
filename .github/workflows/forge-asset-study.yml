@@ -56,6 +56,14 @@ jobs:
           restore-keys: |
             forge-cc0-descriptors-
 
+      - name: Restore prior accepted research champion
+        uses: actions/cache/restore@v4
+        with:
+          path: local-data/mini-ai/forge-study/self-training/champion.json
+          key: forge-research-champion-${{ github.run_id }}
+          restore-keys: |
+            forge-research-champion-
+
       - name: Catalog all licensed model descriptions and source geometry metadata
         run: |
           python tools/mini_ai/descriptive_catalog.py \
@@ -123,6 +131,20 @@ jobs:
             --pairs local-data/mini-ai/forge-study/grounded_pairs/pairs.json \
             --out local-data/mini-ai/forge-study/caption_mesh_prior
 
+      - name: Self-training controller — compare challenger against incumbent
+        run: |
+          python tools/mini_ai/self_training_loop.py \
+            --pairs local-data/mini-ai/forge-study/grounded_pairs/pairs.json \
+            --out local-data/mini-ai/forge-study/self-training \
+            --previous local-data/mini-ai/forge-study/self-training/champion.json
+
+      - name: Cache only accepted research champion for next study
+        if: ${{ hashFiles('local-data/mini-ai/forge-study/self-training/champion.json') != '' }}
+        uses: actions/cache/save@v4
+        with:
+          path: local-data/mini-ai/forge-study/self-training/champion.json
+          key: forge-research-champion-${{ github.run_id }}
+
       - name: Train held-out evaluated geometry prior
         run: |
           python tools/mini_ai/shape_prior_train.py \
@@ -150,6 +172,7 @@ jobs:
             local-data/mini-ai/forge-study/grounded_pairs/*.json
             local-data/mini-ai/forge-study/review_previews/**/*.png
             local-data/mini-ai/forge-study/caption_mesh_prior/*.json
+            local-data/mini-ai/forge-study/self-training/*.json
             local-data/mini-ai/forge-study/prior/*.json
             local-data/mini-ai/forge-study/relations/*.json
           retention-days: 30
