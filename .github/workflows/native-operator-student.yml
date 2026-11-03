@@ -9,6 +9,10 @@ on:
       - 'tools/mini_ai/native_operator_glb_audit.py'
       - 'tools/mini_ai/test_native_operation_intent_student.py'
       - 'tools/mini_ai/test_native_operator_proposal_batch.py'
+      - 'tools/mini_ai/native_skill_clinic.py'
+      - 'tools/mini_ai/test_native_skill_clinic.py'
+      - 'training/curricula/native_skill_clinic_v1.json'
+      - 'training/reviews/vehicle_visual_feedback.json'
       - 'app/src/test/java/com/assetwright/app/mini/NativePlannerBenchmarkExportTest.kt'
       - 'app/src/main/java/com/assetwright/app/mini/NativeCadOperationBridge.kt'
       - '.github/workflows/native-operator-student.yml'
@@ -33,6 +37,8 @@ jobs:
             --out local-data/native-intent
       - name: Run source and planner provenance tests
         run: python -m unittest discover -s tools/mini_ai -p 'test_native_op*.py'
+      - name: Verify feedback clinic safety and bounded correction curriculum
+        run: python -m unittest discover -s tools/mini_ai -p 'test_native_skill_clinic.py'
       - name: Retain research checkpoint, even if heldout rejects it
         if: always()
         uses: actions/upload-artifact@v4
@@ -88,6 +94,15 @@ jobs:
           python tools/mini_ai/native_operator_glb_audit.py \
             --source local-data/native-proof \
             --out local-data/native-proof/evaluation.json
+      - name: Learn from diagnosed construction errors with old-skill rehearsal
+        run: |
+          python tools/mini_ai/native_skill_clinic.py \
+            --model local-data/native-intent/validated_intent_student.json \
+            --evaluation local-data/native-intent/evaluation.json \
+            --geometry-audit local-data/native-proof/evaluation.json \
+            --curriculum training/curricula/native_skill_clinic_v1.json \
+            --negative-reviews training/reviews/vehicle_visual_feedback.json \
+            --out local-data/native-clinic
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -97,5 +112,6 @@ jobs:
             local-data/native-proof/*.json
             local-data/native-intent/proposal/*.json
             local-data/native-intent/evaluation.json
+            local-data/native-clinic/*.json
           if-no-files-found: warn
           retention-days: 21

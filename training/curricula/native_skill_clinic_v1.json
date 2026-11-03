@@ -1,0 +1,185 @@
+{
+  "schema": "assetwright-native-correction-curriculum-v1",
+  "license": "original-assetwright-authored",
+  "purpose": "Contrasting exact bounded native modeling lessons; prevent false self-teaching and confusion between cavity, shoulder and shroud.",
+  "source_scope": "only original native geometry operators that passed structural GLB audits",
+  "feedback_source": "authored labels; no pretrained/teacher-generated meshes or unapproved negative reviews used as positive geometry truth",
+  "learning_protocol": {
+    "correction": "sample previously hard and confusion-inducing cases, with explicit unique operation and numeric intensity",
+    "development": "choose checkpoint using these only",
+    "blind": "one evaluation after checkpoint choice; never sampled for optimization",
+    "retention": "replay original training labels and verify old heldout skills",
+    "geometry_gate": "require SHA-matched original four-GLB audit"
+  },
+  "correction": [
+    {
+      "operation": "recess_rear_socket",
+      "template": "Seat the {vehicle} engine inside a {level} round rear hull well, rather than putting it on top",
+      "skill": "circular blind rear hull opening"
+    },
+    {
+      "operation": "recess_rear_socket",
+      "template": "Form a {level} inset engine pocket behind the {vehicle}, leaving its cabin unchanged",
+      "skill": "circular blind rear hull opening"
+    },
+    {
+      "operation": "recess_rear_socket",
+      "template": "The {vehicle} rear drive needs a {level} closed bottom recess instead of a protruding fairing",
+      "skill": "circular blind rear hull opening"
+    },
+    {
+      "operation": "recess_rear_socket",
+      "template": "Carve a {level} round depression at the aft propulsion mount of the {vehicle}",
+      "skill": "circular blind rear hull opening"
+    },
+    {
+      "operation": "recess_rear_socket",
+      "template": "On the {vehicle}, sink the rear engine {level} into the original body panel",
+      "skill": "circular blind rear hull opening"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "Blend the {vehicle} window base into the fender with a {level} continuous shoulder",
+      "skill": "sculpted continuous cockpit-to-hull shoulder"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "Sculpt a {level} smoothed upper body beneath the {vehicle} cockpit, not the rear engines",
+      "skill": "sculpted continuous cockpit-to-hull shoulder"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "Give the {vehicle} canopy-to-hull bridge a {level} flowing surface transition",
+      "skill": "sculpted continuous cockpit-to-hull shoulder"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "On the {vehicle}, raise and broaden the {level} cockpit flank to meet the greenhouse",
+      "skill": "sculpted continuous cockpit-to-hull shoulder"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "Make the {vehicle} upper fuselage flow {level} into the windshield shoulder, without a cavity",
+      "skill": "sculpted continuous cockpit-to-hull shoulder"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "Wrap the {vehicle} aft booster with a {level} profiled protective engine shroud",
+      "skill": "swept multi-station rear nacelle fairing"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "Loft a {level} tapering sleeve around the {vehicle} rear thruster, not a hole",
+      "skill": "swept multi-station rear nacelle fairing"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "Contour the {vehicle} propulsion housing into a {level} swept engine fairing",
+      "skill": "swept multi-station rear nacelle fairing"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "Give the {vehicle} back nacelle a {level} elongated multi-section cowling",
+      "skill": "swept multi-station rear nacelle fairing"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "Shape a {level} outer engine casing around the {vehicle} exhaust; keep the canopy",
+      "skill": "swept multi-station rear nacelle fairing"
+    }
+  ],
+  "development": [
+    {
+      "operation": "recess_rear_socket",
+      "template": "The {vehicle} needs a {level} blind bore around the central rear motor, not a larger nacelle",
+      "skill": "circular blind rear hull opening"
+    },
+    {
+      "operation": "recess_rear_socket",
+      "template": "Shape a {level} integrated socket in the tail of the {vehicle}; leave the roof alone",
+      "skill": "circular blind rear hull opening"
+    },
+    {
+      "operation": "recess_rear_socket",
+      "template": "Cut a {level} inset mounting cup into the {vehicle} stern for the engine",
+      "skill": "circular blind rear hull opening"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "Close the visual step between cabin and body of the {vehicle} with a {level} molded ridge",
+      "skill": "sculpted continuous cockpit-to-hull shoulder"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "Make a {level} continuous upper shoulder beside the {vehicle} cockpit, not a motor shroud",
+      "skill": "sculpted continuous cockpit-to-hull shoulder"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "The {vehicle} deserves a {level} blended roof-to-fender sculpting pass",
+      "skill": "sculpted continuous cockpit-to-hull shoulder"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "The {vehicle} rear drive needs a {level} tapered casing, not a sunken motor well",
+      "skill": "swept multi-station rear nacelle fairing"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "Add a {level} swept propulsion cowl around the aft engine of the {vehicle}",
+      "skill": "swept multi-station rear nacelle fairing"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "Create a {level} profiled nacelle skin around the {vehicle} rear booster",
+      "skill": "swept multi-station rear nacelle fairing"
+    }
+  ],
+  "blind": [
+    {
+      "operation": "recess_rear_socket",
+      "template": "Recess the tail motor of my {vehicle} by a {level} amount and preserve the outer nacelle",
+      "skill": "circular blind rear hull opening"
+    },
+    {
+      "operation": "recess_rear_socket",
+      "template": "I want a {level} sunken circular drive-seat on the rear wall of the {vehicle}",
+      "skill": "circular blind rear hull opening"
+    },
+    {
+      "operation": "recess_rear_socket",
+      "template": "Keep the canopy as it is but provide a {level} closed rear engine well on the {vehicle}",
+      "skill": "circular blind rear hull opening"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "On this {vehicle}, blend the cockpit skirt into the main shell with a {level} shoulder",
+      "skill": "sculpted continuous cockpit-to-hull shoulder"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "Don't touch the rear thrusters; give the {vehicle} a {level} flowing canopy flank",
+      "skill": "sculpted continuous cockpit-to-hull shoulder"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "Correct the detached cockpit silhouette of the {vehicle} using a {level} body transition",
+      "skill": "sculpted continuous cockpit-to-hull shoulder"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "Give the external motor of the {vehicle} a {level} aerodynamic outer sleeve",
+      "skill": "swept multi-station rear nacelle fairing"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "I want a {level} contoured shroud along the rear propulsion housing of this {vehicle}",
+      "skill": "swept multi-station rear nacelle fairing"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "Keep the hull uncut; loft a {level} fairing around the {vehicle} aft engine casing",
+      "skill": "swept multi-station rear nacelle fairing"
+    }
+  ]
+}
