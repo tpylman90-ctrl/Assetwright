@@ -10,6 +10,7 @@ on:
       - 'tools/mini_ai/test_visual_transfer_student.py'
       - 'app/src/test/java/com/assetwright/app/mini/VisualTransferExportTest.kt'
       - '.github/workflows/visual-transfer.yml'
+      - 'training/requests/visual_transfer.json'
   workflow_dispatch:
     inputs:
       train_on_original_native_glbs:
@@ -35,7 +36,9 @@ jobs:
   cpu-visual-transfer:
     name: Native geometry + frozen DINOv2 + owned-student experiment
     needs: safety-tests
-    if: github.event_name == 'workflow_dispatch' && inputs.train_on_original_native_glbs
+    if: >
+      (github.event_name == 'workflow_dispatch' && inputs.train_on_original_native_glbs) ||
+      (github.event_name == 'push' && contains(github.event.head_commit.message, '[train-owned-student]'))
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     env:
