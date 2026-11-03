@@ -18,26 +18,27 @@ class TechniqueTeacherTests(unittest.TestCase):
 
     def test_can_explain_real_modeling_operation_and_code_location(self):
         procedures=validate(self.curriculum)
-        self.assertEqual(len(procedures),5)
+        self.assertEqual(len(procedures),6)
         executable=[p for p in procedures if p["execution_status"]=="experimental_native_control"]
-        self.assertEqual(len(executable),3)
+        self.assertEqual(len(executable),5)
         for p in executable:
             self.assertTrue((SOURCE.parents[2]/p["source_code"]).is_file())
             self.assertGreaterEqual(len(p["geometry_recipe"]),3)
             self.assertGreaterEqual(len(p["feedback_examples"]),8)
             self.assertGreaterEqual(len(p["holdout_feedback"]),3)
         planned=[p for p in procedures if p["execution_status"]=="requires_new_geometry_primitive"]
-        self.assertEqual(len(planned),2)
+        self.assertEqual(len(planned),1)
         self.assertTrue(all(p["control"] is None for p in planned))
 
     def test_train_on_original_teacher_critique_and_holdout(self):
         report,policy=train(self.curriculum)
         self.assertEqual(report["status"],"technique_selector_validated")
-        self.assertEqual(report["original_training_feedback"],36)
-        self.assertEqual(report["heldout_feedback"],12)
+        self.assertEqual(report["original_training_feedback"],60)
+        self.assertEqual(report["heldout_feedback"],20)
         self.assertGreaterEqual(report["heldout_accuracy"],.75)
         self.assertEqual(policy["classes"],[
-            "crown_profile_loft","shoulder_contour_loft","tapered_bracket_sections"])
+            "crown_profile_loft","shoulder_contour_loft","tapered_bracket_sections",
+            "body_greenhouse_bridge","rear_nacelle_integration"])
         self.assertFalse(policy["auto_execute"])
         self.assertFalse(policy["trained_on_private_user_assets"])
         crown,gap=predict(policy,"This racing windshield looks like a giant bubble.")
@@ -50,7 +51,7 @@ class TechniqueTeacherTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"controlled operation"):
             validate(raw)
         raw=copy.deepcopy(self.curriculum)
-        raw["techniques"][3]["value"]=1.
+        raw["techniques"][-1]["value"]=1.
         with self.assertRaisesRegex(ValueError,"Unimplemented operation"):
             validate(raw)
 
