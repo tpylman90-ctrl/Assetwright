@@ -235,6 +235,34 @@
         "Build the engine nacelles into the back end with tapered fairings",
         "The aft drive motors still appear as constant-diameter cylinders"
       ]
+    },
+    {
+      "id": "true_shared_seam_boolean_cutouts",
+      "stage": 6,
+      "execution_status": "requires_new_geometry_primitive",
+      "modeling_operation": "boolean_cut_hull_shared_topology",
+      "control": null,
+      "value": null,
+      "variant": null,
+      "source_code": null,
+      "purpose": "True welded mesh boundaries and recessed engine sockets with shared topology rather than overlapping volumes",
+      "why": "The implemented cockpit deck sculpt and fitted nacelle housing overlap separate meshes; actual shared topology and watertight Boolean or remeshing integration are not yet implemented",
+      "geometry_recipe": [
+        "Construct source-identified cut contours on the hull surface",
+        "Remove intersecting faces and insert boundary loops with consistent winding",
+        "Bridge or remesh the shared boundaries with smooth normal continuity",
+        "Validate manifoldness, zero self-intersection and exterior face normals across the cut"
+      ],
+      "target_measurement": null,
+      "min_increase": null,
+      "failure_modes": [
+        "Intersecting closed volumes remain uncut",
+        "Booleans create shading pinches or tiny triangles",
+        "Shared boundary appears visually continuous but is not watertight",
+        "Source and target mesh cutout loops have inconsistent winding"
+      ],
+      "feedback_examples": [],
+      "holdout_feedback": []
     }
   ]
 }
