@@ -24,7 +24,11 @@ data class TrainingExample(
 data class VehicleDesignControls(
     val canopySquareness: Float = 0f,
     val shoulderDefinition: Float = 0f,
-    val fairedRepulsorMounts: Float = 0f
+    val fairedRepulsorMounts: Float = 0f,
+    // Both remain OFF for ordinary phone generation. These operations are
+    // independently evaluated using original generated GLB contrasts.
+    val cockpitShoulderTransition: Float = 0f,
+    val rearNacelleShrouding: Float = 0f
 )
 
 data class VehicleSpec(
