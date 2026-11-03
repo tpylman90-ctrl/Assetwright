@@ -41,3 +41,61 @@ jobs:
           path: local-data/native-intent/*.json
           if-no-files-found: warn
           retention-days: 21
+
+
+  native-proof:
+    name: Use OWN learned operations to produce audited original GLBs
+    needs: study
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ASSETWRIGHT_NATIVE_PLANNER_BATCH: ${{ github.workspace }}/local-data/native-intent/proposal/operation_batch.properties
+      ASSETWRIGHT_NATIVE_PLANNER_OUT: ${{ github.workspace }}/local-data/native-proof
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: assetwright-native-operator-heldout-research
+          path: local-data/native-intent
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Infer three operations and strengths using the validated OWNED student
+        run: |
+          python tools/mini_ai/native_operator_proposal_batch.py \
+            --model local-data/native-intent/validated_intent_student.json \
+            --evaluation local-data/native-intent/evaluation.json \
+            --out local-data/native-intent/proposal
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Prepare native Android unit-test runtime
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Execute student-selected construction operations with OUR native MiniGeometry
+        run: |
+          test -f "$ASSETWRIGHT_NATIVE_PLANNER_BATCH"
+          gradle :app:testDebugUnitTest --rerun-tasks --stacktrace
+      - name: Independently audit four original baseline/modified GLBs
+        run: |
+          python tools/mini_ai/native_operator_glb_audit.py \
+            --source local-data/native-proof \
+            --out local-data/native-proof/evaluation.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: assetwright-own-learned-planner-3ops-glb-proof
+          path: |
+            local-data/native-proof/*.glb
+            local-data/native-proof/*.json
+            local-data/native-intent/proposal/*.json
+            local-data/native-intent/evaluation.json
+          if-no-files-found: warn
+          retention-days: 21
