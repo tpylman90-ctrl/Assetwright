@@ -24,3 +24,19 @@ Other models may provide visual supervision, but **AssetWright's own student and
 ## Citations
 Dataset: https://huggingface.co/datasets/ADSKAILab/Zero-To-CAD-100k
 Vision teacher: https://huggingface.co/facebook/dinov2-small
+
+
+## Verified first combined source study — November 3, 2026
+
+Successful [GitHub Actions run 41668523988](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41668523988) read actual Zero-to-CAD 100K train and official validation examples and extracted real frozen DINOv2 Small embeddings:
+
+- 96 distinct CAD training programs, safely inspected using native Python AST (never executed).
+- 40 independent official validation programs.
+- 96 samples with source-hashed reference image views and 96 frozen DINOv2 feature records of 384 values each (two provided CAD views per training sample).
+- The owned operation-sequence grammar reduced heldout next-operation cross entropy from 2.979556 (unigram baseline) to 1.763503 (smoothed trigram), a 40.8132% decrease, over 774 heldout operation tokens.
+- Heldout next-operation top-1 prediction accuracy: 21.5762% baseline vs 47.2868% learned trigram.
+- Both the grammar and visual features remain research-only. They are not fused into a multimodal student yet and are not deployed to Android.
+
+The experiment measures only regularities in *operation order*, not valid CAD execution, accurate part geometry, or free-text 3D generation. In particular, our source AST collector does not prove that arbitrary nested CadQuery expressions will always have complete semantic execution order. Further blind source families and native operator execution tests are required.
+
+The original Zero-to-CAD image fields were raw bytes, not Pillow objects; this was corrected before the successful run. The resulting artifact is named 'assetwright-zero-to-cad-dinov2-research' and contains only source-provenance metadata, operation grammar/evaluation, and frozen numeric visual features—not the CAD scripts, STL/STEP files, or outside meshes.
