@@ -127,6 +127,13 @@ def collect(split:str,*,max_records:int,max_scan:int,image_root:Path|None=None)-
     rows=[];ids=set();hashes=set();rejected=Counter();scanned=0
     for record in dataset_iterator(split):
         if scanned>=max_scan or len(rows)>=max_records: break
+        if scanned==0:
+            print("ZERO_TO_CAD_COLUMN_TYPES",json.dumps({
+                k:{"type":type(v).__name__,
+                   "keys":list(v.keys())[:12] if isinstance(v,dict) else None,
+                   "items":len(v) if isinstance(v,(list,tuple)) else None}
+                for k,v in record.items() if k.startswith("image_")
+            },sort_keys=True))
         scanned+=1
         parsed,reason=parse_row(record,split)
         if parsed is None:
