@@ -111,7 +111,13 @@ def capture_images(raw:dict,item:dict,image_root:Path)->None:
         image=raw.get(key)
         if image is None: continue
         destination=image_root/(item["source_id"]+"__"+key+".png")
-        if isinstance(image,dict) and "bytes" in image:
+        if isinstance(image,(bytes,bytearray)):
+            if not 0 < len(image) <= 4_000_000:
+                raise ValueError("Unbounded or empty dataset image")
+            from io import BytesIO
+            from PIL import Image
+            image=Image.open(BytesIO(image))
+        elif isinstance(image,dict) and isinstance(image.get("bytes"),bytes):
             from io import BytesIO
             from PIL import Image
             image=Image.open(BytesIO(image["bytes"]))
