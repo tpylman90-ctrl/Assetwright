@@ -18,6 +18,11 @@ on:
       - 'tools/mini_ai/test_generated_glb_critic.py'
       - 'tools/mini_ai/test_vehicle_design_critic.py'
       - 'training/reviews/vehicle_visual_feedback.json'
+      - 'training/curricula/vehicle_modeling_techniques.json'
+      - 'tools/mini_ai/technique_teacher.py'
+      - 'tools/mini_ai/technique_effect_audit.py'
+      - 'tools/mini_ai/test_technique_teacher.py'
+      - 'tools/mini_ai/test_technique_effect_audit.py'
   workflow_dispatch:
 
 permissions:
@@ -73,6 +78,19 @@ jobs:
             --source local-data/generator-benchmark \
             --out local-data/generator-results/evaluation.json
 
+      - name: Teach modeling-operation selection from verified original recipes
+        run: |
+          python tools/mini_ai/technique_teacher.py \
+            --curriculum training/curricula/vehicle_modeling_techniques.json \
+            --out local-data/technique-learning/selector
+
+      - name: Verify before-after effects on actual Android-generated GLBs
+        run: |
+          python tools/mini_ai/technique_effect_audit.py \
+            --curriculum training/curricula/vehicle_modeling_techniques.json \
+            --benchmark local-data/generator-results/evaluation.json \
+            --out local-data/technique-learning/effects.json
+
       - name: Upload original generated benchmark GLBs and evaluation
         uses: actions/upload-artifact@v4
         with:
@@ -81,6 +99,8 @@ jobs:
             local-data/generator-benchmark/*.glb
             local-data/generator-benchmark/*.json
             local-data/generator-results/*.json
+            local-data/technique-learning/selector/*.json
+            local-data/technique-learning/effects.json
           if-no-files-found: error
           retention-days: 21
 
