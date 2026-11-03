@@ -27,7 +27,7 @@ def benchmark(*, effect:bool=True):
                 metrics["engine_housing_flare_ratio"]=1.45 if effect else 1.
             rows.append({
                 "case":name,"variant":variant,
-                "source_sha256":f"{j*4+k+1:064x}",
+                "source_sha256":f"{j*6+k+1:064x}",
                 "passed":True,
                 "score":.9,"design_proxy_metrics":metrics
             })
