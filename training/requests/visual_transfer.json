@@ -1,0 +1,12 @@
+{
+  "schema": "assetwright-visual-transfer-request-v1",
+  "cycle": 1,
+  "requested_scope": "36 original MiniGeometry hover vehicle samples; frozen DINOv2-small training features; text-only owned student",
+  "provenance": "original procedural GLBs only",
+  "teacher_permission": "frozen_image_encoder_only",
+  "third_party_mesh_generator_enabled": false,
+  "public_data_only": true,
+  "android_weights_auto_promoted": false,
+  "training_purpose": "measure heldout shape parameter improvement against text-only student",
+  "authorization": "user approved using pretrained knowledge as a teacher, never as the final model generator"
+}
