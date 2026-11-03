@@ -111,3 +111,42 @@ Model weights are not used for automatic code mutation, user-private
 training data never enters this public CI, and the Android generator
 continues to use zero-valued experimental design controls until
 separate approval and deployment.
+
+
+## First verified direct-teaching run: 41570791202
+
+The GitHub Android benchmark completed successfully after preventing Gradle
+from substituting cached unit-test output for the GLB export itself.
+
+- **103 Python tests passed**, native Android compilation/tests passed.
+- **28/28 genuine generated GLBs** passed the existing structural gate.
+- **36 original Forge-authored critique examples** train an operation-ID
+  selector on three executable techniques.
+- **12/12 controlled held-out critique prompts** matched their intended
+  technique (100% on this small, authored test only; majority baseline
+  33.3%). This is **not** general design intelligence.
+- **Canopy crown loft** generated a verified +0.32443 increase in
+  roof-crown-width ratio on each of four independent original vehicles.
+- **Tapered structural-mount loft** generated a verified +1.04362 increase
+  in root-to-tip mount profile ratio for the same four vehicles.
+- **Shoulder station sculpt** has a real experimental code control but
+  no independently isolated metric. No positive geometry-supervision claim.
+- **Body/canopy seamless bridging** and **embedded rear nacelle sockets**
+  are documented but not yet implemented.
+- **Zero generated models** were approved as production-quality or
+  recursively added as independent ground-truth training data.
+- No user-private samples, models or Android runtime AI weights changed.
+
+Both machine-readable training outputs are in the named GitHub Actions
+artifact `assetwright-real-glb-generator-benchmark`:
+
+- `technique-learning/selector/validated_selector.json`
+- `technique-learning/selector/evaluation.json`
+- `technique-learning/effects.json`
+
+The source is preserved in run
+https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41570791202.
+
+The next engineering gain must come from implementing more expressive
+**working modeling operators**, not collecting more superficially
+labeled images or maximizing two easy geometry proxies.
