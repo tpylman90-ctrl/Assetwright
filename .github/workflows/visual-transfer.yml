@@ -1,0 +1,96 @@
+name: AssetWright Native Visual Transfer
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/mini_ai/visual_transfer_student.py'
+      - 'tools/mini_ai/render_visual_transfer.py'
+      - 'tools/mini_ai/extract_dinov2_features.py'
+      - 'tools/mini_ai/test_visual_transfer_student.py'
+      - 'app/src/test/java/com/assetwright/app/mini/VisualTransferExportTest.kt'
+      - '.github/workflows/visual-transfer.yml'
+  workflow_dispatch:
+    inputs:
+      train_on_original_native_glbs:
+        description: 'Run CPU-only DINOv2 teacher features and own-student training'
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  safety-tests:
+    name: Check provenance, split and no-external-mesh rules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m unittest discover -s tools/mini_ai -p 'test_*.py'
+
+  cpu-visual-transfer:
+    name: Native geometry + frozen DINOv2 + owned-student experiment
+    needs: safety-tests
+    if: github.event_name == 'workflow_dispatch' && inputs.train_on_original_native_glbs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ASSETWRIGHT_TRANSFER_OUT: ${{ github.workspace }}/local-data/visual-transfer/native
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Install Android test SDK
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Export 36 genuine AssetWright MiniGeometry GLBs and exact recipes
+        run: gradle :app:testDebugUnitTest --rerun-tasks --stacktrace
+      - name: Install free Blender and CPU vision dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq blender libegl1 libgl1-mesa-dri libopengl0 xvfb xauth
+          python -m pip install --upgrade 'transformers>=4.45,<5' 'Pillow>=10,<13' 'safetensors>=0.4,<1'
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Render four original views per native GLB
+        run: |
+          xvfb-run -a blender -b --factory-startup --disable-autoexec \
+            --python tools/mini_ai/render_visual_transfer.py -- \
+            local-data/visual-transfer/native local-data/visual-transfer/renders
+      - name: Extract frozen DINOv2 visual features, never external meshes
+        run: |
+          python tools/mini_ai/extract_dinov2_features.py \
+            --manifest local-data/visual-transfer/renders/manifest.json \
+            --images local-data/visual-transfer/renders \
+            --out local-data/visual-transfer/teacher/features.json
+      - name: Train our Mini AI student and compare to held-out text-only baseline
+        run: |
+          python tools/mini_ai/visual_transfer_student.py \
+            --manifest local-data/visual-transfer/renders/manifest.json \
+            --features local-data/visual-transfer/teacher/features.json \
+            --out local-data/visual-transfer/results
+      - name: Upload research-only evidence, never Android deployed weights
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-owned-student-visual-transfer-research
+          path: |
+            local-data/visual-transfer/renders/manifest.json
+            local-data/visual-transfer/teacher/features.json
+            local-data/visual-transfer/results/*.json
+          if-no-files-found: warn
+          retention-days: 21
