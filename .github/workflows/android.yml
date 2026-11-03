@@ -75,7 +75,7 @@ jobs:
           # empty benchmark that falsely looks like a generator failure.
           gradle :app:testDebugUnitTest :app:assembleDebug --rerun-tasks --stacktrace 2>&1 | tee gradle-build.log
 
-      - name: Independent structural and design-proxy audit of 28 actual generated GLBs
+      - name: Independent structural and modeling-technique audit of 40 real generated GLBs
         run: |
           python tools/mini_ai/generator_quality_loop.py \
             --source local-data/generator-benchmark \
