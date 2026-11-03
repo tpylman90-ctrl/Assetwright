@@ -389,8 +389,11 @@ def forge_vehicle(outdir):
          (2.84,[-.42,-.24,0,.24,.42]),
          (3.28,[-.37,-.21,0,.21,.37])],black,.030)
     for side in [-1,1]:
-        # Rear alloy duct housings are visibly cradled inside ceramic haunches.
+        # Engine fairings now have five controlling cross-sections with
+        # a recessed outlet and integrated haunch silhouette.
         cx=side*1.06
+        cast_engine_shroud("AX01 / "+str(side)+" rear vector thruster",
+                           cx,.89,ceramic,black)
         rod("AX01 / cast titanium thruster barrel",
             (cx,2.93,.89),(cx,3.64,.89),.405,titanium,36)
         rod("AX01 / deep-black outlet throat",
@@ -417,6 +420,12 @@ def forge_vehicle(outdir):
         beam("AX01 / lower cradle spar",[
            (side*.75,2.44,.66),(side*1.22,2.79,.54),
            (side*1.57,3.40,.66)],.046,titanium)
+        # Engine-side cheek connects the formerly exposed thruster barrel to
+        # the upper armature. Material discontinuities reveal fitted parts.
+        detail_line("AX01 / "+str(side)+" forged engine shoulder seam",[
+            (y,[side*.79,side*.82])
+            for y in [2.33,2.53,2.80,3.02,3.28]],
+            black,.074)
         # Black aero cavities aligned behind the cockpit and ahead of nacelles.
         conform_panel("AX01 / ported rear haunch intake "+str(side),[
           (1.90,[side*.58,side*.65]),
@@ -427,6 +436,17 @@ def forge_vehicle(outdir):
                 (side*.47,y,hull_z(y,.47)+.054),
                 (side*.70,y,hull_z(y,.70)+.045),
                 .013,titanium,8)
+    # Rear central powertrain: twin paired chassis tendons leading into the
+    # vectoring nozzles, rather than a featureless flat engine bay.
+    for side in (-1,1):
+        detail_line("AX01 / inset rear chassis tendon",[
+            (y,[side*.23,side*.27])
+            for y in [1.96,2.24,2.56,2.91,3.27]],
+            titanium,.043)
+        detail_line("AX01 / dark outer aft access slot",[
+            (y,[side*.33,side*.40])
+            for y in [2.18,2.42,2.76,3.07]],
+            inset,.054)
     # Continuous rear light signature and slender heat release seams.
     beam("AX01 / continuous coral rear lamp",
          [(-1.70,3.50,1.05),(-1.11,3.63,1.08),
