@@ -45,13 +45,13 @@ def audit(reference_folder:Path,predicted_folder:Path,report_file:Path)->dict:
     actual_order=[p.get("operation") for p in report["learned_construction_program"]]
     if tuple(actual_order)!=ORDER:
         raise ValueError("Incorrect owned construction-operation sequence")
-    ref_baseline=case(reference_folder,"measure__newfamily__baseline")
+    ref_baseline=case(reference_folder,"measure__blindfamily__baseline")
     checks={}
     source_model_sha=report["source_checkpoint_sha256"]
     for item in report["learned_construction_program"]:
         op=item["operation"]
-        reference=case(reference_folder,"measure__newfamily__"+op+"__s725")
-        predicted=case(predicted_folder,"predicted__newfamily__"+op)
+        reference=case(reference_folder,"measure__blindfamily__"+op+"__s725")
+        predicted=case(predicted_folder,"predicted__blindfamily__"+op)
         if predicted["meta"].get("model_sha256")!=source_model_sha:
             raise ValueError("Owned source checkpoint hashes do not match")
         commands=predicted["meta"].get("commands")
@@ -59,8 +59,8 @@ def audit(reference_folder:Path,predicted_folder:Path,report_file:Path)->dict:
                 commands[0]["strength"]-item["strength"])>.00001:
             raise ValueError("Native output does not implement predicted operation")
         checks[op]=compare(reference,predicted,op)
-    combined_reference=case(reference_folder,"measure__newfamily__program_target")
-    combined_prediction=case(predicted_folder,"predicted__newfamily__program")
+    combined_reference=case(reference_folder,"measure__blindfamily__program_target")
+    combined_prediction=case(predicted_folder,"predicted__blindfamily__program")
     if (combined_prediction["meta"].get("model_sha256")!=source_model_sha or
         [p["operation"] for p in combined_prediction["meta"]["commands"]]!=list(ORDER) or
         [p["operation"] for p in combined_reference["meta"]["commands"]]!=list(ORDER) or

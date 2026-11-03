@@ -38,7 +38,7 @@ are used. No downloaded executable CAD scripts are evaluated.
 - Train families: one-engine original hover *coupe* and *utility*, with
   original hull/engine geometry at native strengths 0.25, 0.50, and 0.90
   for each operation, plus original baseline GLBs. **20 training GLBs**.
-- Unseen third geometry family: original *newfamily* hover vehicle with
+- Fresh unseen third geometry family: original *blindfamily* hover vehicle with
   different body dimensions, source-hashed target GLBs at 0.375 and 0.725,
   plus its baseline and one three-operation target. **8 target/reference GLBs**.
   This geometry is never included in the response-curve fit.
@@ -87,3 +87,28 @@ are used. No downloaded executable CAD scripts are evaluated.
   experiment with research-only artifacts.
 
 A release is valid only after the independent full forward geometry audit.
+
+
+## Measurement correction from first live study
+
+The first GitHub run correctly **rejected** our original maximum-shoulder
+breadth proxy: on both source training families it returned identical deltas
+at strengths 0.25, 0.50, and 0.90. That quantity detected the addition of
+mesh stations, but did not measure their **strength-dependent deformation**.
+
+Using ONLY the two original TRAINING families, we selected a physically
+corresponding upper-hull vertex station at native axial t=-0.05. The new
+measure reports maximum upper-side half-span at this same original GLB ring
+with vertical GLB Y > 0.87m, and is demonstrably monotonic across source
+training strengths. It is read from exact source geometry, not a bounding
+box or text annotation.
+
+The previously inspected source reference vehicle from the failed run was
+therefore retired as an untouched benchmark. This revision uses fresh,
+previously uninspected "blindfamily" dimensions as its third-family
+reference so the new real GLB experiment does not tune repeatedly against
+the earlier test. Inverse-parameter targets are real geometry measurements;
+they are intentionally supplied as input to the estimator after fitting.
+
+No experiment is automatically accepted: the new-family inverse and the
+forward multi-operation GLB audit still must pass independently.

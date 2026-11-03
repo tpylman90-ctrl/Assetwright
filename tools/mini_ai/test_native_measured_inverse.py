@@ -17,7 +17,7 @@ def fixture():
                      "name":"measure__"+family+"__baseline",
                      "meta":{"family":family,"phase":"train","commands":[]},
                      "metrics":{"rear_socket_depth_m":0.,
-                                "body_cockpit_shoulder_span":width,
+                                "upper_hull_station_halfspan_m":width,
                                 "engine_housing_flare_ratio":1.}})
         for operation in ORDER:
             for level in TRAIN_LEVELS:
@@ -27,7 +27,7 @@ def fixture():
                            "loft_rear_nacelle":.46}
                 base=rows[-1] if False else {
                     "rear_socket_depth_m":0.,
-                    "body_cockpit_shoulder_span":width,
+                    "upper_hull_station_halfspan_m":width,
                     "engine_housing_flare_ratio":1.}
                 values=dict(base)
                 values[field]+=responses[operation]*level

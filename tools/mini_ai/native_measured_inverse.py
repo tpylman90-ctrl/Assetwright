@@ -25,12 +25,12 @@ from native_operator_proposal_batch import PROOF_PROMPTS
 SCHEMA="assetwright-native-measured-geometry-response-v1"
 METRIC={
     "recess_rear_socket":"rear_socket_depth_m",
-    "sculpt_cockpit_shoulder":"body_cockpit_shoulder_span",
+    "sculpt_cockpit_shoulder":"upper_hull_station_halfspan_m",
     "loft_rear_nacelle":"engine_housing_flare_ratio"
 }
 ORDER=("sculpt_cockpit_shoulder","recess_rear_socket","loft_rear_nacelle")
 TRAIN_FAMILIES=("coupe","utility")
-UNSEEN="newfamily"
+UNSEEN="blindfamily"
 TRAIN_LEVELS=(.25,.50,.90)
 TARGET_LEVELS=(.375,.725)
 BOUNDARY_TOL={
@@ -68,7 +68,19 @@ def case(folder:Path,name:str)->dict:
               .000001 < p[2]-stern < .36 and
               math.hypot(p[0],p[1]-center_up)<.191]
     depth=round(max(interior,default=0.),6)
+    # IMPORTANT: the old critic's maximum cockpit span saturated immediately
+    # because enabling the operation inserts extra axial stations. Compare
+    # homologous VERTICES on the common t=-.05 hull ring instead. The actual
+    # ring points exist in both the baseline and the modified native GLB.
+    hull_length=max(p[2] for p in hull)-stern
+    station=.05*hull_length
+    ring=[p for p in hull if abs(p[2]-station)<.001]
+    shoulder_candidates=[abs(p[0]) for p in ring if p[1]>.87]
+    if len(ring)<12 or len(shoulder_candidates)<4:
+        raise ValueError("Missing homologous upper-hull shoulder station")
+    station_span=round(max(shoulder_candidates),7)
     values={
+        "upper_hull_station_halfspan_m":station_span,
         "rear_socket_depth_m":depth,
         "body_cockpit_shoulder_span":float(
             style["metrics"]["body_cockpit_shoulder_span"]),
@@ -163,7 +175,7 @@ def target_delta(target:dict,baseline:dict,op:str)->float:
     return round(target["metrics"][field]-baseline["metrics"][field],7)
 
 def evaluation(records:list[dict],model:dict,folder:Path,checkpoint:dict)->dict:
-    base=case(folder,"measure__newfamily__baseline")
+    base=case(folder,"measure__blindfamily__baseline")
     if base["meta"]["phase"]!="reference" or base["meta"]["commands"]:
         raise ValueError("Leaked newfamily training baseline")
     details=[]
@@ -171,7 +183,7 @@ def evaluation(records:list[dict],model:dict,folder:Path,checkpoint:dict)->dict:
         curve=model[op]["curve"]
         for level in TARGET_LEVELS:
             suffix=round(level*1000)
-            item=case(folder,"measure__newfamily__"+op+"__s"+str(suffix))
+            item=case(folder,"measure__blindfamily__"+op+"__s"+str(suffix))
             if (item["meta"]["phase"]!="reference" or
                 len(item["meta"]["commands"])!=1 or
                 item["meta"]["commands"][0]["operation"]!=op or

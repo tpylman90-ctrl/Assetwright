@@ -16,7 +16,7 @@ class MeasuredNativeConstructionProgramTest {
         val dims = when(family) {
             "coupe" -> listOf(4.45f,2.18f,1.27f,1.55f,.42f,1.08f)
             "utility" -> listOf(5.32f,2.58f,1.62f,1.82f,.55f,1.15f)
-            "newfamily" -> listOf(4.94f,2.39f,1.49f,1.72f,.47f,1.12f)
+            "blindfamily" -> listOf(5.06f,2.43f,1.40f,1.73f,.52f,1.18f)
             else -> error("Unknown vehicle family")
         }
         return VehicleSpec("Original "+family,dims[0],dims[1],dims[2],
@@ -97,17 +97,17 @@ class MeasuredNativeConstructionProgramTest {
                     listOf(NativeCadOperationBridge.Command(op,value)))
             }
         }
-        val unfamiliar=sample("newfamily")
-        write(root,"measure__newfamily__baseline","reference",
-            "newfamily",unfamiliar,emptyList())
+        val unfamiliar=sample("blindfamily")
+        write(root,"measure__blindfamily__baseline","reference",
+            "blindfamily",unfamiliar,emptyList())
         for(op in order) for((suffix,value) in listOf(
             "375" to .375f,"725" to .725f)) {
-            write(root,"measure__newfamily__"+op+"__s"+suffix,
-                "reference","newfamily",unfamiliar,
+            write(root,"measure__blindfamily__"+op+"__s"+suffix,
+                "reference","blindfamily",unfamiliar,
                 listOf(NativeCadOperationBridge.Command(op,value)))
         }
-        write(root,"measure__newfamily__program_target","reference",
-            "newfamily",unfamiliar,order.map {
+        write(root,"measure__blindfamily__program_target","reference",
+            "blindfamily",unfamiliar,order.map {
                 NativeCadOperationBridge.Command(it,.725f)
             })
     }
@@ -145,13 +145,13 @@ class MeasuredNativeConstructionProgramTest {
         require(commands.all { it.strength in .10f..1f })
         val root=Path.of(location)
         Files.createDirectories(root)
-        val original=sample("newfamily")
+        val original=sample("blindfamily")
         val sha=props.getProperty("source_model_sha256")
         for(command in commands) {
-            write(root,"predicted__newfamily__"+command.operation,
-                "predicted","newfamily",original,listOf(command),sha)
+            write(root,"predicted__blindfamily__"+command.operation,
+                "predicted","blindfamily",original,listOf(command),sha)
         }
-        write(root,"predicted__newfamily__program","predicted",
-            "newfamily",original,commands,sha)
+        write(root,"predicted__blindfamily__program","predicted",
+            "blindfamily",original,commands,sha)
     }
 }
