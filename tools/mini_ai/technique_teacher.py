@@ -174,6 +174,10 @@ def run(source:Path,out:Path)->dict:
     report,model=train(json.loads(source.read_text(encoding="utf-8")))
     out.mkdir(parents=True,exist_ok=True)
     (out/"evaluation.json").write_text(json.dumps(report,indent=2)+"\n",encoding="utf-8")
+    if model is None:
+        # An earlier run's accepted model must never survive failed
+        # validation in a reused output directory.
+        (out/"validated_selector.json").unlink(missing_ok=True)
     if model is not None:
         (out/"validated_selector.json").write_text(
             json.dumps(model,separators=(",",":"))+"\n",encoding="utf-8")
