@@ -46,3 +46,17 @@ The original Zero-to-CAD image fields were raw bytes, not Pillow objects; this w
 - The workflow computes DINOv2 features for both the train and **independent official validation** split, joining them only with exact CAD source hashes and PNG view hashes.
 - The research student must beat the train-set constant mean visual signature by at least 3% on official heldout examples or its visual-learning claim is rejected.
 - Even if validated, it remains research-only and cannot create or deploy native 3D geometry until we build and evaluate a true visual-to-native-construction bridge.
+
+
+## Verified operation-to-DINOv2 visual distillation — November 3, 2026
+
+[Successful GitHub Actions run 41669695101](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41669695101) executed the complete CPU curriculum including a new AssetWright-owned visual distillation model.
+
+- **96** independent training source CAD programs, with **96** source-hash-verified two-view image examples and 384-D DINOv2 Small frozen feature records.
+- **40** official validation programs, with **40** source-hash-verified two-view examples and 384-D frozen DINOv2 feature records; no source IDs or code hashes overlap the training split.
+- Previous own next-operation grammar result reproduced: **40.8132% reduction** in held-out cross-entropy versus a unigram baseline.
+- The new *owned* visual student predicts a fixed 24-D projection of the frozen DINOv2 visual embedding from **CAD operation-sequence features**. It is trained in our code from random initial weights, and at inference uses no pretrained image encoder or external mesh generator.
+- **Held-out validation MSE**: constant training-set feature mean **0.05835413**; owned visual student **0.04515133**, a **22.6253% reduction**.
+- The student passed its predeclared 3% research-validation gate. The artifact includes an accepted *research-only* checkpoint, never approved for geometry generation or Android deployment.
+
+Limitations: The learned 24-D signatures are compressed *teacher-feature representations*, not measured surface distance, actual mesh reconstruction, topology correctness, or aesthetically graded output. The construction program learner does not yet write executable native geometric operators from arbitrary text. To progress from this result, connect the learned visual semantics to new native cutout/loft/join operations and require independent GLB and visual-quality evaluation. Keep teacher-derived research weights separately from production until those gates pass.
