@@ -76,6 +76,60 @@ def _arm_stations(parts:list[list[tuple]])->dict:
     }
 
 
+def _cockpit_shoulder_span(points:list[tuple])->dict:
+    """Outer upper-hull breadth near cockpit, not just overall vehicle width."""
+    if not points:
+        return {"body_cockpit_shoulder_span":0., "body_cockpit_samples":0}
+    minz,maxz=min(p[2] for p in points),max(p[2] for p in points)
+    miny,maxy=min(p[1] for p in points),max(p[1] for p in points)
+    length=maxz-minz
+    height=maxy-miny
+    if length<=1e-5 or height<=1e-5:
+        return {"body_cockpit_shoulder_span":0., "body_cockpit_samples":0}
+    center=(minz+maxz)/2
+    # Restrict to the upper hull, in the cockpit's longitudinal region.
+    # A structural shift in the original hull must broaden THIS portion.
+    upper=[abs(p[0]) for p in points
+           if abs(p[2]-center)<=length*.19 and
+              miny+height*.58<=p[1]<=miny+height*.89]
+    return {
+        "body_cockpit_shoulder_span":round(max(upper,default=0.),5),
+        "body_cockpit_samples":len(upper)
+    }
+
+
+def _rear_nacelle_profile(parts:list[list[tuple]])->dict:
+    """Real endpoint/ring radial flare in glTF Z-axis (vehicle longitudinal)."""
+    ratios=[]
+    counts=[]
+    for points in parts:
+        by_z={}
+        for x,y,z in points:
+            by_z.setdefault(round(z,4),[]).append((x,y))
+        sections=[by_z[k] for k in sorted(by_z)]
+        counts.append(len(sections))
+        if len(sections)<2:
+            ratios.append(0.)
+            continue
+        radii=[]
+        for ring in sections:
+            if len(ring)<4:
+                continue
+            xvals=[p[0] for p in ring]
+            yvals=[p[1] for p in ring]
+            radius=math.hypot(
+                (max(xvals)-min(xvals))/2,
+                (max(yvals)-min(yvals))/2
+            )
+            radii.append(radius)
+        ratios.append(max(radii)/min(radii) if radii and min(radii)>1e-6 else 0.)
+    return {
+        "engine_housing_flare_ratio":round(min(ratios,default=0.),5),
+        "engine_housing_axial_sections":min(counts,default=0),
+        "engine_housings_examined":len(parts)
+    }
+
+
 def analyze(path:Path)->dict:
     doc,blob,sha=_read_glb(path)
     canopy=_mesh_points(doc,blob,"Bonded panoramic canopy")
@@ -83,17 +137,29 @@ def analyze(path:Path)->dict:
     roof=_canopy_crown(canopy[0]) if len(canopy)==1 else {
         "roof_crown_width_ratio":0., "sample_count":0}
     mounts=_arm_stations(arms)
+    hulls=_mesh_points(doc,blob,"Sculpted continuous body")
+    shoulder=_cockpit_shoulder_span(hulls[0]) if len(hulls)==1 else {
+        "body_cockpit_shoulder_span":0.,"body_cockpit_samples":0}
+    nacelles=(_mesh_points(doc,blob,"Rear drive housing")+
+              _mesh_points(doc,blob,"Central booster housing"))
+    engine_profile=_rear_nacelle_profile(nacelles)
     checks={
         "non_spherical_upper_roof":roof["roof_crown_width_ratio"]>=.55,
         "profiled_mounts_not_two_station_rods":mounts["mount_section_count_min"]>=4,
-        "tapered_mount_sections":mounts["mount_root_tip_taper_ratio"]>=1.25
+        "tapered_mount_sections":mounts["mount_root_tip_taper_ratio"]>=1.25,
+        # Broadness alone does not prove an elegant cockpit transition or
+        # physically unioned nacelle. These are narrow operation effects.
+        "cockpit_hull_shoulder_envelope":shoulder["body_cockpit_samples"]>=4,
+        "profiled_engine_root":engine_profile["engine_housings_examined"]>=1
+            and engine_profile["engine_housing_axial_sections"]>=5
+            and engine_profile["engine_housing_flare_ratio"]>=1.25
     }
     return {
         "schema":"assetwright-vehicle-design-proxy-v1",
         "model_sha256":sha,
-        "metrics":{**roof,**mounts},
+        "metrics":{**roof,**mounts,**shoulder,**engine_profile},
         "checks":checks,
         "proxy_quality_score":round(sum(checks.values())/len(checks),3),
         "review_state":"requires_human_visual_review",
-        "limitations":"Roof-crown profile, mount section count and end taper measured from actual vertices; cannot score beauty, seams, real connectivity, production topology or source similarity."
+        "limitations":"Actual vertex measurements of roof crown, upper hull shoulder breadth, mount taper and nacelle flare. No visual beauty, exact seam welding, physical collision-free assembly or copyright originality is proved."
     }
