@@ -15,7 +15,7 @@ from generated_glb_critic import inspect, evaluate
 from vehicle_design_critic import analyze as assess_design
 
 SCHEMA="assetwright-generator-quality-loop-v1"
-STEM=re.compile(r"^[a-z0-9_]+__(baseline|roof_plus|nose_sculpt|wider_haunch|sculpted_canopy|faired_mounts|integrated_aero)$")
+STEM=re.compile(r"^[a-z0-9_]+__(baseline|roof_plus|nose_sculpt|wider_haunch|sculpted_canopy|faired_mounts|integrated_aero|cockpit_bridge|rear_nacelle|architectural)$")
 MAX_CASES=12
 MAX_VARIANTS=60
 MIN_DELTA=.005
