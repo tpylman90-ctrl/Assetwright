@@ -141,15 +141,33 @@ object MiniGeometry {
         val shoulderSculpt = spec.designControls.shoulderDefinition.coerceIn(0f, 1f)
         val roofSquareness = spec.designControls.canopySquareness.coerceIn(0f, 1f)
         val mountFairing = spec.designControls.fairedRepulsorMounts.coerceIn(0f, 1f)
+        val cockpitTransition = spec.designControls.cockpitShoulderTransition.coerceIn(0f, 1f)
+        val rearShrouding = spec.designControls.rearNacelleShrouding.coerceIn(0f, 1f)
+        val cockpitSpan = spec.canopyLength.coerceAtMost(l * .56f)
+        val cockpitCenter = -l * .045f
         // Denser, continuous nose-to-shoulder transition. Previously the nose
         // factor jumped from 0.55 to 1.0 between adjacent stations, causing
         // an abrupt flare on every exported vehicle.
-        val stations = listOf(
+        val baseStations = listOf(
             -0.50f to 0.38f, -0.46f to 0.52f, -0.39f to 0.71f,
             -0.30f to 0.88f, -0.21f to 0.97f, -0.05f to 1.00f,
             0.12f to 1.03f, 0.27f to spec.rearHaunch,
             0.40f to spec.rearHaunch * 1.01f, 0.50f to 0.82f
         )
+        // Localized mesh detail at actual sculpting transition sites. The
+        // width profile is interpolated from original stations, so adding
+        // vertex rings alone cannot create abrupt geometry discontinuities.
+        val stations = if (cockpitTransition > 0f) {
+            (baseStations.map { it.first } +
+                listOf(-.36f, -.26f, -.16f, -.10f, 0f, .07f, .17f, .22f, .34f))
+                .distinct().sorted().map { t ->
+                    val left = baseStations.lastOrNull { it.first <= t } ?: baseStations.first()
+                    val right = baseStations.firstOrNull { it.first >= t } ?: baseStations.last()
+                    val alpha = if (right.first == left.first) 0f
+                        else (t-left.first)/(right.first-left.first)
+                    t to (left.second + (right.second-left.second)*alpha)
+                }
+        } else baseStations
         val bodyRings = stations.map { (t, profile) ->
             (0 until spec.radialSegments).map { i ->
                 val angle = i * 2.0 * PI / spec.radialSegments
@@ -159,13 +177,25 @@ object MiniGeometry {
                 val eased = frontProgress * frontProgress * (3f - 2f * frontProgress)
                 val frontShape = spec.noseTaper + (1f - spec.noseTaper) * eased
                 val shoulderVolume = shoulderSculpt * .065f * abs(side) * eased
-                val width = w * profile * frontShape * (1f + shoulderVolume)
+                // Cockpit transition is sculpted INTO the same continuous
+                // body mesh. It is not an overlapping flat surround panel.
+                // Raise and broaden the upper shoulder next to the canopy,
+                // preserving the centerline roof and the original silhouette
+                // everywhere outside the cockpit envelope.
+                val canopyEnvelope = (1f -
+                    abs(l*t-cockpitCenter)/(cockpitSpan*.66f)).coerceIn(0f, 1f)
+                val feather = canopyEnvelope*canopyEnvelope*(3f-2f*canopyEnvelope)
+                val upper = maxOf(top,0f)
+                val bridgeWidth = cockpitTransition*.22f*feather*upper
+                val bridgeRise = cockpitTransition*.055f*feather*upper*abs(side)
+                val width = w * profile * frontShape *
+                    (1f + shoulderVolume + bridgeWidth)
                 Vec3(
                     width * side,
                     l * t,
                     hullCenterZ + if (top >= 0f)
                         hullUpperRadius * top * (.94f + .06f * profile) +
-                            shoulderSculpt * .055f * abs(side) * top
+                            shoulderSculpt * .055f * abs(side) * top + bridgeRise
                     else hullLowerRadius * top
                 )
             }
@@ -184,8 +214,8 @@ object MiniGeometry {
 
         // The greenhouse lower edge intersects the upper hull: no floating cockpit.
         val roof = spec.roofHeight
-        val span = spec.canopyLength.coerceAtMost(l * .56f)
-        val center = -l * .045f
+        val span = cockpitSpan
+        val center = cockpitCenter
         // The old glass ellipse sat above the shoulder at its widest point.
         // Its lower perimeter now intersects the hull, while its roof is
         // gradually raised through a fitted eight-station greenhouse profile.
@@ -239,8 +269,31 @@ object MiniGeometry {
             val r = if (centralBooster) .28f else .24f
             val extension = if (centralBooster) .39f else .30f
             val name = if (centralBooster) "Central booster" else "Rear drive"
-            m.cylinderY("$name housing", ENGINE, x, aft - .10f,
-                aft + extension, driveZ, r, 20)
+            if (rearShrouding > 0f) {
+                // Fitted five-station root-to-nozzle fairing. The broad
+                // inboard socket begins inside the rear hull, then smoothly
+                // transitions to the exposed nozzle; the housing is still
+                // a distinct mesh and NOT a topologically boolean-welded
+                // engine cutout. That needs a later real hull cut operation.
+                val outline = listOf(
+                    (aft - .32f) to (r * 1.03f),
+                    (aft - .22f) to (r * (1f + .46f * rearShrouding)),
+                    (aft - .055f) to (r * (1f + .38f * rearShrouding)),
+                    (aft + .065f) to (r * (1f + .21f * rearShrouding)),
+                    (aft + extension * .64f) to (r * (1f + .055f * rearShrouding)),
+                    (aft + extension) to r
+                )
+                m.loft("$name housing", ENGINE, outline.map { (y, radius) ->
+                    (0 until 20).map { i ->
+                        val theta = i * 2.0 * PI / 20
+                        Vec3(x + radius * cos(theta).toFloat(), y,
+                            driveZ + radius * sin(theta).toFloat())
+                    }
+                })
+            } else {
+                m.cylinderY("$name housing", ENGINE, x, aft - .10f,
+                    aft + extension, driveZ, r, 20)
+            }
             m.cylinderY("$name core", UNDERBODY, x, aft + extension,
                 aft + extension + .015f, driveZ, r * .75f, 20)
             m.cylinderY("$name energy ring", LIGHT, x, aft + extension + .015f,
