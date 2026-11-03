@@ -1,6 +1,6 @@
 {
   "schema": "assetwright-visual-transfer-request-v1",
-  "cycle": 1,
+  "cycle": 2,
   "requested_scope": "36 original MiniGeometry hover vehicle samples; frozen DINOv2-small training features; text-only owned student",
   "provenance": "original procedural GLBs only",
   "teacher_permission": "frozen_image_encoder_only",
@@ -8,5 +8,7 @@
   "public_data_only": true,
   "android_weights_auto_promoted": false,
   "training_purpose": "measure heldout shape parameter improvement against text-only student",
-  "authorization": "user approved using pretrained knowledge as a teacher, never as the final model generator"
+  "authorization": "user approved using pretrained knowledge as a teacher, never as the final model generator",
+  "reason": "Fix missing NumPy in optional Blender glTF importer by reading only native GLBs through AssetWright audited stdlib parser",
+  "rerun_of": "41657615030"
 }
