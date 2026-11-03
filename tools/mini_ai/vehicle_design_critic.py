@@ -48,16 +48,30 @@ def _canopy_crown(points:list[tuple])->dict:
 
 def _arm_stations(parts:list[list[tuple]])->dict:
     stations=[]
+    tapers=[]
     for points in parts:
-        # GLBs have the geometry positions, not authored modeling recipes.
-        # More distinct cross-sectional ring stations imply a profiled arm,
-        # instead of a two-endpoint round tube. Topology alone is not proof
-        # that it is integrated or aesthetically pleasing.
-        values=sorted({round(p[0],4) for p in points})
-        stations.append(len(values))
+        # Group real GLB vertices at longitudinal mount stations (X-axis).
+        # A plain pipe has 2 stations with equal radial dimensions.
+        # An authored loft has multiple sections and a broader root.
+        sections={}
+        for x,y,z in points:
+            sections.setdefault(round(x,4),[]).append((y,z))
+        keys=sorted(sections)
+        stations.append(len(keys))
+        if len(keys)<2:
+            tapers.append(0.)
+            continue
+        def radius(section):
+            ys=[p[0] for p in section]
+            zs=[p[1] for p in section]
+            return math.hypot((max(ys)-min(ys))/2,(max(zs)-min(zs))/2)
+        ends=[radius(sections[keys[0]]), radius(sections[keys[-1]])]
+        small=min(ends)
+        tapers.append((max(ends)/small) if small>1e-6 else 0.)
     return {
         "mount_section_count_min":min(stations,default=0),
         "mount_section_count_average":round(sum(stations)/len(stations),3) if stations else 0.,
+        "mount_root_tip_taper_ratio":round(min(tapers,default=0.),5),
         "mount_parts_analyzed":len(stations)
     }
 
@@ -71,7 +85,8 @@ def analyze(path:Path)->dict:
     mounts=_arm_stations(arms)
     checks={
         "non_spherical_upper_roof":roof["roof_crown_width_ratio"]>=.55,
-        "profiled_mounts_not_two_station_rods":mounts["mount_section_count_min"]>=4
+        "profiled_mounts_not_two_station_rods":mounts["mount_section_count_min"]>=4,
+        "tapered_mount_sections":mounts["mount_root_tip_taper_ratio"]>=1.25
     }
     return {
         "schema":"assetwright-vehicle-design-proxy-v1",
@@ -80,5 +95,5 @@ def analyze(path:Path)->dict:
         "checks":checks,
         "proxy_quality_score":round(sum(checks.values())/len(checks),3),
         "review_state":"requires_human_visual_review",
-        "limitations":"Only roof-width and support station proxies; cannot score beauty, seams, real connectivity, production topology or source similarity."
+        "limitations":"Roof-crown profile, mount section count and end taper measured from actual vertices; cannot score beauty, seams, real connectivity, production topology or source similarity."
     }
