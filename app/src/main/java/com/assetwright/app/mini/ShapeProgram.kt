@@ -46,14 +46,14 @@ object ShapeProgram {
         )),
         Step("attach_light_strip", "lighting", listOf("hull"), emptyMap())
     ) + buildList {
+        if (spec.designControls.cockpitShoulderTransition > 0f) {
+            add(Step("sculpt_cockpit_shoulder", "hull", listOf("hull"),
+                mapOf("strength" to spec.designControls.cockpitShoulderTransition.toDouble())))
+        }
         if (spec.driveCount == 1 && spec.designControls.rearSocketDepth > 0f) {
             add(Step("recess_rear_socket", "hull", listOf("hull"),
                 mapOf("socket_depth" to
                     (.085 + .16 * spec.designControls.rearSocketDepth.coerceIn(0f, 1f)))))
-        }
-        if (spec.designControls.cockpitShoulderTransition > 0f) {
-            add(Step("sculpt_cockpit_shoulder", "hull", listOf("hull"),
-                mapOf("strength" to spec.designControls.cockpitShoulderTransition.toDouble())))
         }
         if (spec.designControls.rearNacelleShrouding > 0f) {
             add(Step("loft_rear_nacelle", "propulsion", listOf("hull"),

@@ -14,6 +14,28 @@ object NativeCadOperationBridge {
 
     val supportedOperations = setOf(REAR_SOCKET, COCKPIT_SHOULDER, REAR_NACELLE)
 
+    /**
+     * Native construction program: deterministic dependency order, exact
+     * operation allowlist and unique bounded parameters. No downloaded
+     * CadQuery scripts or outside meshes are ever executed.
+     */
+    data class Command(val operation: String, val strength: Float)
+
+    val constructionOrder = listOf(COCKPIT_SHOULDER, REAR_SOCKET, REAR_NACELLE)
+
+    fun applyProgram(source: VehicleSpec, commands: List<Command>): VehicleSpec {
+        require(commands.size in 1..3) { "Expected 1..3 original geometry operations" }
+        val names = commands.map { it.operation }
+        require(names.size == names.toSet().size) { "Repeated modeling operation" }
+        require(names.all { it in supportedOperations }) { "Unknown native operation" }
+        require(names == names.sortedBy { constructionOrder.indexOf(it) }) {
+            "Invalid operation dependency order: sculpt hull, recess, then shroud"
+        }
+        var result = source
+        commands.forEach { result = apply(result, it.operation, it.strength) }
+        return result
+    }
+
     fun apply(spec: VehicleSpec, operation: String, depth: Float): VehicleSpec {
         require(operation in supportedOperations) {
             "Unimplemented native construction operation"

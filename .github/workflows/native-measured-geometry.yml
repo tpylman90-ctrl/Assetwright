@@ -1,0 +1,129 @@
+name: AssetWright Measured Native Geometry and Composition
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/src/main/java/com/assetwright/app/mini/NativeCadOperationBridge.kt'
+      - 'app/src/main/java/com/assetwright/app/mini/ShapeProgram.kt'
+      - 'app/src/test/java/com/assetwright/app/mini/MeasuredNativeConstructionProgramTest.kt'
+      - 'tools/mini_ai/native_measured_inverse.py'
+      - 'tools/mini_ai/native_measured_program_audit.py'
+      - 'tools/mini_ai/test_native_measured_inverse.py'
+      - '.github/workflows/native-measured-geometry.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write # To store only source-proven, validated research metrics in prereleases
+
+concurrency:
+  group: assetwright-native-geometry-study-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  native-measured-study:
+    name: Learn inverse geometry and validate actual three-operation native GLB
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test safe measured inverse and geometry-source provenance
+        run: python -m unittest discover -s tools/mini_ai -p 'test_native_measured_inverse.py'
+      - name: Restore previous approved OWN Mini AI checkpoint
+        run: |
+          mkdir -p local-data/verified-calibration
+          gh release download assetwright-native-calibrated-6d84e1193e24 \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern 'validated_calibration.json' \
+            --dir local-data/verified-calibration
+          test -s local-data/verified-calibration/validated_calibration.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Prepare original native Android geometry test runtime
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Generate source-hashed original GLB response-training and heldout reference targets
+        env:
+          ASSETWRIGHT_MEASURED_REFERENCE_OUT: ${{ github.workspace }}/local-data/measured/source
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.MeasuredNativeConstructionProgramTest \
+            --rerun-tasks --stacktrace
+      - name: Train ORIGINAL inverse response curves from first two families
+        run: |
+          python tools/mini_ai/native_measured_inverse.py \
+            --source local-data/measured/source \
+            --checkpoint local-data/verified-calibration/validated_calibration.json \
+            --out local-data/measured/study
+          test -s local-data/measured/study/program.properties
+      - name: Construct new third-family vehicle using OWN selected operations and measured parameter inverses
+        env:
+          ASSETWRIGHT_MEASURED_INVERSE_PLAN: ${{ github.workspace }}/local-data/measured/study/program.properties
+          ASSETWRIGHT_MEASURED_PREDICTION_OUT: ${{ github.workspace }}/local-data/measured/predicted
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.MeasuredNativeConstructionProgramTest \
+            --rerun-tasks --stacktrace
+      - name: Independently inspect new single and COMBINED original GLBs against withheld geometry targets
+        run: |
+          python tools/mini_ai/native_measured_program_audit.py \
+            --reference local-data/measured/source \
+            --predicted local-data/measured/predicted \
+            --learning-report local-data/measured/study/inverse_report.json \
+            --out local-data/measured/study/forward_geometry_audit.json
+      - name: Upload verifiable research artifacts, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-native-measured-inverse-and-composition
+          path: |
+            local-data/measured/source/*.glb
+            local-data/measured/source/*.json
+            local-data/measured/study/*.json
+            local-data/measured/study/*.properties
+            local-data/measured/predicted/*.glb
+            local-data/measured/predicted/*.json
+          if-no-files-found: warn
+          retention-days: 21
+      - name: Persist only verified source-hashed response learner in research prerelease
+        if: github.ref == 'refs/heads/main' && success()
+        run: |
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('local-data/measured/study')
+          inverse=json.loads((root/'inverse_report.json').read_text())
+          proof=json.loads((root/'forward_geometry_audit.json').read_text())
+          checkpoint=Path('local-data/verified-calibration/validated_calibration.json').read_bytes()
+          assert inverse['research_status']=='verified_inverse_geometry_response'
+          assert proof['passed'] is True and all(proof['checks'].values())
+          assert inverse['source_checkpoint_sha256']==hashlib.sha256(checkpoint).hexdigest()
+          assert proof['owned_model_sha256']==inverse['source_checkpoint_sha256']
+          (root/'RESEARCH_ONLY.md').write_text(
+              'Measured procedural response curves, two training vehicle families.\n'
+              'Unseen third-family references were used ONLY as geometric targets.\n'
+              'The new composed GLB was generated by AssetWright only.\n'
+              'Not a production Android AI and not a real-world CAD generator.\n')
+          PY
+          tag="assetwright-native-inverse-$(echo "$GITHUB_SHA" | cut -c1-12)"
+          gh release create "$tag" --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" --prerelease \
+            --title "AssetWright native inverse geometry construction research" \
+            --notes "Approved only after original measured GLBs, independent withheld-family parameter prediction and composed native GLB mesh audit. Does not deploy to Android." \
+            local-data/measured/study/inverse_report.json \
+            local-data/measured/study/learned_response_curves.json \
+            local-data/measured/study/forward_geometry_audit.json \
+            local-data/measured/study/RESEARCH_ONLY.md
