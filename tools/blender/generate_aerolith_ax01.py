@@ -234,6 +234,23 @@ def canopy(glass,black,pearl,titanium,cyan):
          [(-.52,1.82,1.29),(0,1.90,1.27),(.52,1.82,1.29)],.037,pearl)
     return rows
 
+def cast_engine_shroud(name,cx,zcenter,finish,shadow):
+    """Purpose-made five-section fairing, integrated with the rear haunch."""
+    profiles=[(2.55,.27),(2.81,.41),(3.13,.465),
+              (3.49,.45),(3.70,.395)]
+    n=32
+    rows=[[(cx+r*math.cos(2*PI*i/n),y,
+            zcenter+r*.88*math.sin(2*PI*i/n))
+           for i in range(n+1)] for y,r in profiles]
+    skin=loft(name+" / sculpted engine shroud",rows,finish,0,True)
+    for face in skin.data.polygons:face.use_smooth=True
+    ring(name+" / forged shroud break seam",(cx,3.50,zcenter),
+         .416,.016,shadow)
+    return skin
+
+def detail_line(name,rows,mat,offset=.035):
+    return conform_panel(name,rows,mat,offset)
+
 def forge_vehicle(outdir):
     ceramic=material("AX01 | storm-titanium satin fender armor",(.245,.315,.365),.56,.42)
     paint=material("AX01 | midnight petrol metallic monocoque",(.068,.128,.174),.68,.36)
@@ -256,43 +273,62 @@ def forge_vehicle(outdir):
         for y,start,end in [(-3.34,.76,.88),(-2.98,.61,.96),(-2.53,.53,.975),
                             (-2.10,.53,.98),(-1.59,.60,.94),(-1.15,.70,.90)]:
             front.append((y,[side*u for u in arr(start,end)]))
-        conform_panel("AX01 / "+sign+" sculpted ceramic forward wing",front,ceramic,.025)
+        conform_panel("AX01 / "+sign+" sculpted satin-titanium forward wing",front,ceramic,.048)
         rear=[]
         for y,start,end in [(1.11,.72,.91),(1.55,.64,.97),(2.06,.53,.985),
                             (2.56,.50,.99),(3.04,.54,.99),(3.32,.69,.96)]:
             rear.append((y,[side*u for u in arr(start,end)]))
-        conform_panel("AX01 / "+sign+" raised ceramic rear delta",rear,ceramic,.029)
+        conform_panel("AX01 / "+sign+" raised satin-titanium rear delta",rear,ceramic,.052)
         # Forward fender gills are genuinely inserted panel volume.
         for i,y in enumerate([-2.86,-2.68,-2.50]):
-            pts=[hull_point(y,side*.86,.048),
-                 hull_point(y+.13,side*.86,.052),
-                 hull_point(y+.09,side*.72,.036),
-                 hull_point(y-.03,side*.72,.033)]
+            pts=[hull_point(y,side*.86,.063),
+                 hull_point(y+.13,side*.86,.067),
+                 hull_point(y+.09,side*.72,.056),
+                 hull_point(y-.03,side*.72,.056)]
             poly("AX01 / flush front fender shark gill",pts,black)
+        detail_line("AX01 / "+sign+" fitted fender shoulder pinstripe",[
+            (y,[side*(u-.020),side*(u+.020)])
+            for y,u in [(-3.20,.76),(-2.95,.66),(-2.64,.59),
+                        (-2.25,.57),(-1.83,.59),(-1.38,.70)]],
+            titanium,.064)
+        for y,u in [(-2.85,.75),(-1.91,.79),(2.22,.80),(2.80,.83)]:
+            xx=side*station(y)[0]*u
+            zz=hull_z(y,u)+.068
+            rod("AX01 / recessed pin-lock collar",
+                (xx,y,zz),(xx,y,zz+.006),.030,black,12)
+            rod("AX01 / pin-lock titanium insert",
+                (xx,y,zz+.005),(xx,y,zz+.009),.017,titanium,12)
         # Inboard aero depression is a satin metal insert, fitted to hull.
         conform_panel("AX01 / "+sign+" carbon hood aero saddle",
             [(y,[side*u for u in arr(.35,.50)])
-              for y in [-3.12,-2.83,-2.43,-1.85]],black,.015)
+              for y in [-3.12,-2.83,-2.43,-1.85]],black,.037)
         # Shoulder-to-door/rocker bridge: distinct physically dark recessed channel.
         plate=[]
-        for y in [-1.14,-.70,-.06,.61,1.06,1.61,2.02]:
+        for y in [-1.14,-.84,-.42,.12,.71,1.18,1.63,2.02]:
             w=station(y)[0]
             mid=station(y)[3]
-            plate.append([(side*(w+.012),y,mid-.17),
-                          (side*(w+.025),y,mid-.37)])
-        loft("AX01 / "+sign+" shadowed aero tunnel",plate,inset,0)
+            taper=max(.65,1-.26*abs((y-.44)/1.60))
+            plate.append([(side*(w+.012),y,mid-.125),
+                          (side*(w+.042*taper),y,mid-.23),
+                          (side*(w+.015),y,mid-.38)])
+        loft("AX01 / "+sign+" formed recessed air tunnel",plate,inset,0)
         beam("AX01 / "+sign+" cyan tunnel perimeter",
              [(side*(station(y)[0]+.028),y,station(y)[3]-.19)
               for y in [-1.03,-.65,-.01,.65,1.14,1.64]],.015,cyan)
         # Detailed fore/aft inspection scuff plates and narrow side access hatch.
         hatch=[]
-        for y in [-.83,.44,1.06]:
+        for y,edge in [(-.83,.78),(-.60,.96),(.00,1.00),(.48,1.00),
+                       (.85,.91),(1.06,.72)]:
             w=station(y)[0]
-            hatch.append([(side*(w+.029),y,.68),
-                          (side*(w+.030),y,.92)])
-        loft("AX01 / "+sign+" long service hatch",hatch,titanium,0)
+            hatch.append([(side*(w+.027),y,.72),
+                          (side*(w+.035),y,.72+.09*edge),
+                          (side*(w+.036),y,.91+.055*edge)])
+        loft("AX01 / "+sign+" chamfered side maintenance cassette",hatch,titanium,0)
         beam("AX01 / "+sign+" hatch rim lower",
              [(side*(station(y)[0]+.038),y,.70) for y in [-.87,.03,1.11]],.012,black)
+        beam("AX01 / "+sign+" continuous lower rocker shoulder",[
+            (side*(station(y)[0]+.027),y,.64)
+            for y in [-1.30,-.82,-.16,.56,1.31,2.05]],.018,black)
         # 3 buried levitation units, each with ring and short thrust pin.
         for y in [-2.37,-.03,2.38]:
             x=side*1.25
