@@ -12,13 +12,19 @@ CURRICULUM=Path(__file__).resolve().parents[2]/"training/curricula/vehicle_model
 def benchmark(*, effect:bool=True):
     rows=[]
     for j,name in enumerate(("racer_exposed","coupe_exposed","suv_hidden","suv_tucked")):
-        for k,variant in enumerate(("baseline","sculpted_canopy","faired_mounts","integrated_aero")):
+        for k,variant in enumerate(("baseline","sculpted_canopy","faired_mounts","integrated_aero","cockpit_bridge","rear_nacelle")):
             metrics={"roof_crown_width_ratio":.37,
-                     "mount_root_tip_taper_ratio":1.}
+                     "mount_root_tip_taper_ratio":1.,
+                     "body_cockpit_shoulder_span":.95,
+                     "engine_housing_flare_ratio":1.}
             if variant in ("sculpted_canopy","integrated_aero"):
                 metrics["roof_crown_width_ratio"] = .7 if effect else .37
             if variant in ("faired_mounts","integrated_aero"):
                 metrics["mount_root_tip_taper_ratio"] = 1.85 if effect else 1.
+            if variant=="cockpit_bridge":
+                metrics["body_cockpit_shoulder_span"]=1.05 if effect else .95
+            if variant=="rear_nacelle":
+                metrics["engine_housing_flare_ratio"]=1.45 if effect else 1.
             rows.append({
                 "case":name,"variant":variant,
                 "source_sha256":f"{j*4+k+1:064x}",
@@ -35,10 +41,10 @@ class TechniqueEffectsTest(unittest.TestCase):
 
     def test_verified_contrast_assigns_effect_not_visual_approval(self):
         result=evaluate(self.content,benchmark())
-        self.assertEqual(result["number_of_techniques"],5)
-        self.assertEqual(result["techniques_with_measured_effect"],2)
+        self.assertEqual(result["number_of_techniques"],6)
+        self.assertEqual(result["techniques_with_measured_effect"],4)
         self.assertEqual(result["techniques_without_independent_measurement"],1)
-        self.assertEqual(result["techniques_requiring_new_geometry"],2)
+        self.assertEqual(result["techniques_requiring_new_geometry"],1)
         self.assertEqual(result["automatically_approved_as_professional_art"],0)
         crown=result["techniques"][0]
         self.assertEqual(crown["outcome"],"measured_operation_effect")
@@ -47,6 +53,9 @@ class TechniqueEffectsTest(unittest.TestCase):
         mount=result["techniques"][2]
         self.assertEqual(mount["outcome"],"measured_operation_effect")
         self.assertTrue(all(x["delta"]>=.25 for x in mount["contrasts"]))
+        self.assertEqual(result["techniques"][3]["outcome"],"measured_operation_effect")
+        self.assertEqual(result["techniques"][4]["outcome"],"measured_operation_effect")
+        self.assertEqual(result["techniques"][5]["outcome"],"unimplemented_operation")
 
     def test_unimproved_geometric_effect_is_not_a_learning_example(self):
         result=evaluate(self.content,benchmark(effect=False))
