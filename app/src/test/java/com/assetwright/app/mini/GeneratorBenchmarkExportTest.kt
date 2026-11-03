@@ -61,7 +61,18 @@ class GeneratorBenchmarkExportTest {
                     designControls = VehicleDesignControls(
                         canopySquareness = .85f,
                         shoulderDefinition = .80f,
-                        fairedRepulsorMounts = 1f))
+                        fairedRepulsorMounts = 1f)),
+                "cockpit_bridge" to original.copy(
+                    designControls = VehicleDesignControls(cockpitShoulderTransition = 1f)),
+                "rear_nacelle" to original.copy(
+                    designControls = VehicleDesignControls(rearNacelleShrouding = 1f)),
+                "architectural" to original.copy(
+                    designControls = VehicleDesignControls(
+                        canopySquareness = .85f,
+                        shoulderDefinition = .80f,
+                        fairedRepulsorMounts = 1f,
+                        cockpitShoulderTransition = 1f,
+                        rearNacelleShrouding = 1f))
             )
             for ((variant, spec) in variations) {
                 val stem = scenario.id + "__" + variant
@@ -86,6 +97,6 @@ class GeneratorBenchmarkExportTest {
                 wrote++
             }
         }
-        assertTrue("Incorrect number of generated GLB samples", wrote == 28)
+        assertTrue("Incorrect number of generated GLB samples", wrote == 40)
     }
 }
