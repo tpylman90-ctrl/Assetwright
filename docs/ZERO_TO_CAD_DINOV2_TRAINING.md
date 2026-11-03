@@ -10,7 +10,7 @@ Other models may provide visual supervision, but **AssetWright's own student and
 ## First bounded implementation
 1. tools/mini_ai/zero_to_cad_ingest.py streams at most 96 official training and 40 validation examples, with 384/160 scan limits. It records only whitelist-approved operation names, source hashes, face counts, and two ephemeral render PNGs where available. Safe Python AST inspects fallback CadQuery methods without executing source code. No STL/STEP files are written to git or used by the production mesher.
 2. tools/mini_ai/zero_to_cad_operation_student.py trains a compact original operation-sequence prior in AssetWright-owned code. It models next-operation probabilities conditional on preceding steps, and compares held-out cross entropy to a unigram baseline. The official train/validation splits remain distinct. At least a 2% gain is required for research acceptance. The output is never deployed to Android.
-3. tools/mini_ai/zero_to_cad_dinov2_teacher.py reads only hashed reference PNGs, loads frozen DINOv2 Small on CPU, and emits 384-dimensional source-associated visual features. It produces no geometry. **These features are stored as research evidence, but do not yet update the operation grammar.** A measured multimodal-distillation model is a separate future step.
+3. tools/mini_ai/zero_to_cad_dinov2_teacher.py reads only hashed reference PNGs, loads frozen DINOv2 Small on CPU, and emits 384-dimensional source-associated visual features. It produces no geometry. **The operation grammar remains separate.** The additional research-only visual student now learns to predict DINO-derived 24-dimensional shape signatures from the CAD operation sequence; it does not generate meshes.
 4. .github/workflows/zero-to-cad-teacher.yml runs offline safety checks on relevant pushes. Explicit [study-zero-to-cad] commit messages or manual dispatch also run a bounded 90-minute CPU study. The image cache remains on the runner; only operation data, features and evaluations are temporary Actions artifacts. Standard GitHub policy and usage limits apply.
 
 ## Research limitations
@@ -40,3 +40,9 @@ Successful [GitHub Actions run 41668523988](https://github.com/tpylman90-ctrl/As
 The experiment measures only regularities in *operation order*, not valid CAD execution, accurate part geometry, or free-text 3D generation. In particular, our source AST collector does not prove that arbitrary nested CadQuery expressions will always have complete semantic execution order. Further blind source families and native operator execution tests are required.
 
 The original Zero-to-CAD image fields were raw bytes, not Pillow objects; this was corrected before the successful run. The resulting artifact is named 'assetwright-zero-to-cad-dinov2-research' and contains only source-provenance metadata, operation grammar/evaluation, and frozen numeric visual features—not the CAD scripts, STL/STEP files, or outside meshes.
+
+## Visual distillation experiment
+- An AssetWright-owned model now tries to predict a compressed 24-dimensional DINOv2 visual signature from a CadQuery operation sequence and conservative source geometry metadata. Its inference uses no image encoder or external CAD meshes.
+- The workflow computes DINOv2 features for both the train and **independent official validation** split, joining them only with exact CAD source hashes and PNG view hashes.
+- The research student must beat the train-set constant mean visual signature by at least 3% on official heldout examples or its visual-learning claim is rejected.
+- Even if validated, it remains research-only and cannot create or deploy native 3D geometry until we build and evaluate a true visual-to-native-construction bridge.

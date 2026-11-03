@@ -60,6 +60,7 @@ jobs:
         run: |
           python tools/mini_ai/zero_to_cad_ingest.py \
             --split validation --max-records 40 --max-scan 160 \
+            --images local-data/zero-to-cad/images \
             --output local-data/zero-to-cad/validation.json
       - name: Fit our own CAD operation grammar and compare heldout predictive loss
         run: |
@@ -73,6 +74,20 @@ jobs:
             --manifest local-data/zero-to-cad/train.json \
             --images local-data/zero-to-cad/images \
             --out local-data/zero-to-cad/dinov2/frozen_features.json
+      - name: Extract independent heldout DINOv2 shape-teacher features
+        run: |
+          python tools/mini_ai/zero_to_cad_dinov2_teacher.py \
+            --manifest local-data/zero-to-cad/validation.json \
+            --images local-data/zero-to-cad/images \
+            --out local-data/zero-to-cad/dinov2/validation_frozen_features.json
+      - name: Distill frozen visual shape features into our own construction student
+        run: |
+          python tools/mini_ai/zero_to_cad_visual_student.py \
+            --train local-data/zero-to-cad/train.json \
+            --train-teacher local-data/zero-to-cad/dinov2/frozen_features.json \
+            --validation local-data/zero-to-cad/validation.json \
+            --validation-teacher local-data/zero-to-cad/dinov2/validation_frozen_features.json \
+            --out local-data/zero-to-cad/visual-student
       - name: Upload only licensed research metadata and evaluations
         if: always()
         uses: actions/upload-artifact@v4
@@ -83,5 +98,6 @@ jobs:
             local-data/zero-to-cad/validation.json
             local-data/zero-to-cad/student/*.json
             local-data/zero-to-cad/dinov2/*.json
+            local-data/zero-to-cad/visual-student/*.json
           if-no-files-found: warn
           retention-days: 21
