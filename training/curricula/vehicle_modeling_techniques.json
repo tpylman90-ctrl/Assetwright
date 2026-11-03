@@ -1,0 +1,200 @@
+{
+  "schema": "assetwright-vehicle-technique-curriculum-v1",
+  "version": 1,
+  "origin": "Forge-authored original procedural modeling instruction; no third-party geometry or private user examples",
+  "purpose": "Teach known, permitted operations and their reasons rather than guessing from finished meshes",
+  "model_basis": "Actual MiniGeometry / GlbWriter code in public Assetwright repo",
+  "review_policy": "Performance measurements validate execution effects only; no autonomous aesthetic acceptance",
+  "techniques": [
+    {
+      "id": "crown_profile_loft",
+      "stage": 2,
+      "execution_status": "experimental_native_control",
+      "modeling_operation": "loft_ring_profile_exponent",
+      "control": "canopySquareness",
+      "value": 0.85,
+      "variant": "sculpted_canopy",
+      "source_code": "app/src/main/java/com/assetwright/app/mini/MiniGeometry.kt",
+      "purpose": "Replace a dome-shaped roof with a wider low-crown panoramic greenhouse without simply increasing roof height",
+      "why": "A high measured roof clearance does not imply an aerodynamic or driver-integrated cabin",
+      "geometry_recipe": [
+        "Preserve specified roof peak and canopy length",
+        "Generate transverse rings along the cockpit length",
+        "Raise positive radial terms to a fractional exponent to widen the crown",
+        "Keep lower boundary intersecting the body and cap the loft"
+      ],
+      "target_measurement": "roof_crown_width_ratio",
+      "min_increase": 0.15,
+      "failure_modes": [
+        "Canopy becomes a detached bubble",
+        "Roof exceeds specified height",
+        "Only vertical height changes"
+      ],
+      "feedback_examples": [
+        "The glass cockpit looks like a round bubble perched on the hood",
+        "Flatten the upper roof profile while preserving the canopy height",
+        "Give the windshield a broad smooth crown rather than a half sphere",
+        "The cabin needs a low wide aerodynamic greenhouse",
+        "Too much roundness at the top of the driver enclosure",
+        "Make the glass roof spread across the shoulders and sweep back",
+        "The roof is tall enough but the silhouette is still a dome",
+        "Avoid a spherical canopy and broaden the upper contours",
+        "Transition from the windshield into a flatter roof line",
+        "Shape the greenhouse crown using cross section lofting",
+        "The cabin glass looks like a round ball on top",
+        "Lower the visual curvature of the canopy crown"
+      ],
+      "holdout_feedback": [
+        "The passenger pod is still an oval bubble; reshape its roof",
+        "A smooth flattened roofline would suit this speedster better",
+        "Widen the top silhouette of the windshield without lifting its peak",
+        "The cockpit glazing has excessive dome curvature"
+      ]
+    },
+    {
+      "id": "shoulder_contour_loft",
+      "stage": 1,
+      "execution_status": "experimental_native_control",
+      "modeling_operation": "hull_station_profile_volume",
+      "control": "shoulderDefinition",
+      "value": 0.8,
+      "variant": "integrated_aero",
+      "source_code": "app/src/main/java/com/assetwright/app/mini/MiniGeometry.kt",
+      "purpose": "Sculpt continuous body shoulder volumes using station-profile cross sections",
+      "why": "A wing-like surface stuck on a flat chassis is not a molded aerodynamic vehicle body",
+      "geometry_recipe": [
+        "Lay out nose to rear longitudinal hull stations",
+        "Use smoothly eased station width profiles",
+        "Vary shoulder elevation and width on the same manifold loft",
+        "Inspect front and rear three-quarter silhouettes"
+      ],
+      "target_measurement": null,
+      "min_increase": null,
+      "failure_modes": [
+        "Shoulder remains a thin attached panel",
+        "Hard step between cross sections",
+        "Horizon edge pinches under reflections"
+      ],
+      "feedback_examples": [
+        "The front fenders look pasted on rather than part of the shell",
+        "Sculpt the side shoulders into the main body surface",
+        "The body needs a stronger continuous shoulder line",
+        "Avoid separate flat wings bolted onto the hood",
+        "Blend wide fender volumes directly into the vehicle hull",
+        "The central body is slab-like and lacks shaped flanks",
+        "Make a flowing side haunch from front to rear",
+        "Add continuous surface volume around the wheel housings",
+        "The silhouette needs an organic wide-body shoulder",
+        "Sculpt the side fairing with longitudinal section profiles",
+        "The aero body is too flat along its rocker edges",
+        "Create smooth hull curvature connecting the nose and rear quarters"
+      ],
+      "holdout_feedback": [
+        "These overfenders feel like disconnected decorative plates",
+        "Give the main fuselage pronounced molded shoulder volumes",
+        "The flanks should have a connected sculpt rather than flat slabs",
+        "Body cross sections need a smooth sculpted side profile"
+      ]
+    },
+    {
+      "id": "tapered_bracket_sections",
+      "stage": 3,
+      "execution_status": "experimental_native_control",
+      "modeling_operation": "tapered_swept_mount_loft",
+      "control": "fairedRepulsorMounts",
+      "value": 1,
+      "variant": "faired_mounts",
+      "source_code": "app/src/main/java/com/assetwright/app/mini/MiniGeometry.kt",
+      "purpose": "Build actual tapered structural mounts instead of straight constant-section cylinders",
+      "why": "A simple pipe connecting the repulsor to the hull reads as placeholder geometry rather than designed machinery",
+      "geometry_recipe": [
+        "Mark actual hull root and repulsor mounting positions",
+        "Construct a five-station rail between the contact points",
+        "Widen and thicken the root gradually",
+        "Taper cross-sectional dimensions toward the end collar",
+        "Verify physical reach and avoid gaps or nonmanifold triangles"
+      ],
+      "target_measurement": "mount_root_tip_taper_ratio",
+      "min_increase": 0.25,
+      "failure_modes": [
+        "Arm remains uniform in thickness",
+        "Arm fails to reach its hover cell",
+        "Arms float away from body or pierce canopy"
+      ],
+      "feedback_examples": [
+        "The hover motors hang from plain cylindrical pipes",
+        "Replace the straight repulsor rods with swept tapered supports",
+        "These outrigger arms need engineered structural fairings",
+        "The hover unit brackets look like steel tubes",
+        "Make each lift cell support wide at the hull and narrow at the pod",
+        "Avoid uniform cylinder supports for external repulsors",
+        "Sculpt the outrigger support as a multi-section loft",
+        "The mounting arms are too thin and mechanically simple",
+        "Taper the hover mounting struts toward each pod",
+        "Make the external lift units blend into the chassis supports",
+        "The repulsor bars read as sticks rather than designed parts",
+        "Give the hover-unit brackets a muscular root and defined collar"
+      ],
+      "holdout_feedback": [
+        "Each hover cell appears attached with a plain rod",
+        "Use a swept support with variable sections instead of tubing",
+        "Give the outboard struts substantial tapered mounting structures",
+        "The undercarriage supports need broader roots and narrower ends"
+      ]
+    },
+    {
+      "id": "body_greenhouse_bridge",
+      "stage": 4,
+      "execution_status": "requires_new_geometry_primitive",
+      "modeling_operation": "shared_boundary_transition_loft",
+      "control": null,
+      "value": null,
+      "variant": null,
+      "source_code": null,
+      "purpose": "Create continuous cabin-to-body transitions beyond simple overlapping closed parts",
+      "why": "Glass intersecting the main hull can still look like a bubble set on top rather than a single designed cockpit",
+      "geometry_recipe": [
+        "Identify cabin perimeter in hull parameterization",
+        "Create shared boundary loops",
+        "Bridge loops with tangent-matched connecting surfaces",
+        "Verify mesh seam and reflectivity continuity"
+      ],
+      "target_measurement": null,
+      "min_increase": null,
+      "failure_modes": [
+        "Overlapping double surfaces",
+        "Floating glass",
+        "Cracked or pinched normal seam"
+      ],
+      "feedback_examples": [],
+      "holdout_feedback": []
+    },
+    {
+      "id": "rear_nacelle_integration",
+      "stage": 5,
+      "execution_status": "requires_new_geometry_primitive",
+      "modeling_operation": "engine_socket_hull_transition",
+      "control": null,
+      "value": null,
+      "variant": null,
+      "source_code": null,
+      "purpose": "Embed propulsion housings inside modeled rear body sockets rather than surface mounted cylinders",
+      "why": "Engine nozzles poking out of the back do not visually read as integrated race-vehicle propulsion",
+      "geometry_recipe": [
+        "Design nacelle location and thrust direction",
+        "Build rear-hull socket surface around engine collar",
+        "Transition housing flares continuously into body shell",
+        "Verify nozzle clearance and engine quantity"
+      ],
+      "target_measurement": null,
+      "min_increase": null,
+      "failure_modes": [
+        "Cylindrical engines attached onto shell",
+        "Thruster intersects deck surface",
+        "Missing airpath or obvious mounting seam"
+      ],
+      "feedback_examples": [],
+      "holdout_feedback": []
+    }
+  ]
+}
