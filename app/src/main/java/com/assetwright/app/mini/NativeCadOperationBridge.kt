@@ -1,25 +1,35 @@
 package com.assetwright.app.mini
 
 /**
- * An intentionally tiny, typed adapter from a reviewed CAD-operation lesson
- * into an actual native modeling operation. Not an arbitrary script runner.
+ * Research-only typed CAD lesson -> ORIGINAL native geometry operations.
  *
- * The learned research policy is not deployed on Android: caller must supply
- * a reviewed, allowlisted operation and bounded parameter. MiniGeometry owns
- * and emits every resulting polygon.
+ * Zero-to-CAD and DINOv2 teach and validate concepts; their source scripts,
+ * model outputs and meshes NEVER execute in this Kotlin modeling engine.
+ * Only these reviewed bounded controls can modify our own generated GLB.
  */
 object NativeCadOperationBridge {
     const val REAR_SOCKET = "recess_rear_socket"
+    const val COCKPIT_SHOULDER = "sculpt_cockpit_shoulder"
+    const val REAR_NACELLE = "loft_rear_nacelle"
+
+    val supportedOperations = setOf(REAR_SOCKET, COCKPIT_SHOULDER, REAR_NACELLE)
 
     fun apply(spec: VehicleSpec, operation: String, depth: Float): VehicleSpec {
-        require(operation == REAR_SOCKET) { "Operation is not implemented natively" }
+        require(operation in supportedOperations) {
+            "Unimplemented native construction operation"
+        }
         require(depth.isFinite() && depth in 0f..1f) {
-            "Native modeling depth is outside verified bounds"
+            "Native modeling strength must be finite and within 0..1"
         }
-        require(spec.driveCount == 1) {
-            "Blind circular socket experiment requires one central engine"
+        if (operation == REAR_SOCKET) require(spec.driveCount == 1) {
+            "Blind rear socket requires one central engine"
         }
-        return spec.copy(designControls =
-            spec.designControls.copy(rearSocketDepth = depth))
+        val revised = when (operation) {
+            REAR_SOCKET -> spec.designControls.copy(rearSocketDepth = depth)
+            COCKPIT_SHOULDER -> spec.designControls.copy(cockpitShoulderTransition = depth)
+            REAR_NACELLE -> spec.designControls.copy(rearNacelleShrouding = depth)
+            else -> error("Operation allowlist exhaustiveness failure")
+        }
+        return spec.copy(designControls = revised)
     }
 }
