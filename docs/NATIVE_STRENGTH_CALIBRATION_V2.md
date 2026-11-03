@@ -63,3 +63,31 @@ language templates. It does not demonstrate ability to model arbitrary
 objects or create professional automotive Class-A surfaces. A genuine next
 milestone requires learning parameters from measured target geometry
 and testing on new object families, not merely more synonyms.
+
+
+## Verified results — November 3, 2026
+
+[Successful training and original GLB proof](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41737700689). The previous validated AssetWright-owned checkpoint was loaded from the durable GitHub research release. The rejected first clinic student was not used.
+
+**Training**: 90 correction examples plus 135 old approved examples, with 315 training rows per epoch and the development-selected checkpoint at epoch 52. Classifier weights and biases were verified identical to the original throughout.
+
+**Fresh 36-example authored blind test (12 new template groups)**:
+
+| Test | Old checkpoint | Calibrated |
+|---|---:|---:|
+| Correct operator selection | 75.00% | 75.00% |
+| Abstentions | 1 | 1 |
+| Conditional strength MAE | 0.209168 | **0.112192** |
+| Correct ordered strengths (gentle / moderate / aggressive) | 0/12 groups | **12/12 groups** |
+
+Strength error improved **46.36% relative to the previous model**. This does *not* mean the model became 46.36% better at creating geometry; the percentage measures a specific bounded label-regression loss. These results are from a small authored curriculum, not a natural user benchmark.
+
+**Earlier skills**: 36/36 original held-out operation choices retained, with conditional strength error 0.055408 → 0.055679 (within the preset nonregression gate).
+
+**Full native GLB audit**: all ten geometry checks passed. The calibrated model generated one baseline and three modified GLBs using the native Kotlin MiniGeometry/GlbWriter, with 1,138 / 1,202 / 1,426 / 1,298 triangles respectively. The cockpit shoulder grew by 0.01817 m, and the rear nacelle achieved six profile stations and a 1.41 measured flare ratio. No outside AI-generated geometry was used.
+
+[Durable research-only calibrated checkpoint](https://github.com/tpylman90-ctrl/Assetwright/releases/tag/assetwright-native-calibrated-6d84e1193e24). SHA-256 `a7a17b5f90b513149c1d6ff5fb3f2836727048500a9cfcd35bbaed770c126ad0`. This is not automatically installed in Android.
+
+**Important future boundary:** The 36 fresh blind examples have now been evaluated. They are no longer pristine for tuning. Do not iterate on them to increase their score. The next test must be authored from new descriptions and ideally new asset families, alongside independent geometry reference comparisons, before any claim of broader generalization.
+
+Machine-readable record: `training/history/native_strength_calibration_2026-11-03.json`.

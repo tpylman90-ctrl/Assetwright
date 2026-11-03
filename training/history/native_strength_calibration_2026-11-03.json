@@ -1,0 +1,57 @@
+{
+  "schema": "assetwright-native-strength-calibration-history-v2",
+  "date_utc": "2026-11-03",
+  "verified_run_url": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41737700689",
+  "commit": "6d84e1193e24d9f7e4ae2a3900540886bbb88e9e",
+  "research_release_url": "https://github.com/tpylman90-ctrl/Assetwright/releases/tag/assetwright-native-calibrated-6d84e1193e24",
+  "seed_verified_model_sha256": "e5ea9962e5f9a605509d1b0e7222997b6123eb111fd783afa46ebf47ee2e18e6",
+  "calibrated_model_sha256": "a7a17b5f90b513149c1d6ff5fb3f2836727048500a9cfcd35bbaed770c126ad0",
+  "training": {
+    "original_examples_rehearsed": 135,
+    "correction_examples": 90,
+    "training_rows_per_epoch": 315,
+    "selected_epoch": 52,
+    "development_strength_mae_before": 0.22449,
+    "development_strength_mae_after": 0.101274,
+    "operation_classifier_frozen": true
+  },
+  "fresh_blind": {
+    "source": "training/curricula/native_strength_blind_v2.json",
+    "cases": 36,
+    "unique_templates": 12,
+    "strength_mae_before": 0.209168,
+    "strength_mae_after": 0.112192,
+    "absolute_gain": 0.096976,
+    "relative_gain": 0.463626,
+    "operation_accuracy_before": 0.75,
+    "operation_accuracy_after": 0.75,
+    "abstentions_before": 1,
+    "abstentions_after": 1,
+    "monotonic_template_fraction_before": 0,
+    "monotonic_template_fraction_after": 1,
+    "used_for_model_selection": false,
+    "now_exposed_do_not_tune_again": true
+  },
+  "prior_retention": {
+    "operator_accuracy_before": 1,
+    "operator_accuracy_after": 1,
+    "strength_mae_before": 0.055408,
+    "strength_mae_after": 0.055679
+  },
+  "native_glb_proof": {
+    "passed": true,
+    "all_ten_independent_checks_passed": true,
+    "source_model_sha256": "a7a17b5f90b513149c1d6ff5fb3f2836727048500a9cfcd35bbaed770c126ad0",
+    "baseline_triangles": 1138,
+    "recessed_socket_triangles": 1202,
+    "cockpit_shoulder_triangles": 1426,
+    "rear_nacelle_triangles": 1298,
+    "measured_shoulder_change_m": 0.01817,
+    "measured_rear_nacelle_flare_ratio": 1.40999,
+    "nacelle_stations": 6
+  },
+  "status": "verified_research_only_never_android_automatically",
+  "external_ai_produces_geometry": false,
+  "previous_rejected_clinic_checkpoint_used": false,
+  "next_research": "Gather genuinely new diverse human-authored and geometry-measured targets, train operation selection on independently held-out structures, multi-operation planner with dependency validation, and visual supervision from verified source assets; do not retune on the 36 exposed blind cases."
+}
