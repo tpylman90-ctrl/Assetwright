@@ -1,0 +1,47 @@
+{
+  "schema": "assetwright-native-clinic-history-v1",
+  "date_utc": "2026-11-03",
+  "run_url": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41726715700",
+  "source_commit": "24c9156435df6d3b347e9410bb6a2ce6e62647ac",
+  "source_student_sha256": "e5ea9962e5f9a605509d1b0e7222997b6123eb111fd783afa46ebf47ee2e18e6",
+  "result": "rejected_clinic_checkpoint",
+  "training": {
+    "correction_lessons": 90,
+    "initial_rehearsal_lessons": 135,
+    "development_lessons": 27,
+    "blind_lessons": 27,
+    "previously_difficult_exercises": 66,
+    "training_updates": 8148
+  },
+  "initial_diagnosis": {
+    "wrong_operation": 5,
+    "wrong_strength": 50,
+    "abstention": 11,
+    "mastered": 24
+  },
+  "blind_before": {
+    "operation_accuracy": 0.777778,
+    "strength_mae": 0.30946,
+    "abstentions": 3
+  },
+  "blind_after": {
+    "operation_accuracy": 0.703704,
+    "strength_mae": 0.284155,
+    "abstentions": 5
+  },
+  "old_skill_before": {
+    "operation_accuracy": 1,
+    "strength_mae": 0.055407
+  },
+  "old_skill_after": {
+    "operation_accuracy": 1,
+    "strength_mae": 0.055414
+  },
+  "validated_original_geometry_proof": true,
+  "negative_visual_reviews_reused_as_truth": false,
+  "android_model_changed": false,
+  "checkpoint_promotion": false,
+  "observed_failure": "Training improved strength accuracy but reduced categorical operation selection and increased abstentions on new phrasing",
+  "next_research": "Separate operation classification from strength calibration; add distinct entirely new blind prompt families and geometric quality checks before evaluating next changes. Do not retune against this session's 27 blind samples.",
+  "artifact_expiration_warning": "Original action research artifacts have a 21-day retention setting; preserve independently validated research checkpoints as versioned durable prerelease assets."
+}

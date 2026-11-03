@@ -80,3 +80,28 @@ requires versioned durable checkpoints and validation data; approved results
 can be added to persistent source-controlled training history. This workflow
 does not pretend that temporary CI artifacts create unlimited background
 training. We retain deliberate, small, reproducible, free training steps.
+
+
+## First real clinic result — November 3, 2026
+
+[GitHub Actions run 41726715700](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41726715700) completed both the original native GLB audit and the bounded mistake clinic.
+
+- 90 gold correction exercises, 27 development samples, 27 distinct blind samples.
+- Before correction: **5 wrong operations, 50 wrong strengths, 11 abstentions**, 24 mastered examples from 90 supervised correction exercises.
+- Focused 66 weak examples, rehearsed 135 old lessons, and performed 8,148 bounded example updates.
+- **Old skill accuracy stayed 100%**, strength MAE changed only 0.055407 → 0.055414.
+- **New blind strength MAE improved 0.309460 → 0.284155**.
+- **New blind operation accuracy degraded 77.78% → 70.37%**, abstentions rose from 3 to 5.
+- This result failed the preset acceptance gate and is labeled **rejected_clinic_checkpoint**.
+- **No Android model was promoted and no third-party mesh was used.**
+- Prior visual feedback remained a problem queue with zero unapproved records used as positive training labels.
+
+The initial evidence shows a real **multi-objective conflict**: improving numeric strength calibration did not preserve generalization for choosing which action to execute. Separate operation-selection and strength-calibration practice, with a fresh untouched evaluation corpus, is the recommended next experiment. Do NOT optimize repeatedly on this rejected session's 27 blind samples; they have already been examined.
+
+Machine-readable record: \`training/history/native_clinic_2026-11-03_first_session.json\`.
+
+### Durable checkpoints
+
+The GitHub student workflow now publishes a **research-only GitHub prerelease** once the original student, geometry auditor, and curriculum provenance checks have all passed. The prerelease contains only the previously independently **validated baseline** student, its evaluation, the source-hash-matched GLB audit, and the clinic report. A rejected clinic checkpoint is never mislabeled as validated. This preserves approved research weights after temporary GitHub Actions artifacts expire.
+
+Future sessions should restore the last validated research checkpoint from a release, rather than repeatedly pretraining the same baseline. Promotion to the Android runtime still requires stronger native operator, scene-quality, and unseen-design evidence.
