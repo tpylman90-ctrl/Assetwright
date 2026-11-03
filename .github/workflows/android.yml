@@ -23,6 +23,9 @@ on:
       - 'tools/mini_ai/technique_effect_audit.py'
       - 'tools/mini_ai/test_technique_teacher.py'
       - 'tools/mini_ai/test_technique_effect_audit.py'
+      - 'tools/mini_ai/native_socket_audit.py'
+      - 'tools/mini_ai/test_zero_to_cad_native_bridge.py'
+      - 'tools/mini_ai/zero_to_cad_native_bridge.py'
   workflow_dispatch:
 
 permissions:
@@ -37,6 +40,7 @@ jobs:
       ANDROID_HOME: /usr/local/lib/android/sdk
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
       ASSETWRIGHT_BENCHMARK_OUT: ${{ github.workspace }}/local-data/generator-benchmark
+      ASSETWRIGHT_SOCKET_BENCHMARK_OUT: ${{ github.workspace }}/local-data/socket-benchmark
       ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
@@ -81,6 +85,12 @@ jobs:
             --source local-data/generator-benchmark \
             --out local-data/generator-results/evaluation.json
 
+      - name: Verify real connected rear socket in two original native GLBs
+        run: |
+          python tools/mini_ai/native_socket_audit.py \
+            --source local-data/socket-benchmark \
+            --out local-data/socket-results/evaluation.json
+
       - name: Teach modeling-operation selection from verified original recipes
         run: |
           python tools/mini_ai/technique_teacher.py \
@@ -102,6 +112,9 @@ jobs:
             local-data/generator-benchmark/*.glb
             local-data/generator-benchmark/*.json
             local-data/generator-results/*.json
+            local-data/socket-benchmark/*.glb
+            local-data/socket-benchmark/*.json
+            local-data/socket-results/*.json
             local-data/technique-learning/selector/*.json
             local-data/technique-learning/effects.json
           if-no-files-found: error

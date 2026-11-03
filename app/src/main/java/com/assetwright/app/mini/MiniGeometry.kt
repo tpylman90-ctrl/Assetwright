@@ -36,11 +36,17 @@ private const val LIGHT = 0xFFB96B
 private class MeshBuilder {
     private val result = mutableListOf<MeshPart>()
 
-    fun loft(name: String, color: Int, rings: List<List<Vec3>>, cap: Boolean = true) {
+    fun loft(name: String, color: Int, rings: List<List<Vec3>>, cap: Boolean = true,
+             socketDepth: Float = 0f, socketRadius: Float = 0f,
+             socketCenterZ: Float = 0f) {
+        require(socketDepth == 0f || (cap &&
+            socketDepth >= .06f && socketDepth <= .40f &&
+            socketRadius >= .10f && socketRadius <= .21f))
+
         require(rings.size >= 2)
         val n = rings.first().size
         require(n >= 3 && rings.all { it.size == n })
-        val verts = rings.flatten()
+        val verts = rings.flatten().toMutableList()
         val triangles = ArrayList<Int>()
         for (j in 0 until rings.size - 1) {
             for (i in 0 until n) {
@@ -56,7 +62,44 @@ private class MeshBuilder {
             val end = (rings.size - 1) * n
             for (i in 1 until n - 1) {
                 triangles.addAll(listOf(0, i + 1, i))
-                triangles.addAll(listOf(end, end + i, end + i + 1))
+            }
+            if (socketDepth > 0f) {
+                // Real connected mesh topology: rear annulus -> inward socket
+                // wall -> blind end cap. Unlike an overlapping decorative
+                // plate, the opening and tunnel share vertex/edge indices
+                // with the hull and do not insert a second body part.
+                val rearY = rings.last().first().y
+                val rim = verts.size
+                val well = rim + n
+                for (i in 0 until n) {
+                    val angle = i * 2.0 * PI / n
+                    val dx = cos(angle).toFloat()
+                    val dz = sin(angle).toFloat()
+                    verts.add(Vec3(socketRadius * dx, rearY,
+                        socketCenterZ + socketRadius * dz))
+                }
+                for (i in 0 until n) {
+                    val angle = i * 2.0 * PI / n
+                    val dx = cos(angle).toFloat()
+                    val dz = sin(angle).toFloat()
+                    verts.add(Vec3(socketRadius * .84f * dx,
+                        rearY - socketDepth,
+                        socketCenterZ + socketRadius * .84f * dz))
+                }
+                for (i in 0 until n) {
+                    val next = (i + 1) % n
+                    triangles.addAll(listOf(end + i, end + next, rim + i))
+                    triangles.addAll(listOf(end + next, rim + next, rim + i))
+                    triangles.addAll(listOf(rim + i, rim + next, well + i))
+                    triangles.addAll(listOf(rim + next, well + next, well + i))
+                }
+                for (i in 1 until n - 1) {
+                    triangles.addAll(listOf(well, well + i, well + i + 1))
+                }
+            } else {
+                for (i in 1 until n - 1) {
+                    triangles.addAll(listOf(end, end + i, end + i + 1))
+                }
             }
             // Ensure the closed shape has outward-facing surfaces. Rings oriented
             // along -Y or +Z have different initial winding; signed volume catches
@@ -143,6 +186,8 @@ object MiniGeometry {
         val mountFairing = spec.designControls.fairedRepulsorMounts.coerceIn(0f, 1f)
         val cockpitTransition = spec.designControls.cockpitShoulderTransition.coerceIn(0f, 1f)
         val rearShrouding = spec.designControls.rearNacelleShrouding.coerceIn(0f, 1f)
+        val rearSocket = if (spec.driveCount == 1)
+            spec.designControls.rearSocketDepth.coerceIn(0f, 1f) else 0f
         val cockpitSpan = spec.canopyLength.coerceAtMost(l * .56f)
         val cockpitCenter = -l * .045f
         // Denser, continuous nose-to-shoulder transition. Previously the nose
@@ -200,7 +245,10 @@ object MiniGeometry {
                 )
             }
         }
-        m.loft("Sculpted continuous body", BODY, bodyRings)
+        m.loft("Sculpted continuous body", BODY, bodyRings,
+            socketDepth = if (rearSocket > 0f) .085f + .16f * rearSocket else 0f,
+            socketRadius = .17f,
+            socketCenterZ = hullCenterZ)
 
         // A low central keel remains inside the body silhouette.
         m.loft("Underside keel", UNDERBODY, listOf(-0.35f, 0.35f).map { t ->

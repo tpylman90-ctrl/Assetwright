@@ -88,6 +88,12 @@ jobs:
             --validation local-data/zero-to-cad/validation.json \
             --validation-teacher local-data/zero-to-cad/dinov2/validation_frozen_features.json \
             --out local-data/zero-to-cad/visual-student
+      - name: Translate independently validated CAD knowledge into bounded original native operation
+        run: |
+          python tools/mini_ai/zero_to_cad_native_bridge.py \
+            --grammar local-data/zero-to-cad/student/validated_grammar.json \
+            --visual local-data/zero-to-cad/visual-student/validated_visual_student.json \
+            --out local-data/zero-to-cad/native-bridge
       - name: Upload only licensed research metadata and evaluations
         if: always()
         uses: actions/upload-artifact@v4
@@ -99,5 +105,54 @@ jobs:
             local-data/zero-to-cad/student/*.json
             local-data/zero-to-cad/dinov2/*.json
             local-data/zero-to-cad/visual-student/*.json
+            local-data/zero-to-cad/native-bridge/*.json
+            local-data/zero-to-cad/native-bridge/*.properties
           if-no-files-found: warn
+          retention-days: 21
+
+
+  native-operator-proof:
+    name: Construct and audit original GLBs from validated native-operation proposal
+    needs: bounded-cpu-study
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ASSETWRIGHT_SOCKET_BENCHMARK_OUT: ${{ github.workspace }}/local-data/native-proof
+      ASSETWRIGHT_NATIVE_OPERATION_PROPOSAL: ${{ github.workspace }}/local-data/zero-to-cad/native-bridge/operation.properties
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: assetwright-zero-to-cad-dinov2-research
+          path: local-data/zero-to-cad
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Install Android JVM test SDK
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Generate genuine native GLBs from research-only typed operator proposal
+        run: |
+          test -f "$ASSETWRIGHT_NATIVE_OPERATION_PROPOSAL"
+          gradle :app:testDebugUnitTest --rerun-tasks --stacktrace
+      - name: Independently audit connected blind socket topology and GLB hashes
+        run: |
+          python tools/mini_ai/native_socket_audit.py \
+            --source local-data/native-proof \
+            --out local-data/native-proof/evaluation.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-zero-to-cad-native-geometry-proof
+          path: |
+            local-data/native-proof/*.glb
+            local-data/native-proof/*.json
+            local-data/zero-to-cad/native-bridge/*.json
+          if-no-files-found: error
           retention-days: 21

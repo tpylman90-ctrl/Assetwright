@@ -45,7 +45,11 @@ object ShapeProgram {
             "mount_outboard" to if (spec.liftMount == "exposed") 1.0 else 0.0
         )),
         Step("attach_light_strip", "lighting", listOf("hull"), emptyMap())
-    )
+    ) + if (spec.driveCount == 1 && spec.designControls.rearSocketDepth > 0f) {
+        listOf(Step("recess_rear_socket", "hull", listOf("hull"),
+            mapOf("socket_depth" to
+                (.085 + .16 * spec.designControls.rearSocketDepth.coerceIn(0f, 1f)))))
+    } else emptyList()
 
     fun toJson(spec: VehicleSpec): JSONObject {
         val ops = JSONArray()

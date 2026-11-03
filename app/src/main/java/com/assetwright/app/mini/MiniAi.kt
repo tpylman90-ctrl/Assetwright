@@ -28,7 +28,10 @@ data class VehicleDesignControls(
     // Both remain OFF for ordinary phone generation. These operations are
     // independently evaluated using original generated GLB contrasts.
     val cockpitShoulderTransition: Float = 0f,
-    val rearNacelleShrouding: Float = 0f
+    val rearNacelleShrouding: Float = 0f,
+    // Genuine blind rear-hull socket, constructed as connected original mesh
+    // topology only for single-engine layouts. Experiment OFF by default.
+    val rearSocketDepth: Float = 0f
 )
 
 data class VehicleSpec(
