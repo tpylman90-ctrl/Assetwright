@@ -112,3 +112,58 @@ they are intentionally supplied as input to the estimator after fitting.
 
 No experiment is automatically accepted: the new-family inverse and the
 forward multi-operation GLB audit still must pass independently.
+
+
+## Verified independent measured-geometry study — November 3, 2026
+
+[Full successful research workflow](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41742186046)
+ran the owned-model/real-native-GLB loop end-to-end. The regular
+[Android APK build](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41742186054)
+also succeeded, without installing the research inverse model as a default
+generator.
+
+The response model was fitted exclusively to **20 original GLBs** from
+two training vehicle families. The student then received geometrically
+measured targets from eight original GLBs of a newly reserved third family,
+with six heldout single-operation levels (0.375 and 0.725 across three
+operators). Prediction results:
+
+- Mean inverse strength error: **0.003847** on a 0..1 scale.
+- Constant 0.60 strength baseline error: **0.175**.
+- The owned classifier selected three distinct operations; the independent
+  inverse response model predicted their strengths.
+- Output program, in dependency order: cockpit shoulder **0.740211**,
+  rear socket **0.725**, rear nacelle **0.725**.
+
+**Forward proof:** The Kotlin native generator then built a new combined
+1,650-triangle original GLB from those three settings. The independent
+Python structural/shape auditor passed all nine checks. Compared with the
+held-out composed reference GLB:
+
+- Upper-hull shoulder station: **0.001435m** absolute measurement error.
+- Rear socket blind depth: **0.000000m** difference at report precision.
+- Rear nacelle flare ratio: **0.000000** difference at report precision.
+- No nonmanifold edges, invalid triangles, unbounded complexity, or new
+  external-model geometry.
+
+The first live run was explicitly rejected because the prior broad
+cockpit-span measurement *saturated*. We replaced it with corresponding
+upper-hull vertices, using the *training* families to establish that
+strength variation is physically measurable. We retired the earlier
+inspected holdout vehicle and used a fresh third family for final testing.
+
+[Durable verified research prerelease](https://github.com/tpylman90-ctrl/Assetwright/releases/tag/assetwright-native-inverse-b1bda05f1252)
+stores the fitted geometry response curves, per-source provenance,
+prediction evaluation, and forward verification report. Additional original
+GLB artifacts reside in the GitHub Actions run.
+
+**Honest limitations:** This is inverse fitting on deterministic
+synthetically generated hovercraft geometry from a small, fixed
+three-operation vocabulary; the learned response curves are not a general
+neural CAD model, and the resulting geometry is not visually approved,
+fully watertight across all separate parts, or known to meet professional
+automotive surface quality. The third-family evaluation has now been
+examined and must not be reused as a fresh test when tuning further.
+
+Machine-readable source-history record:
+`training/history/native_measured_inverse_2026-11-03.json`.

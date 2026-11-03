@@ -1,0 +1,80 @@
+{
+  "schema": "assetwright-native-measured-inverse-history-v1",
+  "recorded_date_utc": "2026-11-03",
+  "repository": "tpylman90-ctrl/Assetwright",
+  "research_run_url": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41742186046",
+  "android_build_url": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41742186054",
+  "commit": "b1bda05f125294c64f225e965ea78ac70e7298eb",
+  "durable_release_url": "https://github.com/tpylman90-ctrl/Assetwright/releases/tag/assetwright-native-inverse-b1bda05f1252",
+  "seed_checkpoint_sha256": "a7a17b5f90b513149c1d6ff5fb3f2836727048500a9cfcd35bbaed770c126ad0",
+  "source_training": {
+    "count_original_glbs": 20,
+    "families": [
+      "coupe",
+      "utility"
+    ],
+    "operator_vocab": [
+      "sculpt_cockpit_shoulder",
+      "recess_rear_socket",
+      "loft_rear_nacelle"
+    ],
+    "strengths": [
+      0.25,
+      0.5,
+      0.9
+    ],
+    "source": "Android original native geometry engine GLB, source hash verified",
+    "from_external_ai": false
+  },
+  "fresh_geometry_evaluation": {
+    "family": "blindfamily",
+    "reference_glbs": 8,
+    "heldout_levels": [
+      0.375,
+      0.725
+    ],
+    "examples": 6,
+    "mean_inverse_strength_mae": 0.003847,
+    "constant_0_6_strength_mae": 0.175,
+    "zero_to_cad_or_dinov2_at_geometry_inference": false,
+    "used_to_fit_response_curves": false,
+    "already_exposed_no_longer_new_blind": true
+  },
+  "owned_inverse_program": [
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "strength": 0.740211
+    },
+    {
+      "operation": "recess_rear_socket",
+      "strength": 0.725
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "strength": 0.725
+    }
+  ],
+  "final_native_glb": {
+    "sha256": "780353d1bc323540b805055a9743ecdcdea31f3b97183e2ee31458b5c85dbc47",
+    "triangle_count": 1650,
+    "independent_mesh_checks_passed": 9,
+    "total_checks": 9,
+    "reference_shape_comparison": {
+      "shoulder_abs_error_m": 0.001435,
+      "socket_depth_abs_error_m": 0,
+      "nacelle_flare_ratio_abs_error": 0
+    },
+    "nonmanifold_edges": 0,
+    "invalid_triangles": 0
+  },
+  "measurement_issue_and_correction": {
+    "initial_failed_run": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41741674373",
+    "root_cause": "old max shoulder span saturated identically at levels 0.25 0.50 0.90; metric could not invert strength",
+    "correction": "measure homologous upper-hull station at axial t=-0.05, Y > .87m from actual original vertices",
+    "first_reference_retired": "newfamily",
+    "new_reference": "blindfamily",
+    "no_gate_weakened": true
+  },
+  "status": "verified_research_only_not_android_promoted",
+  "next_step": "Expand operation vocabulary and learn sequential construction program parameters on additional unseen geometry families and non-vehicle object categories, with independent human visual review."
+}
