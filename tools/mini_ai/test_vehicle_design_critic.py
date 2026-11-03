@@ -1,7 +1,7 @@
 """Synthetic geometry comparisons validate the *measurement*, not beauty."""
 import math
 import unittest
-from vehicle_design_critic import _canopy_crown, _arm_stations
+from vehicle_design_critic import _canopy_crown, _arm_stations, _cockpit_shoulder_span, _rear_nacelle_profile
 
 
 def greenhouse(exponent:float):
@@ -48,10 +48,42 @@ class DesignCriticTests(unittest.TestCase):
         self.assertGreater(sculpt["mount_root_tip_taper_ratio"],rod["mount_root_tip_taper_ratio"]+.25)
         self.assertEqual(rod["mount_root_tip_taper_ratio"],1.)
 
+    def test_cockpit_shoulder_is_measured_on_actual_hull_vertices(self):
+        base=[(-.80,.91,-.08),(-.88,.87,0),(.80,.91,-.08),(.88,.87,0),
+              (-.70,.81,.08),(.70,.81,.08)]
+        after=[(x*1.15,y,z) for x,y,z in base]
+        # add full-height hull vertices so the upper-surface band exists
+        base += [(-.6,.5,-1),(.6,.5,1),(-.15,1.06,1.1),(.15,1.06,-1.1)]
+        after += [(-.6,.5,-1),(.6,.5,1),(-.15,1.06,1.1),(.15,1.06,-1.1)]
+        before=_cockpit_shoulder_span(base)
+        after_measure=_cockpit_shoulder_span(after)
+        self.assertGreater(before["body_cockpit_samples"],0)
+        self.assertGreater(
+            after_measure["body_cockpit_shoulder_span"],
+            before["body_cockpit_shoulder_span"]+.025)
+
+    def test_rear_nacelle_flaring_is_real_radius_change(self):
+        def mesh(radii):
+            pts=[]
+            for ring,rad in enumerate(radii):
+                for index in range(20):
+                    theta=2*math.pi*index/20
+                    pts.append((.7+rad*math.cos(theta),.8+rad*math.sin(theta),
+                                ring*.12))
+            return [pts]
+        plain=_rear_nacelle_profile(mesh([.24,.24]))
+        sculpt=_rear_nacelle_profile(mesh([.25,.35,.33,.29,.25,.24]))
+        self.assertEqual(plain["engine_housing_flare_ratio"],1.)
+        self.assertEqual(plain["engine_housing_axial_sections"],2)
+        self.assertGreater(sculpt["engine_housing_flare_ratio"],1.25)
+        self.assertEqual(sculpt["engine_housing_axial_sections"],6)
+
     def test_missing_geometry_cannot_get_positive_score(self):
         self.assertEqual(_canopy_crown([])["roof_crown_width_ratio"],0)
         self.assertEqual(_arm_stations([])["mount_section_count_min"],0)
         self.assertEqual(_arm_stations([])["mount_root_tip_taper_ratio"],0)
+        self.assertEqual(_cockpit_shoulder_span([])["body_cockpit_shoulder_span"],0)
+        self.assertEqual(_rear_nacelle_profile([])["engine_housing_flare_ratio"],0)
 
 
 if __name__=="__main__":
