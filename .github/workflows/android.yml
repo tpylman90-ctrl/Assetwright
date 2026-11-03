@@ -70,7 +70,10 @@ jobs:
       - name: Test native offline Mini AI and build debug APK
         run: |
           set -o pipefail
-          gradle :app:testDebugUnitTest :app:assembleDebug --stacktrace 2>&1 | tee gradle-build.log
+          # Native generated GLBs are deliberately written as a test-side artifact.
+          # Running from Gradle's build cache would skip that export, creating an
+          # empty benchmark that falsely looks like a generator failure.
+          gradle :app:testDebugUnitTest :app:assembleDebug --rerun-tasks --stacktrace 2>&1 | tee gradle-build.log
 
       - name: Independent structural and design-proxy audit of 28 actual generated GLBs
         run: |
