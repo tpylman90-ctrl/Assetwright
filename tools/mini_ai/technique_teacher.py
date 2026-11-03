@@ -17,9 +17,12 @@ import re
 CURRICULUM="assetwright-vehicle-technique-curriculum-v1"
 POLICY="assetwright-reviewed-technique-selection-policy-v1"
 STATUS="assetwright-technique-training-report-v1"
-CONTROLS={"canopySquareness","shoulderDefinition","fairedRepulsorMounts"}
-METRICS={"roof_crown_width_ratio","mount_root_tip_taper_ratio"}
-VARIANTS={"sculpted_canopy","integrated_aero","faired_mounts"}
+CONTROLS={"canopySquareness","shoulderDefinition","fairedRepulsorMounts",
+          "cockpitShoulderTransition","rearNacelleShrouding"}
+METRICS={"roof_crown_width_ratio","mount_root_tip_taper_ratio",
+         "body_cockpit_shoulder_span","engine_housing_flare_ratio"}
+VARIANTS={"sculpted_canopy","integrated_aero","faired_mounts",
+          "cockpit_bridge","rear_nacelle"}
 ALIASES={
     "windscreen":"canopy","windshield":"canopy","glazing":"canopy",
     "glass":"canopy","greenhouse":"canopy","cockpit":"canopy",
