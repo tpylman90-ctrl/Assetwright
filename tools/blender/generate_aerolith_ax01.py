@@ -235,14 +235,14 @@ def canopy(glass,black,pearl,titanium,cyan):
     return rows
 
 def forge_vehicle(outdir):
-    ceramic=material("AX01 | porcelain ceramic white",(.71,.81,.83),.48,.27)
-    paint=material("AX01 | dark teal iridescent metal",(.086,.17,.22),.77,.29)
+    ceramic=material("AX01 | storm-titanium satin fender armor",(.245,.315,.365),.56,.42)
+    paint=material("AX01 | midnight petrol metallic monocoque",(.068,.128,.174),.68,.36)
     black=material("AX01 | ceramic carbon underbody",(.019,.031,.045),.17,.54)
-    titanium=material("AX01 | satin gunmetal structural alloy",(.22,.28,.32),.72,.37)
+    titanium=material("AX01 | brushed nickel-blue structure",(.19,.245,.28),.56,.43)
     inset=material("AX01 | deeper recess shadow",(.009,.015,.022),.05,.83)
-    glass=material("AX01 | sapphire black canopy",(.023,.08,.125),.27,.14)
-    cyan=material("AX01 | icy plasma luminescence",(.075,.75,1.0),.15,.20,4.0)
-    ember=material("AX01 | coral signal finish",(.95,.19,.12),.28,.26,1.2)
+    glass=material("AX01 | smoked sapphire panoramic glass",(.017,.053,.077),.22,.24)
+    cyan=material("AX01 | frosted cyan functional lighting",(.055,.51,.78),.12,.33,2.0)
+    ember=material("AX01 | restrained coral tail signal",(.66,.19,.135),.23,.38,.55)
     cabin=material("AX01 | cobalt leather cockpit",(.065,.085,.12),.05,.65)
     # Subtle UV-controlled metallic paint, grain and normal details.
     attach_pbr(paint,outdir)
@@ -407,7 +407,7 @@ def forge_vehicle(outdir):
         "design":"Manta-wing hover interceptor with split armored vector-engine rear",
         "original_geometry":True,
         "dimension_target_m":[4.06,7.56,1.80],
-        "palette":["porcelain ceramic","dark teal metal","icy cyan","coral signal"],
+        "palette":["satin storm-titanium","midnight petrol metallic","icy cyan","restrained coral signal"],
         "cockpit":"continuous matched canopy and fitted physical cabin",
         "engine_count":2,"levitation_cells":6}
 
@@ -528,14 +528,14 @@ def studio(outdir,brief,quick):
         bpy.context.scene.world=world
     world.use_nodes=True
     bg=world.node_tree.nodes.get("Background")
-    if bg:bg.inputs["Color"].default_value=(.20,.25,.33,1);bg.inputs["Strength"].default_value=.65
+    if bg:bg.inputs["Color"].default_value=(.16,.21,.26,1);bg.inputs["Strength"].default_value=.45
     bpy.ops.object.camera_add(location=(6,-9,4))
     cam=bpy.context.object;bpy.context.scene.camera=cam
     cam.data.type="ORTHO";cam.data.ortho_scale=9.4
     for loc,power,color,size in [
-        ((-5,-3,8),2300,(.80,.90,1.0),7),
-        ((6,2,8),2700,(1,.88,.79),9),
-        ((0,6,7),1700,(.52,.80,1),5)]:
+        ((-5,-3,8),1280,(.80,.90,1.0),8),
+        ((6,2,8),1480,(1,.88,.79),10),
+        ((0,6,7),940,(.52,.80,1),7)]:
         bpy.ops.object.light_add(type="AREA",location=loc)
         l=bpy.context.object;l.data.energy=power;l.data.shape="DISK"
         l.data.size=size;l.data.color=color
@@ -546,7 +546,7 @@ def studio(outdir,brief,quick):
     sc.render.resolution_percentage=100
     sc.render.image_settings.file_format="PNG"
     sc.render.film_transparent=False
-    sc.view_settings.view_transform="Standard"
+    sc.view_settings.view_transform="AgX" if "AgX" in [x.identifier for x in bpy.types.ColorManagedViewSettings.bl_rna.properties["view_transform"].enum_items] else "Standard"
     if hasattr(sc.view_settings,"look"):
         try:sc.view_settings.look="Medium High Contrast"
         except:pass
@@ -573,7 +573,7 @@ def main():
     if lod1>count or lod2>lod1:
         raise RuntimeError("LOD triangle regression")
     record={"schema":"assetwright-original-sculpt-v1","model":brief,
-      "revision":"A0 original geometrical/paint prototype; visual review required",
+      "revision":"A1 satin-metal silhouette and panel refinement; visual review required",
       "source":"fully original Blender procedural generation",
       "lod0_triangles":count,"lod1_triangles":lod1,"lod2_triangles":lod2,
       "surface_objects":sum(ob.type=="MESH" for ob in objects),
