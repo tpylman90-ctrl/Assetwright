@@ -1,0 +1,74 @@
+{
+  "schema": "assetwright-native-strength-blind-v2",
+  "license": "original-assetwright-authored",
+  "purpose": "New blind evaluation for frozen operation classifier plus separately calibrated strength head; never used to select checkpoints",
+  "created_utc": "2026-11-03",
+  "split": "blind_only",
+  "vehicle": "cargo-hover hauler",
+  "intensities": [
+    {
+      "word": "gentle",
+      "strength": 0.3
+    },
+    {
+      "word": "moderate",
+      "strength": 0.6
+    },
+    {
+      "word": "aggressive",
+      "strength": 0.9
+    }
+  ],
+  "templates": [
+    {
+      "operation": "recess_rear_socket",
+      "template": "Give the {vehicle} tail motor a {level} indented circular mounting well while keeping the outside fairing intact"
+    },
+    {
+      "operation": "recess_rear_socket",
+      "template": "Set the {vehicle} rear drive into a {level} blind round pocket, not a new engine housing"
+    },
+    {
+      "operation": "recess_rear_socket",
+      "template": "For my {vehicle}, shape a {level} sunken engine seat in the stern panel without touching the cockpit"
+    },
+    {
+      "operation": "recess_rear_socket",
+      "template": "Keep the {vehicle} roof unchanged and create a {level} cavity behind its central propulsion motor"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "On the {vehicle}, form a {level} sculpted shoulder at the cabin and main-hull junction; don't change the thrusters"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "Make the {vehicle} greenhouse flow into its outer body with a {level} molded cockpit-side ridge"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "Leave the {vehicle} engine alone and reshape the upper cabin-to-fender surface into a {level} transition"
+    },
+    {
+      "operation": "sculpt_cockpit_shoulder",
+      "template": "Blend the {vehicle} side glass base with the body in one {level} shoulder loft, without cutting a cavity"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "For this {vehicle}, wrap the rear motor in a {level} aerodynamic multi-section shroud, not a circular hole"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "Build a {level} tapered sleeve around the {vehicle} aft drive casing while preserving its cockpit shoulders"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "Extend a {level} profiled nacelle cowling along the {vehicle} propulsion housing"
+    },
+    {
+      "operation": "loft_rear_nacelle",
+      "template": "Make the outside thruster fairing of the {vehicle} {level} and swept, leaving the hull uncut"
+    }
+  ],
+  "independence": "12 new instruction templates across 3 operations, outside earlier clinic correction/development/blind text; not from pretrained teacher; semantic overlap in domain is expected",
+  "notes": "This is an authored three-native-operator test, not a general user language benchmark or geometric-quality evaluation."
+}

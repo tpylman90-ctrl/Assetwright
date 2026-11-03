@@ -1,0 +1,154 @@
+name: AssetWright Frozen Classifier / Strength Calibration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/mini_ai/native_strength_calibration.py'
+      - 'tools/mini_ai/test_native_strength_calibration.py'
+      - 'training/curricula/native_strength_blind_v2.json'
+      - '.github/workflows/native-strength-calibration.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: assetwright-strength-calibration-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  calibrate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ASSETWRIGHT_NATIVE_PLANNER_BATCH: ${{ github.workspace }}/local-data/native-calibration/native-proposals/operation_batch.properties
+      ASSETWRIGHT_NATIVE_PLANNER_OUT: ${{ github.workspace }}/local-data/native-calibration/native-glbs
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test frozen-classifier guarantees and new-blind disjointness
+        run: python -m unittest discover -s tools/mini_ai -p 'test_native_strength_calibration.py'
+      - name: Load durable VERIFIED owned student and original geometry proof
+        run: |
+          mkdir -p local-data/verified-owned-seed
+          gh release download assetwright-native-verified-a4c94b1abb48 \
+            --repo "$GITHUB_REPOSITORY" --pattern 'verified_*.json' \
+            --dir local-data/verified-owned-seed
+          test -s local-data/verified-owned-seed/verified_owned_model.json
+          test -s local-data/verified-owned-seed/verified_training_metrics.json
+          test -s local-data/verified-owned-seed/verified_original_GLBS.json
+      - name: Train only strength weights; hold out fresh blind prompts
+        run: |
+          python tools/mini_ai/native_strength_calibration.py \
+            --seed local-data/verified-owned-seed/verified_owned_model.json \
+            --baseline-evaluation local-data/verified-owned-seed/verified_training_metrics.json \
+            --original-geometry-proof local-data/verified-owned-seed/verified_original_GLBS.json \
+            --correction-curriculum training/curricula/native_skill_clinic_v1.json \
+            --fresh-blind training/curricula/native_strength_blind_v2.json \
+            --out local-data/native-calibration
+      - name: Apply strict evaluation gate
+        id: gate
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads(Path('local-data/native-calibration/calibration_report.json').read_text())
+          passed=r['status']=='validated_research_calibration'
+          print('New blind before:',r['fresh_blind_before'])
+          print('New blind after:',r['fresh_blind_after'])
+          print('Prior retention:',r['prior_after'])
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write('accepted='+str(passed).lower()+'\n')
+          PY
+      - name: Re-evaluate new model on previously accepted instruction benchmark
+        if: steps.gate.outputs.accepted == 'true'
+        run: |
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'tools/mini_ai')
+          from native_operation_intent_student import evaluate,examples
+          model=json.loads(Path('local-data/native-calibration/validated_calibration.json').read_text())
+          score=evaluate(model,examples('holdout'))
+          assert score['status']=='validated_research_intent_student',score
+          Path('local-data/native-calibration/revalidated_old_skill.json').write_text(json.dumps(score,indent=2)+'\n')
+          PY
+      - name: Propose original native geometry operations from calibrated student
+        if: steps.gate.outputs.accepted == 'true'
+        run: |
+          python tools/mini_ai/native_operator_proposal_batch.py \
+            --model local-data/native-calibration/validated_calibration.json \
+            --evaluation local-data/native-calibration/revalidated_old_skill.json \
+            --out local-data/native-calibration/native-proposals
+      - uses: actions/setup-java@v4
+        if: steps.gate.outputs.accepted == 'true'
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        if: steps.gate.outputs.accepted == 'true'
+        with:
+          gradle-version: '9.3.0'
+      - name: Prepare native Android JVM test runtime
+        if: steps.gate.outputs.accepted == 'true'
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Generate original GLBs from calibrated OWN model
+        if: steps.gate.outputs.accepted == 'true'
+        run: |
+          test -s "$ASSETWRIGHT_NATIVE_PLANNER_BATCH"
+          gradle :app:testDebugUnitTest --rerun-tasks --stacktrace
+      - name: Audit original GLB topology and measured effects
+        if: steps.gate.outputs.accepted == 'true'
+        run: |
+          python tools/mini_ai/native_operator_glb_audit.py \
+            --source local-data/native-calibration/native-glbs \
+            --out local-data/native-calibration/native-glbs/evaluation.json
+      - name: Preserve all research reports and candidates temporarily
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-frozen-operation-strength-research
+          path: |
+            local-data/native-calibration/*.json
+            local-data/native-calibration/native-proposals/*.json
+            local-data/native-calibration/native-glbs/*.glb
+            local-data/native-calibration/native-glbs/*.json
+          if-no-files-found: warn
+          retention-days: 21
+      - name: Publish durable research-only checkpoint ONLY if all gates pass
+        if: steps.gate.outputs.accepted == 'true' && github.ref == 'refs/heads/main'
+        run: |
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          p=Path('local-data/native-calibration')
+          report=json.loads((p/'calibration_report.json').read_text())
+          audit=json.loads((p/'native-glbs/evaluation.json').read_text())
+          raw=(p/'validated_calibration.json').read_bytes()
+          sha=hashlib.sha256(raw).hexdigest()
+          assert report['status']=='validated_research_calibration'
+          assert report['class_head_frozen_identical'] is True
+          assert audit['passed'] is True and all(audit['checks'].values())
+          assert audit['research_checkpoint_sha256']==sha
+          (p/'RESEARCH_ONLY.md').write_text(
+              'Original AssetWright model, classifier frozen, strengths calibrated.\n'
+              'No external AI geometry. Android automatic promotion: NO.\n'
+              'Validated original GLB model SHA256: '+sha+'\n')
+          PY
+          tag="assetwright-native-calibrated-$(echo "$GITHUB_SHA" | cut -c1-12)"
+          gh release create "$tag" --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" --prerelease \
+            --title "AssetWright independently evaluated strength calibration" \
+            --notes "Only released after fresh blind validation, unchanged classifier, prior skill retention and native GLB topology audit. Research only." \
+            local-data/native-calibration/validated_calibration.json \
+            local-data/native-calibration/calibration_report.json \
+            local-data/native-calibration/native-glbs/evaluation.json \
+            local-data/native-calibration/RESEARCH_ONLY.md
