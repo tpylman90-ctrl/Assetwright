@@ -85,3 +85,21 @@ encoder can bypass that engineering.
 
 **No external AI should produce the final model. The goal is to help our
 Mini AI learn to construct better models itself.**
+
+
+## First end-to-end verified CPU run — November 3, 2026
+
+[GitHub Actions run 41658363968](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41658363968) completed successfully after we replaced Blender's NumPy-dependent glTF importer with our audited standard-library native GLB reader.
+
+- **36 genuine original MiniGeometry GLBs**, with exact source recipe and SHA-256 provenance.
+- **144 Blender studio renderings** (four per vehicle), with hashed image provenance.
+- **36 frozen DINOv2-small embedding records**, used only during training, not for mesh output.
+- **30 design groups in training; 6 entirely held-out groups**.
+- Uninformed train-set mean normalized parameter MSE: **0.01190717**.
+- Own student trained from descriptions alone: **0.01109658**.
+- Own student trained with frozen pretrained visual feature supervision: **0.01079819**.
+- Improvement versus identical text-only student: **2.689%**, below the hard **3%** promotion requirement.
+- Study status: **transfer_failed_to_beat_text_baseline** under the declared threshold.
+- A research *candidate* checkpoint exists in the run's downloadable artifact, but **no validated research student was emitted**, and no Android runtime weights or native generation code were changed.
+
+The result is a real measured small positive effect on six constrained geometry parameters, **not** evidence of statistically convincing broad 3D shape comprehension or professional asset quality. Do not weaken the threshold or repeatedly tune hyperparameters against these same six held-out samples; increase independent design diversity and reserve a fresh blind test.
