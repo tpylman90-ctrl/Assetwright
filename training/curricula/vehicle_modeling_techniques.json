@@ -1,8 +1,8 @@
 {
   "schema": "assetwright-vehicle-technique-curriculum-v1",
-  "version": 1,
+  "version": 2,
   "origin": "Forge-authored original procedural modeling instruction; no third-party geometry or private user examples",
-  "purpose": "Teach known, permitted operations and their reasons rather than guessing from finished meshes",
+  "purpose": "Explicitly teach five original procedural modeling operations and their verified effects; true boolean-welded glass and nacelle sockets remain future work",
   "model_basis": "Actual MiniGeometry / GlbWriter code in public Assetwright repo",
   "review_policy": "Performance measurements validate execution effects only; no autonomous aesthetic acceptance",
   "techniques": [
@@ -145,56 +145,96 @@
     {
       "id": "body_greenhouse_bridge",
       "stage": 4,
-      "execution_status": "requires_new_geometry_primitive",
-      "modeling_operation": "shared_boundary_transition_loft",
-      "control": null,
-      "value": null,
-      "variant": null,
-      "source_code": null,
-      "purpose": "Create continuous cabin-to-body transitions beyond simple overlapping closed parts",
-      "why": "Glass intersecting the main hull can still look like a bubble set on top rather than a single designed cockpit",
+      "execution_status": "experimental_native_control",
+      "modeling_operation": "continuous_hull_cockpit_deck_envelope",
+      "control": "cockpitShoulderTransition",
+      "value": 1,
+      "variant": "cockpit_bridge",
+      "source_code": "app/src/main/java/com/assetwright/app/mini/MiniGeometry.kt",
+      "purpose": "Mold the body deck into a cockpit-side shoulder transition as part of the original continuous hull loft; glass remains a separate mesh",
+      "why": "A bubble cockpit overlaps a flat hull unless the underlying deck geometry is sculpted to receive it",
       "geometry_recipe": [
-        "Identify cabin perimeter in hull parameterization",
-        "Create shared boundary loops",
-        "Bridge loops with tangent-matched connecting surfaces",
-        "Verify mesh seam and reflectivity continuity"
+        "Locate cockpit fore/aft envelope relative to hull stations",
+        "Insert interpolated longitudinal profile stations in the existing hull loft",
+        "Feather upper-side width and local height to form integral cockpit perimeter shoulders",
+        "Preserve the roof, source-mesh manifoldness and outside-cockpit hull geometry",
+        "Inspect the actual glass-to-deck seam visually; no boolean-welded glass boundary is claimed"
       ],
-      "target_measurement": null,
-      "min_increase": null,
+      "target_measurement": "body_cockpit_shoulder_span",
+      "min_increase": 0.025,
       "failure_modes": [
-        "Overlapping double surfaces",
-        "Floating glass",
-        "Cracked or pinched normal seam"
+        "Deck shoulder appears as a detached overlay panel",
+        "Body ridge intrudes into the glass or reduces canopy clearance",
+        "Profile stations pinch or sharply interrupt the body surface",
+        "Separate glass and hull do not become a single welded topological mesh"
       ],
-      "feedback_examples": [],
-      "holdout_feedback": []
+      "feedback_examples": [
+        "The cockpit base has no shaped deck transition into the hull",
+        "The windshield meets a completely flat body with no perimeter shoulder",
+        "Sculpt the fuselage under the cabin sill instead of adding a panel",
+        "The glass enclosure needs a molded deck shoulder to receive its lower rim",
+        "The cabin base has a harsh edge against the surrounding bodywork",
+        "Blend the greenhouse base through a longitudinal hull envelope",
+        "Form a wider shoulder along the cockpit perimeter inside the main body loft",
+        "Create a continuous deck molding at the foot of the cockpit",
+        "The cockpit sits on the chassis without sculpted surrounding shoulders",
+        "Use inserted profile stations to build a cockpit side bridge into the hull",
+        "Feather the deck width around the lower window seam",
+        "Make the windshield's base sit within a sculpted body shoulder rather than on a flat deck"
+      ],
+      "holdout_feedback": [
+        "The cabin foot needs a blended shoulder built directly into the main hull",
+        "At the window sill, sculpt a deck transition instead of a stuck-on trim panel",
+        "Build a continuous cockpit-base shoulder from the hull cross sections",
+        "The glass lower edge should meet a shaped body deck, not a broad flat slab"
+      ]
     },
     {
       "id": "rear_nacelle_integration",
       "stage": 5,
-      "execution_status": "requires_new_geometry_primitive",
-      "modeling_operation": "engine_socket_hull_transition",
-      "control": null,
-      "value": null,
-      "variant": null,
-      "source_code": null,
-      "purpose": "Embed propulsion housings inside modeled rear body sockets rather than surface mounted cylinders",
-      "why": "Engine nozzles poking out of the back do not visually read as integrated race-vehicle propulsion",
+      "execution_status": "experimental_native_control",
+      "modeling_operation": "multi_station_nacelle_root_shroud_loft",
+      "control": "rearNacelleShrouding",
+      "value": 1,
+      "variant": "rear_nacelle",
+      "source_code": "app/src/main/java/com/assetwright/app/mini/MiniGeometry.kt",
+      "purpose": "Build a wide-rooted shroud that emerges from inside the rear hull and tapers into a compact exposed engine nozzle",
+      "why": "Simple cylindrical thrusters bolted to the stern do not read as fitted propulsion housings",
       "geometry_recipe": [
-        "Design nacelle location and thrust direction",
-        "Build rear-hull socket surface around engine collar",
-        "Transition housing flares continuously into body shell",
-        "Verify nozzle clearance and engine quantity"
+        "Identify actual one/two/three drive coordinates and rear body extent",
+        "Begin the propulsion root inside the aft hull volume",
+        "Loft six axial circular sections from a broad inset root to a smaller exposed outlet",
+        "Keep the existing drive-core and energy-ring spacing beyond the nozzle",
+        "Verify engine count, ring taper and structural geometry; boolean hull sockets remain future work"
       ],
-      "target_measurement": null,
-      "min_increase": null,
+      "target_measurement": "engine_housing_flare_ratio",
+      "min_increase": 0.25,
       "failure_modes": [
-        "Cylindrical engines attached onto shell",
-        "Thruster intersects deck surface",
-        "Missing airpath or obvious mounting seam"
+        "The aft motors still have constant-radius cylindrical housings",
+        "Bulging engine collars collide with neighboring drives",
+        "Root flare creates a detached sleeve rather than blending into the hull",
+        "Housing intersects the deck without a proper topological cutout"
       ],
-      "feedback_examples": [],
-      "holdout_feedback": []
+      "feedback_examples": [
+        "The rear thrusters look like plain cylinders stuck onto the stern",
+        "Blend a flared propulsion nacelle root into the aft hull volume",
+        "Design a wide engine shroud near the tail with a smaller nozzle exit",
+        "These rear motors need inset axial fairings rather than surface mounted pipes",
+        "Build a six-section drive housing that smoothly narrows toward its outlet",
+        "The rear engine collar is bolted on instead of emerging from bodywork",
+        "Integrate the propulsion housing with a broad nacelle socket silhouette",
+        "The tail needs sculpted engine roots and shaped exhaust fairings",
+        "Give the back thrusters a wider aerodynamic inboard housing",
+        "The nozzle sleeves should taper out from a molded rear engine mount",
+        "Make the rear booster housing root broad and the exposed end compact",
+        "Instead of round engine stubs, loft custom stern propulsion nacelles"
+      ],
+      "holdout_feedback": [
+        "The stern jets need broad inset housings, not bare tubes",
+        "Shape each rear propulsion shroud from a wide root toward a tight nozzle",
+        "Build the engine nacelles into the back end with tapered fairings",
+        "The aft drive motors still appear as constant-diameter cylinders"
+      ]
     }
   ]
 }
