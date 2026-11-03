@@ -1,6 +1,6 @@
 {
   "schema": "assetwright-zero-to-cad-study-request-v1",
-  "cycle": 2,
+  "cycle": 3,
   "source_dataset": "ADSKAILab/Zero-To-CAD-100k",
   "vision_teacher": "facebook/dinov2-small",
   "approved_source_license": "Apache-2.0",
@@ -10,6 +10,6 @@
   "allow_external_model_geometry": false,
   "allow_android_promotion": false,
   "purpose": "Learn safe CAD operation sequencing and extract frozen vision teacher features",
-  "reason": "Inspect source CAD render image payload schema; previous teacher stage had zero verified images",
-  "prior_run": 41667579179
+  "reason": "Decode official Zero-to-CAD image_0,image_4 raw bytes into bounded PNGs for DINOv2",
+  "prior_run": 41668174270
 }
