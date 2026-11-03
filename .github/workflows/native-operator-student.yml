@@ -1,0 +1,43 @@
+name: AssetWright Owned Native Operator Student
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/mini_ai/native_operation_intent_student.py'
+      - 'tools/mini_ai/native_operator_proposal_batch.py'
+      - 'tools/mini_ai/native_operator_glb_audit.py'
+      - 'tools/mini_ai/test_native_operation_intent_student.py'
+      - 'tools/mini_ai/test_native_operator_proposal_batch.py'
+      - 'app/src/test/java/com/assetwright/app/mini/NativePlannerBenchmarkExportTest.kt'
+      - 'app/src/main/java/com/assetwright/app/mini/NativeCadOperationBridge.kt'
+      - '.github/workflows/native-operator-student.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  study:
+    name: Hold out unseen instruction templates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Train independently initialized original native operation model
+        run: |
+          python tools/mini_ai/native_operation_intent_student.py --epochs 125 \
+            --out local-data/native-intent
+      - name: Run source and planner provenance tests
+        run: python -m unittest discover -s tools/mini_ai -p 'test_native_op*.py'
+      - name: Retain research checkpoint, even if heldout rejects it
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-native-operator-heldout-research
+          path: local-data/native-intent/*.json
+          if-no-files-found: warn
+          retention-days: 21

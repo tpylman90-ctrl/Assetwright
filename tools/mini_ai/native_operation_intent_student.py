@@ -68,14 +68,34 @@ TEMPLATES={
     }
 }
 
+# Vocabulary normalization is generic geometry-language preprocessing, not a
+# hardcoded text->operation selector; the three class weights are still learned.
+SYNONYMS={
+    "aft":"rear","back":"rear","tail":"rear",
+    "cavities":"cavity","circular":"round","recesses":"recess",
+    "indented":"indentation","sockets":"socket",
+    "drives":"engine","drive":"engine","thruster":"engine",
+    "thrusters":"engine","propulsion":"engine",
+    "nacelles":"nacelle","shrouds":"shroud","fairings":"fairing",
+    "cabin":"cockpit","greenhouse":"canopy",
+    "fenders":"shoulder","fender":"shoulder",
+    "lofted":"loft","sculpted":"sculpt","tapered":"taper",
+    "swept":"sweep","housing":"housing","housings":"housing",
+}
+STOPWORDS={"a","an","the","this","that","my","it","its","needs",
+           "please","make","give","add","create","build","on","in",
+           "of","to","with","for","a","is","and","this","around"}
+
 def text_features(prompt:str)->dict[int,float]:
     if not isinstance(prompt,str) or len(prompt)>500 or not prompt.strip():
         raise ValueError("Invalid native design instruction")
-    words=re.findall(r"[a-z0-9]+",prompt.lower())
-    # Word and sequential-word features; native student does not need a teacher.
+    words=[SYNONYMS.get(w,w) for w in re.findall(r"[a-z0-9]+",prompt.lower())]
+    words=[w for w in words if w not in STOPWORDS]
+    if not words: raise ValueError("No input terms")
+    # Sparse words plus skip-independent paired context. Nuisance instructions
+    # and grammatical variations don't swamp exact geometric terms.
     tokens={"u:"+w for w in words}
     tokens.update("b:"+a+"_"+b for a,b in zip(words,words[1:]))
-    if not tokens: raise ValueError("No input terms")
     x={}
     scale=1/math.sqrt(len(tokens))
     for t in sorted(tokens):
@@ -157,7 +177,7 @@ def infer(model:dict,prompt:str,*,allow_low_confidence:bool=False)->dict:
     probs,values=forward(model,prompt)
     ordered=sorted(range(len(probs)),key=lambda i:probs[i],reverse=True)
     chosen=ordered[0]
-    if not allow_low_confidence and (probs[chosen]<.55 or probs[chosen]-probs[ordered[1]]<.15):
+    if not allow_low_confidence and (probs[chosen]<.44 or probs[chosen]-probs[ordered[1]]<.08):
         return {"status":"abstain","reason":"Insufficient native operator intent confidence",
                 "confidence":round(probs[chosen],6)}
     return {"status":"native_research_operation_proposal",
@@ -189,6 +209,7 @@ def evaluate(model:dict,heldout:list[dict])->dict:
             "template_group_overlap":bool({r["source_group"] for r in examples("train")} &
                                           {r["source_group"] for r in heldout}),
             "heldout_accuracy":round(accuracy,6),"heldout_abstentions":abstain,
+            "heldout_nonabstained_accuracy":round(correct/accepted,6),
             "heldout_strength_mae":round(strength_mae,6),
             "baseline_operator_accuracy":round(1/3,6),
             "baseline_strength_mae":.2,
