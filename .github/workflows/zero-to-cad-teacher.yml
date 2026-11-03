@@ -1,0 +1,87 @@
+name: AssetWright Zero-to-CAD Construction Teacher
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/mini_ai/zero_to_cad_*.py'
+      - 'tools/mini_ai/test_zero_to_cad.py'
+      - '.github/workflows/zero-to-cad-teacher.yml'
+      - 'training/requests/zero_to_cad.json'
+  workflow_dispatch:
+    inputs:
+      run_cad_research:
+        description: 'Bounded public CAD lessons and frozen DINOv2 teacher'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: assetwright-zero-to-cad-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify-source-safety:
+    name: Test safe parser, provenance and split gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m unittest discover -s tools/mini_ai -p 'test_*.py'
+
+  bounded-cpu-study:
+    name: Open CAD operations and frozen DINOv2 features
+    needs: verify-source-safety
+    if: >
+      (github.event_name == 'workflow_dispatch' && inputs.run_cad_research) ||
+      (github.event_name == 'push' && contains(github.event.head_commit.message, '[study-zero-to-cad]'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install CPU and open-dataset dependencies
+        run: |
+          python -m pip install --upgrade 'datasets>=3.0,<5.0' 'transformers>=4.45,<5' 'Pillow>=10,<13' 'safetensors>=0.4,<1'
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Stream bounded, safe CAD training lessons
+        run: |
+          python tools/mini_ai/zero_to_cad_ingest.py \
+            --split train --max-records 96 --max-scan 384 \
+            --images local-data/zero-to-cad/images \
+            --output local-data/zero-to-cad/train.json
+      - name: Stream independent validation examples
+        run: |
+          python tools/mini_ai/zero_to_cad_ingest.py \
+            --split validation --max-records 40 --max-scan 160 \
+            --output local-data/zero-to-cad/validation.json
+      - name: Fit our own CAD operation grammar and compare heldout predictive loss
+        run: |
+          python tools/mini_ai/zero_to_cad_operation_student.py \
+            --train local-data/zero-to-cad/train.json \
+            --validation local-data/zero-to-cad/validation.json \
+            --out local-data/zero-to-cad/student
+      - name: Extract frozen DINOv2-small features without external mesh generation
+        run: |
+          python tools/mini_ai/zero_to_cad_dinov2_teacher.py \
+            --manifest local-data/zero-to-cad/train.json \
+            --images local-data/zero-to-cad/images \
+            --out local-data/zero-to-cad/dinov2/frozen_features.json
+      - name: Upload only licensed research metadata and evaluations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-zero-to-cad-dinov2-research
+          path: |
+            local-data/zero-to-cad/train.json
+            local-data/zero-to-cad/validation.json
+            local-data/zero-to-cad/student/*.json
+            local-data/zero-to-cad/dinov2/*.json
+          if-no-files-found: warn
+          retention-days: 21
