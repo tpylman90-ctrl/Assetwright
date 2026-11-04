@@ -1,0 +1,81 @@
+name: AssetWright Advanced Native Geometry Learning
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/src/main/java/com/assetwright/app/mini/AdvancedFormLab.kt'
+      - 'app/src/test/java/com/assetwright/app/mini/AdvancedFormBatchTest.kt'
+      - 'tools/mini_ai/advanced_form_student.py'
+      - 'tools/mini_ai/test_advanced_form_student.py'
+      - 'tools/mini_ai/render_advanced_form_review.py'
+      - '.github/workflows/advanced-native-geometry.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: assetwright-advanced-geometry-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  geometry-student:
+    name: Audit 912 original GLBs, learn six operations, and evaluate inverse controls
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ASSETWRIGHT_ADVANCED_FORMS_OUT: ${{ github.workspace }}/local-data/advanced-forms/source
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test independent classifier and inverse-response fail-closed rules
+        run: |
+          python -m unittest discover -s tools/mini_ai -p 'test_advanced_form_student.py'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Prepare free Android JVM native source exporter
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Produce all 912 original source-hashed advanced forms
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.AdvancedFormBatchTest \
+            --tests com.assetwright.app.mini.NativeFormLabTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/advanced-forms/source -maxdepth 1 -name '*.glb' | wc -l)" -eq 912
+      - name: Independently audit exact original GLBs and train/evaluate from geometry
+        run: |
+          python tools/mini_ai/advanced_form_student.py \
+            --source local-data/advanced-forms/source \
+            --out local-data/advanced-forms/evaluation
+      - name: Render 72 original mesh clay and wire views for human review
+        if: success()
+        run: |
+          python -m pip install 'Pillow==11.3.0'
+          python tools/mini_ai/render_advanced_form_review.py \
+            --source local-data/advanced-forms/source \
+            --out local-data/advanced-forms/previews
+      - name: Preserve all sources, test reports, failures and visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-advanced-geometry-912-source-glbs-research
+          path: |
+            local-data/advanced-forms/source/*.glb
+            local-data/advanced-forms/source/*.json
+            local-data/advanced-forms/evaluation/*.json
+            local-data/advanced-forms/previews/*.png
+            local-data/advanced-forms/previews/*.json
+          if-no-files-found: warn
+          retention-days: 21
