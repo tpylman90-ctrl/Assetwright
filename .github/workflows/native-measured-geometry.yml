@@ -1,16 +1,8 @@
 name: AssetWright Measured Native Geometry and Composition
 
+# HISTORICAL V1 REPRODUCTION ONLY. blindfamily is exposed: do not rerun as
+# though it were a fresh generalization experiment. No auto-trigger on V2.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'app/src/main/java/com/assetwright/app/mini/NativeCadOperationBridge.kt'
-      - 'app/src/main/java/com/assetwright/app/mini/ShapeProgram.kt'
-      - 'app/src/test/java/com/assetwright/app/mini/MeasuredNativeConstructionProgramTest.kt'
-      - 'tools/mini_ai/native_measured_inverse.py'
-      - 'tools/mini_ai/native_measured_program_audit.py'
-      - 'tools/mini_ai/test_native_measured_inverse.py'
-      - '.github/workflows/native-measured-geometry.yml'
   workflow_dispatch:
 
 permissions:

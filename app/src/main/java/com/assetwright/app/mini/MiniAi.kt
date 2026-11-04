@@ -31,7 +31,9 @@ data class VehicleDesignControls(
     val rearNacelleShrouding: Float = 0f,
     // Genuine blind rear-hull socket, constructed as connected original mesh
     // topology only for single-engine layouts. Experiment OFF by default.
-    val rearSocketDepth: Float = 0f
+    val rearSocketDepth: Float = 0f,
+    // Experimental same-hull rocker undercut; off for ordinary Android use.
+    val rockerChannelRecess: Float = 0f
 )
 
 data class VehicleSpec(

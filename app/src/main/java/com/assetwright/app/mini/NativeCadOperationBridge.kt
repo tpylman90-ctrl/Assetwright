@@ -11,6 +11,7 @@ object NativeCadOperationBridge {
     const val REAR_SOCKET = "recess_rear_socket"
     const val COCKPIT_SHOULDER = "sculpt_cockpit_shoulder"
     const val REAR_NACELLE = "loft_rear_nacelle"
+    const val LOWER_ROCKER = "recess_lower_rocker"
 
     val supportedOperations = setOf(REAR_SOCKET, COCKPIT_SHOULDER, REAR_NACELLE)
 
@@ -21,7 +22,35 @@ object NativeCadOperationBridge {
      */
     data class Command(val operation: String, val strength: Float)
 
+    // Frozen V1 order: do not change the accepted measured inverse study.
     val constructionOrder = listOf(COCKPIT_SHOULDER, REAR_SOCKET, REAR_NACELLE)
+
+    // Separate V2 typed research grammar; no V2 learned planner is claimed.
+    val expandedOperations = supportedOperations + LOWER_ROCKER
+    val expandedConstructionOrder = listOf(
+        COCKPIT_SHOULDER, LOWER_ROCKER, REAR_SOCKET, REAR_NACELLE
+    )
+
+    fun applyExpandedProgram(source: VehicleSpec, commands: List<Command>): VehicleSpec {
+        require(commands.size in 1..4) { "Expected 1..4 V2 geometry operations" }
+        val names = commands.map { it.operation }
+        require(names.size == names.toSet().size) { "Repeated V2 operation" }
+        require(names.all { it in expandedOperations }) { "Unknown V2 native operation" }
+        require(names == names.sortedBy { expandedConstructionOrder.indexOf(it) }) {
+            "V2 dependency violation: hull shaping, cutouts, then propulsion"
+        }
+        require(commands.all { it.strength.isFinite() && it.strength in 0f..1f }) {
+            "V2 strengths must be finite and within 0..1"
+        }
+        var result = source
+        for (command in commands) {
+            result = if (command.operation == LOWER_ROCKER) {
+                result.copy(designControls = result.designControls.copy(
+                    rockerChannelRecess = command.strength))
+            } else apply(result, command.operation, command.strength)
+        }
+        return result
+    }
 
     fun applyProgram(source: VehicleSpec, commands: List<Command>): VehicleSpec {
         require(commands.size in 1..3) { "Expected 1..3 original geometry operations" }

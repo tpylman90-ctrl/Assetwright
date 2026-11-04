@@ -50,6 +50,10 @@ object ShapeProgram {
             add(Step("sculpt_cockpit_shoulder", "hull", listOf("hull"),
                 mapOf("strength" to spec.designControls.cockpitShoulderTransition.toDouble())))
         }
+        if (spec.designControls.rockerChannelRecess > 0f) {
+            add(Step("recess_lower_rocker", "hull", listOf("hull"),
+                mapOf("strength" to spec.designControls.rockerChannelRecess.toDouble())))
+        }
         if (spec.driveCount == 1 && spec.designControls.rearSocketDepth > 0f) {
             add(Step("recess_rear_socket", "hull", listOf("hull"),
                 mapOf("socket_depth" to

@@ -186,6 +186,7 @@ object MiniGeometry {
         val mountFairing = spec.designControls.fairedRepulsorMounts.coerceIn(0f, 1f)
         val cockpitTransition = spec.designControls.cockpitShoulderTransition.coerceIn(0f, 1f)
         val rearShrouding = spec.designControls.rearNacelleShrouding.coerceIn(0f, 1f)
+        val rockerChannel = spec.designControls.rockerChannelRecess.coerceIn(0f, 1f)
         val rearSocket = if (spec.driveCount == 1)
             spec.designControls.rearSocketDepth.coerceIn(0f, 1f) else 0f
         val cockpitSpan = spec.canopyLength.coerceAtMost(l * .56f)
@@ -202,9 +203,14 @@ object MiniGeometry {
         // Localized mesh detail at actual sculpting transition sites. The
         // width profile is interpolated from original stations, so adding
         // vertex rings alone cannot create abrupt geometry discontinuities.
-        val stations = if (cockpitTransition > 0f) {
-            (baseStations.map { it.first } +
-                listOf(-.36f, -.26f, -.16f, -.10f, 0f, .07f, .17f, .22f, .34f))
+        val localStations = buildList {
+            if (cockpitTransition > 0f)
+                addAll(listOf(-.36f, -.26f, -.16f, -.10f, 0f, .07f, .17f, .22f, .34f))
+            if (rockerChannel > 0f)
+                addAll(listOf(-.39f, -.32f, -.25f, -.15f, 0f, .15f, .25f, .32f, .39f))
+        }
+        val stations = if (localStations.isNotEmpty()) {
+            (baseStations.map { it.first } + localStations)
                 .distinct().sorted().map { t ->
                     val left = baseStations.lastOrNull { it.first <= t } ?: baseStations.first()
                     val right = baseStations.firstOrNull { it.first >= t } ?: baseStations.last()
@@ -233,8 +239,16 @@ object MiniGeometry {
                 val upper = maxOf(top,0f)
                 val bridgeWidth = cockpitTransition*.22f*feather*upper
                 val bridgeRise = cockpitTransition*.055f*feather*upper*abs(side)
+                // V2: a genuine continuous lower rocker undercut in the same
+                // indexed hull; smooth angular and axial windows, no overlays.
+                val axialWindow = ((t + .39f) / .15f).coerceIn(0f, 1f) *
+                    ((.39f - t) / .15f).coerceIn(0f, 1f)
+                val angularWindow = (1f - abs(top + .70f) / .32f).coerceIn(0f, 1f)
+                val channelBlend = axialWindow * axialWindow * (3f - 2f * axialWindow) *
+                    angularWindow * angularWindow * (3f - 2f * angularWindow)
+                val lowerSideRecess = rockerChannel * .18f * channelBlend
                 val width = w * profile * frontShape *
-                    (1f + shoulderVolume + bridgeWidth)
+                    (1f + shoulderVolume + bridgeWidth) * (1f - lowerSideRecess)
                 Vec3(
                     width * side,
                     l * t,
