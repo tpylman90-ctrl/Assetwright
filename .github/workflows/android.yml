@@ -25,6 +25,7 @@ on:
       - 'tools/mini_ai/test_technique_effect_audit.py'
       - 'tools/mini_ai/native_socket_audit.py'
       - 'tools/mini_ai/test_zero_to_cad_native_bridge.py'
+      - 'tools/mini_ai/test_native_composition_student.py'
       - 'tools/mini_ai/zero_to_cad_native_bridge.py'
   workflow_dispatch:
 

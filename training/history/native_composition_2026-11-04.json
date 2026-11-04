@@ -1,0 +1,32 @@
+{
+  "schema": "assetwright-native-composition-history-v1",
+  "date": "2026-11-04",
+  "source_commit": "bdca0462528731f98addf09578a891f697ac46ce",
+  "study_run": 41833947043,
+  "study_url": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41833947043",
+  "source_glbs": 1120,
+  "train": 800,
+  "dimension_holdout": 160,
+  "aspect_holdout": 160,
+  "student_generated_reconstructed_glbs": 320,
+  "three_of_six_programs": 20,
+  "dimension_plan_accuracy": 1,
+  "aspect_plan_accuracy": 1,
+  "dimension_strength_mae": 0.001203248983945328,
+  "aspect_strength_mae": 0.0005779200866829349,
+  "dimension_surface_rms": 0.00022382707300711615,
+  "aspect_surface_rms": 0.00023969974242545963,
+  "learner_checks_passed": 8,
+  "forward_checks_passed": 5,
+  "human_approval": false,
+  "android_deployed": false,
+  "source_hashes_preserved": true,
+  "release_status": "research_only",
+  "important_limitations": [
+    "One original procedural generator, synthetic validation",
+    "Only dependency-ordered three-of-six programs",
+    "No cutout, boolean, welded interface or G2 quality",
+    "No new real-world or other asset category blind test"
+  ],
+  "next": "learn new freeform CAD operations and true joined interfaces with independent unseen categories"
+}

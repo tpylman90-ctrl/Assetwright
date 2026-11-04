@@ -1,0 +1,141 @@
+name: AssetWright Freeze Validated Three-Operation Student
+
+# One-time archive of earlier PASS; never refits or re-uses the exposed
+# validation rows as fresh blind benchmarks.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/archive-native-composition.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  checkpoint:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+      STUDY_RUN: '41833947043'
+      STUDY_COMMIT: bdca0462528731f98addf09578a891f697ac46ce
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch exact successful original research artifact
+        run: |
+          git merge-base --is-ancestor "$STUDY_COMMIT" "$GITHUB_SHA"
+          mkdir -p local-data/composition-archived
+          gh run download "$STUDY_RUN" \
+            --repo "$GITHUB_REPOSITORY" \
+            --name assetwright-three-operator-source-geometry-research \
+            --dir local-data/composition-archived
+      - name: Independently reconcile every original and reconstructed SHA-256
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('local-data/composition-archived')
+          report=json.loads((root/'evaluation/composition_report.json').read_text())
+          audit=json.loads((root/'evaluation/forward_reconstruction_audit.json').read_text())
+          model=json.loads((root/'evaluation/candidate_composition_student.json').read_text())
+          previews=json.loads((root/'previews/render_manifest.json').read_text())
+          assert report['status']=='passed_development_study'
+          assert report['original_source_glbs']==1120
+          assert (report['native_training_glbs'],report['dimension_holdout_glbs'],
+              report['aspect_holdout_glbs'])==(800,160,160)
+          assert len(report['checks'])==8 and all(report['checks'].values())
+          assert audit['passed'] and len(audit['tests'])==5 and all(audit['tests'].values())
+          assert len(audit['predictions'])==320
+          assert model['schema']=='assetwright-owned-native-composition-linear-v1'
+          assert model['training_sources']==800
+          assert model['android_deployable'] is False
+          assert previews['count']==60
+          assert report['prior_checkpoints_unchanged'] is True
+          assert report['android_deployed'] is False
+          original={}
+          for file in (root/'source').glob('*.glb'):
+              metadata=json.loads(file.with_suffix('.json').read_text())
+              digest=hashlib.sha256(file.read_bytes()).hexdigest()
+              assert metadata['source_glb_sha256']==digest
+              assert metadata['generator']=='AssetWright-NativeCompositionLab'
+              original[file.stem]=digest
+          assert len(original)==1120 and len(set(original.values()))==1120
+          regenerated={}
+          for file in (root/'reconstructed').glob('*.glb'):
+              digest=hashlib.sha256(file.read_bytes()).hexdigest()
+              assert digest==file.with_suffix('.sha256').read_text().strip()
+              regenerated[file.stem]=digest
+          assert len(regenerated)==320 and len(set(regenerated.values()))==320
+          assert set(original)>=set(regenerated)
+          for row in audit['predictions']:
+              stem=row['case']
+              assert row['source_glb_sha256']==original[stem]
+              assert row['reconstructed_glb_sha256']==regenerated[stem]
+          train=sorted(hashv for stem,hashv in original.items()
+                       if stem.startswith('train__'))
+          assert len(train)==800
+          assert hashlib.sha256('\n'.join(train).encode()).hexdigest()==\
+              report['training_hash_digest']==model['source_hashes_sha256']
+          assert sorted(hashv for stem,hashv in original.items()
+                        if stem.startswith('validation__'))==report['heldout_source_hashes']
+          assert sorted(hashv for stem,hashv in original.items()
+                        if stem.startswith('aspect_shift__'))==report['aspect_source_hashes']
+          checkpoint=Path('training/checkpoints/native_composition_bdca0462')
+          checkpoint.mkdir(parents=True,exist_ok=True)
+          mapping={
+              'evaluation/candidate_composition_student.json':'validated_composition_student.json',
+              'evaluation/composition_report.json':'composition_report.json',
+              'evaluation/forward_reconstruction_audit.json':'forward_reconstruction_audit.json',
+              'evaluation/heldout_predictions.json':'heldout_predictions.json',
+              'previews/render_manifest.json':'render_manifest.json'
+          }
+          for src,dst in mapping.items():
+              (checkpoint/dst).write_bytes((root/src).read_bytes())
+          (checkpoint/'source_hash_manifest.json').write_text(json.dumps(original,sort_keys=True))
+          (checkpoint/'reconstruction_hash_manifest.json').write_text(
+              json.dumps(regenerated,sort_keys=True))
+          model_sha=hashlib.sha256(
+              (checkpoint/'validated_composition_student.json').read_bytes()).hexdigest()
+          provenance={
+              'schema':'assetwright-native-composition-checkpoint-v1',
+              'source_commit':'bdca0462528731f98addf09578a891f697ac46ce',
+              'successful_run':41833947043,
+              'source_hash_count':1120,'reconstructed_hash_count':320,
+              'model_sha256':model_sha,
+              'holdout_status':'exposed_synthetic_not_reusable_as_blind',
+              'source_artifact':'assetwright-three-operator-source-geometry-research',
+              'trained_from_original_native_GLBS':True,
+              'retrained_during_archival':False,
+              'android_deployed':False,
+              'human_approved':False
+          }
+          (checkpoint/'checkpoint_provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
+          (checkpoint/'RESEARCH_ONLY.md').write_text(
+              'Original AssetWright Kotlin native 3-operation geometry study.\n'
+              'Model predicts exactly 3 of 6 known native operations and their strengths.\n'
+              '1120 GLB source hashes and 320 reconstructed source hashes preserved.\n'
+              'Retire all inspected synthetic holdouts; not general CAD or production release.\n')
+          print('Original accepted checkpoint preserved with complete provenance')
+          PY
+      - name: Commit stable original model/checkpoint without shipping Android weights
+        run: |
+          git config user.name "AssetWright research checkpoint bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add training/checkpoints/native_composition_bdca0462/
+          git commit -m "research: freeze validated three-operation student and 1440 native GLB hashes"
+          git push origin HEAD:refs/heads/main
+      - name: Upload independent checkpoint proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-native-composition-validated-checkpoint
+          path: training/checkpoints/native_composition_bdca0462/**
+          if-no-files-found: warn
+          retention-days: 21
