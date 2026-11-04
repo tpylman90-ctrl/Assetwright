@@ -1,0 +1,94 @@
+name: AssetWright Native Connected-Interface Geometry Learning
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/src/main/java/com/assetwright/app/mini/NativeInterfaceLab.kt'
+      - 'app/src/test/java/com/assetwright/app/mini/NativeInterfaceLabTest.kt'
+      - 'app/src/test/java/com/assetwright/app/mini/NativeInterfaceReconstructionTest.kt'
+      - 'tools/mini_ai/native_interface_student.py'
+      - 'tools/mini_ai/test_native_interface_student.py'
+      - 'tools/mini_ai/audit_native_interface_reconstruction.py'
+      - 'tools/mini_ai/render_native_interface_review.py'
+      - '.github/workflows/native-interface-learning.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-connected-interface:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ASSETWRIGHT_INTERFACE_OUT: ${{ github.workspace }}/local-data/interface/source
+      ASSETWRIGHT_INTERFACE_PREDICTIONS: ${{ github.workspace }}/local-data/interface/evaluation/predicted_native_controls.tsv
+      ASSETWRIGHT_INTERFACE_RECON: ${{ github.workspace }}/local-data/interface/reconstruction
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install free numeric and diagnostic rendering libraries
+        run: python -m pip install 'numpy==2.1.3' 'Pillow==11.3.0'
+      - name: Test from-scratch response learner and strict rejection rules
+        run: python -m unittest discover -s tools/mini_ai -p test_native_interface_student.py
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Prepare Android JVM geometry exporter
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Produce 480 original connected through-bore GLBs in Kotlin
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.NativeInterfaceLabTest \
+            --tests com.assetwright.app.mini.NativeCompositionBatchTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/interface/source -maxdepth 1 -name '*.glb' | wc -l)" -eq 480
+      - name: Independently prove through-bore topology and train inverse interface
+        run: |
+          python tools/mini_ai/native_interface_student.py \
+            --source local-data/interface/source \
+            --out local-data/interface/evaluation
+      - name: Generate 120 held-out student predicted GLBs through OWN Kotlin engine
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.NativeInterfaceReconstructionTest \
+            --rerun-tasks --stacktrace
+      - name: Audit 120 reconstructed source-shape matches and true through-bore topology
+        run: |
+          python tools/mini_ai/audit_native_interface_reconstruction.py \
+            --source local-data/interface/source \
+            --reconstructed local-data/interface/reconstruction \
+            --out local-data/interface/evaluation/forward_interface_audit.json
+      - name: Render 80 original and model-controlled clay/wire diagnostic views
+        if: success()
+        run: |
+          python tools/mini_ai/render_native_interface_review.py \
+            --source local-data/interface/source \
+            --reconstructed local-data/interface/reconstruction \
+            --out local-data/interface/previews
+      - name: Preserve original source GLBs, validated predictions and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-native-connected-interface-research
+          path: |
+            local-data/interface/source/*.glb
+            local-data/interface/source/*.json
+            local-data/interface/reconstruction/*.glb
+            local-data/interface/reconstruction/*.sha256
+            local-data/interface/evaluation/*
+            local-data/interface/previews/*.png
+            local-data/interface/previews/*.json
+          if-no-files-found: warn
+          retention-days: 21
