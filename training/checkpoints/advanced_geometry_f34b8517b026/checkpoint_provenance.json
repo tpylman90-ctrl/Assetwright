@@ -1,0 +1,14 @@
+{
+  "schema": "assetwright-advanced-native-checkpoint-v1",
+  "study_commit": "f34b8517b026b8f6d0e7505c425a1e3c8d805a38",
+  "study_run": 41776001899,
+  "validation_source_status": "exposed_synthetic_heldout",
+  "model_sha256": "d78ae0dc44cea925b8425ecb9e088db76da6cd9d84e280ba7aeee56db8504128",
+  "geometry_count": 912,
+  "train_source_count": 720,
+  "validation_source_count": 96,
+  "aspect_source_count": 96,
+  "source_archive_artifact": "assetwright-advanced-geometry-912-source-glbs-research",
+  "android_deployed": false,
+  "research_only": true
+}

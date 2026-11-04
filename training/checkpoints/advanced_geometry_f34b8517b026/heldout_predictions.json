@@ -1,0 +1,1926 @@
+{
+  "validation": [
+    {
+      "source_sha256": "20b8f69c252fd5603591d82f8e9d0d25fb785bdbc0437f66ed8567337e212146",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.600458,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135342,
+      "predicted_strength": 0.135342,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "1a03b0645f85a9aca81f16db5ab361d55485fb72883b1fa2cd1933184b920233",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.979158,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365221,
+      "predicted_strength": 0.365221,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "4573770598d5063d587f57cb23f3078bf5da4ee29f1b8a0d046b5a87b2d75407",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999082,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595343,
+      "predicted_strength": 0.595343,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "d03ec6c41ae6a69c1edfb0fc8447c3c6a720f694f772c97768974e442d3d27ce",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999947,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825388,
+      "predicted_strength": 0.825388,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "721072b5250ed89de40164b3d9fe8d3d4118629feeec5b86e7bfe864571948c5",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.462574,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135,
+      "predicted_strength": 0.135,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "5d2af3355b917e7ca975568f36afea9f8908ae57a5a1b89dee4d3117afe36e38",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.816197,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365,
+      "predicted_strength": 0.365,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "df4a06d18b0ddd8573dffb150dcfdf2dc2ee51cbae044f05be2adc5007114c08",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.936246,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595,
+      "predicted_strength": 0.595,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "f2242166118cff65a23434a90f8d733a6787776d9ce4357c6a1c1f1dd4b90afb",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.97493,
+      "target_strength": 0.825,
+      "oracle_strength": 0.824999,
+      "predicted_strength": 0.824999,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "e3eec4df6e417a5131a47715044680cfc20b8d5931e56372fed40a06f9804b20",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.469862,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135009,
+      "predicted_strength": 0.135009,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "cfcfe5e03316cc0015b492a7150962a52dccc094c718a5b5365e2d48c999a1fd",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.900837,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365006,
+      "predicted_strength": 0.365006,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "131e01b837981cf99a9b2722c448377e870478314c5aec352d52788139ef1bc0",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.986618,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595008,
+      "predicted_strength": 0.595008,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "0229013c5f351954df8296609851016091a51dd1edf66812f5e51cc8448cd1cd",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.99845,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825008,
+      "predicted_strength": 0.825008,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "9d4f1991b8e8c3757c991fe058ae4bb3c2fab48d94a18a8cd53ddd2e7e4773db",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.573991,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135,
+      "predicted_strength": 0.135,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "9eddaf87316a69bb4c7c953c15dbc7409b4503ad7ccf462ed345fc45b3bbc486",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.977683,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365,
+      "predicted_strength": 0.365,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "c847c7170d84bc41f273da7bb56abb69098b1c80546a62ecb62af4962f338683",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999419,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595,
+      "predicted_strength": 0.595,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "53a70380fd8b1f4e989c7ed9c659be54809d674f48dbe320c60b0caa0662c80d",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999988,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825,
+      "predicted_strength": 0.825,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "6c349ec256714e42c35f6d5c5a1d50c0e77cd9003d6483b75d705f0a9ea0a402",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.550954,
+      "target_strength": 0.135,
+      "oracle_strength": 0.134619,
+      "predicted_strength": 0.134619,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "4ac29109ff2a23a045b466065e12353d9aba0520b7be5643b8bca755cdd8c9b0",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.965564,
+      "target_strength": 0.365,
+      "oracle_strength": 0.364779,
+      "predicted_strength": 0.364779,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "044d46bc4e55022673656dfc56201391303912748fcf58372eed39b1d2dcbd5e",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.998834,
+      "target_strength": 0.595,
+      "oracle_strength": 0.594678,
+      "predicted_strength": 0.594678,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "417d8adab31249c26cab0da173f3a53cff1a4d3e4c1e0f0dd2a9ae968dbac252",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.999972,
+      "target_strength": 0.825,
+      "oracle_strength": 0.82468,
+      "predicted_strength": 0.82468,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "ff32bf162e3c928a844c0584aee8b625acd67b913acbbd3bb34bc9fe60da6a69",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.574553,
+      "target_strength": 0.135,
+      "oracle_strength": 0.134967,
+      "predicted_strength": 0.134967,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "e85a7ea8ce6985714bf64bba0eaeed5e9087a269351228013d55de0d2624115c",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.973252,
+      "target_strength": 0.365,
+      "oracle_strength": 0.364485,
+      "predicted_strength": 0.364485,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "aee28ca0448deae6678a092b6eac6559b32f3b896ac17a00c983e3a2c209afc2",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.998984,
+      "target_strength": 0.595,
+      "oracle_strength": 0.592815,
+      "predicted_strength": 0.592815,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "f530fe09f5893f2454b3eb1c255dbe9170a7ef7e165f235f79385d1a3f71e8df",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.999962,
+      "target_strength": 0.825,
+      "oracle_strength": 0.819298,
+      "predicted_strength": 0.819298,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "836a2eefa4073627c3216d36f968143d27de14232d44ad918b4c88d9da86a833",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.600457,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135342,
+      "predicted_strength": 0.135342,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "76512404224970a2de72c9262017702351464bb9d990502ede7a9bfa32d2c4ff",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.979158,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365221,
+      "predicted_strength": 0.365221,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "7d955d14acf87d369381ba38be5c40adce8a4e6d86e58b169483026145649df0",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999082,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595343,
+      "predicted_strength": 0.595343,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "b85207d73971a00ceea2b7636db1141d96c98b101590361614d4609c9b3718f7",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999947,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825388,
+      "predicted_strength": 0.825388,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "887edc8b15b5c500d242b34fd937434f2d74ed98fc774dfab0b8fd3d111fbaad",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.462574,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135,
+      "predicted_strength": 0.135,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "9c94e243461bac95a10cdbe7d43530d40a57ef05d0805767edf4549855ec0826",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.816196,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365,
+      "predicted_strength": 0.365,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "9e48411c1884603d7cc661939cc3846ee804ee1004795dca0fbc4234b4fcff1f",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.936246,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595,
+      "predicted_strength": 0.595,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "33acd00b8d4512d9f6e26b91d312baba4eacbcb3b131106b544f767ea2429d08",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.97493,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825,
+      "predicted_strength": 0.825,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "aa110634705e7fbf4eb8720f2437d77899a52d38f726c967c7af038247fe0fce",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.469862,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135009,
+      "predicted_strength": 0.135009,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "451fd38b3de33364a34548da8a46cef71ad96397607f9b16a24ba0d66da5cfdb",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.900837,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365006,
+      "predicted_strength": 0.365006,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "286dbbb725790c76732dc15ac9c8bf975b4a7236b663d18e9889e90a8b17c542",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.986618,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595008,
+      "predicted_strength": 0.595008,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "74dd523c83b09b75401b1c47795b143d56355c7748869233855af63efbd43f40",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.99845,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825008,
+      "predicted_strength": 0.825008,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "2c212da06d7830c5c57fd8c08fec1d2948fef40182715027d806a0c682b804d6",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.573991,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135,
+      "predicted_strength": 0.135,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "e52e33af1e53539e85f36364954b46e5108a965a71e5938a1ffc219f45f87fab",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.977683,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365,
+      "predicted_strength": 0.365,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "1598dab8add329e3f4d599ec39cf757e0ef777ee2e02690cbc097cf7542b1b91",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999419,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595,
+      "predicted_strength": 0.595,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "6252d94df3456a4c67496ae0ad7d02d26a2b9313504237aed2fbaaf9bbc550c1",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999988,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825,
+      "predicted_strength": 0.825,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "753a4655c34e32f6a1923ce41e12c4c56e11e8dd4ffd5f001569ca9647a24ed0",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.550954,
+      "target_strength": 0.135,
+      "oracle_strength": 0.134619,
+      "predicted_strength": 0.134619,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "98603bba5ddbcc28a1ff0147a7486230101239d1a5fc4741573c0d0728f9d5ea",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.965564,
+      "target_strength": 0.365,
+      "oracle_strength": 0.364779,
+      "predicted_strength": 0.364779,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "277bace6bb5e03fddfe67c2dab70c3e2f39b6ef6af95af687eb91ca04596887e",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.998834,
+      "target_strength": 0.595,
+      "oracle_strength": 0.594678,
+      "predicted_strength": 0.594678,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "38064e323270fed381c459b2568dd25a1836cbc1e03e27916f5fa7d0a82fe4ee",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.999972,
+      "target_strength": 0.825,
+      "oracle_strength": 0.82468,
+      "predicted_strength": 0.82468,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "9e0bd8e364eb2cd7992bcb50afaf14353c8b0ec835a74b2aa52756671b787dff",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.574553,
+      "target_strength": 0.135,
+      "oracle_strength": 0.134967,
+      "predicted_strength": 0.134967,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "e100e3a06abd5fd6d7f5473636163e6ef6fb83122b839d3563830ba6727e06e4",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.973252,
+      "target_strength": 0.365,
+      "oracle_strength": 0.364485,
+      "predicted_strength": 0.364485,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "11f127cc340927912d6f0c73ce42fd5ca9cea025025c9768867daadf6856707e",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.998984,
+      "target_strength": 0.595,
+      "oracle_strength": 0.592815,
+      "predicted_strength": 0.592815,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "78a2a0c7cf8f9c3c79e0c957ec0c9862e191050cd0e63dc4833382602036c3ff",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.999962,
+      "target_strength": 0.825,
+      "oracle_strength": 0.819297,
+      "predicted_strength": 0.819297,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "ace58e9c459c4bbed0aa7f25ef727866f4a4b32741ebe8b9ffdfadc41368ccf4",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.600457,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135342,
+      "predicted_strength": 0.135342,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "637d44ccf80e2f52b772a110c83e94746c0e2b273e00f5020bdc6ad1f8e6ed54",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.979158,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365221,
+      "predicted_strength": 0.365221,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "a2af9b97e9ef7144923d0016f0d0515b5f0920c023194d3fded74a0ad0ea8ac4",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999082,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595343,
+      "predicted_strength": 0.595343,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "42112f6022a88c6c8ac0a96f47fbdd146b84fae2dfc72ab4bbfbf35af2451559",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999947,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825388,
+      "predicted_strength": 0.825388,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "fd982257dfb7b8ccdb96eb59b0b9e30119c88e60742c097b03b9595c15403fe5",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.462574,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135,
+      "predicted_strength": 0.135,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "8671f9e8d29a527b4970d189289a4bdc169239883ab4e5cc7dac932a72d93f7d",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.816197,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365,
+      "predicted_strength": 0.365,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "2842debbd57956e1a97f240fc1a06f829daef5dfaefd6a547bde30e026271fb8",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.936246,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595,
+      "predicted_strength": 0.595,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "1cd94f028d47a9849fff5e47e00ca2ee3bbb627caaac8b45b70cf1fbca06431d",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.97493,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825,
+      "predicted_strength": 0.825,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "b0698debf793ce47c544c3153cc6c6b801b7444d51b5448ff578af789d6cf989",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.469862,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135009,
+      "predicted_strength": 0.135009,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "00851aa429028ff97f1265cc575890126035fadbf12345c31bac19ec946e358b",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.900837,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365006,
+      "predicted_strength": 0.365006,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "49bffc76b524b5b6ccd3250c60b56f21c3f33509a363b54b3999827055650f35",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.986618,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595008,
+      "predicted_strength": 0.595008,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "102ea8011a739c210645f34d444a855b61152b8a4ef49aa453e67b6abfeb9c20",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.99845,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825008,
+      "predicted_strength": 0.825008,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "50ee53d0ef2e1ee192b934091b1c6b6a1a9ddaf0bacad9bdc3083863033774c9",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.573991,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135,
+      "predicted_strength": 0.135,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "16b6cd85db88b622d01fdeb472aee6e0406e13e416bb14ac4fdede7ef242fb1c",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.977683,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365,
+      "predicted_strength": 0.365,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "7b801b4ed41412c56b8baf3637ebb95636df1484a0dd90b2473d39d3451f20d5",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999419,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595,
+      "predicted_strength": 0.595,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "b1a0846f1662f57a624ccc0bd6afbb4d5268b6ad403afa6022a67f31e49f5aee",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999988,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825,
+      "predicted_strength": 0.825,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "d11a62a1c72dfed5035d6a45bea09895bdc07f758f4ebe291bac0728c7778f42",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.550953,
+      "target_strength": 0.135,
+      "oracle_strength": 0.134619,
+      "predicted_strength": 0.134619,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "f86a738ce2d2a4d9c9068c38c37c66d519744c55180cd61b15768ef2b71e96b6",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.965564,
+      "target_strength": 0.365,
+      "oracle_strength": 0.364779,
+      "predicted_strength": 0.364779,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "ccfaa1433fe0c0871a496ee8f12d9b1a96eba85ff162c9df054e96b7ca38c650",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.998834,
+      "target_strength": 0.595,
+      "oracle_strength": 0.594678,
+      "predicted_strength": 0.594678,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "f6f12c4c4f22064d605133f1a1f6b46c7e07992c5046ad9f8b993bbf9ca2d0f0",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.999972,
+      "target_strength": 0.825,
+      "oracle_strength": 0.82468,
+      "predicted_strength": 0.82468,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "1a90f23cfa0e0551fa9018c2c35846015468f7d20c77a1b915a4f851842b94d5",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.5742,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135015,
+      "predicted_strength": 0.135015,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "c600284e53179ec0c2a797883caa8ef5ea61590e05628fc74c0e56bc24e4911d",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.973276,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365435,
+      "predicted_strength": 0.365435,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "ba914c4116ab38d3aee786400901eb638b625bc8f87eee9ead896c0f912bbf31",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.999018,
+      "target_strength": 0.595,
+      "oracle_strength": 0.5969,
+      "predicted_strength": 0.5969,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "6a03b9a516c0507db581a1f2c0b51aa973572e33b3e4e4ef85d0ca29c3941fc3",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.999966,
+      "target_strength": 0.825,
+      "oracle_strength": 0.830029,
+      "predicted_strength": 0.830029,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "15133655edc3fad984f923c1529b8c2ec7e1f74fdf23957e36255632cb365766",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.600457,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135342,
+      "predicted_strength": 0.135342,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "e0bc474c44bc5d27a9e5150648f7443bf0b72d398654b358ce6e0912f4c4165c",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.979159,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365221,
+      "predicted_strength": 0.365221,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "838f0c974a0dd19356f5d40ba3a6c321d04408c39d27e0f571f5766eed9fcda6",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999082,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595343,
+      "predicted_strength": 0.595343,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "ef3ed12eea9bd64ffe558037ccff4050337b329c2adfe02af9911b34a2a597ca",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999947,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825387,
+      "predicted_strength": 0.825387,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "3e00efca3b67ff92faded549a6016595846c7539424bfaf15d350c42811acbe1",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.462574,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135,
+      "predicted_strength": 0.135,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "260c6db63c1848bfa4bce6661f5a7bb07751c6a55b0f0ecf59a414645a16a0e5",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.816196,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365,
+      "predicted_strength": 0.365,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "eddcc474c5d6821bc5bf660412a33882b1ff5c9835cf2c282b79d87099dbd20d",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.936246,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595,
+      "predicted_strength": 0.595,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "727eb55bb7ecdc146af26d81f68ae7af196c5bf936a93191a840aa6075974d2c",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.97493,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825,
+      "predicted_strength": 0.825,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "ccb237e6b9184b77360c80ee93545920c6dbce5ed4b078c6c86abba4dc357310",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.469861,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135009,
+      "predicted_strength": 0.135009,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "9729e7f1f8603623e1b807b5eeb64654220661ec22d2559de1f1cc81efb2095a",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.900837,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365005,
+      "predicted_strength": 0.365005,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "c2f95d3b427c27c486bbfcbdbec6882d8c2d7a29841e3ffd70e7bcc72d147e72",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.986618,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595008,
+      "predicted_strength": 0.595008,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "e5f2b158ad51c689e47fe8fe107e5fcc55b0dd6970af23b77926bd9058308b88",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.99845,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825008,
+      "predicted_strength": 0.825008,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "5b69af81bd113cfdfec5c44860ca4e80327e2fdd6b01d8b1654f32255474803b",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.573991,
+      "target_strength": 0.135,
+      "oracle_strength": 0.135,
+      "predicted_strength": 0.135,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "4965b90e6a5dc4bb768d06d9b257d40a5b4cde269592e330edd2cb4fdf2dac9a",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.977683,
+      "target_strength": 0.365,
+      "oracle_strength": 0.365,
+      "predicted_strength": 0.365,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "57d423155bba41297181081c2d116f79c1b21198be4c34bb9b1f18ac426d9273",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999419,
+      "target_strength": 0.595,
+      "oracle_strength": 0.595,
+      "predicted_strength": 0.595,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "395ad965b9e5abfdd787ba3c366434b4708c3cd451c6a8cefa195ba0b18ca971",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999988,
+      "target_strength": 0.825,
+      "oracle_strength": 0.825,
+      "predicted_strength": 0.825,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "b5e4da13edd00cfd09a1b0c89e513c58da9aa20ab0666fd40466f560f7d89ccb",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.550954,
+      "target_strength": 0.135,
+      "oracle_strength": 0.134619,
+      "predicted_strength": 0.134619,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "cbc29c4dd2aa0239bb9bc5a20fe447fd07b36ff410583b5f40a05a81429c2a8d",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.965563,
+      "target_strength": 0.365,
+      "oracle_strength": 0.364779,
+      "predicted_strength": 0.364779,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "9b69c80c57e8ff7474b1d8c508e69ebb8da0759b180c52436c40df130e5f4f7e",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.998834,
+      "target_strength": 0.595,
+      "oracle_strength": 0.594678,
+      "predicted_strength": 0.594678,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "57aa28801b4fb3aeccfcde2e50cfca6184942f9fddfee3b19c1a8f0c802d21b5",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.999972,
+      "target_strength": 0.825,
+      "oracle_strength": 0.82468,
+      "predicted_strength": 0.82468,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "9170eec57230aef594260d4c8b07dca7fa5086501c709c6c5e11ed3bab733887",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.574554,
+      "target_strength": 0.135,
+      "oracle_strength": 0.134967,
+      "predicted_strength": 0.134967,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "fa3223fc7bd64d1fba9510e5e513915c4f54f7ae894db675883f978ae1a1b115",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.973252,
+      "target_strength": 0.365,
+      "oracle_strength": 0.364485,
+      "predicted_strength": 0.364485,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "85df6178fe999853899ec7fd496e19ca6c33d89f4d8de7a6999fbd1ba4547899",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.998984,
+      "target_strength": 0.595,
+      "oracle_strength": 0.592815,
+      "predicted_strength": 0.592815,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "bc751a58a192a0e79b5d6c5c3fe60a24ce6c3759ed1a7ea635c0208b170c6770",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.999962,
+      "target_strength": 0.825,
+      "oracle_strength": 0.819298,
+      "predicted_strength": 0.819298,
+      "operation_correct": true
+    }
+  ],
+  "aspect_shift": [
+    {
+      "source_sha256": "16da4abeccad48a255ccf790e94ca65b90b08b18a4d144d9eb31b4f9c7fe3847",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.82678,
+      "target_strength": 0.21,
+      "oracle_strength": 0.210367,
+      "predicted_strength": 0.210367,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "7b264ebaad877f6729eacc88005f38cb7392e73ed3fe37b8566b72c5e6fc26d7",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.988883,
+      "target_strength": 0.41,
+      "oracle_strength": 0.410353,
+      "predicted_strength": 0.410353,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "ba5486ac03f09cbf4c925c2159a2235724450fc75835e2a99c1821cd6ef5fa3b",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999244,
+      "target_strength": 0.61,
+      "oracle_strength": 0.610169,
+      "predicted_strength": 0.610169,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "0e4f389ecf142eb87a17fddde8ae261186cb8e1b1d0f865730d44199188b51ff",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999936,
+      "target_strength": 0.81,
+      "oracle_strength": 0.810191,
+      "predicted_strength": 0.810191,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "5295afa0ce47d0a407e43e360d8a63485ef713365074dae37f9b549e4e98d92a",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.608307,
+      "target_strength": 0.21,
+      "oracle_strength": 0.21,
+      "predicted_strength": 0.21,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "4d1f2c083db5e1100000c4c4fd2024f7ff0b3052358bc843737c0b25a00b5fcb",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.852456,
+      "target_strength": 0.41,
+      "oracle_strength": 0.41,
+      "predicted_strength": 0.41,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "9b5ef71611576862d0b9ba62e8f957baae015abc82886c1d498e82f51b0d379b",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.940179,
+      "target_strength": 0.61,
+      "oracle_strength": 0.61,
+      "predicted_strength": 0.61,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "2046274269d13de52e0d1e3c1d74251615b20b470d5b4463aa2b724549190f62",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.973409,
+      "target_strength": 0.81,
+      "oracle_strength": 0.81,
+      "predicted_strength": 0.81,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "73a52679964c703035bad38292f30d1b1ca991f7920235d3a5e92e7f40b940ab",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.670889,
+      "target_strength": 0.21,
+      "oracle_strength": 0.21001,
+      "predicted_strength": 0.21001,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "1cac117b228c12c324ca5027c34e2d6e2cce820a9cde772230cbe7fee6efae07",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.931934,
+      "target_strength": 0.41,
+      "oracle_strength": 0.410009,
+      "predicted_strength": 0.410009,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "8c0220d517bb6cf828fa84fedc6b254c627c937c92d3c68cb8fb3e8db18a74b0",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.988326,
+      "target_strength": 0.61,
+      "oracle_strength": 0.610004,
+      "predicted_strength": 0.610004,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "96b5fd6241c6fb408ec56ccd307142472aabf5f059faa77e09f5ba2046398348",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.99821,
+      "target_strength": 0.81,
+      "oracle_strength": 0.810004,
+      "predicted_strength": 0.810004,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "0d4ffeb2ee49f66b8a2ec8a0967259f3ee6e27653209f17406333a3425f3be85",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.802671,
+      "target_strength": 0.21,
+      "oracle_strength": 0.21,
+      "predicted_strength": 0.21,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "69ae058bdc01dd6ebe352e6e0647884b2870f168724d4c7a2cc008fe935526f4",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.988846,
+      "target_strength": 0.41,
+      "oracle_strength": 0.41,
+      "predicted_strength": 0.41,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "8a14effa8e3b8f914bf8876d174e7de0512852ad27f9094be88f7a665a4d67f0",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999545,
+      "target_strength": 0.61,
+      "oracle_strength": 0.61,
+      "predicted_strength": 0.61,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "9b2de2c2f8d19518f2d3029aec66cff871915aca143bbe9811270de750bfb4ab",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999984,
+      "target_strength": 0.81,
+      "oracle_strength": 0.81,
+      "predicted_strength": 0.81,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "1f5932a8c2c411d9444a8d78e63943ec2489bc749018618efe69d2210aade3e9",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.767547,
+      "target_strength": 0.21,
+      "oracle_strength": 0.209605,
+      "predicted_strength": 0.209605,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "9f44f8268123a3e1676135d4cd82ebc57b0411c1d60b648a860bdb118f26d9f0",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.981638,
+      "target_strength": 0.41,
+      "oracle_strength": 0.409644,
+      "predicted_strength": 0.409644,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "8cc7b6d5a5c1e9553811b1318c224b9897a8fd5a02a4e68026c83d726ef5c1b5",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.999077,
+      "target_strength": 0.61,
+      "oracle_strength": 0.609842,
+      "predicted_strength": 0.609842,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "70b6066195aca4bd033fa1c34adc86f91f7be50273a8acae24c33d789fe76902",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.999964,
+      "target_strength": 0.81,
+      "oracle_strength": 0.809843,
+      "predicted_strength": 0.809843,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "205615f3b3fb356282f42cff309e5dc9eb5168c3253a7421cf4a9d62b7698ca4",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.79603,
+      "target_strength": 0.21,
+      "oracle_strength": 0.209919,
+      "predicted_strength": 0.209919,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "6a4f156b73a6cb1d2a7d2d79b143450a6cd9f8ea6629de3f22e54ce95cd33bdd",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.985296,
+      "target_strength": 0.41,
+      "oracle_strength": 0.409476,
+      "predicted_strength": 0.409476,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "4deb7f65dc9d4f89c75f20edb706dbd46e913ff8e28399b2968150659cb70f1c",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.999132,
+      "target_strength": 0.61,
+      "oracle_strength": 0.608346,
+      "predicted_strength": 0.608346,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "b924b70e945c34f13d6cdfc717a954ee4ca8d0e9c2da7389283a2892eb11bb83",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.99995,
+      "target_strength": 0.81,
+      "oracle_strength": 0.806202,
+      "predicted_strength": 0.806202,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "645846e0a6b79fc2cb7ee0ad9965026c3ae05bc593e02260dd261be36a465e3d",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.82678,
+      "target_strength": 0.21,
+      "oracle_strength": 0.210367,
+      "predicted_strength": 0.210367,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "1e0d477d2813bc31e33f1af661c7df83927e1fcfdd96e39299c9e940b79f3741",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.988883,
+      "target_strength": 0.41,
+      "oracle_strength": 0.410353,
+      "predicted_strength": 0.410353,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "db50900046e264d48db54fe807672f3aa5659a4a2c38e9d47312e37e6a1dc471",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999244,
+      "target_strength": 0.61,
+      "oracle_strength": 0.610169,
+      "predicted_strength": 0.610169,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "e388734859cd7412cad67b8bd74443fa7047411767a7e9ce456ce1f8842c84ef",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999936,
+      "target_strength": 0.81,
+      "oracle_strength": 0.810191,
+      "predicted_strength": 0.810191,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "3503c8d6f3f0d70b38dd8b7604469bafef9a1295edfec9dc14f001a5453f2306",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.608307,
+      "target_strength": 0.21,
+      "oracle_strength": 0.21,
+      "predicted_strength": 0.21,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "841c146e68c61bda7c729b0e6b5ab19e967e0b6e404f8bf21afc5a492f4a89e8",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.852456,
+      "target_strength": 0.41,
+      "oracle_strength": 0.41,
+      "predicted_strength": 0.41,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "a3aa4791f8dd92474080e9324a4dfcef4a8e2fa5e81bdee0ef3b566db4d94740",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.940179,
+      "target_strength": 0.61,
+      "oracle_strength": 0.61,
+      "predicted_strength": 0.61,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "24ac0f9b3b2b5a1a69faf91d777ea56e5de807987d28262c578ebf42fdd06877",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.973409,
+      "target_strength": 0.81,
+      "oracle_strength": 0.81,
+      "predicted_strength": 0.81,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "4a18260f153377e82ad272402a3d1427c7a6de8962b284a5852a1232ceb7438e",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.67089,
+      "target_strength": 0.21,
+      "oracle_strength": 0.21001,
+      "predicted_strength": 0.21001,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "5ca7a008b831c92d6d49c26b60a5c4d5bb9a434f8841831945880c1a89fc7797",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.931934,
+      "target_strength": 0.41,
+      "oracle_strength": 0.410009,
+      "predicted_strength": 0.410009,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "cc5c243a3d577ffe1aec5e743abfbf7621a03bdad786a787180d39c8282c29c8",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.988326,
+      "target_strength": 0.61,
+      "oracle_strength": 0.610004,
+      "predicted_strength": 0.610004,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "f1bf9c8b883cef06bdd14c4d566b880d144ddddef3e2776cb56a65d8df5b733f",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.99821,
+      "target_strength": 0.81,
+      "oracle_strength": 0.810004,
+      "predicted_strength": 0.810004,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "8d8056abef54661a86da8afd325fac59cf2c7a38e0b7e7df8eb574a6dbfb2a4f",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.802672,
+      "target_strength": 0.21,
+      "oracle_strength": 0.21,
+      "predicted_strength": 0.21,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "714a6140f7221687926b510fceff9c857eda0806599848277b10077ace8304f8",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.988846,
+      "target_strength": 0.41,
+      "oracle_strength": 0.41,
+      "predicted_strength": 0.41,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "71ee1d0a545a25549d0a459a79c70e3830bec08b3f0b4ecda192eae6ce0cc6e8",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999545,
+      "target_strength": 0.61,
+      "oracle_strength": 0.61,
+      "predicted_strength": 0.61,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "f49238755ee264bd6329f99efd2485972ecfb53629226259b00aa088c5f7b4d9",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999984,
+      "target_strength": 0.81,
+      "oracle_strength": 0.81,
+      "predicted_strength": 0.81,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "a779c99796d8fdcd95e486795d6fcc7aaad3cd278426add6d7f327f853f2e7e4",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.767547,
+      "target_strength": 0.21,
+      "oracle_strength": 0.209605,
+      "predicted_strength": 0.209605,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "ca378ad7ef34f8d031ebb04fce21ba453285475e7527279dcc8d40e2eff0ebfd",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.981638,
+      "target_strength": 0.41,
+      "oracle_strength": 0.409644,
+      "predicted_strength": 0.409644,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "c174b72c112685ba6ef9535dcc5b5beddd113e989186f515c2ff7361d8e17085",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.999077,
+      "target_strength": 0.61,
+      "oracle_strength": 0.609842,
+      "predicted_strength": 0.609842,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "13a948adf85ae62e8f510af46b8122849caf2f160a975bfee12df34f3ba7dc32",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.999964,
+      "target_strength": 0.81,
+      "oracle_strength": 0.809843,
+      "predicted_strength": 0.809843,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "7939653c2821725dd8e52e802340980e5953468f203e0dbf74fa54cd108a30ac",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.797869,
+      "target_strength": 0.21,
+      "oracle_strength": 0.209891,
+      "predicted_strength": 0.209891,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "b21e058cd13217907f7c9121994e32860bcad36a9a8b73e61f8619b7e70b5bc5",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.98579,
+      "target_strength": 0.41,
+      "oracle_strength": 0.409267,
+      "predicted_strength": 0.409267,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "7859d6357416909708c10fcfcbeb6992cd53342ac10d56715fe0bbe94220df89",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.99918,
+      "target_strength": 0.61,
+      "oracle_strength": 0.607663,
+      "predicted_strength": 0.607663,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "28291c325ad19efae958ec6cd88f449fa960a7f4d3ae7ca7440d4546e622256c",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.999953,
+      "target_strength": 0.81,
+      "oracle_strength": 0.80462,
+      "predicted_strength": 0.80462,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "43cdfca8f12ac929e329971489eda3a4c516ef40d1d6d213526e38b80e11256b",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.82678,
+      "target_strength": 0.21,
+      "oracle_strength": 0.210367,
+      "predicted_strength": 0.210367,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "63e4fa6c89087f0e9d68e4383489e89d60cd09a1de6e8775f392f42d4a28cbba",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.988883,
+      "target_strength": 0.41,
+      "oracle_strength": 0.410353,
+      "predicted_strength": 0.410353,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "32677b81defbda19ff81b0a93e9a0b7003b2cc64daa7131faf527dd3255d60c6",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999244,
+      "target_strength": 0.61,
+      "oracle_strength": 0.610169,
+      "predicted_strength": 0.610169,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "c79ad1ce3bd36199d5c1bba0d72c016729173e1ab69cfd7c848fd94d955b0708",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999936,
+      "target_strength": 0.81,
+      "oracle_strength": 0.810191,
+      "predicted_strength": 0.810191,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "8edfd538153c020a20831b34b380a188905a0aeff97e95927db3c11c735fc7fd",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.608307,
+      "target_strength": 0.21,
+      "oracle_strength": 0.21,
+      "predicted_strength": 0.21,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "7d3fc95c2d2d2ff9d0b33b4dfab49493c2cabf661aecc351814c8c7badd7cb47",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.852456,
+      "target_strength": 0.41,
+      "oracle_strength": 0.41,
+      "predicted_strength": 0.41,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "4b333be3aeaa061fd81c82c2ba333bc45bf1c006f6950140ae998e7e4b2d4d48",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.940179,
+      "target_strength": 0.61,
+      "oracle_strength": 0.61,
+      "predicted_strength": 0.61,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "ab9fc0a0ff21331f9ac1443e7b6db9d996b03e9b1af4d174e245d794f4bed085",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.973409,
+      "target_strength": 0.81,
+      "oracle_strength": 0.81,
+      "predicted_strength": 0.81,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "00957ea24f784f5cf9f3f321969a1dc889e8937ff4ce18e60d1f295c51bd4131",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.67089,
+      "target_strength": 0.21,
+      "oracle_strength": 0.21001,
+      "predicted_strength": 0.21001,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "fb4a014fc4edecc9dda19cbce105261b27a67f8748073df5d542c428bfdb244d",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.931934,
+      "target_strength": 0.41,
+      "oracle_strength": 0.410009,
+      "predicted_strength": 0.410009,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "fe0413664055a3e84d04d06e7db231392b8c5202e756403b9009061b001df593",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.988326,
+      "target_strength": 0.61,
+      "oracle_strength": 0.610004,
+      "predicted_strength": 0.610004,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "b5c21a61b23f93e00db4c0bf753a87d7a2de378170c437eb214505d2396b0ee8",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.99821,
+      "target_strength": 0.81,
+      "oracle_strength": 0.810004,
+      "predicted_strength": 0.810004,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "1f8b4d43de1c260d342d628e39328df348861f8f55d61845f1f3d5cbe6a4e654",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.802673,
+      "target_strength": 0.21,
+      "oracle_strength": 0.21,
+      "predicted_strength": 0.21,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "68a901ecf4700c40da0e972bb47e888e141388893e3b32a0e9986647b0174466",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.988847,
+      "target_strength": 0.41,
+      "oracle_strength": 0.41,
+      "predicted_strength": 0.41,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "05ba383456bf43e7d6746e8bf3d9b6ee132efe1344d97594f411c755dd790af2",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999545,
+      "target_strength": 0.61,
+      "oracle_strength": 0.61,
+      "predicted_strength": 0.61,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "34b8d7f0384631bff776d0c593628a122b5528083451310568a4369b94d3396a",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999984,
+      "target_strength": 0.81,
+      "oracle_strength": 0.81,
+      "predicted_strength": 0.81,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "5e6185f26bb0d23cce1933bb66642456fcb2588aaabf31c20f39ff2d4a87a4a3",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.767547,
+      "target_strength": 0.21,
+      "oracle_strength": 0.209605,
+      "predicted_strength": 0.209605,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "c8ae03efae51b17846e6eb7b2813f37acc581d0c61f56e872c2d7aa25f8aa079",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.981638,
+      "target_strength": 0.41,
+      "oracle_strength": 0.409644,
+      "predicted_strength": 0.409644,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "d7f2b52dee5e527e61bdd8d9c24cd1cd078c73289e1339a8b8a6bc05d2e2e19b",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.999077,
+      "target_strength": 0.61,
+      "oracle_strength": 0.609842,
+      "predicted_strength": 0.609842,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "bf11116a992fd23deaf1722d26bfd013bfd27352d164300815c3f355333870c0",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.999964,
+      "target_strength": 0.81,
+      "oracle_strength": 0.809843,
+      "predicted_strength": 0.809843,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "4712a29ffa8c302a9af1da6ce101cbb10a65b2995ae990586fc0cd874a36c6be",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.798185,
+      "target_strength": 0.21,
+      "oracle_strength": 0.210145,
+      "predicted_strength": 0.210145,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "34e42e4f03ed0aa68d565b5aede2e1838101f938c90deb0313941e40bcf5f714",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.986092,
+      "target_strength": 0.41,
+      "oracle_strength": 0.411149,
+      "predicted_strength": 0.411149,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "8561488e877e6ba08cfded89cd8f1e347c3e035954e709b95212a6a0ec5ece0e",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.999243,
+      "target_strength": 0.61,
+      "oracle_strength": 0.613811,
+      "predicted_strength": 0.613811,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "ff062b29195235e8aaea0637cbc0b4c9b0996ff54149430b5dd2d3b365113b81",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.999961,
+      "target_strength": 0.81,
+      "oracle_strength": 0.818797,
+      "predicted_strength": 0.818797,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "430fef73de5d4aa3ade5ad883137bf96c9a126c01e934f207679302e99d104d9",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.82678,
+      "target_strength": 0.21,
+      "oracle_strength": 0.210367,
+      "predicted_strength": 0.210367,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "836634f2468846a433a9ec24a0b5ebbc431aa2300c7bf011655782ac9ffb4f41",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.988883,
+      "target_strength": 0.41,
+      "oracle_strength": 0.410353,
+      "predicted_strength": 0.410353,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "bb6d46dd8935579692eca3600b881ae7909701e5e70e2e9baea8fb2bd8e1e1ac",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999244,
+      "target_strength": 0.61,
+      "oracle_strength": 0.610169,
+      "predicted_strength": 0.610169,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "9cbb2dc4c2d37c2fb1e46ffa4fe4808f849258ab19a3e6db974bf5322709b6f7",
+      "expected": "LOWER_RECESS",
+      "predicted": "LOWER_RECESS",
+      "confidence": 0.999936,
+      "target_strength": 0.81,
+      "oracle_strength": 0.810191,
+      "predicted_strength": 0.810191,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "f5e69201d4ffe845791b991e2e91af9e08144719e82ec56a560a9c8dce194ca6",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.608308,
+      "target_strength": 0.21,
+      "oracle_strength": 0.21,
+      "predicted_strength": 0.21,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "dd45dfa36a19ca0894724b08905adc10308aa91042ff96cb910e41b8db88c944",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.852456,
+      "target_strength": 0.41,
+      "oracle_strength": 0.41,
+      "predicted_strength": 0.41,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "00432c13476e325ac696db0309ffe6f74888df1112e75fb18ae0a0a0a3442626",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.940179,
+      "target_strength": 0.61,
+      "oracle_strength": 0.61,
+      "predicted_strength": 0.61,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "184d5931987652b74725063b87a82e261d8f9a8ad14eaefb70e66f1ba5343148",
+      "expected": "RIBBED_FAIRING",
+      "predicted": "RIBBED_FAIRING",
+      "confidence": 0.973409,
+      "target_strength": 0.81,
+      "oracle_strength": 0.81,
+      "predicted_strength": 0.81,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "40d100f188b3e0f0ca00b54fab0212b31b1e03b542d6201813ace4ea549d5824",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.67089,
+      "target_strength": 0.21,
+      "oracle_strength": 0.21001,
+      "predicted_strength": 0.21001,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "42d250f141adb484747e95ec719e60384e17e8b10dd199faf207da39693baf3e",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.931934,
+      "target_strength": 0.41,
+      "oracle_strength": 0.410009,
+      "predicted_strength": 0.410009,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "a670fc7ece3871682ebc7df3d846dea6ae4c11b833893d3ae56d77a9ebeb9977",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.988326,
+      "target_strength": 0.61,
+      "oracle_strength": 0.610004,
+      "predicted_strength": 0.610004,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "120b95fb02d2f9bc4f11650965dc97659a5387839777996e110c3bafa9cef061",
+      "expected": "SECTION_LOFT",
+      "predicted": "SECTION_LOFT",
+      "confidence": 0.99821,
+      "target_strength": 0.81,
+      "oracle_strength": 0.810004,
+      "predicted_strength": 0.810004,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "49abafe068e0331654f712a67a23ec25f318f387107a3b00650e3c865442e051",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.802671,
+      "target_strength": 0.21,
+      "oracle_strength": 0.21,
+      "predicted_strength": 0.21,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "e1145306dc15acb65ac0240cfe8b2d27a55e3e69b4ac9ec98a0160d38b9b92df",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.988847,
+      "target_strength": 0.41,
+      "oracle_strength": 0.41,
+      "predicted_strength": 0.41,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "b9f2639d0017786b751bfd798c4a8fdce7ac99c3c7e11d467355e811ce204ca0",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999545,
+      "target_strength": 0.61,
+      "oracle_strength": 0.61,
+      "predicted_strength": 0.61,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "cdf10c5c626a90610e4904164744821336be146a67ba5e25153b3c34e93fa376",
+      "expected": "SECTION_TWIST",
+      "predicted": "SECTION_TWIST",
+      "confidence": 0.999984,
+      "target_strength": 0.81,
+      "oracle_strength": 0.81,
+      "predicted_strength": 0.81,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "eed34b969ebbded9ad87fd625a0fdd1d82677a184a656e71bbe0aea4aea670cc",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.767547,
+      "target_strength": 0.21,
+      "oracle_strength": 0.209605,
+      "predicted_strength": 0.209605,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "83b691f1f43e2ff8e9ff8d94f94e0dbc3197f9e40643d3844b73dd15789fe185",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.981638,
+      "target_strength": 0.41,
+      "oracle_strength": 0.409644,
+      "predicted_strength": 0.409644,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "f8545fe0364652e21199cf559e8805d66c95d5fc90d8d68ed13028d006353f36",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.999077,
+      "target_strength": 0.61,
+      "oracle_strength": 0.609842,
+      "predicted_strength": 0.609842,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "d496bca5e2722aeefa19dc343d9d344bd7e79d856d5dcdba662d98b31aa92e94",
+      "expected": "SUPERELLIPSE_PROFILE",
+      "predicted": "SUPERELLIPSE_PROFILE",
+      "confidence": 0.999964,
+      "target_strength": 0.81,
+      "oracle_strength": 0.809843,
+      "predicted_strength": 0.809843,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "8212c4028e1974cc50a6c04ab96e9d097917ddb49c0d108bb336b5a1c27ea208",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.796361,
+      "target_strength": 0.21,
+      "oracle_strength": 0.209953,
+      "predicted_strength": 0.209953,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "ce643b0cb9fb0135e8fbc450ac7a5dd4bbdd3965082b14a0ee15145e2be332a0",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.985423,
+      "target_strength": 0.41,
+      "oracle_strength": 0.409729,
+      "predicted_strength": 0.409729,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "9369cd60c50fca08c7cdc161719b46d2755c6d58077032aba880270fd49f3956",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.999151,
+      "target_strength": 0.61,
+      "oracle_strength": 0.609176,
+      "predicted_strength": 0.609176,
+      "operation_correct": true
+    },
+    {
+      "source_sha256": "cd7fc0e6aee83ec6d71fb1aceef0ae93919ba12889a0f4d5efeac06924e10bbd",
+      "expected": "TANGENT_SWEEP",
+      "predicted": "TANGENT_SWEEP",
+      "confidence": 0.999952,
+      "target_strength": 0.81,
+      "oracle_strength": 0.808121,
+      "predicted_strength": 0.808121,
+      "operation_correct": true
+    }
+  ]
+}
