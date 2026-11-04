@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 
 from generated_glb_critic import inspect
@@ -23,11 +24,25 @@ def halfspan(points):
     # glTF axes are (native X, native Z, -native Y).
     # Corresponding lower-hull station, not an insensitive bounding box.
     length = max(p[2] for p in points) - min(p[2] for p in points)
+    # The native theta=225 and 315 degree vertices are present at both
+    # 16 and 32 radial segments. Fix the angular station rather than
+    # accepting arbitrary vertices from a broad vertical coordinate band.
+    target_height = .8 - .38 / math.sqrt(2)
     ring = [abs(x) for x, y, z in points
-            if abs(z - .05 * length) < .002 and .48 < y < .60 and abs(x) > .05]
+            if abs(z - .05 * length) < .002
+            and abs(y - target_height) < .002 and abs(x) > .05]
     if len(ring) != 2 or abs(ring[0] - ring[1]) > .0001:
         raise ValueError("Missing symmetric homologous lower-hull station")
     return sum(ring) / 2
+
+
+def underbody_height(points):
+    length = max(p[2] for p in points) - min(p[2] for p in points)
+    ring = [y for x, y, z in points
+            if abs(z - .05 * length) < .002 and abs(x) < .002]
+    if len(ring) != 2:
+        raise ValueError("Missing homologous underside station")
+    return min(ring)
 
 
 def inspect_case(root, family, name):
@@ -66,7 +81,10 @@ def inspect_case(root, family, name):
             or hull["nonmanifold_edges"] != 0
             or hull["signed_volume"] <= 0):
         raise ValueError("Structural audit failed: " + stem)
-    return {"source_sha256": sha, "halfspan_m": halfspan(points_of(path)),
+    hull_points = points_of(path)
+    return {"source_sha256": sha,
+            "halfspan_m": halfspan(hull_points),
+            "underbody_height_m": underbody_height(hull_points),
             "triangles": report["triangles"], "hull_triangles": hull["triangles"],
             "mesh_parts": report["mesh_parts"]}
 
@@ -84,16 +102,23 @@ def run(root, out):
             "baseline", "s250", "s500", "s900", "combined_four")}
         measured = [cases[name]["halfspan_m"] for name in (
             "baseline", "s250", "s500", "s900")]
+        raised = [cases[name]["underbody_height_m"] for name in (
+            "baseline", "s250", "s500", "s900")]
         checks = {
             "monotone_recess": all(a - b > .012
                                    for a, b in zip(measured, measured[1:])),
-            "substantial_real_deformation": measured[0] - measured[-1] > .075,
+            "substantial_real_deformation": measured[0] - measured[-1] > .15,
+            "monotone_side_silhouette_lift": all(b - a > .015
+                                                 for a, b in zip(raised, raised[1:])),
+            "meaningful_side_silhouette_lift": raised[-1] - raised[0] > .075,
             "same_mesh_part_count": len({
                 case["mesh_parts"] for case in cases.values()}) == 1,
             "more_true_hull_stations": cases["s250"]["hull_triangles"]
                                       > cases["baseline"]["hull_triangles"],
             "composed_program_preserves_channel": (
                 measured[2] > cases["combined_four"]["halfspan_m"] > measured[3]),
+            "composed_program_preserves_underbody": (
+                raised[2] < cases["combined_four"]["underbody_height_m"] < raised[3]),
         }
         result["families"][family] = cases
         result["checks"][family] = checks

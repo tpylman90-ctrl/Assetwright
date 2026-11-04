@@ -16,11 +16,11 @@ class NativeRockerV2Test {
     private fun sample(family: String) = when (family) {
         "rockerdev_a" -> VehicleSpec(
             "Development roadster", 4.75f, 2.31f, 1.34f, 1.70f, .48f, 1.10f,
-            "Mobile", "Original roadster with one central engine",
+            "High detail", "Original roadster with one central engine",
             ConstructionPlan(4, "exposed"))
         "rockerdev_b" -> VehicleSpec(
             "Development hauler", 5.80f, 2.67f, 1.75f, 2.06f, .57f, 1.22f,
-            "Mobile", "Original hauler with one central engine",
+            "High detail", "Original hauler with one central engine",
             ConstructionPlan(4, "exposed"))
         else -> error("Unknown V2 development family")
     }
@@ -36,6 +36,16 @@ class NativeRockerV2Test {
         return abs(ring[spec.radialSegments * 7 / 8].x)
     }
 
+    private fun undersideMinHeight(spec: VehicleSpec): Float {
+        val hull = MiniGeometry.generate(spec).parts.single {
+            it.name == "Sculpted continuous body"
+        }
+        val ring = hull.vertices.chunked(spec.radialSegments).single { row ->
+            abs(row.first().y + .05f * spec.length) < .001f
+        }
+        return ring.filter { abs(it.x) < .002f }.minOf { it.z }
+    }
+
     private fun rejects(block: () -> Unit) {
         var rejected = false
         try { block() } catch (_: IllegalArgumentException) { rejected = true }
@@ -49,6 +59,8 @@ class NativeRockerV2Test {
             val base = MiniGeometry.generate(spec)
             val original = channelHalfSpan(spec)
             var previous = original
+            var bottom = undersideMinHeight(spec)
+            val originalBottom = bottom
             for (strength in listOf(.25f, .50f, .90f)) {
                 val changed = NativeCadOperationBridge.applyExpandedProgram(
                     spec, listOf(NativeCadOperationBridge.Command(
@@ -58,6 +70,10 @@ class NativeRockerV2Test {
                 assertTrue("Corresponding source hull vertices must actually move",
                     previous - span > .012f)
                 previous = span
+                val raised = undersideMinHeight(changed)
+                assertTrue("The V2 side-view underbody silhouette must move",
+                    raised - bottom > .015f)
+                bottom = raised
                 assertEquals("No new floating body parts", base.parts.size, asset.parts.size)
                 assertTrue("The surface needs local smooth profile stations",
                     asset.parts.first().vertices.size > base.parts.first().vertices.size)
@@ -65,7 +81,9 @@ class NativeRockerV2Test {
                 assertTrue(ShapeProgram.steps(changed).any {
                     it.operation == NativeCadOperationBridge.LOWER_ROCKER })
             }
-            assertTrue(original - previous > .075f)
+            assertTrue(original - previous > .15f)
+            assertTrue("A shallow recess cannot satisfy the visual-review correction",
+                bottom - originalBottom > .075f)
             assertTrue(ShapeProgram.steps(spec).none {
                 it.operation == NativeCadOperationBridge.LOWER_ROCKER })
         }

@@ -24,7 +24,7 @@ VIEW_DIRECTIONS = {
 }
 FAMILIES = ("rockerdev_a", "rockerdev_b")
 VARIANTS = ("baseline", "s900", "combined_four")
-W, H, SCALE = 1050, 770, 112.0
+W, H = 1050, 770
 
 def subtract(a, b):
     return tuple(x-y for x,y in zip(a,b))
@@ -66,9 +66,17 @@ def render(meshes, view, mode, title, destination):
     right=normalized(cross(forward,nominal_up))
     up=cross(right,forward)
     light=normalized((-.5,.9,1.0))
+    # Fit each orthographic camera to the actual asset rather than leaving
+    # vehicles tiny in the review. The same family baseline/modified spans
+    # are close enough for comparable human inspection.
+    projected=[(dot(subtract(v,target),right),dot(subtract(v,target),up))
+               for v in all_points]
+    span_x=max(x for x,_ in projected)-min(x for x,_ in projected)
+    span_y=max(y for _,y in projected)-min(y for _,y in projected)
+    scale=min((W-140)/max(span_x,.01),(H-140)/max(span_y,.01),175.0)
     def project(v):
         p=subtract(v,target)
-        return (W/2+SCALE*dot(p,right), H/2-SCALE*dot(p,up),
+        return (W/2+scale*dot(p,right), H/2-scale*dot(p,up),
                 dot(p,forward))
     triangles=[]
     for name,verts,indices,color in meshes:
@@ -80,9 +88,13 @@ def render(meshes, view, mode, title, destination):
             n=cross(subtract(xyz[1],xyz[0]),subtract(xyz[2],xyz[0]))
             if dot(n,n)<1e-14: continue
             normal=normalized(n)
-            shade=.49+.51*abs(dot(normal,light))
+            # Diagnostic directional light shows curvature direction;
+            # double-sided abs(n dot light) previously flattened shadows.
+            shade=.36+.64*max(0.,dot(normal,light))
             if mode=="clay":
-                base=(168,179,193)
+                base=(80,101,120) if "canopy" in name.lower() else (
+                    (92,103,118) if "keel" in name.lower() or
+                    "bracket" in name.lower() else (176,187,199))
             else:
                 base=(46,57,73)
             shaded=tuple(min(255,round(channel*shade)) for channel in base)

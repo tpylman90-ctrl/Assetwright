@@ -239,23 +239,37 @@ object MiniGeometry {
                 val upper = maxOf(top,0f)
                 val bridgeWidth = cockpitTransition*.22f*feather*upper
                 val bridgeRise = cockpitTransition*.055f*feather*upper*abs(side)
-                // V2: a genuine continuous lower rocker undercut in the same
-                // indexed hull; smooth angular and axial windows, no overlays.
-                val axialWindow = ((t + .39f) / .15f).coerceIn(0f, 1f) *
-                    ((.39f - t) / .15f).coerceIn(0f, 1f)
-                val angularWindow = (1f - abs(top + .70f) / .32f).coerceIn(0f, 1f)
-                val channelBlend = axialWindow * axialWindow * (3f - 2f * axialWindow) *
-                    angularWindow * angularWindow * (3f - 2f * angularWindow)
-                val lowerSideRecess = rockerChannel * .18f * channelBlend
+                // Visual-review correction: earlier V2 only pinched width
+                // along a few low-poly vertices. The actual side silhouette
+                // remained a slab. Sculpt a wider paired sidewall channel,
+                // retain subtle upper/lower lips in the SAME hull, and lift
+                // the recessed central underbody for an observable Y/Z profile.
+                // All edits are strictly zero when rockerChannel is zero.
+                val entry = ((t + .39f) / .15f).coerceIn(0f, 1f)
+                val exit = ((.39f - t) / .15f).coerceIn(0f, 1f)
+                val axialBlend = entry * entry * (3f - 2f * entry) *
+                    exit * exit * (3f - 2f * exit)
+                fun smoothAngular(center: Float, radius: Float): Float {
+                    val v = (1f - abs(top - center) / radius).coerceIn(0f, 1f)
+                    return v * v * (3f - 2f * v)
+                }
+                val groove = smoothAngular(-.7071068f, .39f)
+                val upperLip = smoothAngular(-.3826834f, .25f)
+                val lowerLip = smoothAngular(-.9238795f, .20f)
+                val widthContour = 1f + rockerChannel * axialBlend *
+                    (-.32f * groove + .038f * upperLip + .055f * lowerLip)
+                val underside = ((-top - .78f) / .22f).coerceIn(0f, 1f)
+                val undersideEase = underside * underside * (3f - 2f * underside)
+                val underbodyRise = rockerChannel * .11f * axialBlend * undersideEase
                 val width = w * profile * frontShape *
-                    (1f + shoulderVolume + bridgeWidth) * (1f - lowerSideRecess)
+                    (1f + shoulderVolume + bridgeWidth) * widthContour
                 Vec3(
                     width * side,
                     l * t,
                     hullCenterZ + if (top >= 0f)
                         hullUpperRadius * top * (.94f + .06f * profile) +
                             shoulderSculpt * .055f * abs(side) * top + bridgeRise
-                    else hullLowerRadius * top
+                    else hullLowerRadius * top + underbodyRise
                 )
             }
         }

@@ -28,3 +28,11 @@ The V2 research workflow also renders 60 lightweight CPU diagnostic PNGs from th
 ## Preventing repeated legacy holdout evaluation
 
 The original native-operator student and strength-calibration GitHub Actions workflows are now manual-reproduction-only, just like the original three-operation measured inverse workflow. Their past holdout templates have been inspected and cannot be used as fresh blind promotion evidence. One legacy student workflow was automatically rerun by the initial V2 bridge edit before this safeguard; that run is only a historical reproduction, not independent V2 evidence, and no student weights from it are installed in Android. New student checkpoint promotion requires new independent partitions and explicit non-regression gates.
+
+## November 3 visual feedback — first V2 presentation rejected
+
+The first screenshots of the V2 rocker experiments exposed an important false-positive risk: although the source-hashed closed hull responded mathematically, the side elevations looked almost identical, the body was still a thin slab, and the 16-segment cockpit and hull were visibly faceted. The first V2 structural pass is preserved in git, but it is **not visually accepted** as a modeling-quality milestone.
+
+The next research-only correction increases hull angular sampling in the two development fixtures to 32 segments; creates a wider recessed side-channel with subtle upper/lower lips in the SAME continuous hull; and raises the lower-hull central profile by up to 0.11 m at full strength. The independent GLB audit now requires the *side elevation's actual underside vertices* to move monotonically (>0.075 m cumulative), in addition to the previously enforced channel half-span condition (tightened to >0.15 m). This rejects an operation that only moves hidden X coordinates while looking unchanged from the side.
+
+The diagnostic renderer also uses a fitted camera and directional shading to expose, not hide, shape weaknesses. These are reuses of inspected **development** families; results are never represented as unseen generalization. The V1 model/checkpoints and production Android presets remain untouched. Even if the new checks pass, human visual approval remains mandatory.
