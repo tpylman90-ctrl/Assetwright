@@ -62,3 +62,7 @@ continuity, real-world cross-category transfer, or visual production
 approval. Synthetic evaluation families become exposed once inspected;
 any correction must retire those exact holdouts before a new claim.
 Free Kotlin, Python, NumPy, Pillow, GitHub Actions only.
+
+## First study immutability policy
+
+The initial original study was launched under run 41833947043 at source commit bdca0462, with all evaluation families and thresholds frozen. The workflow has been switched to **manual historical reproduction only**, avoiding accidental repeated evaluation when fixing packaging or Android's optional research-test imports. For subsequent training changes, use a new study revision with new, unexposed source families. This does not change the running historical experiment or its metrics.

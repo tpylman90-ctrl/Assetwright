@@ -1,7 +1,12 @@
 """Unit tests only; arithmetic fixtures never count as GLB evidence."""
 from __future__ import annotations
 import unittest
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    # Android's standard offline lesson checks have NO numeric dependencies.
+    # The dedicated research workflow installs NumPy and runs these tests.
+    raise unittest.SkipTest("Optional NumPy-backed geometry research not installed")
 from native_composition_student import (
     PAIRS,ORDER,TOTAL,expected_stems,fit_student,predict,acceptance
 )

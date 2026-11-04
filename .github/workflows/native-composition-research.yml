@@ -1,17 +1,9 @@
 name: AssetWright Native Three-Operation Composition Research
 
+# Original 1120-source study already launched at bdca0462. Once inspected,
+# its held-out synthetic families are not fresh blind benchmarks. New model
+# changes require freshly reserved families and a NEW research workflow.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'app/src/main/java/com/assetwright/app/mini/NativeCompositionLab.kt'
-      - 'app/src/test/java/com/assetwright/app/mini/NativeCompositionBatchTest.kt'
-      - 'app/src/test/java/com/assetwright/app/mini/NativeCompositionReconstructionTest.kt'
-      - 'tools/mini_ai/native_composition_student.py'
-      - 'tools/mini_ai/test_native_composition_student.py'
-      - 'tools/mini_ai/audit_native_composition_reconstruction.py'
-      - 'tools/mini_ai/render_composition_review.py'
-      - '.github/workflows/native-composition-research.yml'
   workflow_dispatch:
 
 permissions:
