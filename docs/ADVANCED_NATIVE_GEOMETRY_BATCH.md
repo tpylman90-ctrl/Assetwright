@@ -92,3 +92,25 @@ References for a subsequent continuity-and-guide-rail stage:
   https://help.autodesk.com/cloudhelp/ENU/Fusion-Patch/files/SFC-REF-LOFT-DLG.htm
 
 These are conceptual teachers, not paid mesh generators or runtime assets.
+
+## First-run measurement correction and benchmark retirement
+
+The first 912-GLB source export completed successfully, but its independent
+measurement audit rejected an **unstable descriptor**. In tall aspect-shift
+shapes, an underside lift moved the naïve top/bottom bounding-box center,
+causing the supposed lower-surface recess to appear negative. Twisted
+sections also invalidated world-axis corner measures. A source GLB
+structural pass alone was not sufficient to validate this analysis.
+
+We did not weaken any acceptance threshold or adjust mesh geometry to
+manufacture success. The corrected descriptors measure corner fullness in
+the **actual local section basis**, and measure the upper/lower radial
+difference about the true cross-sectional center determined by paired
+source vertices. These measurements are invariant to cross-section
+rotation and independently anchored to actual GLB coordinates.
+
+The initial `advval1..4` and `advshift1..4` geometries were inspected
+in debugging and are now retired, not pristine blind tests. New unseen
+synthetic families `advval5..8` and `advshift5..8` replace them. The 720
+training examples and strict independent study gates are unchanged. The
+original failed build and uploaded GLBs remain in GitHub Actions evidence.

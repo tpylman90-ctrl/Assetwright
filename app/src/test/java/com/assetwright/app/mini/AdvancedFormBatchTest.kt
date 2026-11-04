@@ -23,17 +23,20 @@ class AdvancedFormBatchTest {
                 .87f+(i%4)*.15f+(i/4)*.045f))
     }
     private val validation=listOf(
-        Dimensions(3.14f,2.04f,1.08f),
-        Dimensions(4.79f,1.72f,1.47f),
-        Dimensions(5.94f,2.81f,1.76f),
-        Dimensions(2.21f,1.54f,2.13f)
-    ).mapIndexed { i,d -> Family("advval"+(i+1),d) }
+        // New source families: previous advval1..4 are retired because
+        // their geometry was inspected while fixing old descriptor math.
+        Dimensions(3.33f,1.89f,1.14f),
+        Dimensions(4.57f,2.35f,1.61f),
+        Dimensions(5.45f,1.72f,1.37f),
+        Dimensions(2.74f,2.11f,1.95f)
+    ).mapIndexed { i,d -> Family("advval"+(i+5),d) }
     private val aspectShift=listOf(
-        Dimensions(7.45f,1.08f,.86f),
-        Dimensions(2.16f,3.46f,1.32f),
-        Dimensions(3.38f,1.45f,3.21f),
-        Dimensions(5.85f,1.06f,2.57f)
-    ).mapIndexed { i,d -> Family("advshift"+(i+1),d) }
+        // New aspect-ratio stress families; earlier shift1..4 exposed.
+        Dimensions(7.89f,.98f,.92f),
+        Dimensions(2.37f,3.65f,1.18f),
+        Dimensions(3.67f,1.37f,3.45f),
+        Dimensions(6.22f,1.15f,2.71f)
+    ).mapIndexed { i,d -> Family("advshift"+(i+5),d) }
 
     private val trainLevels=listOf(.08f,.17f,.26f,.35f,.44f,
         .53f,.62f,.71f,.80f,.89f)

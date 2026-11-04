@@ -26,8 +26,10 @@ VALID_LEVELS = (.135,.365,.595,.825)
 SHIFT_LEVELS = (.21,.41,.61,.81)
 PHASES = {
     "train": (tuple("advtrain%02d" % i for i in range(1,13)),TRAIN_LEVELS),
-    "validation": (tuple("advval%d" % i for i in range(1,5)),VALID_LEVELS),
-    "aspect_shift": (tuple("advshift%d" % i for i in range(1,5)),SHIFT_LEVELS),
+    # New V2 synthetic holdouts: val1..4 and shift1..4 were inspected
+    # diagnosing an invalid geometric measurement, so are retired.
+    "validation": (tuple("advval%d" % i for i in range(5,9)),VALID_LEVELS),
+    "aspect_shift": (tuple("advshift%d" % i for i in range(5,9)),SHIFT_LEVELS),
 }
 SIGNAL_FOR = {
     "SECTION_LOFT": 0, "TANGENT_SWEEP": 1, "SECTION_TWIST": 2,
@@ -57,7 +59,10 @@ def features_from_glb(path: Path, stations: int, segments: int) -> tuple[list[fl
     def ring_data(row):
         # glTF: x=source X, y=source Z-up, z=-source Y (longitudinal).
         cx = (row[0][0]+row[12][0])*.5
-        cy = (row[6][1]+row[18][1])*.5
+        # Position of the local shape frame comes from opposite lateral
+        # vertices, not from upper/lower extrema. A lower recess may lift
+        # the bottom without moving the true section center.
+        cy = (row[0][1]+row[12][1])*.5
         w = abs(row[0][0]-row[12][0])*.5
         h = abs(row[6][1]-row[18][1])*.5
         cz = sum(point[2] for point in row)/segments
@@ -80,11 +85,25 @@ def features_from_glb(path: Path, stations: int, segments: int) -> tuple[list[fl
                      last[0][0]-stats[-1][0])
     twist=abs(theta)/(math.pi*.47)
     center=rings[12]
-    corner=(abs(center[3][0]-stats[12][0])/stats[12][3]*
-            abs(center[3][1]-stats[12][1])/stats[12][4])-.5
-    upper=abs(center[3][0]-stats[12][0])
-    lower=abs(center[21][0]-stats[12][0])
-    recess=1-lower/max(upper,.025)
+    # Intrinsic tangent/cross-section basis: orientation-independent corner
+    # fullness. Global X/Y projections wrongly penalized twisted sections.
+    def vector(k):
+        return (center[k][0]-stats[12][0],
+                center[k][1]-stats[12][1])
+    v0,v6,v3,v21=(vector(k) for k in (0,6,3,21))
+    d0=v0[0]*v0[0]+v0[1]*v0[1]
+    d6=v6[0]*v6[0]+v6[1]*v6[1]
+    if min(d0,d6)<1.e-6:
+        raise ValueError("Collapsed intrinsic section frame")
+    component0=(v3[0]*v0[0]+v3[1]*v0[1])/d0
+    component6=(v3[0]*v6[0]+v3[1]*v6[1])/d6
+    corner=abs(component0*component6)-.5
+    # Paired radial norms detect a genuine one-sided recess, but are
+    # invariant when an ellipse is merely rotated about its centerline.
+    # Normalization by original lateral position removes aspect dependence.
+    top_norm=v3[0]*v3[0]+v3[1]*v3[1]
+    low_norm=v21[0]*v21[0]+v21[1]*v21[1]
+    recess=(top_norm-low_norm)/max(v3[0]*v3[0],.02)
     rib=1-width[12]/max(.025,(width[6]+width[18])*.5)
     measured=[shoulder,path_bend,twist,corner,recess,rib]
     if any(not math.isfinite(x) or abs(x)>2.5 for x in measured):
