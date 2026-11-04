@@ -36,3 +36,19 @@ The first screenshots of the V2 rocker experiments exposed an important false-po
 The next research-only correction increases hull angular sampling in the two development fixtures to 32 segments; creates a wider recessed side-channel with subtle upper/lower lips in the SAME continuous hull; and raises the lower-hull central profile by up to 0.11 m at full strength. The independent GLB audit now requires the *side elevation's actual underside vertices* to move monotonically (>0.075 m cumulative), in addition to the previously enforced channel half-span condition (tightened to >0.15 m). This rejects an operation that only moves hidden X coordinates while looking unchanged from the side.
 
 The diagnostic renderer also uses a fitted camera and directional shading to expose, not hide, shape weaknesses. These are reuses of inspected **development** families; results are never represented as unseen generalization. The V1 model/checkpoints and production Android presets remain untouched. Even if the new checks pass, human visual approval remains mandatory.
+
+## Visual correction results and remaining design deficiency
+
+Source revision: `78a68c19cbef4ba0b7eef393bae1b586f63713a6`.
+Verified research workflow: https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41748866385.
+Independent audit passed the new side-elevation and GLB structural gates.
+
+Measured real GLB changes at strength 0.90:
+- Development A: lower side halfspan 0.816708 -> 0.581496 m; underside height 0.420 -> 0.519 m.
+- Development B: lower side halfspan 0.943988 -> 0.672119 m; underside height 0.420 -> 0.519 m.
+- Composed four-operator GLBs: 3,354 triangles each, below the original 12K development budget.
+- No production Android generator parameter was enabled; regular signed APK CI passed only as a nonregression check.
+
+**Crucial visual honesty:** these improvements are mechanically measurable and more apparent in the diagnostic images, but the overall craft still reads as a thin, blocky plank. The cockpit remains a separate visibly intersecting bubble, not an integrated windshield/open-cabin interface; the plain forward cap and exposed straight support struts are also far from professional vehicle quality. The two development families have been inspected and must never be represented as untouched independent design benchmarks. There is **no human production approval**.
+
+Next engineering priority: a new native parametric multi-station hull loft with intentional nose/shoulder/rear haunch volume, variable cross sections and curvature/fairing continuity; an actual cockpit opening/glazing attachment boundary; and formed structural suspension/hover interfaces. This needs new surface-shape evaluation metrics and human clay/wire approval before another mini-AI vocabulary expansion or production claim. Do not pursue mere ring-count inflation as a surrogate for shape fidelity.
