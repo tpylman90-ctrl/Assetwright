@@ -23,6 +23,8 @@ jobs:
       STUDY_COMMIT: f34b8517b026b8f6d0e7505c425a1e3c8d805a38
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Reconcile source revision without relying on shallow history
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
