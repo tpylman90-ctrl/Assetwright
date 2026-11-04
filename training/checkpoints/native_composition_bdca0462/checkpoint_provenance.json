@@ -1,0 +1,14 @@
+{
+  "schema": "assetwright-native-composition-checkpoint-v1",
+  "source_commit": "bdca0462528731f98addf09578a891f697ac46ce",
+  "successful_run": 41833947043,
+  "source_hash_count": 1120,
+  "reconstructed_hash_count": 320,
+  "model_sha256": "fa44f0d846b373f2896d0c966fab7098ddb85732292c2df9346aafaef4d37adf",
+  "holdout_status": "exposed_synthetic_not_reusable_as_blind",
+  "source_artifact": "assetwright-three-operator-source-geometry-research",
+  "trained_from_original_native_GLBS": true,
+  "retrained_during_archival": false,
+  "android_deployed": false,
+  "human_approved": false
+}
