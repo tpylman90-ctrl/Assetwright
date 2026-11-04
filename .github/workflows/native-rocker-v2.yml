@@ -7,6 +7,7 @@ on:
       - 'app/src/main/java/com/assetwright/app/mini/**'
       - 'app/src/test/java/com/assetwright/app/mini/NativeRockerV2Test.kt'
       - 'tools/mini_ai/audit_native_rocker_v2.py'
+      - 'tools/mini_ai/render_native_rocker_v2.py'
       - '.github/workflows/native-rocker-v2.yml'
   workflow_dispatch:
 
@@ -48,6 +49,13 @@ jobs:
           python tools/mini_ai/audit_native_rocker_v2.py \
             --source local-data/rocker-v2 \
             --out local-data/rocker-v2/v2_rocker_audit.json
+      - name: Install free CPU image rasterizer
+        run: python -m pip install 'Pillow==11.3.0'
+      - name: Render original GLB clay and wire diagnostic review images
+        run: |
+          python tools/mini_ai/render_native_rocker_v2.py \
+            --source local-data/rocker-v2 \
+            --out local-data/rocker-v2/previews
       - name: Upload evidence for human review only
         if: always()
         uses: actions/upload-artifact@v4
@@ -56,5 +64,7 @@ jobs:
           path: |
             local-data/rocker-v2/*.glb
             local-data/rocker-v2/*.json
+            local-data/rocker-v2/previews/*.png
+            local-data/rocker-v2/previews/*.json
           if-no-files-found: warn
           retention-days: 21
