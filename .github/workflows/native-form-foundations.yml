@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write # research-only prerelease after every gate passes
 
 jobs:
   form-foundations:
@@ -58,3 +58,42 @@ jobs:
             local-data/form-foundations/evaluation/*.json
           if-no-files-found: warn
           retention-days: 21
+
+      - name: Save verified research checkpoint and source GLBs in durable prerelease
+        if: success() && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          study=Path('local-data/form-foundations/evaluation')
+          report=json.loads((study/'evaluation.json').read_text())
+          model=json.loads((study/'candidate_shape_student.json').read_text())
+          predictions=json.loads((study/'development_predictions.json').read_text())
+          assert report['status']=='passed_development_holdout'
+          assert report['all_meshes_structurally_valid'] is True
+          assert report['candidate_accuracy']>=.90
+          assert report['train_glbs']==45 and report['heldout_glbs']==20
+          assert all(v>=3 for v in report['per_class_correct'].values())
+          assert model['schema']=='assetwright-owned-geometric-form-student-v1'
+          assert model['android_deployable'] is False
+          assert predictions['accuracy']==report['candidate_accuracy']
+          assert sorted(model['training_source_sha256'])==report['train_source_hashes']
+          assert not set(report['train_source_hashes']) & set(report['heldout_source_hashes'])
+          (study/'RESEARCH_ONLY.md').write_text(
+              'AssetWright ORIGINAL form-vocabulary geometry student.\n'
+              '45 source-hashed Kotlin GLBs trained; 20 synthetic family holdouts evaluated.\n'
+              'This is INTERNAL morphology discrimination, not professional\n'
+              '3D model synthesis, blind real-world generalization, or Android deployment.\n')
+          PY
+          cd local-data/form-foundations
+          zip -jq source_forms.zip source/*.glb source/*.json
+          tag="assetwright-native-forms-$(echo "$GITHUB_SHA" | cut -c1-12)"
+          gh release create "$tag" --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" --prerelease \
+            --title "AssetWright native shape foundations (research-only)" \
+            --notes "From-scratch five-class geometry student. 45 native training GLBs; 20 synthetic dimension-heldout GLBs. Classification is not general model-building or production approval. Source hashes, original GLBs and explicit limits included." \
+            source_forms.zip evaluation/evaluation.json \
+            evaluation/candidate_shape_student.json \
+            evaluation/development_predictions.json evaluation/RESEARCH_ONLY.md
