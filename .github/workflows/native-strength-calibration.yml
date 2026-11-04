@@ -1,13 +1,9 @@
 name: AssetWright Frozen Classifier / Strength Calibration
 
+# Historical measured/heldout research REPRODUCTION ONLY. Previously exposed
+# evaluation prompts are not new blind benchmarks. Explicit manual dispatch
+# preserves reproducibility without accidental automatic model promotion.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'tools/mini_ai/native_strength_calibration.py'
-      - 'tools/mini_ai/test_native_strength_calibration.py'
-      - 'training/curricula/native_strength_blind_v2.json'
-      - '.github/workflows/native-strength-calibration.yml'
   workflow_dispatch:
 
 permissions:

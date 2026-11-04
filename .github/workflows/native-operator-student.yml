@@ -1,21 +1,9 @@
 name: AssetWright Owned Native Operator Student
 
+# Historical measured/heldout research REPRODUCTION ONLY. Previously exposed
+# evaluation prompts are not new blind benchmarks. Explicit manual dispatch
+# preserves reproducibility without accidental automatic model promotion.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'tools/mini_ai/native_operation_intent_student.py'
-      - 'tools/mini_ai/native_operator_proposal_batch.py'
-      - 'tools/mini_ai/native_operator_glb_audit.py'
-      - 'tools/mini_ai/test_native_operation_intent_student.py'
-      - 'tools/mini_ai/test_native_operator_proposal_batch.py'
-      - 'tools/mini_ai/native_skill_clinic.py'
-      - 'tools/mini_ai/test_native_skill_clinic.py'
-      - 'training/curricula/native_skill_clinic_v1.json'
-      - 'training/reviews/vehicle_visual_feedback.json'
-      - 'app/src/test/java/com/assetwright/app/mini/NativePlannerBenchmarkExportTest.kt'
-      - 'app/src/main/java/com/assetwright/app/mini/NativeCadOperationBridge.kt'
-      - '.github/workflows/native-operator-student.yml'
   workflow_dispatch:
 
 permissions:
