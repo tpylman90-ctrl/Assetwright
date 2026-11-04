@@ -28,9 +28,8 @@ class NativeFormLabTest {
             assertEquals(0,original.indices.size%3)
             assertTrue(original.indices.all { it in original.vertices.indices })
             assertTrue(changed.indices.all { it in changed.vertices.indices })
-            if(kind != NativeFormKind.CYLINDER)
-                assertTrue("Control must alter real source geometry: $kind",
-                    original.vertices != changed.vertices)
+            assertTrue("Control must alter real source geometry: $kind",
+                original.vertices != changed.vertices)
         }
         val sample=NativeFormSpec(NativeFormKind.TAPERED_LOFT,2f,1f,1f,.5f)
         for (bad in listOf(Float.NaN,Float.POSITIVE_INFINITY,-.1f,1.01f)) {

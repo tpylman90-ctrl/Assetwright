@@ -57,6 +57,10 @@ object NativeFormLab {
                     (ss.sign * abs(ss).toDouble().pow(exponent.toDouble()).toFloat())
                 } else cc to ss
                 val widthScale = when (spec.kind) {
+                    // A cylinder's native strength is radius expansion.
+                    // Every training level must create genuinely different
+                    // source-hashed geometry, not duplicate GLB labels.
+                    NativeFormKind.CYLINDER -> .80f + .40f * spec.strength
                     NativeFormKind.ELLIPSOID -> bulb
                     NativeFormKind.TAPERED_LOFT -> taper
                     else -> 1f

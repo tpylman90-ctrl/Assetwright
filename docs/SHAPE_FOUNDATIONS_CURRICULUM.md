@@ -18,7 +18,7 @@ geometry BEFORE extending the vehicle-only planner.
 
 ## Actual first experiment
 The new Kotlin NativeFormLab creates five original continuous, capped
-mesh types: cylinder, rounded-box superellipse extrusion, sampled ellipsoid,
+mesh types: cylinder (strength changes its radius), rounded-box superellipse extrusion, sampled ellipsoid,
 tapered loft and arch sweep with fixed-orientation cross sections.
 These are elementary research shapes, NOT true CAD NURBS/3D fillets,
 advanced moving-frame sweeps or an arbitrary asset generator.
@@ -48,3 +48,6 @@ https://help.autodesk.com/view/fusion360/ENU/?contextId=SLD-LOFT-SOLID
 Next stage: add full capsule/cone, continuous inverse parameter learning,
 real tangent-oriented sweeps and variable-section curvature probes; then
 test on entirely new object families before any production promotion.
+
+## First live training lesson
+The initial live run correctly rejected the corpus because its cylinder strength did not move any vertices: three training GLBs of the same numeric family were byte-for-byte identical. Distinct command labels were not independent geometry. We fixed the actual native cylinder radius control instead of dropping its SHA-256 uniqueness gate or lowering model acceptance thresholds. The discarded initial run remains available in GitHub Actions as research history.
