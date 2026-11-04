@@ -1,0 +1,58 @@
+{
+  "schema": "assetwright-owned-native-interface-inverse-v1",
+  "architecture": "self-trained multi-target ridge response student",
+  "source_glbs": 360,
+  "feature_mean": [
+    0.3130600032258468,
+    0.25961805338168226,
+    0.20216077198713883,
+    0.02059825482054399
+  ],
+  "feature_std": [
+    0.07732548257647927,
+    0.07963392715324555,
+    0.02496514675051677,
+    0.01
+  ],
+  "weights": [
+    [
+      0.5089999997777782,
+      0.5131944447777766,
+      0.5092777774999997
+    ],
+    [
+      0.22742661298881833,
+      -3.9627422965364545e-07,
+      8.509777934652731e-07
+    ],
+    [
+      -3.8773529335076325e-07,
+      0.22750879359099713,
+      1.714119263232413e-05
+    ],
+    [
+      3.7623526741272826e-07,
+      1.2231551239203898e-05,
+      0.227536255326175
+    ],
+    [
+      6.33927025833628e-07,
+      2.4344848017155394e-05,
+      -2.6835330348255915e-05
+    ]
+  ],
+  "features": [
+    "source_bore_ratio",
+    "source_flange_amplitude",
+    "normalized_flange_transition_area",
+    "local_discrete_surface_curvature"
+  ],
+  "targets": [
+    "bore_strength",
+    "flange_strength",
+    "blend_strength"
+  ],
+  "training_hashes_sha256": "cc36d87e855485dbbb1948b53e9dbedad0c78cc44eddc4c88eb62405031c2df1",
+  "external_mesh_generator": false,
+  "android_deployable": false
+}

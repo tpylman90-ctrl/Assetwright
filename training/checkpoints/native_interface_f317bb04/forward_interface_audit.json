@@ -1,0 +1,1229 @@
+{
+  "schema": "assetwright-native-through-bore-forward-audit-v1",
+  "status": "verified_development_only",
+  "groups": {
+    "validation": {
+      "source_glbs": 60,
+      "mean_normalized_surface_rms": 5.92940463609411e-07,
+      "worst_normalized_surface_rms": 1.8365247063528368e-06,
+      "mean_p95_distance": 1.6062768695244706e-06
+    },
+    "aspect_shift": {
+      "source_glbs": 60,
+      "mean_normalized_surface_rms": 5.828135833025473e-07,
+      "worst_normalized_surface_rms": 1.8356768975776708e-06,
+      "mean_p95_distance": 1.5875643062647494e-06
+    }
+  },
+  "checks": {
+    "all_120_independent_source_sha_and_manifold_topology": true,
+    "new_dimension_forward_rms": true,
+    "aspect_shift_forward_rms": true,
+    "new_dimension_worst_surface_rms": true,
+    "aspect_worst_surface_rms": true
+  },
+  "passed": true,
+  "evidence": [
+    {
+      "stem": "aspect_shift__if05__s00",
+      "phase": "aspect_shift",
+      "target_sha256": "2e16c7f00b8162a0386f1f7a0247aa31bcbd2ea32428c5c4f91420bcb2e44c47",
+      "student_sha256": "eded66cd2b7eb5ebbf426b93e827a2fed5ba4e65e8e9d2642de6ee207484cae8",
+      "normalized_surface_rms": 7.996053224606235e-07,
+      "p95_normalized_surface_distance": 2.407897867900841e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if05__s01",
+      "phase": "aspect_shift",
+      "target_sha256": "55e367f43c4dbe37f95fb05fe5ff83e7213a3f34061239288d2ebe10989e0ead",
+      "student_sha256": "9507474a9c39f39d671ab7ec5587f90aca5b814bdb245a487f26be63485f67bf",
+      "normalized_surface_rms": 2.0878312407953861e-07,
+      "p95_normalized_surface_distance": 6.159208975303903e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if05__s02",
+      "phase": "aspect_shift",
+      "target_sha256": "519400c8256afe0d4778bd3154c4b561bad7d646be3156a821f0f3cb125edf79",
+      "student_sha256": "e9141c57464a118f8b70c8a75b268b50c381805e65fcab9cba766c00e753291d",
+      "normalized_surface_rms": 1.2524409238871092e-06,
+      "p95_normalized_surface_distance": 3.581793383224795e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if05__s03",
+      "phase": "aspect_shift",
+      "target_sha256": "f20da604c0b968b1a8b520ee06be2ced07390f3169233a74e8934122ae8d2041",
+      "student_sha256": "099a0c49b016edccf9ccf5a0abd2c6f740a8656d897b8647ebb3028c80c6d7fc",
+      "normalized_surface_rms": 9.284549024399595e-07,
+      "p95_normalized_surface_distance": 2.896118321037739e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if05__s04",
+      "phase": "aspect_shift",
+      "target_sha256": "ba880b95cfa69f54e0e99adb5c01f005114f4abee4e84c71a897829697620bbf",
+      "student_sha256": "348acad8f456c4e18612e822c2c13cbe058c4c43c64998abd67ae2e661d9d199",
+      "normalized_surface_rms": 6.25767112158884e-07,
+      "p95_normalized_surface_distance": 1.6663664130754368e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if05__s05",
+      "phase": "aspect_shift",
+      "target_sha256": "40e047eaca74d7efd15a817c7cfa9ce7c6115dd5689df1010c34a5835237079a",
+      "student_sha256": "6d02d90622e110958e3fea97c714f42be19cea6ecaaf35b8fccac648d59595a7",
+      "normalized_surface_rms": 7.304717236109932e-07,
+      "p95_normalized_surface_distance": 2.0296476305355868e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if05__s06",
+      "phase": "aspect_shift",
+      "target_sha256": "a128d970359043298dab4973dd20cbe6df83c3feea86930d07780e8ba2bdb61d",
+      "student_sha256": "08655cb532123c781165c96770b65b14805b5202003722ad3f239bbe8b023123",
+      "normalized_surface_rms": 1.2783795882503655e-07,
+      "p95_normalized_surface_distance": 2.590532311638837e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if05__s07",
+      "phase": "aspect_shift",
+      "target_sha256": "269670a78ee55b032f1083aa32e9e8e5ebee357e2855b0d0acdf01fb1c200d86",
+      "student_sha256": "ea9d7ff653bd3158fdd2631cd47d63b9cb19ddc956bd28569a8663d2f83b710b",
+      "normalized_surface_rms": 4.5829625601692413e-07,
+      "p95_normalized_surface_distance": 1.2173286602527186e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if05__s08",
+      "phase": "aspect_shift",
+      "target_sha256": "75c801b558e608be7fef4a44865c09ff053c90ff5f6d02c0ca238c4ff1285eb8",
+      "student_sha256": "0c9d2cb91b3fedb04e084078b3bb598cee9bd29887983c6a485d3b3f35215de6",
+      "normalized_surface_rms": 9.83305376914504e-07,
+      "p95_normalized_surface_distance": 2.7068802206614096e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if05__s09",
+      "phase": "aspect_shift",
+      "target_sha256": "29fa90c4188e015407e2275f5bc5de184594c73b57860a08b78a80d3e5ca1567",
+      "student_sha256": "bb4bb639f4b70eaab7966cbee6cb1186fd4cc18db76fd271d3b754d0a5db25ab",
+      "normalized_surface_rms": 4.815669617512429e-07,
+      "p95_normalized_surface_distance": 1.4253284620202107e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if05__s10",
+      "phase": "aspect_shift",
+      "target_sha256": "3434ce3ceeadebb7f2400c713df1476dae8b68ef296259eb106cf1d3fa4622fd",
+      "student_sha256": "a230f9343fcd55cb4433e478a6ac6f14507a2d374d0f374d815928c49198b372",
+      "normalized_surface_rms": 6.384795997502917e-07,
+      "p95_normalized_surface_distance": 1.8042503198320181e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if05__s11",
+      "phase": "aspect_shift",
+      "target_sha256": "cca60a0e0a4cdfe397962d68a8f0ef43e4f00de957ee1f187cc8b128d233f1ae",
+      "student_sha256": "d1ee504c447c96fe4bb85530c62601a9b308357ec6f0044b6bfb2fb0bac4a5e8",
+      "normalized_surface_rms": 6.915216172915321e-07,
+      "p95_normalized_surface_distance": 1.8030208925747448e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if05__s12",
+      "phase": "aspect_shift",
+      "target_sha256": "bf595022f16c0014a40efcdf3707c4bfd6ce125d4f5a5c19f6d960f002100a74",
+      "student_sha256": "24ec5f8c353792f7d294cd258865d6f8d5e4b20e2bf265c79a747b0a5af1cf56",
+      "normalized_surface_rms": 3.1356568322684504e-07,
+      "p95_normalized_surface_distance": 7.467841480043431e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if05__s13",
+      "phase": "aspect_shift",
+      "target_sha256": "5cd747cbbe2c2e1b7229d899f76168f20edd88979495687fdd3546b61b0add1c",
+      "student_sha256": "40306660141e779c905178d1cd7a214d8c07ad6bde470d840334e61e2af0ef8c",
+      "normalized_surface_rms": 8.782101197582254e-07,
+      "p95_normalized_surface_distance": 2.4356283134586075e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if05__s14",
+      "phase": "aspect_shift",
+      "target_sha256": "53dda6d0680b4e25995d3bf4c114656e6fa381be29ce8c3f7d01229374a03e50",
+      "student_sha256": "124a49bae7039a5efc5fc715b063582fccff6d463d831f28f1e5539a40b6fd2b",
+      "normalized_surface_rms": 4.1420050283698233e-07,
+      "p95_normalized_surface_distance": 1.0772248951319476e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s00",
+      "phase": "aspect_shift",
+      "target_sha256": "9bfef8d24500c6e5bd23ca9d0e72746377187eb4006761b0fc4701460fc8eef2",
+      "student_sha256": "f0d743e4e6aee727a410f1e82da9f337d90c0aaf93009206b7242ff75cddc887",
+      "normalized_surface_rms": 5.682960353876833e-07,
+      "p95_normalized_surface_distance": 1.5649540311100851e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s01",
+      "phase": "aspect_shift",
+      "target_sha256": "cb0742d8c01b7447cf8260392ebb9fda32253ba9c3a94424b2c294e090ca2ba8",
+      "student_sha256": "4d173b0eedc3ddd0a4525be6ff5a3143d628f4a4a944858b438dacea2832d430",
+      "normalized_surface_rms": 3.0980164243058153e-07,
+      "p95_normalized_surface_distance": 7.729629494080016e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s02",
+      "phase": "aspect_shift",
+      "target_sha256": "3a1b588af03fe8a6f7016ea41565e3d99aab61b7a9e681b6bb23b259e3b95c19",
+      "student_sha256": "3cdc02f5112e372bb76482c1140774ef009c8c3ccc30ef8bd076e7997d78d5d3",
+      "normalized_surface_rms": 1.8704900650535486e-07,
+      "p95_normalized_surface_distance": 2.4797435522427155e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s03",
+      "phase": "aspect_shift",
+      "target_sha256": "09d990ad648344a7e6b6db26fa424ae90f72cbb9f262492d69b1eee216446be8",
+      "student_sha256": "881b79d73ae53593e3e78152bf0f37397ace2fec322d2d32006d8d47155f3c2c",
+      "normalized_surface_rms": 1.0950113607218442e-06,
+      "p95_normalized_surface_distance": 2.827426578460089e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s04",
+      "phase": "aspect_shift",
+      "target_sha256": "85f1acce3778be3115a2664c61c90f3850bc078ead78356243f3622c6d724346",
+      "student_sha256": "7ad5c1e42e5170d5f60eed679299b9883ee4611bfbb88e566102a92bdafe39f4",
+      "normalized_surface_rms": 5.398453568668564e-07,
+      "p95_normalized_surface_distance": 1.6001284841562813e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s05",
+      "phase": "aspect_shift",
+      "target_sha256": "f5c372799000cd4f9e585a28f3127e3e177417580838db5c135d14a180b01b3a",
+      "student_sha256": "df2b82952bf5f866befe089ce5e069ca7350bb5612fcf45d9606275ea84f5643",
+      "normalized_surface_rms": 3.8317496980993866e-07,
+      "p95_normalized_surface_distance": 1.136612510578992e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s06",
+      "phase": "aspect_shift",
+      "target_sha256": "dec44d367a13549781ee28a281801d373dcfd268db220bb2f78ca63dda4a9a7e",
+      "student_sha256": "2f2a0023efdcca8ae13bbcdbe41430c6bb1875f19b3a286fc2c2c1c12a11c815",
+      "normalized_surface_rms": 1.8356768975776708e-06,
+      "p95_normalized_surface_distance": 5.123471995620661e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s07",
+      "phase": "aspect_shift",
+      "target_sha256": "e5edb211001e5e942f4ec958d4137fec9c33c53bfd9116762a995f8eb9f82f7b",
+      "student_sha256": "81bd11539e5f3429401a91b95713d7ebfa09ce2c95fc28d99d4d2763393167e0",
+      "normalized_surface_rms": 2.6963485847782304e-07,
+      "p95_normalized_surface_distance": 5.542718968472063e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s08",
+      "phase": "aspect_shift",
+      "target_sha256": "62c6ff5e1482549a61f0ee3b6870b41a063049eb0299aa02558dd25282c82ce5",
+      "student_sha256": "2970d194f0e91e37a7a35feac42e170b94b79042c29ba637afbc99975b391e45",
+      "normalized_surface_rms": 9.268322531197023e-07,
+      "p95_normalized_surface_distance": 2.5857130211229936e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s09",
+      "phase": "aspect_shift",
+      "target_sha256": "035a797d806bb72419405323c7b9468b5c7735e9ddbf351401f6f74c549e1b5f",
+      "student_sha256": "35e34dbdeb55ca8b620c7d607c11d81640b4907044ebcc5a495f3967a6465c34",
+      "normalized_surface_rms": 8.086122145612637e-07,
+      "p95_normalized_surface_distance": 2.4231049881879287e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s10",
+      "phase": "aspect_shift",
+      "target_sha256": "3eda2e22f2ac2b544159b21000a2ab472f9ae998933ac3cd136b39ab66f6b1df",
+      "student_sha256": "5f9dde499704ca2b1851bed85c2c214a54c343301458f4cfd5881c0c9d100350",
+      "normalized_surface_rms": 3.5753124359456055e-07,
+      "p95_normalized_surface_distance": 8.398776476744584e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s11",
+      "phase": "aspect_shift",
+      "target_sha256": "52e4bd4f2c5ca8400100a5fa60279c6fc6adb12c303fb31bf868f3ca233a1f0c",
+      "student_sha256": "31b0adfc2975f3f319b476eb49a184fe4d5dcafcfad318d74f5142d3fa44dac2",
+      "normalized_surface_rms": 1.4773647599140068e-06,
+      "p95_normalized_surface_distance": 3.878886937569101e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s12",
+      "phase": "aspect_shift",
+      "target_sha256": "df75306b24febeac4e5d5034ccee0703b09b409f02fb2d64fe730f99e8939362",
+      "student_sha256": "991604da46318d30b1635114802b1c85390a65354efc96645125d31114481e30",
+      "normalized_surface_rms": 2.43840195197037e-07,
+      "p95_normalized_surface_distance": 7.388448954640573e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s13",
+      "phase": "aspect_shift",
+      "target_sha256": "6eb13a14ba6e889f60f976049e6d446411dd6c6f297a9047bec6192b20fb7a63",
+      "student_sha256": "8291b53fdb78c42a3a4587ec0daf12f51181d517a62184afb15b47b43fe0d591",
+      "normalized_surface_rms": 7.18041536526574e-07,
+      "p95_normalized_surface_distance": 2.0848773529294015e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if06__s14",
+      "phase": "aspect_shift",
+      "target_sha256": "94d53231afc92f7b99f9eacaa9e4ee22f29932cdc1d69d9922db9b66a0c37673",
+      "student_sha256": "d28e4e56373711bbad9f9679f3cdb5d1c73841411c0baefecdc846c78c8337e1",
+      "normalized_surface_rms": 8.366578724520299e-07,
+      "p95_normalized_surface_distance": 2.475443484566613e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s00",
+      "phase": "aspect_shift",
+      "target_sha256": "f409649e011f8ffa177c711e277bd53ebf3e75785efd7f44ccda7f6187e834e9",
+      "student_sha256": "e14f107a2ff43695bdce603524bfaccadd2a9694e0eace9479870e5e59d04b94",
+      "normalized_surface_rms": 2.681501694529157e-07,
+      "p95_normalized_surface_distance": 7.445202653535486e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s01",
+      "phase": "aspect_shift",
+      "target_sha256": "810e979e4e2884641111bfc086f1b8ef5a74cbb1e4a73824c60dd982a929eb01",
+      "student_sha256": "00ad533b0d1ed8cdcffaf0eda66387a78d802b1b57a0ca684bf926bfc29b8fb6",
+      "normalized_surface_rms": 3.529859621581919e-07,
+      "p95_normalized_surface_distance": 8.204366463793399e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s02",
+      "phase": "aspect_shift",
+      "target_sha256": "4931b1d75df3d950b0f640efb6ffec3b38d12e50453551cf537623d68c123148",
+      "student_sha256": "71288bfe8e2c32171d2a716759d7e2849fcd0e990febaecfcb9378b7b18252f8",
+      "normalized_surface_rms": 4.883437670078642e-07,
+      "p95_normalized_surface_distance": 1.1700334373782073e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s03",
+      "phase": "aspect_shift",
+      "target_sha256": "6756433a017440adb4e82799c007445313b6d0c885b32cfb33b90c196d4a20ea",
+      "student_sha256": "2a6bb242bc235c653d22d26945ee2d7e6598ea9c4c1201649022753336eed975",
+      "normalized_surface_rms": 1.8508233441275472e-07,
+      "p95_normalized_surface_distance": 5.873412638751223e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s04",
+      "phase": "aspect_shift",
+      "target_sha256": "fb631b225e35a882166040c84067ef37c869b375e3395d962dfb8ec30a3a01ac",
+      "student_sha256": "aaede89e0d8630a91458ae6c930bef7a921f0134220e7bc1be8d7ac2cde62af3",
+      "normalized_surface_rms": 9.050573983032869e-07,
+      "p95_normalized_surface_distance": 2.7408831346603586e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s05",
+      "phase": "aspect_shift",
+      "target_sha256": "c1603761101fb2abd5efcb31d13addb22fd3277b8b166dbeff0d06452c1d8066",
+      "student_sha256": "ca4accc9c7121335b6c3c528a351cb58cabad37a6dabb87a0605d854661499f3",
+      "normalized_surface_rms": 3.9130905817550835e-07,
+      "p95_normalized_surface_distance": 8.667506242787302e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s06",
+      "phase": "aspect_shift",
+      "target_sha256": "1b5986dfaa832f32ed6b2593dc6705492a4707788d9717d2f2bed7ae04c7d4de",
+      "student_sha256": "2e15a9fe0d36c31b9884f26b73173d4b3f766aceab1bdbdffdb02cb5a5f4f579",
+      "normalized_surface_rms": 3.308736062559743e-07,
+      "p95_normalized_surface_distance": 7.805949546858122e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s07",
+      "phase": "aspect_shift",
+      "target_sha256": "d16ad3ac0675866cf41565c1fa3743d455afb3eb834ceb6c5fbdec22ddae71e7",
+      "student_sha256": "953c3b8b5caa401da0fa6798d95e6e18b36c96d45cdc5898f0564a1a6e39f8a7",
+      "normalized_surface_rms": 2.96800845109031e-07,
+      "p95_normalized_surface_distance": 7.37164078511789e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s08",
+      "phase": "aspect_shift",
+      "target_sha256": "6b58a2dfff78e66b83859b04e5e90d4e8783d43bb6617cb1c6c07ce01390bbe5",
+      "student_sha256": "50429b68a5804432201666a908f4396ed2f9507f3ebb95ce204dd014c66d1968",
+      "normalized_surface_rms": 2.698562249360131e-07,
+      "p95_normalized_surface_distance": 7.623895984075064e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s09",
+      "phase": "aspect_shift",
+      "target_sha256": "b58de0e949aded30b558688ba32dd774681fe0b5b6013b4ef86b9eaa23b0e76e",
+      "student_sha256": "8435234aaf8981ae818c9bde009949f480503daf7f10dd5ade7873249373b721",
+      "normalized_surface_rms": 6.873236689175555e-07,
+      "p95_normalized_surface_distance": 1.8252195256755222e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s10",
+      "phase": "aspect_shift",
+      "target_sha256": "75ca821bc505bec073bc4167adf2dc6a7f3b114185c62e9c1e6b0b188910f3ce",
+      "student_sha256": "5264e26d6b6823bfaa62ddc4711efb6c6734672f481bced61ad9ab224426784e",
+      "normalized_surface_rms": 4.1288573323268473e-07,
+      "p95_normalized_surface_distance": 1.0795148804157248e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s11",
+      "phase": "aspect_shift",
+      "target_sha256": "23ebf309717ec8cd828d24688af572dd91a8b7d01659da4383f5d392cb2b1bd8",
+      "student_sha256": "2ce3769c8522a80132d7c464a653e523375d4b744070dad84c621faaede9bff8",
+      "normalized_surface_rms": 1.5826390828770295e-07,
+      "p95_normalized_surface_distance": 4.441962082232814e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s12",
+      "phase": "aspect_shift",
+      "target_sha256": "1fca96eb78c70ce8e41dba3496e7b0d5a6d58dca960e93a5b50c4944187d4c91",
+      "student_sha256": "4b568fa0e73d3a176d1524f2f1503a7caf8b06d102defd3fabf7c60e670a18c4",
+      "normalized_surface_rms": 1.3931563708059571e-06,
+      "p95_normalized_surface_distance": 3.963002263674934e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s13",
+      "phase": "aspect_shift",
+      "target_sha256": "bebb35190e9c3c49d3d2d92f97c36fdb344d8326737cbff2e021fe320343fa37",
+      "student_sha256": "512d9214d91db9a57bad9cdec24002c1c00e203102ac32660979460bb11e4392",
+      "normalized_surface_rms": 4.494391012892945e-07,
+      "p95_normalized_surface_distance": 1.217752937052063e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if07__s14",
+      "phase": "aspect_shift",
+      "target_sha256": "96e44e0e9b4e94ba46dfc5db386793358925b0b05b816b8fea94db2bb63220cd",
+      "student_sha256": "83135c17892ab4e9b252f359af838a67ac73ef0734a77fc3ea4a180cd372b595",
+      "normalized_surface_rms": 6.063313362529439e-07,
+      "p95_normalized_surface_distance": 1.6790166857282762e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s00",
+      "phase": "aspect_shift",
+      "target_sha256": "0237e52d31e3b06a781bd8a1e0d827fd180a13f84e0e7fbb697ec8c615d54788",
+      "student_sha256": "eb1bd05c864930f041888e5d3da8507aacfd69a4e9b05d636c8d0633600b5ed2",
+      "normalized_surface_rms": 7.70263951181856e-07,
+      "p95_normalized_surface_distance": 2.255644653725275e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s01",
+      "phase": "aspect_shift",
+      "target_sha256": "74a1089850fedf9d2f92bd8df2c36ebd554b57a5cfe0b90da1335b61a38b9845",
+      "student_sha256": "bf464e8b5fea21c8cbb4a150191bf8102896dd019826dda228512f687d74bc6a",
+      "normalized_surface_rms": 3.8526668887573705e-07,
+      "p95_normalized_surface_distance": 9.66579701044589e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s02",
+      "phase": "aspect_shift",
+      "target_sha256": "fa94e5699cb76a942c2ad18d3ac7dab7b6a484d55ebb593a811d850e4be06fea",
+      "student_sha256": "96f74de9c2a93d5f4f7462d78ed6b18898ddc6446306104a3966ea8362bd4c6a",
+      "normalized_surface_rms": 8.966958045955241e-07,
+      "p95_normalized_surface_distance": 2.515970471733793e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s03",
+      "phase": "aspect_shift",
+      "target_sha256": "3aa3882071fd1c493ceaadc2792f3604aaec2b45bac84491217945e2204c8acc",
+      "student_sha256": "699c5080346fb03124186bb311ca54678e67531b94531dd979a46e15c098dd59",
+      "normalized_surface_rms": 2.568727782249171e-07,
+      "p95_normalized_surface_distance": 7.2198622637809e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s04",
+      "phase": "aspect_shift",
+      "target_sha256": "9c6ec5a4c09ec1f20893fbbd846e3fa00209eb846676d65aad1f42f1c73e550b",
+      "student_sha256": "1d08ee68488426bf1c339262f1958a950f17ad819bd784a1d95477f311ed7837",
+      "normalized_surface_rms": 1.9194666830493692e-07,
+      "p95_normalized_surface_distance": 2.468657691710766e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s05",
+      "phase": "aspect_shift",
+      "target_sha256": "d909ba51458d14b7eb4fdb6cc0c201d0e48acf67cbed776db9755bc65aa8415a",
+      "student_sha256": "5617e2ae6ebef8e69222a9063dc0bfd8db41543bec80e041cb6227ee4bdc3128",
+      "normalized_surface_rms": 5.815181962351049e-07,
+      "p95_normalized_surface_distance": 1.3939795955534904e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s06",
+      "phase": "aspect_shift",
+      "target_sha256": "7752191c3ac73f00667b240501c314336428c63cbc77e8396987cef8c1f3e7c7",
+      "student_sha256": "caaa861b959193bf1d020b57ad003968f50e4ab079f61a0ffb5b7cc1b3d24e9c",
+      "normalized_surface_rms": 3.610592469832421e-07,
+      "p95_normalized_surface_distance": 1.032082885312444e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s07",
+      "phase": "aspect_shift",
+      "target_sha256": "dad2c6da7614185383509843091d410bb384069bebef063ba995337480a2a2bb",
+      "student_sha256": "18a7ddfcdcb904160f6fec94d56e0dafa05d982521967f0e18d92bf892f46c49",
+      "normalized_surface_rms": 2.421765193493888e-07,
+      "p95_normalized_surface_distance": 7.28240116635431e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s08",
+      "phase": "aspect_shift",
+      "target_sha256": "a90deb3cdca567b950d95ba0c74f114f8b45dcf8818f997e8bc32aee87c8fc41",
+      "student_sha256": "b2b42192bc37748723a2f854c8ee3efbfc7b76ac3493cfb0f4b9c67448bf76ce",
+      "normalized_surface_rms": 5.478588798581396e-07,
+      "p95_normalized_surface_distance": 1.2981128104381142e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s09",
+      "phase": "aspect_shift",
+      "target_sha256": "f06bab77ae9cbb14ecdefaae147e0b995f4bd6aeb35a7144a80a6c2971dff1f8",
+      "student_sha256": "4b8f8eaac60e24926c26eb06c4fdec7de27f5c54532d0ddc27750512120b5495",
+      "normalized_surface_rms": 3.503484807003006e-07,
+      "p95_normalized_surface_distance": 8.098276365211945e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s10",
+      "phase": "aspect_shift",
+      "target_sha256": "23e0e2b0cb4ad5a6c9d0b087adf8b559c123e8d36767defcce04e61e3524cc16",
+      "student_sha256": "38c3326ee24b84b99877a1c6de94bf7bc5dcb5a575d7083a7dcb4a9ce8ce5d12",
+      "normalized_surface_rms": 1.6758734751455609e-06,
+      "p95_normalized_surface_distance": 4.63308933745764e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s11",
+      "phase": "aspect_shift",
+      "target_sha256": "3e436404f1c466b6ed9a02b40061db72dba46ab7045facb0da2d4bf9d77870a6",
+      "student_sha256": "84325f4c1b4b96a6bddd61bf6d71496a200f04ecb2546991cb9968c28cb47c69",
+      "normalized_surface_rms": 3.01026908202406e-07,
+      "p95_normalized_surface_distance": 8.579108720702317e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s12",
+      "phase": "aspect_shift",
+      "target_sha256": "c239e5cf9ef93c0ebc54b99993a1052580cd69f0ab9872e01f2490d72703d664",
+      "student_sha256": "88eef59271e85684143bf597b1b8e2a9ec8b9bc1d44f4dde17c8eb9a28bb0a7d",
+      "normalized_surface_rms": 3.813440896119657e-07,
+      "p95_normalized_surface_distance": 9.283600626330635e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s13",
+      "phase": "aspect_shift",
+      "target_sha256": "5c1965e730423695df1a114aec759c73c35240bcc58bcfd9141743ed7d409b06",
+      "student_sha256": "58c387f2970474cd4bc69d941b3163869b4e38bc784e81478642040c56ce9b3f",
+      "normalized_surface_rms": 4.801357591623236e-07,
+      "p95_normalized_surface_distance": 1.2424937401421098e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "aspect_shift__if08__s14",
+      "phase": "aspect_shift",
+      "target_sha256": "a12d2810fd59c6f87305fad77c7ccda892e87658b01089c859fe7fdb8b26d821",
+      "student_sha256": "0aa47da627c743901dfce8ad38ec4bbe09709db09c90f26d4b416062935f83af",
+      "normalized_surface_rms": 2.6069067897213877e-07,
+      "p95_normalized_surface_distance": 6.761032074433805e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s00",
+      "phase": "validation",
+      "target_sha256": "2f1b8a8057fc0190e82f7046ba13e60f1431aa476073fe6a65c072c96fdc806f",
+      "student_sha256": "e06df89ace2d4a23da4e4e3e228049e14dc8b53f940e683c529b4b933e6f3cf8",
+      "normalized_surface_rms": 5.565652717426749e-07,
+      "p95_normalized_surface_distance": 1.4589832029634e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s01",
+      "phase": "validation",
+      "target_sha256": "3f846222787a483c064f124a4fe4ca3aa1ed234cd121242c68f9a550ef85ec25",
+      "student_sha256": "7b33d475875b2caf84d68e69cfa0a206460bf87263e6634c631d7f918af3f563",
+      "normalized_surface_rms": 2.931988658691619e-07,
+      "p95_normalized_surface_distance": 6.574804711107671e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s02",
+      "phase": "validation",
+      "target_sha256": "e2da910a80d792f738522782bf71674c9e3fb17f36d7609de31d1a4034308e99",
+      "student_sha256": "6284319e7a684fad557bea972af23db042ef9b0694037178e792b445f675f88a",
+      "normalized_surface_rms": 4.2407532462775253e-07,
+      "p95_normalized_surface_distance": 9.847455450490201e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s03",
+      "phase": "validation",
+      "target_sha256": "78511c132a82b615f10aa56cf0dd5dfecd42f80ee6b33629c897b9ac83bfb755",
+      "student_sha256": "75ea257653869a4ff16df3ba75645409cab20fe7884da57fd5df915afa0279fd",
+      "normalized_surface_rms": 2.6658998416274934e-07,
+      "p95_normalized_surface_distance": 7.286957483524567e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s04",
+      "phase": "validation",
+      "target_sha256": "0e455b913bf0c7ebf43da52420233a07aeb9d9d16ca4871c871dc95e62f5ca28",
+      "student_sha256": "a648ca5723a0ba8f499c73b5281d4e1a0b7418e2306abc9cd0515db789d682f4",
+      "normalized_surface_rms": 8.900194668113982e-07,
+      "p95_normalized_surface_distance": 2.4690833491245162e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s05",
+      "phase": "validation",
+      "target_sha256": "a5f91d6b335482c55e51944df2dd2092a8cef3e532e8e9bb0527d2a96381fb92",
+      "student_sha256": "b45ff723ec8d2f224fa3e0f0f1257e5a906c5a0882e2c42b039b4c4fe9bedb05",
+      "normalized_surface_rms": 4.004299874500697e-07,
+      "p95_normalized_surface_distance": 8.409641756572875e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s06",
+      "phase": "validation",
+      "target_sha256": "ed02a7618c91616862e131bed02f1cd5f3044f00d9bcf72857b270f0d784ccad",
+      "student_sha256": "b3f205ccf222b8b3eae33b4685436afe691b92c377680bb6836e382cf05b016f",
+      "normalized_surface_rms": 4.286292731737295e-07,
+      "p95_normalized_surface_distance": 1.313756871838964e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s07",
+      "phase": "validation",
+      "target_sha256": "1710efafb4c76dbc9fe6f3ceeb04df9b5d48d52353192475825e2133f0abbe89",
+      "student_sha256": "38cebbcf6da22964cf6ce2e7c137145c559b66d84a6aabc712324839cb13b8e6",
+      "normalized_surface_rms": 1.5526392777607299e-06,
+      "p95_normalized_surface_distance": 4.412306757905054e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s08",
+      "phase": "validation",
+      "target_sha256": "76b186cdd19d4fa935320a5546982e1d2096727fe82251849eae69602e6bd647",
+      "student_sha256": "6b646df8720b26f3d3151839f4dbe3c0b6ddf9a528f4465f25b03a0afef0391a",
+      "normalized_surface_rms": 2.810520362647186e-07,
+      "p95_normalized_surface_distance": 7.834069971208431e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s09",
+      "phase": "validation",
+      "target_sha256": "bb440044b0c4aad9c4955861cc50c505eb783b5ec83f18264c4a5bc25f7a0acf",
+      "student_sha256": "7c404ffa12dfd039185cf0e352e31826850523484563757c478254c8f6457edc",
+      "normalized_surface_rms": 2.936806813896297e-07,
+      "p95_normalized_surface_distance": 5.719883720305644e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s10",
+      "phase": "validation",
+      "target_sha256": "78fa67780bf89cf8b04a4fd171fa294e552c334ea20bae04b5fb726d3e3e6603",
+      "student_sha256": "26f434ebe808e4f4abc4c40b937f3f920a9ab2cccce479ec97e00faf227eebe1",
+      "normalized_surface_rms": 5.397032765691485e-07,
+      "p95_normalized_surface_distance": 1.3450392862223608e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s11",
+      "phase": "validation",
+      "target_sha256": "5c20cad4364bbaa1012f0b53620e0a99918a042f1b1cda84b59e775e350b94ed",
+      "student_sha256": "c575d70b9d34fd468a3edb077473296cd54744ee549711be5ad56b57b4afabfd",
+      "normalized_surface_rms": 4.833290731595851e-07,
+      "p95_normalized_surface_distance": 1.4384682304078453e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s12",
+      "phase": "validation",
+      "target_sha256": "1dcd61968b9b81741636556e65b9b93eb2b1bbcd0e0c2f1f6517c211b31c95a4",
+      "student_sha256": "f000b35358641a50fd82cdd90c4c5f21650f530109e7539a41a5fa9093bbea5c",
+      "normalized_surface_rms": 1.0035748024895574e-06,
+      "p95_normalized_surface_distance": 2.718095913712771e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s13",
+      "phase": "validation",
+      "target_sha256": "98a981d4a457584fa6657aec7cb1f5d3aaab0c87a707e7444f9cd3caea1f8952",
+      "student_sha256": "71723d81807fbcd9208e7340b16bc967265636f7852677a3f4f6bd003e751197",
+      "normalized_surface_rms": 5.484930998630782e-07,
+      "p95_normalized_surface_distance": 1.295140345432655e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if05__s14",
+      "phase": "validation",
+      "target_sha256": "af8cc3d9f08f20f7c714a39e56d42f4b8fb9b03e053ccff77a7b066553783cc2",
+      "student_sha256": "0be08892a20a9190f8ea5744f0976066e2a0791c39593dfb83e9a1c569f1f8e4",
+      "normalized_surface_rms": 8.237582268660877e-07,
+      "p95_normalized_surface_distance": 2.3496004104758524e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s00",
+      "phase": "validation",
+      "target_sha256": "8459a60a813544df54ca8cd804c018edbd81193e8920e6db57b1d33a5edbc416",
+      "student_sha256": "2e3afd5f8b344de74750586eece9b0a2df88be584c827aae2c2a2642ad20886f",
+      "normalized_surface_rms": 7.317521296157882e-07,
+      "p95_normalized_surface_distance": 2.0720269770210413e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s01",
+      "phase": "validation",
+      "target_sha256": "c5973a484e00e246698f67066b82457acd25c24ccc1ec815fc0601a9420c2e64",
+      "student_sha256": "0cb0a01a35758e4a5346d8a7b7e41a22ea72adfb69ebf8945177e29f294b8e1b",
+      "normalized_surface_rms": 2.7499784540147e-07,
+      "p95_normalized_surface_distance": 7.482935162347294e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s02",
+      "phase": "validation",
+      "target_sha256": "c662a067c88dc8173811b1f6d75873fd9ceb34d332c8755e16924e4f0322ead7",
+      "student_sha256": "8557e4848047e7693659858d4aa48955b7c00abad0f5406c9f14422f8218cb43",
+      "normalized_surface_rms": 9.623373042952656e-07,
+      "p95_normalized_surface_distance": 2.5832220657209135e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s03",
+      "phase": "validation",
+      "target_sha256": "d49292aa8c227f93acce5ca8281de710992b140929b757f63fbc165173d2dfa6",
+      "student_sha256": "f244a6c0ffcdf0fdfd07e20c3e5d14f4763f1151ae07f9e54ff0511500079c1e",
+      "normalized_surface_rms": 4.3261250517525836e-07,
+      "p95_normalized_surface_distance": 1.0321481049079423e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s04",
+      "phase": "validation",
+      "target_sha256": "0af3c4ea6a31fa72ea9ffb48ecdef474404ff225a11d8ecaa7edbb33fa10b33c",
+      "student_sha256": "454a26a9cb5d365882d3975d50b97012a86271bb7d2854b63bc253f6d16822d0",
+      "normalized_surface_rms": 4.435953950034318e-07,
+      "p95_normalized_surface_distance": 1.0652352438955718e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s05",
+      "phase": "validation",
+      "target_sha256": "d5eb5f46ca7da2757dd4b57a241f830ee45d4ca9d2fce2a4d535581196ae7c46",
+      "student_sha256": "30ba8970fc158b330beed2a822a6a6af98843de5e817a201a3970432ca4ae656",
+      "normalized_surface_rms": 2.7324383238375633e-07,
+      "p95_normalized_surface_distance": 7.987112754608078e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s06",
+      "phase": "validation",
+      "target_sha256": "f71f3bf4dad9ead571b4d81aa85f1681fc8eb4f91ac7d6f8ddca9e9d7813da02",
+      "student_sha256": "af921f5e8548b0b62ed7aa665e1aa090b230e27b5ca966e5aaf55a030698121d",
+      "normalized_surface_rms": 4.7165266245005596e-07,
+      "p95_normalized_surface_distance": 1.3495096973837725e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s07",
+      "phase": "validation",
+      "target_sha256": "5c164e1e36fa2728291b8bc3351e153ff6c803169cc2d36e78ca2f9908680a24",
+      "student_sha256": "f016789d5fbfba5b127147fb958921e56aae765fe76411ae2f1e9f04ca41d5df",
+      "normalized_surface_rms": 1.2180304011010225e-06,
+      "p95_normalized_surface_distance": 3.315753694502102e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s08",
+      "phase": "validation",
+      "target_sha256": "8f99a76b7aec17f9eb4ad71480870b3c9fc0d01286fb755a7996a9851b88ad16",
+      "student_sha256": "9cc517a3d3a3fa09e1edfc027f278f61a08cd1e7ea565c9162e0ac74b740480b",
+      "normalized_surface_rms": 3.5121494023058233e-07,
+      "p95_normalized_surface_distance": 8.310400126043594e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s09",
+      "phase": "validation",
+      "target_sha256": "e5ede944b88f120c60d5ec3f35708f1d75fef77145c6975031e8987ba04e2198",
+      "student_sha256": "3aea110cd65b091b0486f83012ee197fee45bbccdcdb771485414c6a5b708ddd",
+      "normalized_surface_rms": 6.304668903447511e-07,
+      "p95_normalized_surface_distance": 1.8260845309268404e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s10",
+      "phase": "validation",
+      "target_sha256": "46336ac28552ad7334882d315bae7367c456540efc7a095271571c74fd5c8710",
+      "student_sha256": "b82d5f483c996444cca27ac8738dd58a21539f79ade6b2f24248d5b5901c1704",
+      "normalized_surface_rms": 7.319800943012978e-07,
+      "p95_normalized_surface_distance": 2.214243412840158e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s11",
+      "phase": "validation",
+      "target_sha256": "7a94b1610194b14e64934e4583f013d77db8d0d0c0f3cce702ddd9d19f3b63f4",
+      "student_sha256": "c48c9be1fcdacf1f190f9d57422eb13802018ba64c3f98859ed1fc046593322d",
+      "normalized_surface_rms": 1.6801264561302656e-07,
+      "p95_normalized_surface_distance": 3.506728817875568e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s12",
+      "phase": "validation",
+      "target_sha256": "ed71e686962ea073e78de64842d9b4cd62d232e345565d41f7e64661ef257a4e",
+      "student_sha256": "ec223466cce11537c0031f1da14b22bf0385aa5f746198fd0bcdd75307faeac6",
+      "normalized_surface_rms": 3.804323417419272e-07,
+      "p95_normalized_surface_distance": 7.938659073559878e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s13",
+      "phase": "validation",
+      "target_sha256": "a55bef574f2fca01d9208d2763222c23ca053108b5303544bcf7d82463fb800c",
+      "student_sha256": "f7e23c2a21b9734bf758c660c9561139e73be22a2b7b97543a8827f7d600e512",
+      "normalized_surface_rms": 4.2950490611130604e-07,
+      "p95_normalized_surface_distance": 1.112394451782457e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if06__s14",
+      "phase": "validation",
+      "target_sha256": "99a1341f8add0225477d6db0e23d309d67b32e5d48aa116a1e981fea6ff41871",
+      "student_sha256": "5b76322a3357fee4df8a7c8d4476cd8834e4b60d9452213fbae737dd62e02cd7",
+      "normalized_surface_rms": 7.21896432223373e-07,
+      "p95_normalized_surface_distance": 2.058877836269091e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s00",
+      "phase": "validation",
+      "target_sha256": "7aa1e196941f468e884d668888680619ccb99fa21882165e1eee8d56083f2127",
+      "student_sha256": "8fe912d34d4f5f019e71619de8ca025f7aa011deb1f489cd7bf076e7eb49b6a4",
+      "normalized_surface_rms": 4.067321281071379e-07,
+      "p95_normalized_surface_distance": 1.1445534013710517e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s01",
+      "phase": "validation",
+      "target_sha256": "e0245eb341c658039cd733e0b21fdc15eb0c1007759f5ea32e05fd166a4a820e",
+      "student_sha256": "3f421a2b520175468fd6648741e89ace344f5ba212c4044a62d2443a59dff7a9",
+      "normalized_surface_rms": 5.584942590719731e-07,
+      "p95_normalized_surface_distance": 1.6399613514223542e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s02",
+      "phase": "validation",
+      "target_sha256": "2a89f7837aab4e29b452a70b4c242908cbbcdfa1fe57a5f489c596c1f9b8cd2d",
+      "student_sha256": "4dd3b541542e85297e4340927022d5bdbbcbaa445e8391ae91636a824bd80859",
+      "normalized_surface_rms": 1.2785280711660945e-06,
+      "p95_normalized_surface_distance": 3.5878106356128626e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s03",
+      "phase": "validation",
+      "target_sha256": "72adceb1bd84f18af09edfc186a957ff2557fb77b5b2ceadb24c4b37f19a287b",
+      "student_sha256": "2ea4ca327d3f87cb9e8ec0c5b7f42735f62748f91014fe689fa8989ef4a90c59",
+      "normalized_surface_rms": 1.3400794280958443e-06,
+      "p95_normalized_surface_distance": 4.220132229291152e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s04",
+      "phase": "validation",
+      "target_sha256": "07dc1d0613ae7e4cce1af8e64b328b57363a840b774972a35b81f89890c022ec",
+      "student_sha256": "bcd49176742a0c1da30d71df0c92a16c1907e6842deb7715ae2ed6c61ec361c3",
+      "normalized_surface_rms": 4.646779777970993e-07,
+      "p95_normalized_surface_distance": 1.1287955749920163e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s05",
+      "phase": "validation",
+      "target_sha256": "75a605ae236e7001357d09febc2dc197b1783a7e641e8d2a65059cb0afd7cc4b",
+      "student_sha256": "b7253599e5680178bf84a8198840d52cdb69ec6438e6ff0c6c71f78ea0a7328c",
+      "normalized_surface_rms": 5.251389583764224e-07,
+      "p95_normalized_surface_distance": 1.47512450981307e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s06",
+      "phase": "validation",
+      "target_sha256": "2683a8aa04d1604f8c28c470dc035903dccf99c142fa29e44019c9b9a869834e",
+      "student_sha256": "234f4ead30ff0c2fe417de633873f940f3d4bb7253b99e10a207455cc15ca839",
+      "normalized_surface_rms": 3.9008541906783784e-07,
+      "p95_normalized_surface_distance": 1.1097208660150872e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s07",
+      "phase": "validation",
+      "target_sha256": "200243cb6c854d2d03aa506961af3365bf1a11b426dbc0f3071221d87dd8b0a3",
+      "student_sha256": "da4cdb603e9342d110feed3179288f4963a91e5f69d56fb99ddfd3965d5f50a9",
+      "normalized_surface_rms": 2.5841179615257107e-07,
+      "p95_normalized_surface_distance": 3.366272035719506e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s08",
+      "phase": "validation",
+      "target_sha256": "69ed30c3f54f0ce49a25c148d976a014447d6c386cd5fd3f3291a54592ad9a85",
+      "student_sha256": "514a92cbd5aae68b66292f7742348ce35093756a6a4e01fb58fdc9c017e712de",
+      "normalized_surface_rms": 2.9960902717981015e-07,
+      "p95_normalized_surface_distance": 7.450131347937655e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s09",
+      "phase": "validation",
+      "target_sha256": "58cda1f1a7766e1bf78e7faaec8c661ccadcdb7cdd3dccbde5e6038f4bf9b78b",
+      "student_sha256": "94b2a81a86b013231a2334ab7f1346d2e68d9b095c7950e44b90d83bd54ac3d3",
+      "normalized_surface_rms": 7.446399992654266e-07,
+      "p95_normalized_surface_distance": 2.0774900264285665e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s10",
+      "phase": "validation",
+      "target_sha256": "abb5fdc32b26bc639058b903d60950229bd2dbac5131843534b88b0a5c3785bc",
+      "student_sha256": "00c649a7f0390dd62793f9d53434a39c34dfdcb076df084f9cecd56eb4cf9c5e",
+      "normalized_surface_rms": 6.495337780913437e-07,
+      "p95_normalized_surface_distance": 1.8652728952542221e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s11",
+      "phase": "validation",
+      "target_sha256": "c336f169b40785ae983e31fda2badcdaa43f85def48b0f89e5bf9226d4f9f88b",
+      "student_sha256": "974971c95e682fb42055afb4d9c9a1214f26641d11789bc8288a494ac53b8dc2",
+      "normalized_surface_rms": 2.607675503696262e-07,
+      "p95_normalized_surface_distance": 4.801632267063735e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s12",
+      "phase": "validation",
+      "target_sha256": "cf6c4888cbdb415589dddd1d6b9f212ff475c785d0007c2acce563812d4fcc52",
+      "student_sha256": "f8a81382f412f32c7a13b2c22ff82b7d354fad0d5ec7c9149c039f0146a841d4",
+      "normalized_surface_rms": 3.6598839208645607e-07,
+      "p95_normalized_surface_distance": 9.10846839358313e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s13",
+      "phase": "validation",
+      "target_sha256": "07b0c4dfc73747eddc878b4f6c6f1bcd6e6c05d552324ac1c79cebd2148b5053",
+      "student_sha256": "a75c8989942fa033628e354366ce042b6ddf4072b388ead3c3bde93181b656d3",
+      "normalized_surface_rms": 1.1860607415929332e-06,
+      "p95_normalized_surface_distance": 3.4467337260216173e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if07__s14",
+      "phase": "validation",
+      "target_sha256": "1ef8e45d4df9e2eb601a6b0c2debb13eb8afc79fdbb9f9db3172a03884fdcac1",
+      "student_sha256": "d9aa9283a83e4822be136b8b2325ce4ab74b3d0c59cc70fa98717accc7f136ee",
+      "normalized_surface_rms": 3.226973300518153e-07,
+      "p95_normalized_surface_distance": 8.73861189754042e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s00",
+      "phase": "validation",
+      "target_sha256": "e07a152e2427b454cf3b1dc87cc70b77fcf9a54808f88de4ca232b8a50733fa5",
+      "student_sha256": "c5867b614b9943f8ea41360959c2fce1f10d6855d4ef411da0b728e952d8b674",
+      "normalized_surface_rms": 3.7706824979548763e-07,
+      "p95_normalized_surface_distance": 1.0372093925594678e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s01",
+      "phase": "validation",
+      "target_sha256": "b2b7598cb7814c1fdcb8d5cd26c3fb708c15364a5f60d4ef103045493ea6f4cd",
+      "student_sha256": "acc0f3b7f2f245fd7a6275b6c27cfb501840469bdfc3bd62387ab16c2322e738",
+      "normalized_surface_rms": 4.028654308928495e-07,
+      "p95_normalized_surface_distance": 1.0431680686484707e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s02",
+      "phase": "validation",
+      "target_sha256": "0c3eec42fe07a6d88d3663f1ab998aed2f0b2e6e6d886d2d50eb5e7d379e9c1c",
+      "student_sha256": "46c5e28498c81866ed32d6604a0115af439d8baaf22e4667208a3f1f070a4032",
+      "normalized_surface_rms": 3.872325481427854e-07,
+      "p95_normalized_surface_distance": 1.027399897097332e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s03",
+      "phase": "validation",
+      "target_sha256": "f90bc236dca3376fafe4ba9c6b8ed54ada62420a1427e955fcd4eed70c57165c",
+      "student_sha256": "edaa9f5c43536689a71fd3c716693b6e22adaead4fbf9554a4b2199faf8ba0d5",
+      "normalized_surface_rms": 6.110859798799138e-07,
+      "p95_normalized_surface_distance": 1.5546057944070762e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s04",
+      "phase": "validation",
+      "target_sha256": "8506c2d8dac315b146fe58d5eb30c62744e195eb5f11e6ba1f0c277b2c1b1111",
+      "student_sha256": "db4700fe982465250c0902605930b4d39015c23df67b5dbc799e8928ec478e19",
+      "normalized_surface_rms": 8.030371703512251e-07,
+      "p95_normalized_surface_distance": 2.383956864324574e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s05",
+      "phase": "validation",
+      "target_sha256": "bc0f9851485fe36a0e55abe7cbb01a9a1e57a2d60b42c48a3adfef2b33a7fc5e",
+      "student_sha256": "3da690697ca7dafd91aea5dd9971c23ff894d358a9cf57195797aed23c88176f",
+      "normalized_surface_rms": 7.15842154350654e-07,
+      "p95_normalized_surface_distance": 2.0423544994470355e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s06",
+      "phase": "validation",
+      "target_sha256": "026a027cd1e6c64420582bc15803e0906ac30024cbddd35d8d5a21a9c59b7ff4",
+      "student_sha256": "970fb78a60f06e97a6eea04fa8bb72bc94d9cc188d21f2f96903dbadcc0733e0",
+      "normalized_surface_rms": 1.8365247063528368e-06,
+      "p95_normalized_surface_distance": 5.3813346477080734e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s07",
+      "phase": "validation",
+      "target_sha256": "c265676a886d5697b2ca5a2f5b3cdb88968ca6c5052266095d13d3f2df9b09f4",
+      "student_sha256": "73a22192d3c04ed336c4c7ec33f4c832fb4f01a9bb3a3f6f2bed2f5dbe229246",
+      "normalized_surface_rms": 2.8456682609707494e-07,
+      "p95_normalized_surface_distance": 4.836004641856086e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s08",
+      "phase": "validation",
+      "target_sha256": "7b65b1d70c9b9dc6f138637fb130e415a4b81d74558c696590e782fa3446d731",
+      "student_sha256": "952105d8958f3c3b3a2d4c16dc82f874321bb25fef87a61b0e45641d4104899f",
+      "normalized_surface_rms": 8.040399387416384e-07,
+      "p95_normalized_surface_distance": 2.139702515642723e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s09",
+      "phase": "validation",
+      "target_sha256": "fc4bf78fe089ef02f6657e49da650b9f36ba8f892e6d099865ec025f549b1063",
+      "student_sha256": "96d1d30df771a5d4f516f84b7ab805682276b61dea6dbc705f1e08314e1e1739",
+      "normalized_surface_rms": 5.86475806630982e-07,
+      "p95_normalized_surface_distance": 1.5256145282798555e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s10",
+      "phase": "validation",
+      "target_sha256": "33f2ba51761933546be28f01de9d6dfd924794cd107e292c6606331d4db75807",
+      "student_sha256": "6f363d51bdf7db355dd3ba6602e4d656ffde0b91f377ca2544eea04ba1cfef32",
+      "normalized_surface_rms": 3.234319765581792e-07,
+      "p95_normalized_surface_distance": 7.495401049641144e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s11",
+      "phase": "validation",
+      "target_sha256": "b6b3935b498593ed913f698e87971a78d3af51496c94a803327bd351002e071f",
+      "student_sha256": "3d29aaeee0c8fa120268ce3eea2b62089c165b91fbc657d0a4f78b62ed5e381e",
+      "normalized_surface_rms": 5.898636488177633e-07,
+      "p95_normalized_surface_distance": 1.455505903415738e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s12",
+      "phase": "validation",
+      "target_sha256": "ba954c2a11f3f239a470a1fa44e2a952ef3e3c6c3823895a7495808600099a2d",
+      "student_sha256": "acd80b27a670a1decb7ce7091976303c6c0cac8194b3d9ab6603355cd32c0e31",
+      "normalized_surface_rms": 3.3513737016117275e-07,
+      "p95_normalized_surface_distance": 9.020610936883529e-07,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s13",
+      "phase": "validation",
+      "target_sha256": "58abff343c44e6f494a14b2a180b1949c8f88fb41899cbf750d8f91f60df4de6",
+      "student_sha256": "acc6bd7ac60b490ac96a0fe67bf7b2deeebc706eaabc545343a829e81209c463",
+      "normalized_surface_rms": 9.894539445383428e-07,
+      "p95_normalized_surface_distance": 2.771667721797554e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    },
+    {
+      "stem": "validation__if08__s14",
+      "phase": "validation",
+      "target_sha256": "b7155ea1b4dc5f5ff74ae5b687d3177e08f26fb9d3870871364ea43070382f1a",
+      "student_sha256": "7e51ec1e31b9cea2b1675ea2d12804d4f8c0f36da6fae6a0306f359cc1acfebf",
+      "normalized_surface_rms": 4.708882345889769e-07,
+      "p95_normalized_surface_distance": 1.3169485787981698e-06,
+      "true_through_bore": true,
+      "one_connected_shell": true
+    }
+  ],
+  "limitations": "Same source parametric housing family; measured source-vertex correspondence, not novel object design, Boolean flexibility or human visual approval."
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "assetwright-connected-interface-study-v1",
+  "status": "passed_development_only",
+  "owned_source_glbs": 480,
+  "train_source_glbs": 360,
+  "dimension_holdout_glbs": 60,
+  "aspect_holdout_glbs": 60,
+  "topology": "one connected closed genus-one through-bore with annular stitched ends",
+  "per_glb_triangle_count": 5248,
+  "source_hashes_unique": true,
+  "physical_topology_audits": 480,
+  "dimension_holdout": {
+    "source_glbs": 60,
+    "mean_parameter_mae": 1.1212705870768114e-05,
+    "max_parameter_error": 7.983669026653817e-05,
+    "per_control_mae": {
+      "bore_strength": 1.039393643016695e-06,
+      "flange_strength": 3.2435868715083304e-06,
+      "blend_strength": 2.9355137097779316e-05
+    },
+    "constant_point_five_baseline_mae": 0.19283333366666666
+  },
+  "aspect_holdout": {
+    "source_glbs": 60,
+    "mean_parameter_mae": 1.1039385681267358e-05,
+    "max_parameter_error": 7.583901491098333e-05,
+    "per_control_mae": {
+      "bore_strength": 1.0758417215872562e-06,
+      "flange_strength": 3.233960241953715e-06,
+      "blend_strength": 2.8808355080261102e-05
+    },
+    "constant_point_five_baseline_mae": 0.18699999972222223
+  },
+  "checks": {
+    "heldout_control_mae": true,
+    "aspect_control_mae": true,
+    "heldout_each_strength": true,
+    "aspect_each_strength": true,
+    "heldout_beats_constant_by_point_thirteen": true,
+    "aspect_beats_constant_by_point_thirteen": true,
+    "heldout_max_error_bound": true,
+    "aspect_max_error_bound": true
+  },
+  "prior_checkpoints_unchanged": true,
+  "android_deployed": false,
+  "human_visual_approval": false,
+  "limitations": "Single original parametric housing family, not arbitrary Boolean modeling or welded separate bodies; analytic C2 flange envelope is only approximated by triangles; no true Class-A NURBS/G2 face boundary."
+}

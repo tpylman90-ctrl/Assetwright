@@ -1,0 +1,15 @@
+{
+  "schema": "assetwright-native-interface-checkpoint-v1",
+  "source_commit": "f317bb048395eb790e41b6926529b064ada95f3d",
+  "study_run": 41932652201,
+  "source_glbs": 480,
+  "student_generated_glbs": 120,
+  "model_sha256": "3bfe9975300a794469356bc066c0b4b1c7de7f9cb32358ea68b1b9cbedfb3c4f",
+  "all_source_sha256_reconciled": true,
+  "heldout_status": "inspected_synthetic_retired",
+  "learning_gates_passed": 8,
+  "forward_gates_passed": 5,
+  "archival_retraining": false,
+  "android_deployed": false,
+  "human_approved": false
+}
