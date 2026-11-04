@@ -1,0 +1,22 @@
+# Native rocker channel — V2 development (research only)
+
+The first three native operations and the accepted measured inverse v1 checkpoint remain frozen. The original blindfamily benchmark was inspected, so it is no longer pristine. The v1 measured-geometry workflow is now manual reproduction only, to prevent an accidental new release from exposed holdout data.
+
+## Real fourth operation
+
+- recess_lower_rocker deforms **the existing connected hull loft** at the lower sidewall, with angular and longitudinal smoothstep windows and extra axial stations. Its strength is continuous in [0,1].
+- The Android default still uses zero strength. No new loose body overlays, downloaded geometry, or foreign model inference are introduced.
+- applyExpandedProgram is a distinct four-operation bounded V2 executor: sculpt_cockpit_shoulder, recess_lower_rocker, recess_rear_socket, loft_rear_nacelle. The V1 applyProgram and constructionOrder have not changed.
+- No trained V2 text selector or learned planner is asserted. The command sequence is hand-reviewed engineering scaffolding for a future learner.
+
+## Development proof
+
+NativeRockerV2Test exports two original development vehicle configurations, each with baseline, three channel strengths (.25, .50, .90) and a composed four-operation output (.725 each), for ten original Kotlin-generated GLBs and SHA-256 provenance files.
+
+The independent audit_native_rocker_v2.py must verify the corresponding lower-hull GLB stations actually move monotonically (at least 0.012 m between levels, >0.075 m cumulative), a real single closed hull with no invalid or nonmanifold edges, a stable number of mesh parts, original topology gain, the 12K-triangle development cap, and preservation of the channel in the four-step GLB. Negative tests reject duplicates, unknown commands, NaN/overrange strengths, wrong order, and incompatible engine counts.
+
+The native-rocker-v2 GitHub Actions workflow uploads original GLBs and measurements for human visual review **without promoting the research to Android or a new model release**. No false claim of Class-A surface continuity, Boolean openings, fully welded engine transitions, or production appearance is made.
+
+## Next stage
+
+Freeze this v2 source revision after verification. Train an owned four-class selector and measured response learner with untouched, newly reserved vehicle families and a nonvehicle object category. Keep operation-choice accuracy, strength error, actual forward geometry quality and human visual approval as separate gates. Never retune against earlier exposed blindfamily references or silently regress v1 skills.

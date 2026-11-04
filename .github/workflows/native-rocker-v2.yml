@@ -1,0 +1,60 @@
+name: AssetWright V2 Native Rocker Channel Development
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/src/main/java/com/assetwright/app/mini/**'
+      - 'app/src/test/java/com/assetwright/app/mini/NativeRockerV2Test.kt'
+      - 'tools/mini_ai/audit_native_rocker_v2.py'
+      - '.github/workflows/native-rocker-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  v2-native-rocker:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Prepare Android JVM test runtime
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Set absolute original GLB export path
+        run: |
+          echo "ASSETWRIGHT_ROCKER_V2_OUT=$GITHUB_WORKSPACE/local-data/rocker-v2" >> "$GITHUB_ENV"
+      - name: Verify V2 and preserve V1 native geometry tests
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.NativeRockerV2Test \
+            --tests com.assetwright.app.mini.VehicleConstructionTechniqueTest \
+            --tests com.assetwright.app.mini.MeasuredNativeConstructionProgramTest \
+            --rerun-tasks --stacktrace
+      - name: Independently audit source-hashed original GLBs
+        run: |
+          python tools/mini_ai/audit_native_rocker_v2.py \
+            --source local-data/rocker-v2 \
+            --out local-data/rocker-v2/v2_rocker_audit.json
+      - name: Upload evidence for human review only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-v2-original-rocker-glbs-development
+          path: |
+            local-data/rocker-v2/*.glb
+            local-data/rocker-v2/*.json
+          if-no-files-found: warn
+          retention-days: 21
