@@ -15,7 +15,7 @@ OPS=("section_loft","tangent_sweep","section_twist",
 CASES=(
     ("train","advtrain02",("s170","s800")),
     ("train","advtrain11",("s170","s800")),
-    ("aspect_shift","advshift2",("s210","s810")),
+    ("aspect_shift","advshift6",("s210","s810")),
 )
 def run(source:Path,out:Path):
     out.mkdir(parents=True,exist_ok=True)

@@ -114,3 +114,32 @@ in debugging and are now retired, not pristine blind tests. New unseen
 synthetic families `advval5..8` and `advshift5..8` replace them. The 720
 training examples and strict independent study gates are unchanged. The
 original failed build and uploaded GLBs remain in GitHub Actions evidence.
+
+## Verified numerical study and separate preview recovery
+
+In the corrected original study (source revision
+`f34b8517b026b8f6d0e7505c425a1e3c8d805a38`), the independent Kotlin
+GLB export, Python structural audit, new synthetic dimension partition,
+and extreme aspect-ratio partition all passed. The original research run was
+marked **failure overall** solely because the optional diagnostic renderer
+still requested retired `advshift2` rather than current `advshift6`.
+**The learning verification itself passed.** The archived evaluation reports:
+
+- 912 unique native source-hashed GLBs, with all 912 structurally audited.
+- 720 training shapes and 96/96 classified operations on the new
+  dimension-only partition.
+- 96/96 classified operations on the new aspect-ratio-shift partition.
+- Original owned response-curve mean strength error: 0.0004475435
+  on dimension holdouts; 0.0004191237 on aspect shifts.
+- Constant .5 strength errors: 0.23 and 0.20.
+- All nine strict learning and inverse metrics satisfied (no threshold
+  adjustment), while regular Android shape generation remained unchanged.
+
+The now-inspected `advval5..8` and `advshift5..8` families are frozen
+as historical development evidence; they must not be treated as pristine
+blind benchmarks for future tuning. An isolated archive/review workflow
+downloads the **exact earlier GitHub Actions artifact**, verifies the
+stored source hashes and accepted report, renders missing original GLB
+clay/wire views, and preserves the validated checkpoint without retraining
+on the exposed evaluation set. No renewed classification claim is made by
+that archival workflow.

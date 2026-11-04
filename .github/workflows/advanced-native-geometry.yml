@@ -1,15 +1,8 @@
 name: AssetWright Advanced Native Geometry Learning
 
+# This specific 912-source synthetic evaluation has been inspected.
+# Keep reproduction manual-only; fresh tests require NEW reserved families.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'app/src/main/java/com/assetwright/app/mini/AdvancedFormLab.kt'
-      - 'app/src/test/java/com/assetwright/app/mini/AdvancedFormBatchTest.kt'
-      - 'tools/mini_ai/advanced_form_student.py'
-      - 'tools/mini_ai/test_advanced_form_student.py'
-      - 'tools/mini_ai/render_advanced_form_review.py'
-      - '.github/workflows/advanced-native-geometry.yml'
   workflow_dispatch:
 
 permissions:

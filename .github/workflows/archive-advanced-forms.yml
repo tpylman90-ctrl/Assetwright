@@ -1,0 +1,126 @@
+name: AssetWright Archive Verified Advanced Forms and Visual Review
+
+# One-time source-stable evidence packaging. This does NOT refit or re-evaluate
+# the exposed benchmark, or modify the signed Android application.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/archive-advanced-forms.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  preserve:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GH_TOKEN: ${{ github.token }}
+      STUDY_RUN: '41776001899'
+      STUDY_COMMIT: f34b8517b026b8f6d0e7505c425a1e3c8d805a38
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch exact already-audited, original Kotlin GLB result
+        run: |
+          git merge-base --is-ancestor "$STUDY_COMMIT" "$GITHUB_SHA"
+          mkdir -p local-data/advanced-preserved
+          gh run download "$STUDY_RUN" \
+            --repo "$GITHUB_REPOSITORY" \
+            --name assetwright-advanced-geometry-912-source-glbs-research \
+            --dir local-data/advanced-preserved
+          test -s local-data/advanced-preserved/evaluation/advanced_evaluation.json
+      - name: Reconcile source hashes and original accepted evaluation WITHOUT retraining
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('local-data/advanced-preserved')
+          report=json.loads((root/'evaluation/advanced_evaluation.json').read_text())
+          model=json.loads((root/'evaluation/advanced_candidate.json').read_text())
+          preds=json.loads((root/'evaluation/heldout_predictions.json').read_text())
+          assert report['status']=='verified_development_study'
+          assert report['closed_meshes_audited']==912
+          assert (report['train_glbs'],report['validation_glbs'],
+                  report['aspect_shift_glbs'])==(720,96,96)
+          assert len(report['checks'])==9 and all(report['checks'].values())
+          assert report['validation_metrics']['accuracy']>=.9
+          assert report['aspect_shift_metrics']['accuracy']>=.82
+          assert report['validation_metrics']['oracle_strength_mae']<=.085
+          assert report['aspect_shift_metrics']['oracle_strength_mae']<=.12
+          assert report['prior_native_student_unchanged'] is True
+          assert report['android_deployed'] is False
+          assert model['schema']=='assetwright-advanced-geometry-student-v1'
+          assert model['android_deployable'] is False
+          assert model['no_pretrained_geometry_generator'] is True
+          assert len(preds['validation'])==96 and len(preds['aspect_shift'])==96
+          sources=list((root/'source').glob('*.glb'))
+          manifests=list((root/'source').glob('*.json'))
+          assert len(sources)==len(manifests)==912
+          observed={}
+          for path in sources:
+              data=json.loads(path.with_suffix('.json').read_text())
+              sha=hashlib.sha256(path.read_bytes()).hexdigest()
+              assert sha==data['source_glb_sha256']
+              assert data['native_generator']=='AssetWright-AdvancedFormLab'
+              observed[sha]=data['phase']
+          assert len(observed)==912
+          for phase,hashes,count in (
+              ('train',model['source_sha256'],720),
+              ('validation',report['validation_source_sha256'],96),
+              ('aspect_shift',report['shift_source_sha256'],96)):
+              assert len(hashes)==count and all(observed[sha]==phase for sha in hashes)
+          assert hashlib.sha256(
+              '\n'.join(model['source_sha256']).encode()).hexdigest()==report['train_hashes_sha256']
+          (root/'RESEARCH_ONLY.md').write_text(
+              'Verified original Kotlin advanced-form geometry study.\n'
+              'This step only REPACKAGES the frozen earlier 912-GLB result.\n'
+              'Synthetic original-source test, not novel CAD or production approval.\n'
+              'No model re-training or holdout reuse occurred in this archive job.\n'
+              'Original training/validation/shift GLBs: 720/96/96.\n')
+          print('Frozen, source-hashed development study reconciled: 912 GLBs')
+          PY
+      - name: Render complete original geometry diagnostics from validated sources
+        run: |
+          python -m pip install 'Pillow==11.3.0'
+          python tools/mini_ai/render_advanced_form_review.py \
+            --source local-data/advanced-preserved/source \
+            --out local-data/advanced-preserved/previews-final
+          test "$(find local-data/advanced-preserved/previews-final -name '*.png' | wc -l)" -eq 72
+      - name: Upload full diagnostic render review even if release unavailable
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-advanced-form-complete-visual-review
+          path: |
+            local-data/advanced-preserved/previews-final/*.png
+            local-data/advanced-preserved/previews-final/*.json
+            local-data/advanced-preserved/evaluation/*.json
+            local-data/advanced-preserved/RESEARCH_ONLY.md
+          if-no-files-found: warn
+          retention-days: 21
+      - name: Persist verified checkpoint and complete native GLBs in research prerelease
+        if: success()
+        run: |
+          cd local-data/advanced-preserved
+          zip -q -j all_original_advanced_forms.zip source/*.glb source/*.json
+          tag="assetwright-advanced-forms-$(echo "$STUDY_COMMIT" | cut -c1-12)"
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Archival release exists; refusing overwrite"
+            exit 1
+          fi
+          gh release create "$tag" \
+            --repo "$GITHUB_REPOSITORY" --target "$STUDY_COMMIT" \
+            --prerelease \
+            --title "AssetWright 912 original advanced geometry lessons (research)" \
+            --notes "Source-stable recovery of the earlier independently audited 912 native Kotlin GLBs and learned six-class geometry response curves. Six operations: 96/96 heldout classification and 96/96 synthetic aspect-shift classification. Mean conditional strength errors 0.000448 and 0.000419. This is NOT arbitrary 3D modeling, human approval, G2 surfacing, or Android deployment. Original run learning and mesh audit passed; its optional preview job failed on an outdated filename. Archive rechecks provenance and restores 72 clay/wire renders without retraining." \
+            all_original_advanced_forms.zip \
+            evaluation/advanced_evaluation.json \
+            evaluation/advanced_candidate.json \
+            evaluation/heldout_predictions.json \
+            previews-final/review_manifest.json RESEARCH_ONLY.md
