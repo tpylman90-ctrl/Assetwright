@@ -1,0 +1,60 @@
+name: AssetWright Native Shape Foundations Research
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/src/main/java/com/assetwright/app/mini/NativeFormLab.kt'
+      - 'app/src/test/java/com/assetwright/app/mini/NativeFormLabTest.kt'
+      - 'tools/mini_ai/native_form_foundations.py'
+      - 'tools/mini_ai/test_native_form_foundations.py'
+      - '.github/workflows/native-form-foundations.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  form-foundations:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test original form student and strict partitioning
+        run: python -m unittest discover -s tools/mini_ai -p test_native_form_foundations.py
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Prepare native Kotlin geometry runner
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Export original native shape GLBs
+        env:
+          ASSETWRIGHT_FORM_FOUNDATION_OUT: ${{ github.workspace }}/local-data/form-foundations/source
+        run: |
+          gradle :app:testDebugUnitTest --tests com.assetwright.app.mini.NativeFormLabTest --tests com.assetwright.app.mini.MeasuredNativeConstructionProgramTest --rerun-tasks --stacktrace
+      - name: Learn five form types from actual GLB morphology and audit the heldout source
+        run: |
+          python tools/mini_ai/native_form_foundations.py --source local-data/form-foundations/source --out local-data/form-foundations/evaluation
+      - name: Preserve all original meshes and candidate evaluations including rejections
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-native-form-foundations-original-glbs
+          path: |
+            local-data/form-foundations/source/*.glb
+            local-data/form-foundations/source/*.json
+            local-data/form-foundations/evaluation/*.json
+          if-no-files-found: warn
+          retention-days: 21
