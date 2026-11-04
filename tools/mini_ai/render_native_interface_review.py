@@ -11,8 +11,10 @@ from pathlib import Path
 from render_native_rocker_v2 import load_meshes, render
 
 TRAIN=("train__if02__s21","train__if09__s17")
-HELDOUT=("validation__if01__s12","validation__if03__s04",
-         "aspect_shift__if02__s10","aspect_shift__if04__s08")
+# The original if01..if04 holdouts were inspected diagnosing provenance.
+# Render only source families from the accepted independent if05..if08 batch.
+HELDOUT=("validation__if05__s12","validation__if07__s04",
+         "aspect_shift__if06__s10","aspect_shift__if08__s08")
 VIEWS=("front","rear","side","front_three_quarter")
 
 def run(source:Path,reconstruction:Path,out:Path):

@@ -1,17 +1,8 @@
 name: AssetWright Native Connected-Interface Geometry Learning
 
+# Historical original study, whose synthetic holdout families were inspected.
+# Manual reproduction only; never advertise repeated evaluations as blind.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'app/src/main/java/com/assetwright/app/mini/NativeInterfaceLab.kt'
-      - 'app/src/test/java/com/assetwright/app/mini/NativeInterfaceLabTest.kt'
-      - 'app/src/test/java/com/assetwright/app/mini/NativeInterfaceReconstructionTest.kt'
-      - 'tools/mini_ai/native_interface_student.py'
-      - 'tools/mini_ai/test_native_interface_student.py'
-      - 'tools/mini_ai/audit_native_interface_reconstruction.py'
-      - 'tools/mini_ai/render_native_interface_review.py'
-      - '.github/workflows/native-interface-learning.yml'
   workflow_dispatch:
 
 permissions:

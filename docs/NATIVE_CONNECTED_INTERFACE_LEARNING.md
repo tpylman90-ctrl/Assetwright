@@ -103,3 +103,40 @@ precommitted structural/accuracy gates are retained.
 
 The failed source artifacts remain accessible through the first Actions
 run. Future accepted metrics must come from the fresh families only.
+
+## Accepted second-source study — independent structural and inverse results
+
+The first attempted study was correctly rejected on a source label mismatch
+and its old evaluation families permanently retired. The corrected native
+study used NEW \`validation__if05..if08\` and
+\`aspect_shift__if05..if08\` dimensions, under unchanged fixed gates.
+
+Verified original study source: f317bb048395eb790e41b6926529b064ada95f3d
+GitHub Actions: https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41932652201
+
+- 480 source-hashed Kotlin GLBs with verified one-shell, closed genus-one
+  structural topology: 360 train + 60 new dimension + 60 aspect shift.
+- Owned three-control inverse ridge student: dimension MAE
+  0.000011212705870768114; aspect MAE 0.000011039385681267358.
+- Constant 0.5 strength baselines: 0.1928333 and 0.1870000.
+- Every one of the eight precommitted source/learning gates passed.
+- 120 independently reconstructed Kotlin GLBs; all five forward-audit
+  checks passed. Mean normalized source/reconstruction RMS:
+  0.000000592940463609411 new dimensions and 0.0000005828135833025473
+  extreme proportions.
+- The overall research workflow was marked failed **only** because its
+  optional renderer still requested retired if01..if04 visual-review files.
+  The actual geometry learning and independent forward checks had already
+  passed. The review script was corrected without modifying source geometry,
+  student weights or evaluation families.
+
+This is genuine connected opening topology and a source-trained parameter
+inverse, but the sample task remains a *single deterministic housing family*.
+It does not prove semantic design, general Boolean remeshing, human approved
+surface detail, true separate-component welding or Class-A/NURBS continuity.
+
+The inspected if05..if08 synthetic holdouts are now retired as future
+pristine blind benchmarks. The original training workflow is
+manual-reproduction only. A source-stable archive job copies ONLY the
+verified checkpoint and independently checks original SHA-256 provenance;
+it does NOT retrain or re-run acceptance on exposed test data.

@@ -1,0 +1,149 @@
+name: AssetWright Archive Verified Connected Interface Student
+
+# Freeze the exact original successful *learning and forward validation*
+# evidence. The source workflow's overall failure was optional preview
+# requesting retired filenames; this workflow does NOT refit/re-evaluate.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/archive-native-interface.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  preserve:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GH_TOKEN: ${{ github.token }}
+      STUDY_RUN: '41932652201'
+      STUDY_COMMIT: f317bb048395eb790e41b6926529b064ada95f3d
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download exact audited Kotlin source and student reconstruction artifacts
+        run: |
+          git merge-base --is-ancestor "$STUDY_COMMIT" "$GITHUB_SHA"
+          mkdir -p local-data/interface-preserved
+          gh run download "$STUDY_RUN" \
+            --repo "$GITHUB_REPOSITORY" \
+            --name assetwright-native-connected-interface-research \
+            --dir local-data/interface-preserved
+      - name: Verify source hashes, model, topology audit reports and holdout retirement
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('local-data/interface-preserved')
+          report=json.loads((root/'evaluation/interface_report.json').read_text())
+          forward=json.loads((root/'evaluation/forward_interface_audit.json').read_text())
+          model=json.loads((root/'evaluation/candidate_interface_student.json').read_text())
+          predictions=json.loads((root/'evaluation/heldout_predictions.json').read_text())
+          assert report['schema']=='assetwright-connected-interface-study-v1'
+          assert report['status']=='passed_development_only'
+          assert report['physical_topology_audits']==480
+          assert (report['train_source_glbs'],report['dimension_holdout_glbs'],
+                  report['aspect_holdout_glbs'])==(360,60,60)
+          assert len(report['checks'])==8 and all(report['checks'].values())
+          assert forward['passed'] and len(forward['checks'])==5
+          assert all(forward['checks'].values())
+          assert len(forward['evidence'])==120
+          assert model['schema']=='assetwright-owned-native-interface-inverse-v1'
+          assert model['source_glbs']==360 and model['android_deployable'] is False
+          assert len(predictions['validation'])==60
+          assert len(predictions['aspect_shift'])==60
+          sources={}
+          for file in (root/'source').glob('*.glb'):
+              manifest=json.loads(file.with_suffix('.json').read_text())
+              digest=hashlib.sha256(file.read_bytes()).hexdigest()
+              assert digest==manifest['source_glb_sha256']
+              assert manifest['generator']=='AssetWright-NativeInterfaceLab'
+              sources[file.stem]=digest
+          assert len(sources)==480 and len(set(sources.values()))==480
+          recreated={}
+          for file in (root/'reconstruction').glob('*.glb'):
+              digest=hashlib.sha256(file.read_bytes()).hexdigest()
+              assert digest==file.with_suffix('.sha256').read_text().strip()
+              recreated[file.stem]=digest
+          assert len(recreated)==120 and len(set(recreated.values()))==120
+          assert set(recreated)<=set(sources)
+          for evidence in forward['evidence']:
+              stem=evidence['stem']
+              assert evidence['target_sha256']==sources[stem]
+              assert evidence['student_sha256']==recreated[stem]
+              assert evidence['true_through_bore'] and evidence['one_connected_shell']
+          train=sorted(hashval for stem,hashval in sources.items()
+                       if stem.startswith('train__'))
+          assert len(train)==360
+          assert hashlib.sha256('\n'.join(train).encode()).hexdigest()==\
+                 model['training_hashes_sha256']
+          dest=Path('training/checkpoints/native_interface_f317bb04')
+          dest.mkdir(parents=True,exist_ok=True)
+          mapping={
+              'evaluation/candidate_interface_student.json':'validated_interface_student.json',
+              'evaluation/interface_report.json':'interface_report.json',
+              'evaluation/forward_interface_audit.json':'forward_interface_audit.json',
+              'evaluation/heldout_predictions.json':'heldout_predictions.json'
+          }
+          for src,name in mapping.items():
+              (dest/name).write_bytes((root/src).read_bytes())
+          (dest/'source_hash_manifest.json').write_text(json.dumps(sources,indent=1)+'\n')
+          (dest/'reconstructed_hash_manifest.json').write_text(json.dumps(recreated,indent=1)+'\n')
+          weights=(dest/'validated_interface_student.json').read_bytes()
+          (dest/'checkpoint_provenance.json').write_text(json.dumps({
+              'schema':'assetwright-native-interface-checkpoint-v1',
+              'source_commit':'f317bb048395eb790e41b6926529b064ada95f3d',
+              'study_run':41932652201,'source_glbs':480,'student_generated_glbs':120,
+              'model_sha256':hashlib.sha256(weights).hexdigest(),
+              'all_source_sha256_reconciled':True,
+              'heldout_status':'inspected_synthetic_retired',
+              'learning_gates_passed':8,'forward_gates_passed':5,
+              'archival_retraining':False,'android_deployed':False,
+              'human_approved':False
+          },indent=2)+'\n')
+          (dest/'RESEARCH_ONLY.md').write_text(
+              'Original AssetWright Kotlin through-bore and integrated flange study.\n'
+              '480 verified original one-shell genus-one source GLBs; 120 reconstructions.\n'
+              'All 8 learning and 5 independent forward gates passed.\n'
+              'Old synthetic evaluation is exposed and cannot support future blind claims.\n'
+              'This archival workflow does not retrain or alter model weights.\n'
+              'No Android deployment or visual production approval.\n')
+          print('Validated source-stable interface checkpoint assembled.')
+          PY
+      - name: Render only the matching, verified original and student GLBs
+        run: |
+          python -m pip install 'Pillow==11.3.0'
+          python tools/mini_ai/render_native_interface_review.py \
+            --source local-data/interface-preserved/source \
+            --reconstructed local-data/interface-preserved/reconstruction \
+            --out local-data/interface-preserved/review-final
+          test "$(find local-data/interface-preserved/review-final -name '*.png' | wc -l)" -eq 80
+      - name: Capture original source-verified visual review and durable model evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-connected-interface-80-views-and-checkpoint
+          path: |
+            local-data/interface-preserved/review-final/*.png
+            local-data/interface-preserved/review-final/*.json
+            training/checkpoints/native_interface_f317bb04/*
+          if-no-files-found: warn
+          retention-days: 21
+      - name: Commit exact checkpoint; do not place research weights in Android assets
+        if: success()
+        run: |
+          cp local-data/interface-preserved/review-final/review_manifest.json \
+             training/checkpoints/native_interface_f317bb04/review_manifest.json
+          git config user.name "AssetWright research checkpoint bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add training/checkpoints/native_interface_f317bb04/
+          git commit -m "research: freeze audited native through-bore interface student and 600 source hashes"
+          git push origin HEAD:refs/heads/main
