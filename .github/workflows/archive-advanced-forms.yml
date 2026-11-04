@@ -106,23 +106,46 @@ jobs:
             local-data/advanced-preserved/RESEARCH_ONLY.md
           if-no-files-found: warn
           retention-days: 21
-      - name: Persist verified checkpoint and complete native GLBs in research prerelease
+      - name: Preserve exact validated weights and evaluation as versioned repository checkpoint
         if: success()
         run: |
-          cd local-data/advanced-preserved
-          zip -q -j all_original_advanced_forms.zip source/*.glb source/*.json
-          tag="assetwright-advanced-forms-$(echo "$STUDY_COMMIT" | cut -c1-12)"
-          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo "Archival release exists; refusing overwrite"
-            exit 1
-          fi
-          gh release create "$tag" \
-            --repo "$GITHUB_REPOSITORY" --target "$STUDY_COMMIT" \
-            --prerelease \
-            --title "AssetWright 912 original advanced geometry lessons (research)" \
-            --notes "Source-stable recovery of the earlier independently audited 912 native Kotlin GLBs and learned six-class geometry response curves. Six operations: 96/96 heldout classification and 96/96 synthetic aspect-shift classification. Mean conditional strength errors 0.000448 and 0.000419. This is NOT arbitrary 3D modeling, human approval, G2 surfacing, or Android deployment. Original run learning and mesh audit passed; its optional preview job failed on an outdated filename. Archive rechecks provenance and restores 144 clay/wire renders without retraining." \
-            all_original_advanced_forms.zip \
-            evaluation/advanced_evaluation.json \
-            evaluation/advanced_candidate.json \
-            evaluation/heldout_predictions.json \
-            previews-final/review_manifest.json RESEARCH_ONLY.md
+          target="training/checkpoints/advanced_geometry_f34b8517b026"
+          mkdir -p "$target"
+          cp local-data/advanced-preserved/evaluation/advanced_candidate.json \
+             "$target/validated_advanced_student.json"
+          cp local-data/advanced-preserved/evaluation/advanced_evaluation.json \
+             "$target/advanced_evaluation.json"
+          cp local-data/advanced-preserved/evaluation/heldout_predictions.json \
+             "$target/heldout_predictions.json"
+          cp local-data/advanced-preserved/previews-final/review_manifest.json \
+             "$target/review_manifest.json"
+          cp local-data/advanced-preserved/RESEARCH_ONLY.md "$target/RESEARCH_ONLY.md"
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('training/checkpoints/advanced_geometry_f34b8517b026')
+          weights=(root/'validated_advanced_student.json').read_bytes()
+          report=json.loads((root/'advanced_evaluation.json').read_text())
+          assert report['status']=='verified_development_study'
+          assert all(report['checks'].values())
+          manifest={
+              'schema':'assetwright-advanced-native-checkpoint-v1',
+              'study_commit':'f34b8517b026b8f6d0e7505c425a1e3c8d805a38',
+              'study_run':41776001899,
+              'validation_source_status':'exposed_synthetic_heldout',
+              'model_sha256':hashlib.sha256(weights).hexdigest(),
+              'geometry_count':912,
+              'train_source_count':720,
+              'validation_source_count':96,
+              'aspect_source_count':96,
+              'source_archive_artifact':'assetwright-advanced-geometry-912-source-glbs-research',
+              'android_deployed':False,
+              'research_only':True
+          }
+          (root/'checkpoint_provenance.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          PY
+          git config user.name "AssetWright research checkpoint bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$target"
+          git commit -m "research: preserve source-hashed advanced native learner and heldout report"
+          git push origin HEAD:refs/heads/main

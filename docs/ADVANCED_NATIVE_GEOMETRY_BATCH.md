@@ -146,3 +146,19 @@ that archival workflow.
 
 ## Visual review bookkeeping correction
 The archival render code already produced 144 original GLB diagnostic PNGs (3 development dimensions × 6 operations × 2 strengths × 2 camera views × 2 drawing modes). Its completion counter incorrectly asserted 72, marking the archive job failed after all images had been rendered. The corrected assertion matches the actual agreed 144-case preview matrix. This is a presentation test count correction, **not** a change to the 912 original geometry GLBs, model, measurements, learning acceptance thresholds, or previously inspected holdouts.
+
+## Durable storage fallback (GitHub permission guard)
+
+The isolated archive workflow successfully downloaded the exact earlier
+source artifact, verified 912 matching SHA-256 values and passed all original
+learning gates without fitting the model again. It also generated all 144
+original clay/wire images. A subsequent attempt to create a GitHub release
+returned HTTP 403 despite the workflow requesting `contents: write`.
+No new secrets or permissions were requested. Rather than pretend a release
+succeeded, the updated archive flow records the **already validated weights,
+heldout predictions and evaluation** as versioned research files under
+`training/checkpoints/advanced_geometry_f34b8517b026/` in the public
+repository. Original 912 GLBs remain reproducible from the pinned Kotlin
+generator and are retained in the completed Actions artifact and downloadable
+conversation review ZIP. If the repository push itself is denied, the
+workflow must fail honestly and keep uploaded original evidence.
