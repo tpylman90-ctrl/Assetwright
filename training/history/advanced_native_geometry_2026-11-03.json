@@ -1,0 +1,65 @@
+{
+  "schema": "assetwright-advanced-native-geometry-history-v1",
+  "study_date": "2026-11-03",
+  "source_commit": "f34b8517b026b8f6d0e7505c425a1e3c8d805a38",
+  "checkpoint_commit": "181b2d76aa53b1a96b88d5722fb6f62ad0c7b91d",
+  "checkpoint_directory": "training/checkpoints/advanced_geometry_f34b8517b026",
+  "model_sha256": "d78ae0dc44cea925b8425ecb9e088db76da6cd9d84e280ba7aeee56db8504128",
+  "native_generator": "AssetWright Kotlin AdvancedFormLab",
+  "original_source_glbs": 912,
+  "train_glbs": 720,
+  "validation_glbs": 96,
+  "aspect_shift_glbs": 96,
+  "operations": [
+    "SECTION_LOFT",
+    "TANGENT_SWEEP",
+    "SECTION_TWIST",
+    "SUPERELLIPSE_PROFILE",
+    "LOWER_RECESS",
+    "RIBBED_FAIRING"
+  ],
+  "validation": {
+    "accuracy": 1,
+    "correct": 96,
+    "total": 96,
+    "mean_parameter_error": 0.0004475435056773107,
+    "constant_strength_baseline_error": 0.23
+  },
+  "aspect_shift": {
+    "accuracy": 1,
+    "correct": 96,
+    "total": 96,
+    "mean_parameter_error": 0.00041912370169846364,
+    "constant_strength_baseline_error": 0.2
+  },
+  "independent_audit": {
+    "all_912_source_sha_verified": true,
+    "all_912_mesh_structures_audited": true,
+    "all_nine_acceptance_checks_pass": true
+  },
+  "original_workflow": {
+    "run_id": 41776001899,
+    "url": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41776001899",
+    "overall_conclusion": "failure",
+    "reason": "Optional preview script requested retired family; all geometry and learning checks were successful"
+  },
+  "archive_workflow": {
+    "run_id": 41776825400,
+    "url": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41776825400",
+    "overall_conclusion": "success",
+    "validation_retrained": false,
+    "source_hashes_reconciled": true,
+    "review_pngs": 144
+  },
+  "durability": "Model, training source hash list, evaluated predictions, scorecards, visual manifest and provenance are versioned in public repo; original GLBs are in downloadable Actions research artifact; GitHub release API returned HTTP 403 and no release was claimed.",
+  "benchmark_status": "The tested synthetic dimension and aspect-shift families were inspected; never reuse them as pristine blind evaluations.",
+  "prior_checkpoints_preserved": true,
+  "android_model_deployed": false,
+  "limitations": [
+    "Synthetic shapes from same native procedural generator",
+    "Six isolated operations, not an arbitrary learned multi-step CAD program",
+    "No true Boolean cutouts, component welding or G2 surface continuity",
+    "No external object-category benchmark or human production approval"
+  ],
+  "next_milestone": "Learning composed programs and geometric interfaces with new independent category holdouts, verified forward GLBs and human clay/wire review"
+}
