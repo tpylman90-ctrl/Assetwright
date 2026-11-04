@@ -17,11 +17,13 @@ class NativeInterfaceLabTest {
             .82f+(i%4)*.20f+(i/4)*.05f)
     }
     private val holdout = listOf(
-        Shape(3.18f,1.91f,1.20f),Shape(4.65f,2.43f,1.38f),
-        Shape(6.16f,1.82f,1.70f),Shape(2.26f,1.65f,1.92f))
+        // Retired if01..if04 were inspected diagnosing a provenance mismatch.
+        Shape(3.32f,2.08f,1.17f),Shape(4.83f,2.28f,1.53f),
+        Shape(6.03f,1.77f,1.80f),Shape(2.41f,1.73f,1.95f))
     private val aspect = listOf(
-        Shape(7.75f,.85f,.64f),Shape(2.40f,3.40f,.94f),
-        Shape(3.27f,.95f,3.10f),Shape(6.78f,1.10f,2.40f))
+        // New uninspected aspect families; initial if01..if04 retired.
+        Shape(7.91f,.93f,.69f),Shape(2.63f,3.61f,1.02f),
+        Shape(3.49f,1.01f,3.28f),Shape(6.97f,1.24f,2.54f))
 
     private fun strength(split: String, family: Int, sample: Int, seed: Int) =
         when (split) {
@@ -103,7 +105,8 @@ class NativeInterfaceLabTest {
             Triple("validation",holdout,15),
             Triple("aspect_shift",aspect,15))) {
             for ((family,shape) in shapes.withIndex()) for(index in 0 until count)
-                export(root,phase,family+1,index,shape)
+                export(root,phase,if(phase=="train")family+1 else family+5,
+                    index,shape)
         }
         assertEquals(480,Files.list(root).use { stream ->
             stream.filter { it.fileName.toString().endsWith(".glb") }.count().toInt()

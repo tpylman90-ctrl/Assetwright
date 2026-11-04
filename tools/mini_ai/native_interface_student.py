@@ -35,12 +35,17 @@ def expected_stems():
     return {
         f"{phase}__if{family:02d}__s{index:02d}"
         for phase,(families,cases) in PHASES.items()
-        for family in range(1,families+1)
+        for family in (range(1,families+1) if phase=="train"
+                       else range(5,5+families))
         for index in range(cases)
     }
 
 def expected_recipe(phase,family,index):
-    i=family-1
+    # The native Kotlin source recipe uses the externally visible
+    # one-based family NUMBER; the first audit incorrectly subtracted one.
+    # Keep the signed physical source labels intact and fix the auditor,
+    # never the acceptance limits.
+    i=family
     if phase=="train":
         return np.array([.12+((index*k+i*11)%79)/100.
                          for k in (19,31,47)])
@@ -150,7 +155,8 @@ def load(source:Path):
             raise ValueError("Malformed source identity")
         phase,fam_s,idx_s=match.groups()
         family,index=int(fam_s),int(idx_s)
-        if not(1<=family<=PHASES[phase][0] and 0<=index<PHASES[phase][1]):
+        families=(range(1,13) if phase=="train" else range(5,9))
+        if not(family in families and 0<=index<PHASES[phase][1]):
             raise ValueError("Wrong original interface study partition")
         file=source/(stem+".glb")
         metadata=json.loads((source/(stem+".json")).read_text())

@@ -82,3 +82,24 @@ Conceptual references (not geometry providers):
   https://help.autodesk.com/cloudhelp/2026/ENU/Alias-Tool-Palette-Reference/files/Surfaces-palette/Alias_Tool_Palette_Reference_Surfaces_palette_Surface_Tools_Common_Parameters_html.html
 
 Only free native Kotlin, Python, NumPy, Pillow, GitHub Actions tooling.
+
+## First attempted batch — provenance rejection and fresh evaluation families
+
+The initial native Kotlin export at commit 3a50cb9 successfully generated
+480 original GLBs with a genuine connected genus-one mesh. The Python source
+auditor correctly rejected the batch *before any training* because the
+independent expected-control recipe subtracted one from the native
+one-based family number. The mismatch was measurable in the first source
+manifest (0.23 actual bore versus 0.12 wrongly expected). This is a
+verification bug, not a geometry regression; no test threshold is relaxed.
+
+Because the failed run's numeric evaluation families
+\`validation__if01..if04\` and \`aspect_shift__if01..if04\` were inspected
+while diagnosing the fault, they are retired and will never be called
+fresh blind results. New, independently chosen dimensions and IDs
+\`validation__if05..if08\` and \`aspect_shift__if05..if08\` replace them.
+The original 360 training cases, 60+60 evaluation cardinality and ALL
+precommitted structural/accuracy gates are retained.
+
+The failed source artifacts remain accessible through the first Actions
+run. Future accepted metrics must come from the fresh families only.
