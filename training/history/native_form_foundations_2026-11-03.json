@@ -1,0 +1,34 @@
+{
+  "schema": "assetwright-native-form-foundations-history-v1",
+  "date": "2026-11-03",
+  "status": "verified_development_only",
+  "source_commit": "66ce4ee6005860c20f9524726ad9128832a6e141",
+  "archive_commit": "79b712cf2d077e4fd2b53265238f4176675c01d7",
+  "release_tag": "assetwright-native-forms-79b712cf2d07",
+  "release_url": "https://github.com/tpylman90-ctrl/Assetwright/releases/tag/assetwright-native-forms-79b712cf2d07",
+  "source_glbs": 65,
+  "train_glbs": 45,
+  "synthetic_validation_glbs": 20,
+  "majority_baseline_accuracy": 0.2,
+  "student_accuracy": 1,
+  "per_class_correct": {
+    "CYLINDER": 4,
+    "ROUNDED_BOX": 4,
+    "ELLIPSOID": 4,
+    "TAPERED_LOFT": 4,
+    "ARCH_SWEEP": 4
+  },
+  "all_meshes_structurally_valid": true,
+  "trained_geometry_source": "Original Kotlin NativeFormLab",
+  "previous_student_modified": false,
+  "android_deployed": false,
+  "validation_status": "exposed_development_set_not_blind_for_future",
+  "prior_failure": "Cylinders with distinct strength labels had identical geometry SHA; repaired via native radius scaling without changing thresholds.",
+  "limitations": [
+    "Own-generator synthetic families",
+    "Handcrafted morphology input features",
+    "Not trained to synthesize arbitrary objects",
+    "No G1/G2 or professional surface quality",
+    "No cross-category blind test"
+  ]
+}
