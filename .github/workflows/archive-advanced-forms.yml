@@ -93,7 +93,7 @@ jobs:
           python tools/mini_ai/render_advanced_form_review.py \
             --source local-data/advanced-preserved/source \
             --out local-data/advanced-preserved/previews-final
-          test "$(find local-data/advanced-preserved/previews-final -name '*.png' | wc -l)" -eq 72
+          test "$(find local-data/advanced-preserved/previews-final -name '*.png' | wc -l)" -eq 144
       - name: Upload full diagnostic render review even if release unavailable
         if: always()
         uses: actions/upload-artifact@v4
@@ -120,7 +120,7 @@ jobs:
             --repo "$GITHUB_REPOSITORY" --target "$STUDY_COMMIT" \
             --prerelease \
             --title "AssetWright 912 original advanced geometry lessons (research)" \
-            --notes "Source-stable recovery of the earlier independently audited 912 native Kotlin GLBs and learned six-class geometry response curves. Six operations: 96/96 heldout classification and 96/96 synthetic aspect-shift classification. Mean conditional strength errors 0.000448 and 0.000419. This is NOT arbitrary 3D modeling, human approval, G2 surfacing, or Android deployment. Original run learning and mesh audit passed; its optional preview job failed on an outdated filename. Archive rechecks provenance and restores 72 clay/wire renders without retraining." \
+            --notes "Source-stable recovery of the earlier independently audited 912 native Kotlin GLBs and learned six-class geometry response curves. Six operations: 96/96 heldout classification and 96/96 synthetic aspect-shift classification. Mean conditional strength errors 0.000448 and 0.000419. This is NOT arbitrary 3D modeling, human approval, G2 surfacing, or Android deployment. Original run learning and mesh audit passed; its optional preview job failed on an outdated filename. Archive rechecks provenance and restores 144 clay/wire renders without retraining." \
             all_original_advanced_forms.zip \
             evaluation/advanced_evaluation.json \
             evaluation/advanced_candidate.json \

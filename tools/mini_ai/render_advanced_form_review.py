@@ -41,7 +41,7 @@ def run(source:Path,out:Path):
     result={"schema":"assetwright-advanced-geometry-review-v1",
             "artwork_role":"CPU diagnostic only; no automatic visual approval",
             "render_count":len(images),"files":images}
-    if len(images)!=72:
+    if len(images)!=144:
         raise ValueError("Incomplete multiview development review")
     (out/"review_manifest.json").write_text(json.dumps(result,indent=2)+"\n")
     print("Source verified advanced-form clay/wire previews:",len(images))

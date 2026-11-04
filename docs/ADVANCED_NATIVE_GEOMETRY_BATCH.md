@@ -69,7 +69,7 @@ changing metrics, operations or thresholds.
    aspect-shift partition with >=11/16 per operation, and strict conditional
    strength MAE <=.085/.12 respectively. Also enforce end-to-end error
    and real improvement over constant .50 strength.
-6. Human visual inspection: 72 source-hashed side/three-quarter clay and
+6. Human visual inspection: 144 source-hashed side/three-quarter clay and
    wire frames. Automatic mesh correctness does not constitute approval.
 
 Original training examples and original geometry remain the source of
@@ -139,7 +139,10 @@ The now-inspected `advval5..8` and `advshift5..8` families are frozen
 as historical development evidence; they must not be treated as pristine
 blind benchmarks for future tuning. An isolated archive/review workflow
 downloads the **exact earlier GitHub Actions artifact**, verifies the
-stored source hashes and accepted report, renders missing original GLB
+stored source hashes and accepted report, renders 144 original GLB
 clay/wire views, and preserves the validated checkpoint without retraining
 on the exposed evaluation set. No renewed classification claim is made by
 that archival workflow.
+
+## Visual review bookkeeping correction
+The archival render code already produced 144 original GLB diagnostic PNGs (3 development dimensions × 6 operations × 2 strengths × 2 camera views × 2 drawing modes). Its completion counter incorrectly asserted 72, marking the archive job failed after all images had been rendered. The corrected assertion matches the actual agreed 144-case preview matrix. This is a presentation test count correction, **not** a change to the 912 original geometry GLBs, model, measurements, learning acceptance thresholds, or previously inspected holdouts.
