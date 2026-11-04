@@ -1,0 +1,67 @@
+{
+  "schema": "assetwright-native-interface-history-v1",
+  "date": "2026-11-04",
+  "research_scope": "Original native single-shell through-bore and integrated smooth flange; research only",
+  "source_commit": "f317bb048395eb790e41b6926529b064ada95f3d",
+  "final_archive_commit": "726d1078acaa71e2f51c9afabf4f67ee4bdd4f15",
+  "checkpoint_directory": "training/checkpoints/native_interface_f317bb04",
+  "runs": {
+    "initial_rejection": 41932208703,
+    "accepted_learning_and_forward_audit": 41932652201,
+    "archive_and_source_verified_visual_review": 41933125371,
+    "signed_android_ci": 41932652356
+  },
+  "accepted_research_run_overall_conclusion": "failure",
+  "overall_failure_reason": "Only the optional visual renderer referenced retired if01..if04 files; all eight fixed learning gates and five independent forward topology/surface gates passed.",
+  "archive_conclusion": "success",
+  "original_source_glbs": 480,
+  "source_train": 360,
+  "source_new_dimension_holdout": 60,
+  "source_new_aspect_holdout": 60,
+  "student_generated_reconstructed_glbs": 120,
+  "source_verified_clay_wire_previews": 80,
+  "true_topology": {
+    "genus": 1,
+    "euler_characteristic": 0,
+    "connected_components": 1,
+    "vertices_per_mesh": 2624,
+    "triangles_per_mesh": 5248,
+    "edges_per_mesh": 7872,
+    "all_edges_two_sided": true,
+    "through_bore_interior_joined_to_annular_end_surfaces": true,
+    "independent_structural_audit_passed": true
+  },
+  "learned_parameters": [
+    "bore_strength",
+    "flange_strength",
+    "blend_strength"
+  ],
+  "mean_abs_strength_error": {
+    "dimension_holdout": 0.000011212705870768114,
+    "aspect_holdout": 0.000011039385681267358,
+    "constant_baseline_dimension": 0.19283333366666666,
+    "constant_baseline_aspect": 0.18699999972222223
+  },
+  "forward_normalized_surface_rms": {
+    "dimension_holdout": 5.92940463609411e-7,
+    "aspect_holdout": 5.828135833025473e-7
+  },
+  "fixed_learning_gates_passed": 8,
+  "fixed_forward_gates_passed": 5,
+  "all_source_and_reconstruction_sha256_preserved": true,
+  "source_glb_artifact": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41932652201",
+  "visual_archive_url": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41933125371",
+  "benchmark_status": "Earlier if01..if04 families retired after provenance debugging; accepted if05..if08 synthetic families also inspected and now retired as pristine future blind tests.",
+  "previous_checkpoints_unchanged": true,
+  "research_model_deployed_to_android": false,
+  "human_visual_approval": false,
+  "current_visual_findings": "A plausible seamless hollow housing/flange but still a simple pipe-like form; does not demonstrate sophisticated vehicle body complexity.",
+  "limitations": [
+    "One authored deterministic topology, not arbitrary through-bore placement or Boolean mesh surgery",
+    "Native model predicts continuous controls for a known housing family; does not decide semantics or topology automatically",
+    "Analytic smooth flange envelope sampled as triangles, not demonstrated Class-A NURBS G2 patch continuity",
+    "No detached component welding, general vehicle design or cross-category blind evaluation",
+    "No production approval"
+  ],
+  "next_milestone": "Learn true topology-choice decisions and arbitrary placement of openings/branch connectors with new untouched independent non-vehicle form families, curvature/normal seam continuity checks and human approval."
+}
