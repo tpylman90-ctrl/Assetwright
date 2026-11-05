@@ -56,8 +56,11 @@ def load_meshes(path):
             meshes.append((str(mesh.get("name","")),verts,faces,color))
     return meshes,sha
 
-def render(meshes, view, mode, title, destination):
-    all_points=[p for _,vertices,_,_ in meshes for p in vertices]
+def render(meshes, view, mode, title, destination, *, fit_meshes=None):
+    # Research before/after lessons can share an identical family camera
+    # without changing existing individual-asset renderer behavior.
+    framing=meshes if fit_meshes is None else fit_meshes
+    all_points=[p for _,vertices,_,_ in framing for p in vertices]
     bounds=[(min(p[i] for p in all_points),max(p[i] for p in all_points))
             for i in range(3)]
     target=tuple((lo+hi)/2 for lo,hi in bounds)
