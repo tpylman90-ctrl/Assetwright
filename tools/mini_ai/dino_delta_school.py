@@ -9,6 +9,7 @@ from itertools import product
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import re
 
@@ -32,8 +33,25 @@ LEVELS={
     "development":(.20,.49,.76),
     "validation":(.15,.54,.89)
 }
-EXPECTED=468
-BASELINES=18
+# An explicit study switch keeps historical outcomes exactly reproducible.
+# bdhold01..03 are already inspected and NEVER become fresh validation again.
+STUDY=os.environ.get("ASSETWRIGHT_DINO_STUDY","delta_v1")
+if STUDY=="strength_v2":
+    FAMILIES={
+        "train":tuple("bs_train%02d"%i for i in range(1,19)),
+        "development":tuple("bs_dev%02d"%i for i in range(1,5)),
+        "validation":tuple("bs_blind%02d"%i for i in range(1,5))
+    }
+    LEVELS={
+        "train":(.04,.16,.32,.48,.64,.80,.96),
+        "development":(.11,.39,.71,.91),
+        "validation":(.09,.43,.67,.93)
+    }
+elif STUDY!="delta_v1":
+    raise ValueError("Unapproved native source curriculum")
+EXPECTED=sum(len(FAMILIES[phase])*6*len(LEVELS[phase])
+             for phase in FAMILIES)
+BASELINES=sum(len(x) for x in FAMILIES.values())
 
 
 def hash_file(path:Path)->str:
@@ -180,7 +198,7 @@ def render_school(source:Path,images:Path,manifest_path:Path)->dict:
     manifest={
         "schema":MANIFEST,"generator":"AssetWright-Kotlin-AdvancedFormLab",
         "teacher":"frozen "+DINO,"views":list(VIEWS),"source_count":486,
-        "paired_examples":len(records),"renderer":"fixed-family-orthographic-clay",
+        "paired_examples":len(records),"renderer":"fixed-family-orthographic-clay","study_id":STUDY,
         "no_text_labels_in_images":True,"external_geometry_used":False,
         "records":records
     }
@@ -198,6 +216,7 @@ def checked_manifest(manifest:dict,images:Path)->list[dict]:
         manifest.get("paired_examples")!=EXPECTED or
         manifest.get("source_count")!=EXPECTED+BASELINES or
         manifest.get("renderer")!="fixed-family-orthographic-clay" or
+        manifest.get("study_id")!=STUDY or
         manifest.get("external_geometry_used") is not False):
         raise ValueError("Unknown native delta school source")
     expected=expected_changes()
