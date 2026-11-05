@@ -3,6 +3,7 @@ import hashlib
 from pathlib import Path
 import tempfile
 import unittest
+import importlib.util
 
 from dino_delta_school import (
     BASELINES,EXPECTED,FAMILIES,LEVELS,VIEWS,MANIFEST,
@@ -51,6 +52,8 @@ def fixture(directory):
     }
 
 
+@unittest.skipUnless(importlib.util.find_spec("PIL") is not None,
+                     "Pillow needed only for optional visual research")
 class OriginalDeltaSchoolTests(unittest.TestCase):
     def test_frozen_source_family_and_strength_holdouts(self):
         self.assertEqual(len(expected_changes()),468)
