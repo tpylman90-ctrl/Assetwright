@@ -280,9 +280,6 @@ private fun AssetwrightScreen() {
             item {
                 PreviewCard(generatedAsset)
             }
-            item {
-                NativeGeometrySkillCard(prompt) { message -> status = message }
-            }
 
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -332,6 +329,10 @@ private fun AssetwrightScreen() {
                         fontSize = 11.sp
                     )
                 }
+            }
+
+            item {
+                NativeGeometrySkillCard(prompt) { message -> status = message }
             }
 
             item {
