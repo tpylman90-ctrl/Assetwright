@@ -1,0 +1,81 @@
+name: AssetWright CAD Resolved Geometry — Fresh Study D
+
+# Validation cohorts 1700,2600,3700 are exposed and retired.
+# Only a wholly unused official source range (5000) can support this study.
+# Source code statically analyzed, NEVER executed; imported STL as teacher only.
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/cad-surface-transfer-v4.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cad-resolved-geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install free CPU source readers and numeric regressors
+        run: python -m pip install 'datasets>=3.0,<5.0' 'numpy==2.1.3'
+      - name: Validate safe scalar-only CAD parser and true STL measurements
+        run: |
+          python -m unittest discover -s tools/mini_ai -p test_cad_surface_transfer.py -v
+          python -m unittest discover -s tools/mini_ai -p test_cad_surface_profile.py -v
+      - name: Confirm exact published source SHA and Apache 2.0 corpus
+        run: |
+          mkdir -p local-data/cad-resolved
+          printf '%s\n' 48bcf0a8c6fbfb47a27f5662007c24dff8d754ae > local-data/cad-resolved/revision.txt
+      - name: Teach 320 source-hashed real CAD STL surfaces and resolved sketch relationships
+        run: |
+          python tools/mini_ai/cad_surface_teacher.py --enriched \
+            --split train --revision "$(cat local-data/cad-resolved/revision.txt)" \
+            --offset 2300 --count 320 --scan-limit 950 \
+            --out local-data/cad-resolved/train.json
+      - name: Independently measure 96 NEW official STL validation targets
+        run: |
+          python tools/mini_ai/cad_surface_teacher.py --enriched \
+            --split validation --revision "$(cat local-data/cad-resolved/revision.txt)" \
+            --offset 5000 --count 96 --scan-limit 520 \
+            --out local-data/cad-resolved/validation.json
+      - name: Fit owned model using TRAIN-INTERNAL data, score official validation once
+        run: |
+          python tools/mini_ai/cad_surface_student_v2.py \
+            --train local-data/cad-resolved/train.json \
+            --validation local-data/cad-resolved/validation.json \
+            --validation-offset 5000 \
+            --out local-data/cad-resolved/student
+      - name: Enforce all eight fixed original and stronger ablation gates
+        if: success()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('local-data/cad-resolved/student')
+          m=json.loads((p/'candidate_profile_surface_student.json').read_text())
+          r=json.loads((p/'evaluation.json').read_text())
+          assert r['status']=='passed_research_only'
+          assert len(r['predeclared_learning_gates'])==8
+          assert all(r['predeclared_learning_gates'].values())
+          assert r['train_profile_coverage']>=.30
+          assert r['validation_source_offset']==5000
+          assert r['native_GLBS_generated']==0
+          assert r['source_CadQuery_executed'] is False
+          assert r['external_STL_used_as_final_geometry'] is False
+          assert m['production_deployable'] is False
+          PY
+      - name: Always retain audited source-data and rejected candidate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-resolved-CAD-geometry-study-d
+          path: |
+            local-data/cad-resolved/revision.txt
+            local-data/cad-resolved/train.json
+            local-data/cad-resolved/validation.json
+            local-data/cad-resolved/student/*.json
+          if-no-files-found: warn
+          retention-days: 30
