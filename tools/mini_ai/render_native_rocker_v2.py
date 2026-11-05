@@ -12,7 +12,6 @@ import json
 import math
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
 from generated_glb_critic import _read_glb, _accessor, inspect
 
 VIEW_DIRECTIONS = {
@@ -57,6 +56,8 @@ def load_meshes(path):
     return meshes,sha
 
 def render(meshes, view, mode, title, destination, *, fit_meshes=None):
+    # Optional render-only dependency; importing offline research tests is safe.
+    from PIL import Image, ImageDraw, ImageFont
     # Research before/after lessons can share an identical family camera
     # without changing existing individual-asset renderer behavior.
     framing=meshes if fit_meshes is None else fit_meshes
