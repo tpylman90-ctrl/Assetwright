@@ -80,27 +80,36 @@ object NativeSkillMemory {
     private fun destination(context: Context) =
         AtomicFile(File(context.filesDir, FILE))
 
-    @Synchronized
-    fun lessons(context: Context): List<Lesson> {
+    private fun readVerified(context: Context): List<Lesson> {
         val file = destination(context)
         if (!file.baseFile.exists()) return emptyList()
-        return try {
-            val root = JSONObject(file.openRead().bufferedReader().use { it.readText() })
-            require(root.getString("schema") == SCHEMA)
-            val rows = root.getJSONArray("lessons")
-            require(rows.length() <= LIMIT)
-            (0 until rows.length()).map { index ->
-                val item = rows.getJSONObject(index)
-                val example = Lesson(item.getString("prompt"),
-                    AdvancedFormOperation.valueOf(item.getString("operation")),
-                    item.getDouble("strength").toFloat())
-                validate(example)
-                example
-            }
-        } catch (_: Exception) {
-            // Preserve the file on failure; do not silently overwrite it.
-            emptyList()
+        val root = JSONObject(file.openRead().bufferedReader().use { it.readText() })
+        require(root.getString("schema") == SCHEMA)
+        val rows = root.getJSONArray("lessons")
+        require(rows.length() <= LIMIT)
+        val parsed = (0 until rows.length()).map { index ->
+            val item = rows.getJSONObject(index)
+            val example = Lesson(item.getString("prompt"),
+                AdvancedFormOperation.valueOf(item.getString("operation")),
+                item.getDouble("strength").toFloat())
+            validate(example)
+            example
         }
+        require(root.getInt("count") == parsed.size) {
+            "Existing native skill memory count mismatch"
+        }
+        require(parsed.map { it.prompt.lowercase() }.toSet().size == parsed.size) {
+            "Existing native skills contain duplicate approved prompts"
+        }
+        return parsed
+    }
+
+    @Synchronized
+    fun lessons(context: Context): List<Lesson> = try {
+        readVerified(context)
+    } catch (_: Exception) {
+        // Bad local data must never be silently deleted or promoted.
+        emptyList()
     }
 
     fun infer(context: Context, prompt: String): Prediction =
@@ -117,7 +126,7 @@ object NativeSkillMemory {
                 strength: Float): Int {
         val next = Lesson(prompt.trim(), operation, strength)
         validate(next)
-        val memory = lessons(context).toMutableList()
+        val memory = readVerified(context).toMutableList()
         memory.removeAll { it.prompt.trim().equals(next.prompt, ignoreCase = true) }
         memory.add(next)
         while (memory.size > LIMIT) memory.removeAt(0)
