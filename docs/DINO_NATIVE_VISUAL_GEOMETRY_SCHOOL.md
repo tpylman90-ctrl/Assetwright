@@ -84,3 +84,52 @@ The earlier 320/80-source four-view DINO study had validation error
 The revised 480/96-source CAD literal study recorded 0.03660592 versus
 0.03622425 for its operation-only baseline. Both were rejected;
 their inspected validation examples are retired for further model selection.
+
+
+## Verified first independent end-to-end study — November 5, 2026
+
+[Successful native-geometry research workflow 41958833332](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41958833332)
+exported and audited 252 unique original native GLBs and extracted frozen DINOv2
+image features from 504 label-free two-view renders. It trained identical
+teacher-free and DINO-supervised owned pixel students, then generated **36
+student-predicted original Kotlin GLBs** and **36 constant-prior original Kotlin
+GLBs**, all with valid independently audited manifold topology.
+
+| Predeclared measurement | Teacher-free | Frozen-DINO supervised | Research requirement |
+|---|---:|---:|---:|
+| Correct chosen native operation (36 unseen cases) | 22.22% | **25.00%** | ≥55% |
+| Absolute strength error (0–1 scale) | 0.23650 | **0.22310** | ≤0.20 |
+| Joint pixel-to-native score improvement | — | **3.31%** | ≥3%, without other regression |
+| Normalized real target-vs-predicted GLB vertex RMSE | — | **0.018296** | At least 10% better than constant |
+| Constant-native-prior GLB vertex RMSE | — | 0.018660 | — |
+| Forward native GLB error improvement | — | **1.95%** | ≥10% |
+
+**Research verdict: candidate rejected for native-model promotion.** Frozen
+DINO teaching produced a real, small measured benefit over the same pixel
+student without the teacher, but both native accuracy and reconstructed
+surface distance remain insufficient. A passing workflow means all operations
+executed and all generated meshes were structurally valid; it does **not**
+certify the learned model.
+
+The exact source GLBs, teacher observations, research weights, per-case
+predictions, real student/constant reconstructions, and independent forward
+audit remain in [run artifact 13383839458](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41958833332/artifacts/13383839458)
+for its configured 45-day retention. Research weights were not installed in
+the Android app.
+
+The next defensible curriculum should focus on **controlled before/after
+visual comparisons**, retaining per-family baseline meshes and independent
+fresh validation families. This isolates actual geometry changes in loft,
+sweep, twist, recess and corner fullness from incidental camera, size and
+lighting variations. The current official validation shapes have been
+inspected and must not be reused as fresh evidence for retuned models.
+
+## Combined release guard
+
+`dino_native_acceptance_gate.py` and
+`test_dino_native_acceptance_gate.py` now reconcile the visual and
+forward-native reports by exact original target GLB hashes and by the actual
+reported accuracy/strength metrics. A passing image benchmark alone cannot
+create a validated combined checkpoint. Even if **both** independent research
+gates pass, the model stays research-only and requires human visual approval
+before any possibility of Android integration.
