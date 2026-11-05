@@ -95,3 +95,15 @@ Technical reference concepts:
   https://dev.opencascade.org/doc/overview/html/specification__modeling_algorithms.html
 
 Only original Kotlin geometry, free Python/NumPy/Pillow, and GitHub Actions.
+
+## First-study evaluation freeze
+
+The original one-shot study was launched from `a4248753b47387879eb48948b9daca8fd40bad67`
+at https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41944304381.
+Its 520 source family choices and all classification, continuous strength,
+forward reconstruction and structural limits were committed before testing.
+We now keep the original workflow manual-reproduction-only, to avoid
+automatically repeating or promoting an exposed synthetic benchmark on
+subsequent commits. Any correction involving the student, measurements,
+native shapes or testing thresholds must establish fresh, untouched
+evaluation families first. This does not affect the already-running run.

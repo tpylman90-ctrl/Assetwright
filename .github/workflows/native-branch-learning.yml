@@ -1,17 +1,9 @@
 name: AssetWright Native Branch Placement and Junction Learning
 
+# Original synthetic evaluation source families were fixed before the
+# experiment at commit a4248753. After the first run they are historical
+# research evidence, NOT unexposed blind test sets for future tuning.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'app/src/main/java/com/assetwright/app/mini/NativeBranchLab.kt'
-      - 'app/src/test/java/com/assetwright/app/mini/NativeBranchLabTest.kt'
-      - 'app/src/test/java/com/assetwright/app/mini/NativeBranchReconstructionTest.kt'
-      - 'tools/mini_ai/native_branch_student.py'
-      - 'tools/mini_ai/test_native_branch_student.py'
-      - 'tools/mini_ai/audit_native_branch_reconstruction.py'
-      - 'tools/mini_ai/render_native_branch_review.py'
-      - '.github/workflows/native-branch-learning.yml'
   workflow_dispatch:
 
 permissions:
