@@ -3,10 +3,9 @@ name: AssetWright CAD Physical Profiles — Fresh Study C
 # Both previous STLs studies are retired development evidence.
 # This study is independently sourced, with unchanged original geometric
 # acceptance thresholds and an extra non-regression challenge to old model.
+# Original holdout 3700 study started from 1f1fdaec6fb5b9e9172de30705a2e064ec405f80.
+# This workflow is historical/manual now; all inspected validation is retired.
 on:
-  push:
-    branches: [main]
-    paths: ['.github/workflows/cad-surface-transfer-v3.yml']
   workflow_dispatch:
 permissions:
   contents: read
