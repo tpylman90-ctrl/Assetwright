@@ -23,7 +23,7 @@ def forward(source:Path,reconstructed:Path)->dict:
     expected={stem+"__"+variant for stem in cases for variant in VARIANTS}
     found={p.stem for p in reconstructed.glob("*.glb")}
     meta_found={p.stem for p in reconstructed.glob("*.json")}
-    if len(cases)!=(96 if STUDY=="strength_v2" else 54) or found!=expected or meta_found!=expected:
+    if len(cases)!=(96 if STUDY in ("strength_v2","strength_marathon_v3") else 54) or found!=expected or meta_found!=expected:
         raise ValueError("Incomplete or contaminated native after/before reconstruction cohort")
     records=[];by_op=defaultdict(list);all_target_hashes=[]
     for stem,identity in sorted(cases.items()):
