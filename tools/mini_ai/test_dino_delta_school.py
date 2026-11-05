@@ -46,6 +46,7 @@ def fixture(directory):
         })
     return {
         "schema":MANIFEST,"generator":"AssetWright-Kotlin-AdvancedFormLab",
+        "study_id":"delta_v1",
         "views":list(VIEWS),"source_count":EXPECTED+BASELINES,
         "paired_examples":EXPECTED,"renderer":"fixed-family-orthographic-clay",
         "external_geometry_used":False,"records":records
