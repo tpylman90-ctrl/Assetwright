@@ -3,10 +3,9 @@ name: AssetWright CAD Resolved Geometry — Fresh Study D
 # Validation cohorts 1700,2600,3700 are exposed and retired.
 # Only a wholly unused official source range (5000) can support this study.
 # Source code statically analyzed, NEVER executed; imported STL as teacher only.
+# Original new 5000-cohort study started at 9aceeff895bcc3d1148bd76b53e52d6c2cb7d519.
+# Historical manual reproduction only; never repeat as a fresh blind score.
 on:
-  push:
-    branches: [main]
-    paths: ['.github/workflows/cad-surface-transfer-v4.yml']
   workflow_dispatch:
 permissions:
   contents: read
