@@ -1,0 +1,126 @@
+name: AssetWright Archive Validated CAD Shape School
+# Preserve exact PASS run; do not train again on exposed validation rows.
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/archive-cad-shape-school.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  archive:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_RUN: '41951784006'
+      SOURCE_COMMIT: 3c2da575a3e441f7d34c85b5fab8791498d487f5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download exact original successful CAD lesson artifact
+        run: |
+          git merge-base --is-ancestor "$SOURCE_COMMIT" "$GITHUB_SHA"
+          mkdir -p local-data/cad-archive
+          gh run download "$SOURCE_RUN" \
+            --repo "$GITHUB_REPOSITORY" \
+            --name assetwright-2000-licensed-cad-shape-school \
+            --dir local-data/cad-archive
+      - name: Reconcile immutable source hashes and frozen accepted research
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path('local-data/cad-archive')
+          train=json.loads((root/'train.json').read_text())
+          valid=json.loads((root/'validation.json').read_text())
+          report=json.loads((root/'student/evaluation.json').read_text())
+          model=json.loads((root/'student/candidate_shape_school.json').read_text())
+          lessons=json.loads((root/'student/cad_concept_lessons.json').read_text())
+          revision=(root/'revision.txt').read_text().strip()
+          assert len(revision)==40
+          assert (train['dataset_revision'],valid['dataset_revision'],report['dataset_revision'],
+                  model['dataset_revision'])==(revision,revision,revision,revision)
+          assert (train['split'],valid['split'])==('train','validation')
+          assert train['license']==valid['license']==model['license']=='Apache-2.0'
+          assert train['dataset']==valid['dataset']=='ADSKAILab/Zero-To-CAD-100k'
+          assert train['excluded_scanned_prefix']==0
+          assert valid['excluded_scanned_prefix']>=256
+          a=train['records'];b=valid['records']
+          assert len(a)==1600 and len(b)==400
+          assert len({x['source_id'] for x in a})==1600
+          assert len({x['source_id'] for x in b})==400
+          assert not ({x['source_id'] for x in a}&{x['source_id'] for x in b})
+          hash_a={x['code_sha256'] for x in a}
+          hash_b={x['code_sha256'] for x in b}
+          assert len(hash_a)==1600 and len(hash_b)==400 and not hash_a&hash_b
+          assert hashlib.sha256('\n'.join(sorted(hash_a)).encode()).hexdigest()==                 model['training_code_hash_digest']
+          assert report['status']=='passed_research_only'
+          assert len(report['learning_checks'])==7 and all(report['learning_checks'].values())
+          assert report['train_sources']==1600 and report['official_validation_sources']==400
+          assert report['concept_contextual_student']['transitions']>=1000
+          assert report['concept_cross_entropy_relative_gain']>=.075
+          assert report['concept_top1_absolute_gain']>=.035
+          assert model['production_deployable'] is False
+          assert model['external_meshes_used_for_final_geometry'] is False
+          assert model['third_party_scripts_executed'] is False
+          assert report['separately_verified_native_GLBS_in_this_study']==0
+          assert lessons['examples_are_observational_not_causes'] is True
+          assert len(lessons['lessons'])>=4
+          dest=Path('training/checkpoints/cad_shape_school_3c2da575')
+          dest.mkdir(parents=True,exist_ok=True)
+          mapping={
+              'student/candidate_shape_school.json':'validated_cad_shape_student.json',
+              'student/evaluation.json':'evaluation.json',
+              'student/cad_concept_lessons.json':'cad_concept_lessons.json'
+          }
+          for old,new in mapping.items():
+              (dest/new).write_bytes((root/old).read_bytes())
+          (dest/'train_source_hashes.json').write_text(json.dumps(sorted(hash_a),indent=1)+'\n')
+          (dest/'validation_source_hashes.json').write_text(json.dumps(sorted(hash_b),indent=1)+'\n')
+          model_hash=hashlib.sha256((dest/'validated_cad_shape_student.json').read_bytes()).hexdigest()
+          provenance={
+              'schema':'assetwright-cad-shape-school-checkpoint-v1',
+              'source_commit':'3c2da575a3e441f7d34c85b5fab8791498d487f5',
+              'successful_run':41951784006,
+              'license':'Apache-2.0','dataset':'ADSKAILab/Zero-To-CAD-100k',
+              'dataset_revision':revision,
+              'train_sources':1600,'official_validation_sources':400,
+              'excluded_old_validation_scan_prefix':256,
+              'model_sha256':model_hash,
+              'source_hashes_disjoint':True,
+              'all_seven_training_gates_passed':True,
+              'archival_retraining':False,'android_deployed':False,
+              'student_generated_geometry_in_this_study':False,
+              'validation_exposed_retired_for_future_blind_testing':True
+          }
+          (dest/'checkpoint_provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
+          (dest/'RESEARCH_ONLY.md').write_text(
+              '1600 source-hashed Apache-2.0 official CAD train programs; 400 new official validation.\n'
+              'Only static program operations and BRep face-count labels. No CAD code execution.\n'
+              'Source hashes, original owned weights, seven acceptance gates and lesson cards preserved.\n'
+              'No external final geometry, Android deployment, CAD topology or human approval.\n'
+              'The original validation is now exposed; do not reuse as fresh blind evidence.\n')
+          print('CAD checkpoint verified and prepared without retraining')
+          PY
+      - name: Upload verified source-integrity checkpoint
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-cad-shape-school-validated-checkpoint
+          path: training/checkpoints/cad_shape_school_3c2da575/*
+          if-no-files-found: warn
+          retention-days: 21
+      - name: Commit permanently frozen model and source manifest
+        if: success()
+        run: |
+          git config user.name "AssetWright research checkpoint bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add training/checkpoints/cad_shape_school_3c2da575/
+          git commit -m "research: archive licensed CAD school 1600/400 and all seven fixed gates"
+          git push origin HEAD:refs/heads/main
