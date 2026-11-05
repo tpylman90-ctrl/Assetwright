@@ -1,0 +1,195 @@
+name: Forge Mini — Genuine Continual Geometry Learning
+
+# Start from existing source-verified trained weights, REPLAY older original
+# examples, learn fresh real geometry, audit and persist new weights.
+# Research only; never install a model in Android automatically.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/forge-mini-continual-learning.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: assetwright-owned-native-cumulative-v4
+  cancel-in-progress: false
+
+jobs:
+  prepare-fresh-original-geometry:
+    name: 716 NEW Kotlin GLBs and 1432 source-matched views; strict fresh holdouts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 38
+    env:
+      ASSETWRIGHT_DINO_STUDY: strength_continual_v4
+      ASSETWRIGHT_CONTINUAL_SOURCE: ${{ github.workspace }}/local-data/continuation/new/source
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Require genuinely new native heldout families and tested no-regression gate
+        run: |
+          python -m unittest discover -s tools/mini_ai -p 'test_native_continual_pipeline.py'
+      - name: Install SDK needed only for original Kotlin native GLB generator
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Export exactly 716 original closed GLBs including 504 train and 96 fresh blind transforms
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoContinualGeometryBatchTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/continuation/new/source -maxdepth 1 -name '*.glb' | wc -l)" -eq 716
+      - name: Install free neutral geometry rendering dependencies
+        run: python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3'
+      - name: Audit original GLBs and render 1432 non-text source-matched geometry views
+        run: |
+          python tools/mini_ai/dino_delta_school.py render \
+            --source local-data/continuation/new/source \
+            --images local-data/continuation/new/images \
+            --out local-data/continuation/new/manifest.json
+      - name: Reject any old/inspected validation shapes before continuation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          doc=json.loads(Path('local-data/continuation/new/manifest.json').read_text())
+          assert doc['study_id']=='strength_continual_v4'
+          assert doc['source_count']==716 and doc['paired_examples']==696
+          assert not doc['external_geometry_used']
+          assert len([x for x in doc['records'] if x['split']=='validation'])==96
+          assert all(x['family'].startswith('bc_blind') for x in doc['records']
+                     if x['split']=='validation')
+          print('The original native replay and new blind schools are separated',flush=True)
+          PY
+      - name: Archive complete original source GLBs, images and hashes for replay and audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-mini-continual-716-new-original-GLBs
+          path: local-data/continuation/new/
+          if-no-files-found: warn
+          retention-days: 35
+
+  resume-train-compare-and-retain:
+    name: Reload retained original weights; 32min REAL learning, 192 new GLBs, permanent results
+    needs: prepare-fresh-original-geometry
+    runs-on: ubuntu-24.04
+    timeout-minutes: 58
+    env:
+      ASSETWRIGHT_DINO_STUDY: strength_continual_v4
+      ASSETWRIGHT_CONTINUAL_PREDICTIONS: ${{ github.workspace }}/local-data/continuation/student/native_proposals.properties
+      ASSETWRIGHT_CONTINUAL_RECON: ${{ github.workspace }}/local-data/continuation/reconstructed
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      GH_TOKEN: ${{ github.token }}
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: forge-mini-continual-716-new-original-GLBs
+          path: local-data/continuation/new/
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Retrieve exactly the original 32-minute model's 672 earlier training sources
+        run: |
+          test -s training/knowledge/native_strength_teacher_free_42080318206/owned_native_student.safetensors
+          mkdir -p local-data/continuation/prior
+          gh run download 42080318206 --repo "$GITHUB_REPOSITORY" \
+            --name assetwright-marathon-888-own-GLBs-and-teacher \
+            --dir local-data/continuation/prior
+          test -s local-data/continuation/prior/manifest.json
+          test -s local-data/continuation/prior/images/train__bm_train01__baseline__side.png
+      - name: Install free original CPU neural trainer and reconstruction dependencies
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+          python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3' 'safetensors>=0.4,<1'
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify previously saved original neural model still loads without loss
+        run: |
+          python -m unittest discover -s tools/mini_ai -p 'test_native_studied_warm_start.py'
+      - name: REAL warm-start, 672 old lessons rehearsed, 504 new examples, eight 32min sessions
+        run: |
+          python -u tools/mini_ai/native_continual_student.py \
+            --new-manifest local-data/continuation/new/manifest.json \
+            --new-images local-data/continuation/new/images \
+            --prior-manifest local-data/continuation/prior/manifest.json \
+            --prior-images local-data/continuation/prior/images \
+            --knowledge training/knowledge/native_strength_teacher_free_42080318206 \
+            --out local-data/continuation/student \
+            --training-seconds 1920
+      - name: Rebuild 192 new real Kotlin GLBs using only prior and learned predictions
+        run: |
+          test -s "$ASSETWRIGHT_CONTINUAL_PREDICTIONS"
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoContinualReconstructionTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/continuation/reconstructed -maxdepth 1 -name '*.glb' | wc -l)" -eq 192
+      - name: Independently compare original source vs prior and continued indexed Kotlin GLBs
+        run: |
+          python tools/mini_ai/native_continual_forward_audit.py \
+            --source local-data/continuation/new/source \
+            --reconstructed local-data/continuation/reconstructed \
+            --out local-data/continuation/forward_audit.json
+      - name: Gate cumulative learning with NEW blind reconstruction and previous skill retention
+        run: |
+          python tools/mini_ai/native_continual_acceptance.py \
+            --evaluation local-data/continuation/student/evaluation.json \
+            --geometry local-data/continuation/forward_audit.json \
+            --lineage local-data/continuation/student/candidate_lineage.json \
+            --out local-data/continuation/student/combined_disposition.json
+      - name: Persist actual trained neural weights and original geometric evidence even if rejected
+        run: |
+          python tools/mini_ai/retain_continual_learning.py \
+            --run-id "$GITHUB_RUN_ID" \
+            --root local-data/continuation \
+            --out "training/learning_runs/strength_continual_v4_$GITHUB_RUN_ID" \
+            --knowledge training/knowledge/native_strength_teacher_free_42080318206
+          git config user.name "AssetWright native knowledge bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "training/learning_runs/strength_continual_v4_$GITHUB_RUN_ID"
+          git commit -m "research: retain actual Forge Mini continued neural weights and 192 GLB proof [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:refs/heads/main
+      - name: Keep complete training candidates and original GLB evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-mini-actual-continuing-learning-weights-and-192-GLBs
+          path: |
+            local-data/continuation/student/*.json
+            local-data/continuation/student/*.properties
+            local-data/continuation/student/*.safetensors
+            local-data/continuation/student/sessions/*.safetensors
+            local-data/continuation/forward_audit.json
+            local-data/continuation/reconstructed/*.glb
+            local-data/continuation/reconstructed/*.json
+            training/learning_runs/strength_continual_v4_*/**
+          if-no-files-found: warn
+          retention-days: 45
