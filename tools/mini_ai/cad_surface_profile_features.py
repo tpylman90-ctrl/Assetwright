@@ -67,6 +67,10 @@ def extract(source:object)->list[float]:
     # Only pure finite arithmetic over simple scalar assignments is
     # statically resolved. No downloaded Python statements are executed.
     calls,_=collect_static_cad_numbers(source)
+    if not calls:
+        # Unparseable or unsupported input has NO demonstrated CAD profile.
+        # Do not fabricate a normalized square/cube as a learning signal.
+        return [0.]*SIZE
     base=None
     profiles=[]
     for op,args in calls:
