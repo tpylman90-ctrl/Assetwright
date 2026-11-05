@@ -1,0 +1,70 @@
+name: AssetWright Retain Verified Native Mini Knowledge
+
+# Real retention of a development-chosen original student's learned weights.
+# Research-only. Does NOT deploy a DINO candidate or affect Android generator.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/freeze-forge-mini-native-knowledge.yml'
+      - 'tools/mini_ai/archive_owned_marathon_knowledge.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: assetwright-once-retain-native-student
+  cancel-in-progress: false
+
+jobs:
+  retain:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      GH_TOKEN: ${{ github.token }}
+      STUDY_RUN: '42080318206'
+      STUDY_SHA: 38d5780adaa20a342546f514ecf8cbc8045a142f
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pin exact successful historical source and never archive a different experiment
+        run: |
+          git merge-base --is-ancestor "$STUDY_SHA" "$GITHUB_SHA"
+          test ! -e training/knowledge/native_strength_teacher_free_42080318206/model_lineage.json
+      - name: Download original 888 GLBs and 192 native reconstructions with real student weights
+        run: |
+          mkdir -p local-data/owned-marathon-archive/source-data
+          mkdir -p local-data/owned-marathon-archive/results
+          gh run download "$STUDY_RUN" --repo "$GITHUB_REPOSITORY" \
+            --name assetwright-marathon-888-own-GLBs-and-teacher \
+            --dir local-data/owned-marathon-archive/source-data
+          gh run download "$STUDY_RUN" --repo "$GITHUB_REPOSITORY" \
+            --name assetwright-32minute-DINO-training-and-192-GLB-results \
+            --dir local-data/owned-marathon-archive/results
+      - name: Verify learning history, unexposed at selection, 888 original source SHA and 192 output SHA
+        run: |
+          python tools/mini_ai/archive_owned_marathon_knowledge.py \
+            --source local-data/owned-marathon-archive/source-data \
+            --results local-data/owned-marathon-archive/results \
+            --out training/knowledge/native_strength_teacher_free_42080318206
+      - name: Commit durable original student weights, retain all earlier checkpoint history
+        run: |
+          git config user.name "AssetWright research knowledge bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add training/knowledge/native_strength_teacher_free_42080318206/
+          git commit -m "research: permanently retain verified original native student weights [skip ci]"
+          git push origin HEAD:refs/heads/main
+      - name: Archive independent provenance and source proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-original-mini-permanent-model-lineage
+          path: training/knowledge/native_strength_teacher_free_42080318206/**
+          if-no-files-found: warn
+          retention-days: 30
