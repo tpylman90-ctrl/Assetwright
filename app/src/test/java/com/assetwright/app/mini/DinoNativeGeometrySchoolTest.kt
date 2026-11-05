@@ -68,10 +68,10 @@ class DinoNativeGeometrySchoolTest {
               "split":"${split}",
               "family":"${family.name}",
               "operation":"${operation.name}",
-              "strength":${strength}",
-              "length":${d.length}",
-              "width":${d.width}",
-              "height":${d.height}",
+              "strength":${strength},
+              "length":${d.length},
+              "width":${d.width},
+              "height":${d.height},
               "source_glb_sha256":"${digest}"
             }
         """.trimIndent()
