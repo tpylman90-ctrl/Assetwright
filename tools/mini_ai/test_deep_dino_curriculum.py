@@ -58,8 +58,10 @@ class DeepDinoCurriculumSafety(unittest.TestCase):
     def test_rejects_underpowered_or_duplicate_training(self):
         doc, teacher = fixtures(35, "train")
         rows = validated_rows(doc, teacher, "train")
+        v, tf = fixtures(65, "validation")
+        heldout = validated_rows(v, tf, "validation")
         with self.assertRaisesRegex(ValueError, "deep enough"):
-            check_splits(rows, rows[:])
+            check_splits(rows, heldout)
         doc, teacher = fixtures(220, "train")
         rows = validated_rows(doc, teacher, "train")
         v, tf = fixtures(65, "validation")
