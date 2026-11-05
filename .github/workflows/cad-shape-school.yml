@@ -1,0 +1,82 @@
+name: AssetWright Large Licensed CAD Shape School
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/cad-shape-school.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  study:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 85
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install free dataset reader and CPU numerics
+        run: python -m pip install 'datasets>=3.0,<5.0' 'numpy==2.1.3'
+      - name: Safety and heldout provenance unit gates
+        run: |
+          python -m unittest discover -s tools/mini_ai -p test_zero_to_cad.py
+          python -m unittest discover -s tools/mini_ai -p test_cad_shape_school.py
+      - name: Pin the official licensed dataset commit
+        run: |
+          mkdir -p local-data/cad-school
+          python - <<'PY'
+          from huggingface_hub import HfApi
+          from pathlib import Path
+          import re
+          sha=HfApi().dataset_info('ADSKAILab/Zero-To-CAD-100k').sha
+          assert re.fullmatch(r'[0-9a-f]{40}',sha)
+          Path('local-data/cad-school/revision.txt').write_text(sha+'\n')
+          print('Pinned CAD revision:',sha)
+          PY
+      - name: Parse 1600 source-hashed CAD construction programs without executing them
+        run: |
+          python tools/mini_ai/zero_to_cad_ingest.py \
+            --split train --revision "$(cat local-data/cad-school/revision.txt)" \
+            --max-records 1600 --max-scan 3200 \
+            --output local-data/cad-school/train.json
+      - name: Parse 400 untouched official validation programs beyond old prefix
+        run: |
+          python tools/mini_ai/zero_to_cad_ingest.py \
+            --split validation --revision "$(cat local-data/cad-school/revision.txt)" \
+            --skip-scan 256 --max-records 400 --max-scan 1300 \
+            --output local-data/cad-school/validation.json
+      - name: Train original CAD concept and geometric-complexity predictors
+        run: |
+          python tools/mini_ai/cad_shape_school.py \
+            --train local-data/cad-school/train.json \
+            --validation local-data/cad-school/validation.json \
+            --out local-data/cad-school/student
+      - name: Refuse model promotion and external geometry on research completion
+        if: success()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('local-data/cad-school/student')
+          m=json.loads((p/'candidate_shape_school.json').read_text())
+          r=json.loads((p/'evaluation.json').read_text())
+          x=json.loads((p/'cad_concept_lessons.json').read_text())
+          assert r['status']=='passed_research_only' and all(r['learning_checks'].values())
+          assert m['production_deployable'] is False
+          assert m['third_party_scripts_executed'] is False
+          assert m['external_meshes_used_for_final_geometry'] is False
+          assert m['dataset_revision']==r['dataset_revision']
+          assert len(x['lessons'])>=4
+          PY
+      - name: Retain source data, rejected candidates, scores and lessons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-2000-licensed-cad-shape-school
+          path: |
+            local-data/cad-school/revision.txt
+            local-data/cad-school/train.json
+            local-data/cad-school/validation.json
+            local-data/cad-school/student/*.json
+          if-no-files-found: warn
+          retention-days: 21
