@@ -1,0 +1,80 @@
+name: AssetWright CAD Physical Profiles — Fresh Study C
+
+# Both previous STLs studies are retired development evidence.
+# This study is independently sourced, with unchanged original geometric
+# acceptance thresholds and an extra non-regression challenge to old model.
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/cad-surface-transfer-v3.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-profile-learning:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      HF_HUB_DISABLE_PROGRESS_BARS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install free CPU study libraries
+        run: python -m pip install 'datasets>=3.0,<5.0' 'numpy==2.1.3'
+      - name: Test independent STL signatures and safe relative CAD dimensions
+        run: |
+          python -m unittest discover -s tools/mini_ai -p test_cad_surface_transfer.py -v
+          python -m unittest discover -s tools/mini_ai -p test_cad_surface_profile.py -v
+      - name: Confirm one pinned upstream Apache-2.0 revision
+        run: |
+          mkdir -p local-data/cad-profile
+          printf '%s\n' '48bcf0a8c6fbfb47a27f5662007c24dff8d754ae' > local-data/cad-profile/revision.txt
+      - name: Generate 320 actual STL geometry teaching signatures and relative sketch parameters
+        run: |
+          python tools/mini_ai/cad_surface_teacher.py --enriched \
+            --split train --revision "$(cat local-data/cad-profile/revision.txt)" \
+            --offset 2300 --count 320 --scan-limit 950 \
+            --out local-data/cad-profile/train.json
+      - name: Source 96 never-before-inspected official STL validation examples
+        run: |
+          python tools/mini_ai/cad_surface_teacher.py --enriched \
+            --split validation --revision "$(cat local-data/cad-profile/revision.txt)" \
+            --offset 3700 --count 96 --scan-limit 520 \
+            --out local-data/cad-profile/validation.json
+      - name: Compare owned shape-aware, aggregate and operations-only regressors
+        run: |
+          python tools/mini_ai/cad_surface_student_v2.py \
+            --train local-data/cad-profile/train.json \
+            --validation local-data/cad-profile/validation.json \
+            --out local-data/cad-profile/student
+      - name: Forbid downloaded 3D as a generated AssetWright model
+        if: success()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('local-data/cad-profile/student')
+          m=json.loads((p/'candidate_profile_surface_student.json').read_text())
+          r=json.loads((p/'evaluation.json').read_text())
+          assert r['status']=='passed_research_only'
+          assert len(r['predeclared_learning_gates'])==8
+          assert all(r['predeclared_learning_gates'].values())
+          assert r['native_GLBS_generated']==0
+          assert r['external_STL_used_as_final_geometry'] is False
+          assert m['production_deployable'] is False
+          assert m['allows_imported_STL_as_output'] is False
+          PY
+      - name: Archive every research source hash, failed candidate and acceptance decision
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-cad-relative-profile-stl-study-c
+          path: |
+            local-data/cad-profile/revision.txt
+            local-data/cad-profile/train.json
+            local-data/cad-profile/validation.json
+            local-data/cad-profile/student/*.json
+          if-no-files-found: warn
+          retention-days: 30
