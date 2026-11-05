@@ -1,0 +1,496 @@
+{
+  "schema": "assetwright-owned-cad-shape-school-v2",
+  "source": "ADSKAILab/Zero-To-CAD-100k",
+  "license": "Apache-2.0",
+  "dataset_revision": "48bcf0a8c6fbfb47a27f5662007c24dff8d754ae",
+  "training_code_hash_digest": "6824e508252a71b77ecf0aa28f9889f474be80534573a29886e08ed9bd005732",
+  "training_sources": 1600,
+  "concept_student": {
+    "groups": [
+      "profile",
+      "volume",
+      "cut",
+      "finish",
+      "pattern",
+      "transform"
+    ],
+    "unigram": {
+      "transform": 934,
+      "finish": 2192,
+      "profile": 3022,
+      "volume": 2758,
+      "pattern": 1115,
+      "cut": 3141
+    },
+    "bigram": {
+      "profile": {
+        "transform": 285,
+        "volume": 2627,
+        "cut": 970,
+        "profile": 285,
+        "pattern": 52,
+        "finish": 148
+      },
+      "transform": {
+        "finish": 133,
+        "profile": 233,
+        "pattern": 75,
+        "cut": 247,
+        "transform": 129,
+        "volume": 47
+      },
+      "finish": {
+        "profile": 569,
+        "finish": 395,
+        "pattern": 299,
+        "cut": 201,
+        "transform": 14,
+        "volume": 13
+      },
+      "volume": {
+        "pattern": 194,
+        "profile": 931,
+        "finish": 757,
+        "transform": 467,
+        "cut": 500,
+        "volume": 24
+      },
+      "pattern": {
+        "cut": 829,
+        "profile": 250,
+        "finish": 6,
+        "volume": 24,
+        "pattern": 3,
+        "transform": 2
+      },
+      "cut": {
+        "finish": 753,
+        "pattern": 492,
+        "profile": 754,
+        "cut": 394,
+        "transform": 37,
+        "volume": 23
+      }
+    },
+    "trigram": {
+      "<START>|profile": {
+        "transform": 47,
+        "volume": 965,
+        "profile": 184,
+        "pattern": 10,
+        "finish": 129,
+        "cut": 13
+      },
+      "profile|transform": {
+        "finish": 43,
+        "profile": 93,
+        "pattern": 27,
+        "cut": 48,
+        "volume": 40,
+        "transform": 25
+      },
+      "transform|finish": {
+        "profile": 23,
+        "pattern": 21,
+        "cut": 15,
+        "finish": 20
+      },
+      "finish|profile": {
+        "volume": 287,
+        "transform": 40,
+        "cut": 206,
+        "profile": 25,
+        "pattern": 8,
+        "finish": 3
+      },
+      "profile|volume": {
+        "pattern": 173,
+        "profile": 829,
+        "finish": 620,
+        "transform": 448,
+        "cut": 441,
+        "volume": 16
+      },
+      "volume|pattern": {
+        "cut": 152,
+        "profile": 39,
+        "pattern": 1,
+        "finish": 1
+      },
+      "pattern|cut": {
+        "finish": 214,
+        "pattern": 99,
+        "profile": 202,
+        "cut": 22,
+        "volume": 8,
+        "transform": 6
+      },
+      "cut|finish": {
+        "finish": 93,
+        "pattern": 80,
+        "profile": 82,
+        "cut": 28,
+        "transform": 2,
+        "volume": 3
+      },
+      "transform|profile": {
+        "volume": 126,
+        "transform": 61,
+        "profile": 8,
+        "cut": 34,
+        "pattern": 2,
+        "finish": 2
+      },
+      "volume|profile": {
+        "cut": 243,
+        "profile": 26,
+        "volume": 584,
+        "transform": 59,
+        "pattern": 16,
+        "finish": 3
+      },
+      "profile|cut": {
+        "finish": 229,
+        "pattern": 224,
+        "profile": 226,
+        "cut": 126,
+        "transform": 7,
+        "volume": 4
+      },
+      "finish|pattern": {
+        "cut": 230,
+        "profile": 67,
+        "pattern": 1,
+        "transform": 1
+      },
+      "cut|pattern": {
+        "cut": 364,
+        "profile": 125,
+        "transform": 1,
+        "finish": 1
+      },
+      "volume|finish": {
+        "cut": 101,
+        "pattern": 118,
+        "finish": 193,
+        "profile": 258,
+        "transform": 8,
+        "volume": 5
+      },
+      "finish|cut": {
+        "profile": 49,
+        "pattern": 38,
+        "finish": 11,
+        "cut": 42,
+        "volume": 1,
+        "transform": 1
+      },
+      "cut|profile": {
+        "cut": 282,
+        "volume": 383,
+        "transform": 54,
+        "profile": 15,
+        "pattern": 13,
+        "finish": 4
+      },
+      "pattern|profile": {
+        "volume": 104,
+        "cut": 144,
+        "pattern": 1,
+        "transform": 1
+      },
+      "volume|transform": {
+        "profile": 114,
+        "cut": 144,
+        "pattern": 33,
+        "transform": 71,
+        "finish": 62,
+        "volume": 4
+      },
+      "volume|cut": {
+        "profile": 151,
+        "pattern": 74,
+        "finish": 123,
+        "cut": 80,
+        "transform": 13,
+        "volume": 5
+      },
+      "profile|profile": {
+        "transform": 23,
+        "volume": 178,
+        "cut": 48,
+        "pattern": 2,
+        "profile": 27,
+        "finish": 7
+      },
+      "transform|pattern": {
+        "cut": 52,
+        "finish": 4,
+        "volume": 5,
+        "profile": 12,
+        "pattern": 1
+      },
+      "<START>|volume": {
+        "finish": 116,
+        "cut": 21,
+        "profile": 73,
+        "pattern": 13,
+        "volume": 7,
+        "transform": 4
+      },
+      "finish|finish": {
+        "pattern": 74,
+        "profile": 133,
+        "cut": 48,
+        "transform": 3,
+        "finish": 45,
+        "volume": 3
+      },
+      "transform|cut": {
+        "finish": 72,
+        "profile": 57,
+        "pattern": 29,
+        "cut": 33,
+        "transform": 7,
+        "volume": 2
+      },
+      "profile|pattern": {
+        "profile": 6,
+        "cut": 27,
+        "volume": 19
+      },
+      "transform|transform": {
+        "cut": 40,
+        "transform": 22,
+        "finish": 21,
+        "profile": 16,
+        "pattern": 8,
+        "volume": 3
+      },
+      "cut|cut": {
+        "pattern": 28,
+        "cut": 91,
+        "finish": 102,
+        "profile": 67,
+        "volume": 3,
+        "transform": 1
+      },
+      "transform|volume": {
+        "cut": 17,
+        "finish": 10,
+        "pattern": 2,
+        "profile": 13,
+        "transform": 2,
+        "volume": 1
+      },
+      "finish|transform": {
+        "profile": 4,
+        "transform": 3,
+        "cut": 5
+      },
+      "cut|transform": {
+        "profile": 4,
+        "pattern": 7,
+        "cut": 10,
+        "transform": 7,
+        "finish": 7
+      },
+      "volume|volume": {
+        "transform": 4,
+        "pattern": 6,
+        "cut": 6,
+        "profile": 4,
+        "finish": 4
+      },
+      "profile|finish": {
+        "volume": 2,
+        "profile": 73,
+        "cut": 9,
+        "finish": 41,
+        "pattern": 6,
+        "transform": 1
+      },
+      "finish|volume": {
+        "profile": 3,
+        "cut": 4,
+        "transform": 5,
+        "finish": 1
+      },
+      "<START>|finish": {
+        "finish": 3
+      },
+      "pattern|volume": {
+        "cut": 9,
+        "profile": 8,
+        "transform": 2,
+        "finish": 2
+      },
+      "pattern|pattern": {
+        "cut": 3
+      },
+      "cut|volume": {
+        "finish": 4,
+        "transform": 2,
+        "cut": 2,
+        "profile": 1
+      },
+      "<START>|cut": {
+        "profile": 2,
+        "finish": 2,
+        "transform": 2
+      },
+      "<START>|pattern": {
+        "profile": 1,
+        "cut": 1
+      },
+      "pattern|transform": {
+        "profile": 2
+      },
+      "<START>|transform": {
+        "transform": 1
+      }
+    },
+    "source_train_transitions": 13162,
+    "context_smoothing": {
+      "bigram": 8,
+      "trigram": 5
+    }
+  },
+  "face_complexity_student": {
+    "train_labels": 1600,
+    "mean": [
+      2.9902729661136647,
+      2.4736943458535587,
+      1.2302136472619183,
+      0.9616253769332752,
+      1.019461255563686,
+      0.8160327207518041,
+      0.44087369604747856,
+      0.3167837795025561,
+      0.8322100697956281,
+      0.010037605117834454,
+      0.065244433265924,
+      0.0989214073452252,
+      0.24399185467649798,
+      0.34083324991384395,
+      0.4833723671483972,
+      0.2928248270103242,
+      0.5253639266627449,
+      0.09494813473642791,
+      0.4323030418943995,
+      0.0034657359027997266,
+      0.05769994317719223,
+      0.11768133290835524,
+      0.13765984000697626,
+      0.09121973962235204,
+      0.09629670922126583,
+      0.07437906111023682,
+      0.03501573666285304,
+      0.02603595166849061
+    ],
+    "std": [
+      0.3723326691645738,
+      0.23063286290477936,
+      0.4373016260486647,
+      0.4415147413556506,
+      0.38192490432184706,
+      0.3145212112335995,
+      0.4193229747582274,
+      0.4902990261630637,
+      0.5202443550053304,
+      0.08610223782511094,
+      0.2111549942939158,
+      0.25108606601490413,
+      0.4205469692381871,
+      0.4214205094333652,
+      0.42156506038569175,
+      0.382460400730567,
+      0.3394454528572029,
+      0.23948840220362919,
+      0.4952061219505873,
+      0.05,
+      0.202887934763092,
+      0.2911613521413351,
+      0.058948990228178476,
+      0.05,
+      0.05,
+      0.05,
+      0.05,
+      0.05
+    ],
+    "coefficients": [
+      3.2794558559876834,
+      0.1848047060890143,
+      0.057594194247999095,
+      -0.002182951520937977,
+      0.019718656763273435,
+      -0.08609345592793059,
+      0.019328252840935197,
+      -0.019680405492928734,
+      -0.06727608158973421,
+      -0.0004952015508085715,
+      -0.007300159764490947,
+      -0.053873803955663886,
+      -0.11540807058252901,
+      -0.07512921133999434,
+      -0.02689930930031589,
+      -0.004456140927281148,
+      0.059398395057624204,
+      0.09323866368673984,
+      0.06337277714864861,
+      0.07701745068367159,
+      -0.03493259635279691,
+      -0.04958951700234534,
+      0.034381729218373826,
+      0.07333874213426607,
+      0.004122732938231823,
+      0.1300031215177133,
+      0.09766272627713711,
+      0.14951294198987083,
+      0.11643132908333191
+    ],
+    "median_log_faces": 3.2188758248682006,
+    "length_only_weights": [
+      1.901578393424619,
+      0.4607865162068568
+    ],
+    "ridge_regularization": 3.0,
+    "target": "log1p(original BRep num_faces); no STEP/STL input"
+  },
+  "transfer_registry": {
+    "profile": {
+      "status": "partial",
+      "implemented": "NativeFormLab cross-sections; NativeInterfaceLab concentric profiles",
+      "missing": "arbitrary sketch constraints, multiwire profiles and profiles with islands"
+    },
+    "volume": {
+      "status": "partial",
+      "implemented": "AdvancedFormLab loft/sweep; NativeCompositionLab composed hull",
+      "missing": "arbitrary rail/spline sweep and face-patch continuity"
+    },
+    "cut": {
+      "status": "partial",
+      "implemented": "NativeInterfaceLab fixed through-bore; NativeBranchLab fixed blind socket",
+      "missing": "general position-independent Boolean CSG and true T-branch passage"
+    },
+    "finish": {
+      "status": "missing_general",
+      "implemented": "sampled flange ease; ring blend controls",
+      "missing": "true constant-radius multi-edge fillet, chamfer solver and G2 continuity"
+    },
+    "pattern": {
+      "status": "not_implemented",
+      "implemented": "no general native feature-array operator",
+      "missing": "connected polar/linear patterned CAD features"
+    },
+    "transform": {
+      "status": "partial",
+      "implemented": "bounded axial and 20-position native branch placement",
+      "missing": "free continuous placement of arbitrary joined components"
+    }
+  },
+  "third_party_scripts_executed": false,
+  "external_meshes_used_for_final_geometry": false,
+  "native_generator_authority": "AssetWright Kotlin only",
+  "production_deployable": false
+}

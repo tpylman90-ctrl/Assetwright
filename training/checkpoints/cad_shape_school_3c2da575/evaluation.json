@@ -1,0 +1,88 @@
+{
+  "schema": "assetwright-cad-shape-school-evaluation-v2",
+  "status": "passed_research_only",
+  "official_licensed_dataset": "ADSKAILab/Zero-To-CAD-100k",
+  "dataset_revision": "48bcf0a8c6fbfb47a27f5662007c24dff8d754ae",
+  "train_sources": 1600,
+  "official_validation_sources": 400,
+  "learned_transition_samples": 13162,
+  "train_unique_op_names": 40,
+  "train_group_counts": {
+    "profile": 4370,
+    "transform": 935,
+    "finish": 2195,
+    "volume": 2998,
+    "pattern": 1117,
+    "cut": 3147
+  },
+  "concept_majority_baseline": {
+    "transitions": 3342,
+    "cross_entropy": 1.7007502518987923,
+    "perplexity": 5.478055772119117,
+    "top1_accuracy": 0.2540394973070018,
+    "per_target_accuracy": {
+      "profile": 0.0,
+      "volume": 0.0,
+      "cut": 1.0,
+      "finish": 0.0,
+      "pattern": 0.0,
+      "transform": 0.0
+    },
+    "heldout_group_counts": {
+      "profile": 788,
+      "volume": 650,
+      "cut": 849,
+      "finish": 528,
+      "pattern": 274,
+      "transform": 253
+    }
+  },
+  "concept_contextual_student": {
+    "transitions": 3342,
+    "cross_entropy": 1.2649161959132191,
+    "perplexity": 3.542795822899296,
+    "top1_accuracy": 0.4473369239976062,
+    "per_target_accuracy": {
+      "profile": 0.4987309644670051,
+      "volume": 0.9030769230769231,
+      "cut": 0.3404004711425206,
+      "finish": 0.42803030303030304,
+      "pattern": 0.0,
+      "transform": 0.0
+    },
+    "heldout_group_counts": {
+      "profile": 788,
+      "volume": 650,
+      "cut": 849,
+      "finish": 528,
+      "pattern": 274,
+      "transform": 253
+    }
+  },
+  "concept_cross_entropy_relative_gain": 0.2562598803081104,
+  "concept_top1_absolute_gain": 0.1932974266906044,
+  "face_complexity": {
+    "heldout_labeled_sources": 400,
+    "semantic_log_face_mae": 0.4757745864697228,
+    "sequence_length_only_log_face_mae": 0.5214002326423361,
+    "train_median_constant_log_face_mae": 0.5336396052696601,
+    "semantic_log_face_rmse": 0.6036085105077004,
+    "heldout_actual_num_faces_p50": 23.000000000000004
+  },
+  "face_constant_baseline_relative_gain": 0.10843464058612517,
+  "learning_checks": {
+    "official_source_disjoint": true,
+    "train_at_least_1000": true,
+    "validation_at_least_250": true,
+    "concept_crossentropy_improvement": true,
+    "concept_top1_absolute_gain": true,
+    "face_prediction_better_than_constant": true,
+    "face_model_beats_length_only": true
+  },
+  "separately_verified_native_GLBS_in_this_study": 0,
+  "geometry_generated_by_licensed_source": false,
+  "new_cad_script_executions": 0,
+  "human_visual_approval": false,
+  "android_deployed": false,
+  "limitations": "Learns CAD operation relationships and BRep face-count proxy from licensed synthetic programs, not actual surface geometry, CAD program execution, independent semantic design, accurate fillets, or arbitrary 3D assets."
+}

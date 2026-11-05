@@ -1,0 +1,18 @@
+{
+  "schema": "assetwright-cad-shape-school-checkpoint-v1",
+  "source_commit": "3c2da575a3e441f7d34c85b5fab8791498d487f5",
+  "successful_run": 41951784006,
+  "license": "Apache-2.0",
+  "dataset": "ADSKAILab/Zero-To-CAD-100k",
+  "dataset_revision": "48bcf0a8c6fbfb47a27f5662007c24dff8d754ae",
+  "train_sources": 1600,
+  "official_validation_sources": 400,
+  "excluded_old_validation_scan_prefix": 256,
+  "model_sha256": "cf16da5536a4e36e42f68d9ee2b1d0db2c05d290fe36a5819b83f2584bf1adcc",
+  "source_hashes_disjoint": true,
+  "all_seven_training_gates_passed": true,
+  "archival_retraining": false,
+  "android_deployed": false,
+  "student_generated_geometry_in_this_study": false,
+  "validation_exposed_retired_for_future_blind_testing": true
+}

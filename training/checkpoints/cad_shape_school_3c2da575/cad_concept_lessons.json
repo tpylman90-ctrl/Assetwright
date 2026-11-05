@@ -1,0 +1,231 @@
+{
+  "schema": "assetwright-cad-observed-transition-lessons-v1",
+  "source_revision": "48bcf0a8c6fbfb47a27f5662007c24dff8d754ae",
+  "examples_are_observational_not_causes": true,
+  "native_skill_coverage": {
+    "profile": {
+      "status": "partial",
+      "implemented": "NativeFormLab cross-sections; NativeInterfaceLab concentric profiles",
+      "missing": "arbitrary sketch constraints, multiwire profiles and profiles with islands"
+    },
+    "volume": {
+      "status": "partial",
+      "implemented": "AdvancedFormLab loft/sweep; NativeCompositionLab composed hull",
+      "missing": "arbitrary rail/spline sweep and face-patch continuity"
+    },
+    "cut": {
+      "status": "partial",
+      "implemented": "NativeInterfaceLab fixed through-bore; NativeBranchLab fixed blind socket",
+      "missing": "general position-independent Boolean CSG and true T-branch passage"
+    },
+    "finish": {
+      "status": "missing_general",
+      "implemented": "sampled flange ease; ring blend controls",
+      "missing": "true constant-radius multi-edge fillet, chamfer solver and G2 continuity"
+    },
+    "pattern": {
+      "status": "not_implemented",
+      "implemented": "no general native feature-array operator",
+      "missing": "connected polar/linear patterned CAD features"
+    },
+    "transform": {
+      "status": "partial",
+      "implemented": "bounded axial and 20-position native branch placement",
+      "missing": "free continuous placement of arbitrary joined components"
+    }
+  },
+  "lessons": [
+    {
+      "lesson_type": "observed_construction_transition",
+      "observed_previous_concept": "profile",
+      "likely_next_concept": "volume",
+      "observed_transition_count": 2627,
+      "learned_conditional_probability": 0.60084,
+      "unconditional_probability": 0.20952,
+      "relative_to_base": 2.868,
+      "geometry_rationale_educational_not_causal": "A solid-making operation adds material or carries a profile through space.",
+      "native_transfer": {
+        "status": "partial",
+        "implemented": "AdvancedFormLab loft/sweep; NativeCompositionLab composed hull",
+        "missing": "arbitrary rail/spline sweep and face-patch continuity"
+      },
+      "source": "licensed Zero-to-CAD 100K training split only"
+    },
+    {
+      "lesson_type": "observed_construction_transition",
+      "observed_previous_concept": "profile",
+      "likely_next_concept": "cut",
+      "observed_transition_count": 970,
+      "learned_conditional_probability": 0.22215,
+      "unconditional_probability": 0.23861,
+      "relative_to_base": 0.931,
+      "geometry_rationale_educational_not_causal": "A subtractive feature changes solid topology or forms a cavity; validate remaining walls.",
+      "native_transfer": {
+        "status": "partial",
+        "implemented": "NativeInterfaceLab fixed through-bore; NativeBranchLab fixed blind socket",
+        "missing": "general position-independent Boolean CSG and true T-branch passage"
+      },
+      "source": "licensed Zero-to-CAD 100K training split only"
+    },
+    {
+      "lesson_type": "observed_construction_transition",
+      "observed_previous_concept": "volume",
+      "likely_next_concept": "profile",
+      "observed_transition_count": 931,
+      "learned_conditional_probability": 0.32379,
+      "unconditional_probability": 0.22957,
+      "relative_to_base": 1.41,
+      "geometry_rationale_educational_not_causal": "The profile defines a cross-section or sketch to be shaped, cut, or revolved.",
+      "native_transfer": {
+        "status": "partial",
+        "implemented": "NativeFormLab cross-sections; NativeInterfaceLab concentric profiles",
+        "missing": "arbitrary sketch constraints, multiwire profiles and profiles with islands"
+      },
+      "source": "licensed Zero-to-CAD 100K training split only"
+    },
+    {
+      "lesson_type": "observed_construction_transition",
+      "observed_previous_concept": "pattern",
+      "likely_next_concept": "cut",
+      "observed_transition_count": 829,
+      "learned_conditional_probability": 0.74056,
+      "unconditional_probability": 0.23861,
+      "relative_to_base": 3.104,
+      "geometry_rationale_educational_not_causal": "A subtractive feature changes solid topology or forms a cavity; validate remaining walls.",
+      "native_transfer": {
+        "status": "partial",
+        "implemented": "NativeInterfaceLab fixed through-bore; NativeBranchLab fixed blind socket",
+        "missing": "general position-independent Boolean CSG and true T-branch passage"
+      },
+      "source": "licensed Zero-to-CAD 100K training split only"
+    },
+    {
+      "lesson_type": "observed_construction_transition",
+      "observed_previous_concept": "volume",
+      "likely_next_concept": "finish",
+      "observed_transition_count": 757,
+      "learned_conditional_probability": 0.26322,
+      "unconditional_probability": 0.16654,
+      "relative_to_base": 1.581,
+      "geometry_rationale_educational_not_causal": "An edge/skin operation changes transitions or wall behavior; inspect radii and normals.",
+      "native_transfer": {
+        "status": "missing_general",
+        "implemented": "sampled flange ease; ring blend controls",
+        "missing": "true constant-radius multi-edge fillet, chamfer solver and G2 continuity"
+      },
+      "source": "licensed Zero-to-CAD 100K training split only"
+    },
+    {
+      "lesson_type": "observed_construction_transition",
+      "observed_previous_concept": "cut",
+      "likely_next_concept": "profile",
+      "observed_transition_count": 754,
+      "learned_conditional_probability": 0.30713,
+      "unconditional_probability": 0.22957,
+      "relative_to_base": 1.338,
+      "geometry_rationale_educational_not_causal": "The profile defines a cross-section or sketch to be shaped, cut, or revolved.",
+      "native_transfer": {
+        "status": "partial",
+        "implemented": "NativeFormLab cross-sections; NativeInterfaceLab concentric profiles",
+        "missing": "arbitrary sketch constraints, multiwire profiles and profiles with islands"
+      },
+      "source": "licensed Zero-to-CAD 100K training split only"
+    },
+    {
+      "lesson_type": "observed_construction_transition",
+      "observed_previous_concept": "cut",
+      "likely_next_concept": "finish",
+      "observed_transition_count": 753,
+      "learned_conditional_probability": 0.30651,
+      "unconditional_probability": 0.16654,
+      "relative_to_base": 1.84,
+      "geometry_rationale_educational_not_causal": "An edge/skin operation changes transitions or wall behavior; inspect radii and normals.",
+      "native_transfer": {
+        "status": "missing_general",
+        "implemented": "sampled flange ease; ring blend controls",
+        "missing": "true constant-radius multi-edge fillet, chamfer solver and G2 continuity"
+      },
+      "source": "licensed Zero-to-CAD 100K training split only"
+    },
+    {
+      "lesson_type": "observed_construction_transition",
+      "observed_previous_concept": "finish",
+      "likely_next_concept": "profile",
+      "observed_transition_count": 569,
+      "learned_conditional_probability": 0.38081,
+      "unconditional_probability": 0.22957,
+      "relative_to_base": 1.659,
+      "geometry_rationale_educational_not_causal": "The profile defines a cross-section or sketch to be shaped, cut, or revolved.",
+      "native_transfer": {
+        "status": "partial",
+        "implemented": "NativeFormLab cross-sections; NativeInterfaceLab concentric profiles",
+        "missing": "arbitrary sketch constraints, multiwire profiles and profiles with islands"
+      },
+      "source": "licensed Zero-to-CAD 100K training split only"
+    },
+    {
+      "lesson_type": "observed_construction_transition",
+      "observed_previous_concept": "finish",
+      "likely_next_concept": "finish",
+      "observed_transition_count": 395,
+      "learned_conditional_probability": 0.2644,
+      "unconditional_probability": 0.16654,
+      "relative_to_base": 1.588,
+      "geometry_rationale_educational_not_causal": "An edge/skin operation changes transitions or wall behavior; inspect radii and normals.",
+      "native_transfer": {
+        "status": "missing_general",
+        "implemented": "sampled flange ease; ring blend controls",
+        "missing": "true constant-radius multi-edge fillet, chamfer solver and G2 continuity"
+      },
+      "source": "licensed Zero-to-CAD 100K training split only"
+    },
+    {
+      "lesson_type": "observed_construction_transition",
+      "observed_previous_concept": "pattern",
+      "likely_next_concept": "profile",
+      "observed_transition_count": 250,
+      "learned_conditional_probability": 0.22445,
+      "unconditional_probability": 0.22957,
+      "relative_to_base": 0.978,
+      "geometry_rationale_educational_not_causal": "The profile defines a cross-section or sketch to be shaped, cut, or revolved.",
+      "native_transfer": {
+        "status": "partial",
+        "implemented": "NativeFormLab cross-sections; NativeInterfaceLab concentric profiles",
+        "missing": "arbitrary sketch constraints, multiwire profiles and profiles with islands"
+      },
+      "source": "licensed Zero-to-CAD 100K training split only"
+    },
+    {
+      "lesson_type": "observed_construction_transition",
+      "observed_previous_concept": "transform",
+      "likely_next_concept": "cut",
+      "observed_transition_count": 247,
+      "learned_conditional_probability": 0.28545,
+      "unconditional_probability": 0.23861,
+      "relative_to_base": 1.196,
+      "geometry_rationale_educational_not_causal": "A subtractive feature changes solid topology or forms a cavity; validate remaining walls.",
+      "native_transfer": {
+        "status": "partial",
+        "implemented": "NativeInterfaceLab fixed through-bore; NativeBranchLab fixed blind socket",
+        "missing": "general position-independent Boolean CSG and true T-branch passage"
+      },
+      "source": "licensed Zero-to-CAD 100K training split only"
+    },
+    {
+      "lesson_type": "observed_construction_transition",
+      "observed_previous_concept": "transform",
+      "likely_next_concept": "profile",
+      "observed_transition_count": 233,
+      "learned_conditional_probability": 0.26931,
+      "unconditional_probability": 0.22957,
+      "relative_to_base": 1.173,
+      "geometry_rationale_educational_not_causal": "The profile defines a cross-section or sketch to be shaped, cut, or revolved.",
+      "native_transfer": {
+        "status": "partial",
+        "implemented": "NativeFormLab cross-sections; NativeInterfaceLab concentric profiles",
+        "missing": "arbitrary sketch constraints, multiwire profiles and profiles with islands"
+      },
+      "source": "licensed Zero-to-CAD 100K training split only"
+    }
+  ]
+}
