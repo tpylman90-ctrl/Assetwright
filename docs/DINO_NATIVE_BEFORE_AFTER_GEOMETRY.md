@@ -110,3 +110,49 @@ Workflow: .github/workflows/dino-before-after-native-learning.yml.
 The run preserves source GLBs, 972 camera images, source hashes,
 teacher features, student candidates, actual student GLBs and independent
 reports for 30 days via GitHub Actions artifacts.
+
+
+## First complete experiment — verified November 5, 2026
+
+The initial source-protected study completed successfully in
+[GitHub Actions run 42040669117](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/42040669117).
+The exported original meshes, camera-aligned images, frozen teacher,
+candidate weights and independent native GLB reports are archived as
+[research artifact 13421515288](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/42040669117/artifacts/13421515288).
+
+All 486 source GLBs, 972 source-aligned render images, and 108 student
+reconstructed GLBs passed the recorded source hash and topology checks.
+The initial before/after curriculum showed a clear benefit over
+single-image recognition, measured once on 54 disjoint original
+validation examples.
+
+| Held-out metric | After-only | Before/after without DINO | Before/after with DINO |
+|---|---:|---:|---:|
+| Operation accuracy | 44.44% | 79.63% | 79.63% |
+| Strength MAE (0–1) | 0.26796 | 0.24162 | 0.24163 |
+| Classification + strength joint loss | 2.58037 | 1.30149 | 1.27600 |
+| Mean native normalized vertex RMSE | Not reconstructed | 0.009883 | 0.009787 |
+
+An actual unchanged-original-native baseline had normalized target
+vertex RMSE 0.014969. The guided student reduced that by **34.62%**
+on actual, independently audited source-owned GLBs. DINO supervision
+improved the paired student's joint prediction loss by **1.96%**
+and native reconstruction error by **0.97%**. These improvements are
+real but small compared with the strong paired non-DINO baseline.
+
+**Promotion decision: rejected.** Native operator accuracy surpassed
+the 60% gate, and before/after input improved prediction by 49.56%
+relative to after-only. However strength MAE was 0.24163 rather than
+the required ≤0.18, DINO-specific joint improvement was 1.96% rather
+than ≥2.5%, and DINO-specific geometric improvement was 0.97% rather
+than ≥2%. No thresholds were weakened and no Android weights were
+modified. This is validated *evidence of visual-change learning*, not
+a production-ready 3D generation model.
+
+The 54 originally fresh validation source cases (bdhold01..03) are now
+**inspected, exposed and retired** from independent generalization
+claims. Any subsequent strength-calibration, teacher-loss or model
+change must reserve genuinely new source families and strength
+values for its final blinded comparison. Historical reruns of the
+same first experiment may verify reproducibility, not provide new
+unseen-test evidence.
