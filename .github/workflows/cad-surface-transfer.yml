@@ -1,0 +1,96 @@
+name: AssetWright Licensed CAD Surface Measurement Teacher
+
+# Original licensed STL is a short-lived numerical target only.
+# Never execute source code or import foreign meshes into Android.
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/cad-surface-transfer.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cad-surface-teacher:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      HF_DATASETS_DISABLE_PROGRESS_BARS: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install free source reader and bounded geometry numerics
+        run: |
+          python -m pip install 'datasets>=3.0,<5.0' 'numpy==2.1.3'
+      - name: Ensure STL parser, unsafe-source rejection and baseline tests pass
+        run: |
+          python -m unittest discover -s tools/mini_ai -p test_cad_surface_transfer.py -v
+          python -m unittest discover -s tools/mini_ai -p test_cad_shape_school.py
+      - name: Pin single source revision for all licensed geometry measurements
+        run: |
+          mkdir -p local-data/cad-surfaces
+          python - <<'PY'
+          from huggingface_hub import HfApi
+          from pathlib import Path
+          import re
+          revision=HfApi().dataset_info('ADSKAILab/Zero-To-CAD-100k').sha
+          assert isinstance(revision,str) and re.fullmatch('[a-f0-9]{40}',revision)
+          Path('local-data/cad-surfaces/revision.txt').write_text(revision+'\n')
+          print('Licensed STL teacher pinned:',revision)
+          PY
+      - name: Measure 320 NEW original official training STL shapes
+        run: |
+          python tools/mini_ai/cad_surface_teacher.py \
+            --split train \
+            --revision "$(cat local-data/cad-surfaces/revision.txt)" \
+            --offset 2300 --count 320 --scan-limit 950 \
+            --out local-data/cad-surfaces/train.json
+      - name: Measure 96 official UNSEEN validation STL shapes
+        run: |
+          python tools/mini_ai/cad_surface_teacher.py \
+            --split validation \
+            --revision "$(cat local-data/cad-surfaces/revision.txt)" \
+            --offset 1700 --count 96 --scan-limit 520 \
+            --out local-data/cad-surfaces/validation.json
+      - name: Train owned surface signature learner with train-internal model selection
+        run: |
+          python tools/mini_ai/cad_surface_student.py \
+            --train local-data/cad-surfaces/train.json \
+            --validation local-data/cad-surfaces/validation.json \
+            --out local-data/cad-surfaces/student
+      - name: Independently guard against outside model generation or accidental promotion
+        if: success()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('local-data/cad-surfaces/student')
+          model=json.loads((root/'candidate_surface_student.json').read_text())
+          report=json.loads((root/'evaluation.json').read_text())
+          assert report['status']=='validated_research_surface_teacher'
+          assert all(report['precommitted_checks'].values())
+          assert report['actually_generated_native_GLBS']==0
+          assert report['outside_STL_imported_into_android'] is False
+          assert model['outside_mesh_generator'] is False
+          assert model['android_deployable'] is False
+          assert model['allowed_for_native_geometry'] is False
+          assert model['selected_from_internal_development_only'] is True
+          print('Research surface targets verified; no Android or foreign geometry promotion')
+          PY
+      - name: Retain every candidate, rejection, hash and original geometry descriptor
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-cad-real-stl-surface-teacher
+          path: |
+            local-data/cad-surfaces/revision.txt
+            local-data/cad-surfaces/train.json
+            local-data/cad-surfaces/validation.json
+            local-data/cad-surfaces/student/*.json
+          if-no-files-found: warn
+          retention-days: 30
