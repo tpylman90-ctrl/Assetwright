@@ -20,6 +20,7 @@ import re
 import numpy as np
 
 from deep_dino_curriculum import numeric_cad_features, NUMERIC_SCHEMA
+from cad_surface_profile_features import extract as profile_features, SCHEMA as PROFILE_SCHEMA
 from zero_to_cad_ingest import DATASET,LICENSE,SCHEMA,dataset_iterator,parse_row
 
 GEOMETRY_SCHEMA="assetwright-cad-stl-surface-teacher-v1"
@@ -128,7 +129,8 @@ def descriptors(triangles:np.ndarray)->tuple[list[float],dict]:
         "bounding_surface_area_ratio":round(area_ratio,8)
     }
 
-def collect(split:str,revision:str,offset:int,count:int,scan:int)->dict:
+def collect(split:str,revision:str,offset:int,count:int,scan:int,
+            enriched:bool=False)->dict:
     if split not in ("train","validation"):
         raise ValueError("Only original official train and validation")
     if not isinstance(revision,str) or not re.fullmatch(r"[a-f0-9]{40}",revision):
@@ -162,7 +164,9 @@ def collect(split:str,revision:str,offset:int,count:int,scan:int)->dict:
             "stl_sha256":mesh_sha,"split":split,
             "operations":row["operations"],
             "safe_numeric_cad_features":numeric_cad_features(raw.get("cadquery_file")),
-            "surface_target":geometry,"surface_audit":physics
+            "surface_target":geometry,"surface_audit":physics,
+            **({"profile_geometry_features":profile_features(raw.get("cadquery_file"))}
+                if enriched else {})
         })
     result={
         "schema":GEOMETRY_SCHEMA,"dataset":DATASET,"license":LICENSE,
@@ -170,6 +174,7 @@ def collect(split:str,revision:str,offset:int,count:int,scan:int)->dict:
         "source_offset":offset,"scanned":scanned,"accepted":len(rows),
         "records":rows,"target_names":list(TARGETS),
         "numeric_feature_schema":NUMERIC_SCHEMA,
+        "profile_feature_schema":PROFILE_SCHEMA if enriched else None,
         "rejected":dict(rejected),
         "downloaded_scripts_executed":False,
         "downloaded_meshes_exported_as_native":False,
@@ -187,8 +192,11 @@ def main():
     p.add_argument("--count",type=int,required=True)
     p.add_argument("--scan-limit",type=int,required=True)
     p.add_argument("--out",type=Path,required=True)
+    p.add_argument("--enriched",action="store_true",
+                   help="Persist safe relative profile, depth and fillet ratios")
     args=p.parse_args()
-    data=collect(args.split,args.revision,args.offset,args.count,args.scan_limit)
+    data=collect(args.split,args.revision,args.offset,args.count,args.scan_limit,
+                 enriched=args.enriched)
     args.out.parent.mkdir(parents=True,exist_ok=True)
     args.out.write_text(json.dumps(data,indent=2)+"\n")
     print(json.dumps({k:v for k,v in data.items() if k!="records"},indent=2))
