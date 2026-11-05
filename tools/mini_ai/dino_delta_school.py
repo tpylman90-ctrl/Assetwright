@@ -197,7 +197,7 @@ def render_school(source:Path,images:Path,manifest_path:Path)->dict:
         })
     manifest={
         "schema":MANIFEST,"generator":"AssetWright-Kotlin-AdvancedFormLab",
-        "teacher":"frozen "+DINO,"views":list(VIEWS),"source_count":486,
+        "teacher":"frozen "+DINO,"views":list(VIEWS),"source_count":EXPECTED+BASELINES,
         "paired_examples":len(records),"renderer":"fixed-family-orthographic-clay","study_id":STUDY,
         "no_text_labels_in_images":True,"external_geometry_used":False,
         "records":records
