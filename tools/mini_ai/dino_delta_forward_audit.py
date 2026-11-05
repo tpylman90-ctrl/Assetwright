@@ -10,7 +10,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from dino_delta_school import expected_changes,read_case
+from dino_delta_school import STUDY,FAMILIES,expected_changes,read_case
 from dino_native_forward_audit import audited,distance
 
 SCHEMA="assetwright-native-before-after-reconstruction-v1"
@@ -23,7 +23,7 @@ def forward(source:Path,reconstructed:Path)->dict:
     expected={stem+"__"+variant for stem in cases for variant in VARIANTS}
     found={p.stem for p in reconstructed.glob("*.glb")}
     meta_found={p.stem for p in reconstructed.glob("*.json")}
-    if len(cases)!=54 or found!=expected or meta_found!=expected:
+    if len(cases)!=(96 if STUDY=="strength_v2" else 54) or found!=expected or meta_found!=expected:
         raise ValueError("Incomplete or contaminated native after/before reconstruction cohort")
     records=[];by_op=defaultdict(list);all_target_hashes=[]
     for stem,identity in sorted(cases.items()):
@@ -109,10 +109,11 @@ def forward(source:Path,reconstructed:Path)->dict:
     }
     return {
         "schema":"assetwright-native-before-after-forward-audit-v1",
+        "study_id":STUDY,
         "status":"forward_reconstruction_pass" if all(checks.values()) else "forward_reconstruction_not_validated",
-        "fresh_original_target_glbs":54,
-        "real_student_generated_glbs":108,
-        "native_unmodified_family_baselines":3,
+        "fresh_original_target_glbs":len(records),
+        "real_student_generated_glbs":len(records)*len(VARIANTS),
+        "native_unmodified_family_baselines":len(FAMILIES["validation"]),
         "source":"Only original AssetWright-AdvancedFormLab indexed Kotlin GLBs",
         "source_hashes_sha256":hashlib.sha256(
             "\n".join(sorted(all_target_hashes)).encode()).hexdigest(),
