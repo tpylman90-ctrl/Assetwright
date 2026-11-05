@@ -12,7 +12,7 @@ Files:
 - `tools/mini_ai/deep_dino_curriculum.py`: bounded official split ingestion; pin one immutable dataset revision for training and validation; hash source CadQuery programs and 4 reference images (`image_0`, `image_2`, `image_4`, `image_6`); use DINOv2 Small on CPU without execution of any source CAD program.
 - `tools/mini_ai/deep_dino_student.py`: an **AssetWright-owned, from-scratch** two-layer 64-hidden-unit student that predicts 24-dimensional visual signatures from supported CAD operation sequences. It is not prompt-to-mesh, and teacher images or a face count are not student inference inputs.
 - `tools/mini_ai/test_deep_dino_curriculum.py`: source integrity, disjoint validation, missing/tampered images, no leakage from source mesh face counts, bounded revision-pinned inputs.
-- `.github/workflows/deep-dino-training.yml`: triggered on first source push, can be manually rerun, and runs once per week on Sunday at 08:13 UTC. The cron job rotates among six fixed development cohorts; it does **not** implicitly accumulate validated weights or promote any model.
+- `.github/workflows/deep-dino-training.yml`: triggered on first source push, can be manually rerun, and runs once per week on Sunday at 08:13 UTC. The cron job rotates among six bounded training cohorts and 30 source-offset validation cohorts (repeats cease to be untouched after a full cycle); it does **not** implicitly accumulate validated weights or promote any model.
 
 Historical first bounded research cycle (run 41951810570):
 - 320 licensed source-hashed training CAD programs (starts after the earlier 96-example training study).
@@ -37,7 +37,7 @@ A lower held-out DINO feature error means the student predicts numeric teacher f
 A subsequent phase must train and audit **actual native geometry operators** using independently generated Kotlin GLBs, test continuity/manifoldness/triangles/physical dimensions, evaluate unseen object families, and require human visual approval before any Android deployment. DINOv2 cannot bypass these mechanical and artistic gates.
 
 
-## Geometry-aware second curriculum — next independent experiment
+## Geometry-aware second curriculum — completed and rejected
 
 The initial November 4/5 CPU run completed four-view source collection,
 embedding extraction, and strict evaluation. The **deep** operation-sequence
@@ -48,7 +48,7 @@ from future unseen-benchmark claims. Nothing was deployed to Android.
 
 The second curriculum, now wired into the same workflow, uses:
 - **480** pinned, licensed training programs with four original images each.
-- **96 new official validation programs** beginning at offset 240, separate
+- **96 then-new official validation programs** beginning at offset 240, separate
   from the first inspected 80-example official validation cohort.
 - 2,304 expected DINOv2 reference-image passes.
 - An AST-only numeric CAD literal extractor. Its bounded 18-number vector
@@ -63,6 +63,12 @@ The second curriculum, now wired into the same workflow, uses:
 - Acceptance requires at least 3% gain over the uninformed mean, 2% over
   the **operations-only** baseline, and no material advanced-operator
   subgroup regression.
+
+### Verified second study outcome
+
+[Run 41952882327](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41952882327) processed 480 pinned training and 96 official validation CAD programs, four views each. The owned geometry-literal candidate reached held-out visual-feature MSE **0.03660592**, versus **0.03622425** for the operations-only ridge and **0.04420222** for the constant-mean baseline. It improved over the uninformed baseline but worsened 1.05% against the stronger nonvisual baseline; **the candidate was rejected**. The 96-example validation cohort at offset 240 is now inspected and retired from pristine-test claims.
+
+The next separate [DINO native geometry school](DINO_NATIVE_VISUAL_GEOMETRY_SCHOOL.md) uses original Kotlin-generated GLBs with exact construction controls, genuine native-mesh forward reconstructions, and separately reserved parametric families.
 
 The owned student still predicts only 24-dimensional visual signatures
 from an already structured CAD operation program and safe literal arguments.
