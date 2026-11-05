@@ -46,7 +46,7 @@ class DinoStrengthReconstructionTest {
             val stem=field("teacher_free","case")
             require(Regex("validation__bs_blind0[1-4]__[a-z_]+__s[0-9]{3}").matches(stem))
             require(cases.add(stem)) { "Duplicate native strength test target" }
-            for (key in ("source_glb_sha256","baseline_glb_sha256")) {
+            for (key in listOf("source_glb_sha256","baseline_glb_sha256")) {
                 require(Regex("[0-9a-f]{64}").matches(field("teacher_free",key)))
             }
             val dims=listOf("length","width","height").map{
@@ -56,7 +56,7 @@ class DinoStrengthReconstructionTest {
             require(dims[1].isFinite() && dims[1] in .5f..7f)
             require(dims[2].isFinite() && dims[2] in .5f..7f)
             for (variant in variants) {
-                for (key in ("case","source_glb_sha256","baseline_glb_sha256",
+                for (key in listOf("case","source_glb_sha256","baseline_glb_sha256",
                              "length","width","height")) {
                     require(field(variant,key)==field("teacher_free",key)) {
                         "Control and teacher model comparison uses unequal original GLBs"
