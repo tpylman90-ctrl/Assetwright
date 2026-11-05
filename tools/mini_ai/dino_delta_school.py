@@ -60,6 +60,19 @@ elif STUDY=="strength_marathon_v3":
         "development":(.13,.37,.61,.87),
         "validation":(.075,.455,.735,.975)
     }
+elif STUDY=="strength_continual_v4":
+    # New 716 original GLBs. All 96 blind items are genuinely unseen;
+    # historic bm_blind, bs_blind and bdhold sources are retired forever.
+    FAMILIES={
+        "train":tuple("bc_train%02d"%i for i in range(1,13)),
+        "development":tuple("bc_dev%02d"%i for i in range(1,5)),
+        "validation":tuple("bc_blind%02d"%i for i in range(1,5))
+    }
+    LEVELS={
+        "train":(.03,.18,.36,.52,.68,.83,.97),
+        "development":(.10,.40,.60,.90),
+        "validation":(.07,.27,.73,.95)
+    }
 elif STUDY!="delta_v1":
     raise ValueError("Unapproved native source curriculum")
 EXPECTED=sum(len(FAMILIES[phase])*6*len(LEVELS[phase])
