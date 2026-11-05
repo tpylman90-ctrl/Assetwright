@@ -65,6 +65,10 @@ NATIVE_TRANSFER={
 }
 
 def verify_manifests(train:dict,valid:dict)->tuple[list[dict],list[dict]]:
+    # Earlier research inspected the first 160 official validation scans.
+    # New research must start strictly after that exposed prefix.
+    if valid.get("excluded_scanned_prefix",0)<256:
+        raise ValueError("New CAD validation must exclude the exposed prefix")
     a=read_rows(train,"train")
     b=read_rows(valid,"validation")
     if len(a)<300 or len(b)<80:

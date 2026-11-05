@@ -40,7 +40,9 @@ def manifest(n,split):
         rows.append(parsed)
     return {
         "schema":SCHEMA,"dataset":DATASET,"license":LICENSE,
-        "split":split,"dataset_revision":REVISION,"records":rows
+        "split":split,"dataset_revision":REVISION,
+        "excluded_scanned_prefix":256 if split=="validation" else 0,
+        "records":rows
     }
 
 class CadShapeSchoolTest(unittest.TestCase):
