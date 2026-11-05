@@ -1,0 +1,128 @@
+name: AssetWright DINO Native Shape School
+
+# Train ORIGINAL image-to-native-control student on source-verified Kotlin GLBs.
+# Research only. Never overwrite Android weights or third-party generated GLBs.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/mini_ai/dino_native_visual_*.py'
+      - 'tools/mini_ai/dino_native_forward_audit.py'
+      - 'tools/mini_ai/test_dino_native_visual_school.py'
+      - 'app/src/test/java/com/assetwright/app/mini/DinoNativeGeometrySchoolTest.kt'
+      - 'app/src/test/java/com/assetwright/app/mini/DinoVisualReconstructionTest.kt'
+      - '.github/workflows/dino-native-shape-school.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: assetwright-dino-native-school-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  offline-safety:
+    name: Prove source partition, hash and no-label input protections
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install basic image/numerical test dependencies
+        run: python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3'
+      - name: Run native visual source and frozen teacher integrity tests
+        run: python -m unittest discover -s tools/mini_ai -p 'test_dino_native_visual_school.py'
+
+  native-geometry-vision:
+    name: Source GLBs -> DINO teacher -> own pixel student -> reconstructed GLBs
+    needs: offline-safety
+    runs-on: ubuntu-24.04
+    timeout-minutes: 95
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ASSETWRIGHT_DINO_NATIVE_SOURCE: ${{ github.workspace }}/local-data/dino-school/native-source
+      ASSETWRIGHT_DINO_RECON_PROPERTIES: ${{ github.workspace }}/local-data/dino-school/students/candidate_native_proposals.properties
+      ASSETWRIGHT_DINO_RECON_OUTPUT: ${{ github.workspace }}/local-data/dino-school/reconstructed
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Prepare free Android SDK to run ORIGINAL Kotlin GLB generator
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Export 252 source-hashed original Kotlin forms across disjoint design families
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoNativeGeometrySchoolTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/dino-school/native-source -maxdepth 1 -name '*.glb' | wc -l)" -eq 252
+      - name: Install free CPU-only DINO teacher and pixel student dependencies
+        run: |
+          python -m pip install --upgrade 'Pillow==11.3.0' 'numpy>=1.26,<3' 'transformers>=4.45,<5' 'safetensors>=0.4,<1'
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Audit real source mesh topology and render 504 label-free orthographic images
+        run: |
+          python tools/mini_ai/dino_native_visual_school.py render \
+            --source local-data/dino-school/native-source \
+            --images local-data/dino-school/images \
+            --out local-data/dino-school/source_manifest.json
+      - name: Teach 252 source-aligned shapes using frozen DINOv2 Small only
+        run: |
+          python tools/mini_ai/dino_native_visual_school.py teach \
+            --manifest local-data/dino-school/source_manifest.json \
+            --images local-data/dino-school/images \
+            --out local-data/dino-school/frozen_teacher.json
+      - name: Train original image-to-native-control student with and without teacher
+        run: |
+          python tools/mini_ai/dino_native_visual_student.py \
+            --manifest local-data/dino-school/source_manifest.json \
+            --teacher local-data/dino-school/frozen_teacher.json \
+            --images local-data/dino-school/images \
+            --out local-data/dino-school/students
+      - name: Reconstruct actual new Kotlin GLBs from learned student predictions
+        run: |
+          test -s "$ASSETWRIGHT_DINO_RECON_PROPERTIES"
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoVisualReconstructionTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/dino-school/reconstructed -maxdepth 1 -name '*.glb' | wc -l)" -eq 72
+      - name: Independently compare original target / owned student / constant prior vertices
+        run: |
+          python tools/mini_ai/dino_native_forward_audit.py \
+            --source local-data/dino-school/native-source \
+            --reconstructed local-data/dino-school/reconstructed \
+            --out local-data/dino-school/forward_audit.json
+      - name: Preserve original meshes, rejected students and independently tested geometry
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-dino-owned-native-geometry-learning
+          path: |
+            local-data/dino-school/source_manifest.json
+            local-data/dino-school/frozen_teacher.json
+            local-data/dino-school/students/*.json
+            local-data/dino-school/students/*.properties
+            local-data/dino-school/forward_audit.json
+            local-data/dino-school/native-source/*.glb
+            local-data/dino-school/native-source/*.json
+            local-data/dino-school/reconstructed/*.glb
+            local-data/dino-school/reconstructed/*.json
+          if-no-files-found: warn
+          retention-days: 45
