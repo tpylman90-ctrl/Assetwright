@@ -2,10 +2,10 @@ name: AssetWright Licensed CAD Surface Measurement Teacher
 
 # Original licensed STL is a short-lived numerical target only.
 # Never execute source code or import foreign meshes into Android.
+# Frozen historical study started at 391d307c8bffee513b31dd2e02aaa5d491bb8d42.
+# Manual reproduction only after the first source-only official holdouts
+# have been evaluated. Future changes need fresh, untouched cohorts.
 on:
-  push:
-    branches: [main]
-    paths: ['.github/workflows/cad-surface-transfer.yml']
   workflow_dispatch:
 
 permissions:
