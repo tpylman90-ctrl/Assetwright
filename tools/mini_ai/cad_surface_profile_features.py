@@ -10,6 +10,7 @@ import ast
 import math
 from deep_dino_curriculum import _literal_numbers
 from zero_to_cad_ingest import canonical
+from safe_cad_numeric_resolver import collect_static_cad_numbers
 
 SCHEMA="assetwright-safe-cad-relative-profile-features-v1"
 NAMES=(
@@ -63,13 +64,9 @@ def extract(source:object)->list[float]:
         source=source.decode("utf-8",errors="replace")
     if not isinstance(source,str) or not 0<len(source)<=200_000:
         return [0.]*SIZE
-    try:
-        code=ast.parse(source)
-    except (SyntaxError,ValueError,RecursionError):
-        return [0.]*SIZE
-    collector=Collector()
-    collector.visit(code)
-    calls=collector.records
+    # Only pure finite arithmetic over simple scalar assignments is
+    # statically resolved. No downloaded Python statements are executed.
+    calls,_=collect_static_cad_numbers(source)
     base=None
     profiles=[]
     for op,args in calls:
