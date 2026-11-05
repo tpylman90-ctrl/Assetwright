@@ -10,6 +10,9 @@ on:
       - 'tools/mini_ai/render_native_rocker_v2.py'
       - 'tools/mini_ai/test_dino_native_visual_school.py'
       - 'tools/mini_ai/test_dino_delta_school.py'
+      - 'tools/mini_ai/native_studied_warm_start.py'
+      - 'tools/mini_ai/test_native_studied_warm_start.py'
+      - 'training/knowledge/native_strength_teacher_free_42080318206/**'
   workflow_dispatch:
 
 permissions:
