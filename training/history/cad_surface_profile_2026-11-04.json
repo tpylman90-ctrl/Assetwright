@@ -1,0 +1,39 @@
+{
+  "schema": "assetwright-cad-relative-profile-study-history-v1",
+  "date": "2026-11-04",
+  "original_revision": "48bcf0a8c6fbfb47a27f5662007c24dff8d754ae",
+  "source_dataset": "ADSKAILab/Zero-To-CAD-100k",
+  "source_license": "Apache-2.0",
+  "third_study": {
+    "run_id": 41959918181,
+    "source_commit": "1f1fdaec6fb5b9e9172de30705a2e064ec405f80",
+    "status": "rejected_fixed_stronger_baseline_gates",
+    "train_source_records": 320,
+    "new_official_validation_records": 96,
+    "official_train_offset": 2300,
+    "official_validation_offset": 3700,
+    "train_median_normalized_mae": 0.13787475315104167,
+    "operations_only_normalized_mae": 0.11552315572422622,
+    "previous_aggregate_numeric_normalized_mae": 0.11806634631876446,
+    "new_parametric_numeric_normalized_mae": 0.12024199639719671,
+    "new_vs_ops_relative_gain": -0.04084757418015128,
+    "new_vs_old_numeric_relative_gain": -0.018427351622775312,
+    "new_vs_train_median_relative_gain": 0.1278896705224073,
+    "fixed_gates_passed": 6,
+    "fixed_gates_total": 8,
+    "validation_exposed_and_retired": true
+  },
+  "source_coverage_audit": {
+    "train_primary_supported_profile_literal_count": 3,
+    "train_total": 320,
+    "validation_primary_supported_profile_literal_count": 2,
+    "validation_total": 96,
+    "why_this_matters": "Most scripts use parameter expressions or variable references not captured by direct literal-only sketch extraction; this explains a likely low-information input channel, but further source-syntax analysis is necessary to verify the precise cause."
+  },
+  "model_accepted": false,
+  "external_final_mesh_generation": false,
+  "cad_scripts_executed": false,
+  "native_checkpoints_preserved": true,
+  "android_student_deployed": false,
+  "future_direction": "Bounded static CAD variable/constant resolution with strict AST whitelist, source provenance tests, larger official train corpus, and untouched new official evaluation cohort. Evaluate strongly against operation-only, train median, and previous aggregate baselines. Never weaken original gates to obtain success."
+}
