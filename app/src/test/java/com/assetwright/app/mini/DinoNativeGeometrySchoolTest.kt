@@ -58,24 +58,24 @@ class DinoNativeGeometrySchoolTest {
         val bytes = GlbWriter.encode(GeneratedAsset(vehicle,listOf(shell)))
         val digest = sha256(bytes)
         val level = "s" + (strength*1000).roundToInt().toString().padStart(3,'0')
-        val stem = "$"+"{split}__$"+"{family.name}__$"+"{operation.name.lowercase()}__$"+"{level}"
-        Files.write(root.resolve("$"+"{stem}.glb"),bytes)
+        val stem = "${split}__${family.name}__${operation.name.lowercase()}__${level}"
+        Files.write(root.resolve("${stem}.glb"),bytes)
         val metadata = """
             {
               "schema":"assetwright-dino-native-school-v1",
               "native_generator":"AssetWright-AdvancedFormLab",
-              "case":"$"+"{stem}",
-              "split":"$"+"{split}",
-              "family":"$"+"{family.name}",
-              "operation":"$"+"{operation.name}",
-              "strength":$"+"{strength}",
-              "length":$"+"{d.length}",
-              "width":$"+"{d.width}",
-              "height":$"+"{d.height}",
-              "source_glb_sha256":"$"+"{digest}"
+              "case":"${stem}",
+              "split":"${split}",
+              "family":"${family.name}",
+              "operation":"${operation.name}",
+              "strength":${strength}",
+              "length":${d.length}",
+              "width":${d.width}",
+              "height":${d.height}",
+              "source_glb_sha256":"${digest}"
             }
         """.trimIndent()
-        Files.write(root.resolve("$"+"{stem}.json"),metadata.toByteArray(StandardCharsets.UTF_8))
+        Files.write(root.resolve("${stem}.json"),metadata.toByteArray(StandardCharsets.UTF_8))
     }
 
     @Test
