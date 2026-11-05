@@ -129,13 +129,15 @@ def capture_images(raw:dict,item:dict,image_root:Path)->None:
             item.setdefault("view_files",{})[key]=destination.name
 
 def collect(split:str,*,max_records:int,max_scan:int,image_root:Path|None=None,
-            revision:str|None=None)->dict:
+            revision:str|None=None,skip_scan:int=0)->dict:
     # Max 2,500 records/split; maintain firm safety, memory and bandwidth
     # bounds while permitting meaningful CAD-library-scale teaching.
     if not 1<=max_records<=2500 or not max_records<=max_scan<=10000:
         raise ValueError("Unbounded streaming request")
     if revision is not None and not re.fullmatch(r"[0-9a-f]{40}",revision):
         raise ValueError("Dataset revision must be a pinned 40-hex commit")
+    if not 0<=skip_scan<max_scan or skip_scan>2000:
+        raise ValueError("Unbounded or invalid prefix exclusion")
     if image_root is not None: image_root.mkdir(parents=True,exist_ok=True)
     rows=[];ids=set();hashes=set();rejected=Counter();scanned=0
     for record in dataset_iterator(split,revision):
@@ -148,6 +150,9 @@ def collect(split:str,*,max_records:int,max_scan:int,image_root:Path|None=None,
                 for k,v in record.items() if k.startswith("image_")
             },sort_keys=True))
         scanned+=1
+        # Previously exposed early validation records cannot be treated as a
+        # brand-new blind partition. Skip them BEFORE parsing/training.
+        if scanned<=skip_scan: continue
         parsed,reason=parse_row(record,split)
         if parsed is None:
             rejected[reason]+=1;continue
@@ -158,6 +163,7 @@ def collect(split:str,*,max_records:int,max_scan:int,image_root:Path|None=None,
         rows.append(parsed)
     return {"schema":SCHEMA,"dataset":DATASET,"license":LICENSE,
             "dataset_revision":revision,
+            "excluded_scanned_prefix":skip_scan,
             "split":split,"records":rows,"scanned":scanned,"accepted":len(rows),
             "rejections":dict(rejected),"raw_python_executed":False,
             "external_meshes_exported":False}
@@ -170,9 +176,12 @@ def main():
     parser.add_argument("--output",type=Path,required=True)
     parser.add_argument("--images",type=Path)
     parser.add_argument("--revision",type=str,help="Immutable dataset commit hash")
+    parser.add_argument("--skip-scan",type=int,default=0,
+                        help="Skip exposed source-prefix rows, preserving fresh evaluation")
     args=parser.parse_args()
     result=collect(args.split,max_records=args.max_records,max_scan=args.max_scan,
-                   image_root=args.images,revision=args.revision)
+                   image_root=args.images,revision=args.revision,
+                   skip_scan=args.skip_scan)
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(result,indent=2)+"\n")
     print(json.dumps({k:v for k,v in result.items() if k!="records"},indent=2))
