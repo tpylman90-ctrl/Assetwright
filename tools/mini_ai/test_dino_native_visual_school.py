@@ -4,12 +4,15 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+import importlib.util
 
 from dino_native_visual_school import (
     VIEWS,FAMILIES,LEVELS,MANIFEST_SCHEMA,MODEL,checked_manifest,expected_stems)
 from dino_native_visual_student import FEATURE_DIM,image_features
 
 
+@unittest.skipUnless(importlib.util.find_spec("PIL") is not None,
+                     "Pillow needed only for optional visual research")
 class NativeDinoSchoolTests(unittest.TestCase):
     def test_source_families_and_levels_are_truly_disjoint(self):
         expected=expected_stems()
