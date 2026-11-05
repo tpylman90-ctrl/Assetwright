@@ -107,7 +107,11 @@ class CadSurfaceTransferTests(unittest.TestCase):
             safe_stl_bytes(b"solid imaginary bad STL")
 
     def test_own_model_never_sees_teacher_target_at_inference(self):
-        train,valid=verify(corpus(300,"train"),corpus(80,"validation"))
+        train_doc=corpus(300,"train")
+        # Negative numeric literal groups legitimately have signed fraction -1;
+        # their bounds are [-1,1], unlike the other [0,1] features.
+        train_doc["records"][0]["safe_numeric_cad_features"][3]=-1.0
+        train,valid=verify(train_doc,corpus(80,"validation"))
         fitted,internal=split_internal(train)
         student=model_fit(fitted,10.,True)
         student_ops=model_fit(fitted,10.,False)
