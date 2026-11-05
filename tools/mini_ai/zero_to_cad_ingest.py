@@ -102,9 +102,11 @@ def parse_row(raw:dict,split:str)->tuple[dict|None,str]:
             "operations":operations[:MAX_OPS],"operations_source":origin,
             "num_faces":faces},"accepted"
 
-def dataset_iterator(split:str):
+def dataset_iterator(split:str,revision:str|None=None):
     from datasets import load_dataset
-    return iter(load_dataset(DATASET,split=split,streaming=True))
+    if revision is not None and not re.fullmatch(r"[0-9a-f]{40}",revision):
+        raise ValueError("Dataset revision must be a pinned 40-hex commit")
+    return iter(load_dataset(DATASET,split=split,streaming=True,revision=revision))
 
 def capture_images(raw:dict,item:dict,image_root:Path)->None:
     for key in ("image_0","image_4"):
@@ -126,12 +128,17 @@ def capture_images(raw:dict,item:dict,image_root:Path)->None:
             item.setdefault("view_sha256",{})[key]=sha(destination.read_bytes())
             item.setdefault("view_files",{})[key]=destination.name
 
-def collect(split:str,*,max_records:int,max_scan:int,image_root:Path|None=None)->dict:
-    if not 1<=max_records<=400 or not max_records<=max_scan<=1600:
+def collect(split:str,*,max_records:int,max_scan:int,image_root:Path|None=None,
+            revision:str|None=None)->dict:
+    # Max 2,500 records/split; maintain firm safety, memory and bandwidth
+    # bounds while permitting meaningful CAD-library-scale teaching.
+    if not 1<=max_records<=2500 or not max_records<=max_scan<=10000:
         raise ValueError("Unbounded streaming request")
+    if revision is not None and not re.fullmatch(r"[0-9a-f]{40}",revision):
+        raise ValueError("Dataset revision must be a pinned 40-hex commit")
     if image_root is not None: image_root.mkdir(parents=True,exist_ok=True)
     rows=[];ids=set();hashes=set();rejected=Counter();scanned=0
-    for record in dataset_iterator(split):
+    for record in dataset_iterator(split,revision):
         if scanned>=max_scan or len(rows)>=max_records: break
         if scanned==0:
             print("ZERO_TO_CAD_COLUMN_TYPES",json.dumps({
@@ -150,6 +157,7 @@ def collect(split:str,*,max_records:int,max_scan:int,image_root:Path|None=None)-
         ids.add(parsed["source_id"]);hashes.add(parsed["code_sha256"])
         rows.append(parsed)
     return {"schema":SCHEMA,"dataset":DATASET,"license":LICENSE,
+            "dataset_revision":revision,
             "split":split,"records":rows,"scanned":scanned,"accepted":len(rows),
             "rejections":dict(rejected),"raw_python_executed":False,
             "external_meshes_exported":False}
@@ -161,9 +169,10 @@ def main():
     parser.add_argument("--max-scan",type=int,default=384)
     parser.add_argument("--output",type=Path,required=True)
     parser.add_argument("--images",type=Path)
+    parser.add_argument("--revision",type=str,help="Immutable dataset commit hash")
     args=parser.parse_args()
     result=collect(args.split,max_records=args.max_records,max_scan=args.max_scan,
-                   image_root=args.images)
+                   image_root=args.images,revision=args.revision)
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(result,indent=2)+"\n")
     print(json.dumps({k:v for k,v in result.items() if k!="records"},indent=2))
