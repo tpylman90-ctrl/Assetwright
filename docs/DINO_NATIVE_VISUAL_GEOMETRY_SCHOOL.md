@@ -133,3 +133,10 @@ reported accuracy/strength metrics. A passing image benchmark alone cannot
 create a validated combined checkpoint. Even if **both** independent research
 gates pass, the model stays research-only and requires human visual approval
 before any possibility of Android integration.
+
+
+## Final combined gate verified — November 5, 2026
+
+[Run 41960017409](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41960017409) completed with **both jobs successful** and the acceptance gate confirming `research_candidate_rejected`. The gate independently reconciled 36 held-out source GLB hashes and student predictions. It confirmed all target and reconstructed GLBs were structurally valid, matched the visual and forward metrics, and found that both visual transfer and forward geometry thresholds remained unmet.
+
+The resulting `combined_disposition.json`, retained candidate weights, 252 original native GLBs, 36 student and 36 constant-prior reconstructions, original teacher features and forward vertex audit are in the [final research artifact](https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41960017409/artifacts/13384942430). No validated combined checkpoint was emitted, and no Android weights were changed.
