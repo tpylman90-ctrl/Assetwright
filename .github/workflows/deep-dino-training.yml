@@ -1,0 +1,123 @@
+name: AssetWright Deep DINOv2 Teaching Research
+
+# Research-only frozen visual teacher. Never deploys student or outside models.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/mini_ai/deep_dino_*.py'
+      - '.github/workflows/deep-dino-training.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '13 8 * * 0' # Weekly bounded fresh cohort; not automatic Android promotion.
+
+permissions:
+  contents: read
+
+concurrency:
+  group: assetwright-deep-dino-teaching
+  cancel-in-progress: false
+
+jobs:
+  provenance-tests:
+    name: Source trust, teacher-view hashes, heldout isolation
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate our native-source and visual-teacher safety rules
+        run: |
+          python -m unittest discover -s tools/mini_ai -p 'test_deep_dino_curriculum.py'
+          python -m unittest discover -s tools/mini_ai -p 'test_zero_to_cad_visual.py'
+          python -m unittest discover -s tools/mini_ai -p 'test_zero_to_cad.py'
+
+  deep-vision-curriculum:
+    name: Four-view DINO teacher and three-stage owned-student fit
+    needs: provenance-tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install CPU-only teacher and licensed dataset dependencies
+        run: |
+          python -m pip install --upgrade 'datasets>=3.0,<5.0' 'transformers>=4.45,<5' 'Pillow>=10,<13' 'safetensors>=0.4,<1' 'numpy>=1.26,<3' 'huggingface-hub>=0.25,<2'
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Pin upstream public dataset revision for BOTH independent splits
+        run: |
+          mkdir -p local-data/deep-dino
+          python - <<'PY'
+          import re
+          from pathlib import Path
+          from huggingface_hub import HfApi
+          revision = HfApi().dataset_info('ADSKAILab/Zero-To-CAD-100k').sha
+          assert isinstance(revision, str) and re.fullmatch(r'[0-9a-f]{40}', revision)
+          Path('local-data/deep-dino/source_revision').write_text(revision + '\n')
+          print('Immutable curriculum source:', revision)
+          PY
+      - name: Choose disjoint, bounded source cohort for this study
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = schedule ]; then
+            week="$(date -u +%V)"
+            offset=$((160 + (10#$week % 6) * 480))
+          else
+            offset=160
+          fi
+          echo "TRAIN_OFFSET=$offset" >> "$GITHUB_ENV"
+          echo "CAD cohort offset: $offset (four views, 320 sources)"
+      - name: Stream 320 licensed training programs and original source images
+        run: |
+          python tools/mini_ai/deep_dino_curriculum.py ingest \
+            --split train --revision "$(cat local-data/deep-dino/source_revision)" \
+            --offset "$TRAIN_OFFSET" --count 320 --scan-limit 800 \
+            --images local-data/deep-dino/images \
+            --output local-data/deep-dino/train.json
+      - name: Stream 80 separate official validation programs from an unseen offset
+        run: |
+          python tools/mini_ai/deep_dino_curriculum.py ingest \
+            --split validation --revision "$(cat local-data/deep-dino/source_revision)" \
+            --offset 80 --count 80 --scan-limit 320 \
+            --images local-data/deep-dino/images \
+            --output local-data/deep-dino/validation.json
+      - name: Freeze multi-view DINOv2 image signatures; no downloaded meshes
+        run: |
+          python tools/mini_ai/deep_dino_curriculum.py teach \
+            --manifest local-data/deep-dino/train.json \
+            --images local-data/deep-dino/images \
+            --output local-data/deep-dino/train-teacher.json
+          python tools/mini_ai/deep_dino_curriculum.py teach \
+            --manifest local-data/deep-dino/validation.json \
+            --images local-data/deep-dino/images \
+            --output local-data/deep-dino/validation-teacher.json
+      - name: Train OUR staged Mini AI research student and check independent baselines
+        run: |
+          python tools/mini_ai/deep_dino_student.py \
+            --train local-data/deep-dino/train.json \
+            --train-teacher local-data/deep-dino/train-teacher.json \
+            --validation local-data/deep-dino/validation.json \
+            --validation-teacher local-data/deep-dino/validation-teacher.json \
+            --out local-data/deep-dino/result
+      - name: Preserve candidate, rejection or accepted research evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-deep-dino-four-view-research
+          path: |
+            local-data/deep-dino/source_revision
+            local-data/deep-dino/train.json
+            local-data/deep-dino/validation.json
+            local-data/deep-dino/train-teacher.json
+            local-data/deep-dino/validation-teacher.json
+            local-data/deep-dino/result/*.json
+          if-no-files-found: warn
+          retention-days: 45
