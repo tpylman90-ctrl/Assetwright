@@ -1,0 +1,36 @@
+name: AssetWright Lean Research Import Safety
+
+# Run the exact all-module Python test discovery needed by Android builds,
+# without installing optional Pillow / CPU torch vision dependencies.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/lean-research-import-safety.yml'
+      - 'tools/mini_ai/render_native_rocker_v2.py'
+      - 'tools/mini_ai/test_dino_native_visual_school.py'
+      - 'tools/mini_ai/test_dino_delta_school.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python-offline:
+    name: Verify Android-safe standard-library Python test discovery
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Assert Pillow is optional and not installed
+        run: |
+          python - <<'PY'
+          import importlib.util
+          assert importlib.util.find_spec('PIL') is None, 'Lean test must not use Pillow'
+          PY
+      - name: Run complete native research Python unit suite with no optional image packages
+        run: |
+          python -m unittest discover -s tools/mini_ai -p 'test_*.py'
