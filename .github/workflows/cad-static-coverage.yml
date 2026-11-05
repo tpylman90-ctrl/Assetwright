@@ -1,0 +1,36 @@
+name: AssetWright Safe CAD Parameter Coverage Clinic
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/cad-static-coverage.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  static-cad-parameters:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install licensed dataset reader and numerical source-validation tests
+        run: python -m pip install 'datasets>=3.0,<5.0' 'numpy==2.1.3'
+      - name: Test safe variable arithmetic, forbidden calls and profile ratios
+        run: python -m unittest discover -s tools/mini_ai -p test_cad_surface_profile.py -v
+      - name: Measure actual STATIC geometry parameter coverage on new TRAIN-only sources
+        run: |
+          mkdir -p local-data/cad-static-coverage
+          python tools/mini_ai/cad_static_coverage_audit.py \
+            --revision 48bcf0a8c6fbfb47a27f5662007c24dff8d754ae \
+            --offset 3400 --count 200 --scan-limit 430 \
+            --out local-data/cad-static-coverage/report.json
+      - name: Retain accepted or rejected source-coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-safe-cad-variable-coverage-train-only
+          path: local-data/cad-static-coverage/report.json
+          if-no-files-found: warn
+          retention-days: 30
