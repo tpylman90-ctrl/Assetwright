@@ -5,18 +5,89 @@ is imported into the Android app or used to produce production models.
 """
 from __future__ import annotations
 import argparse
+import ast
 from collections import Counter
 import hashlib
 from io import BytesIO
 import json
+import math
 from pathlib import Path
 import re
 
-from zero_to_cad_ingest import DATASET, LICENSE, SCHEMA, dataset_iterator, parse_row
+from zero_to_cad_ingest import DATASET, LICENSE, SCHEMA, canonical, dataset_iterator, parse_row
 from zero_to_cad_dinov2_teacher import MODEL, SCHEMA as TEACHER_SCHEMA
 
 VIEWS = ("image_0", "image_2", "image_4", "image_6")
 MAX_PIXELS = 4096 * 4096
+NUMERIC_SCHEMA = "assetwright-safe-cad-literal-geometry-v1"
+NUMERIC_GROUPS = {
+    "profile": frozenset(("box","rect","circle","ellipse","polygon","slot2D","polyline","lineTo","hLine","vLine")),
+    "depth": frozenset(("extrude","cutBlind","cutThruAll","shell","hole","cskHole","cboreHole")),
+    "surface": frozenset(("fillet","chamfer","revolve","loft","sweep","offset2D","threePointArc","tangentArcPoint")),
+    "layout": frozenset(("translate","rotate","mirror","polarArray","rarray","pushPoints","center","moveTo")),
+}
+NUMERIC_DIM = 4 * len(NUMERIC_GROUPS) + 2
+
+
+def _literal_numbers(node: ast.AST) -> list[float]:
+    # Literal values only; never eval downloaded Python, read identifiers,
+    # evaluate expressions or follow function calls.
+    if isinstance(node, ast.Constant) and type(node.value) in (int,float):
+        value = float(node.value)
+        return [value] if math.isfinite(value) and abs(value) <= 1.e9 else []
+    if isinstance(node, ast.UnaryOp) and isinstance(node.op,(ast.USub,ast.UAdd)):
+        result = _literal_numbers(node.operand)
+        return [(-v if isinstance(node.op,ast.USub) else v) for v in result]
+    if isinstance(node,(ast.Tuple,ast.List)) and len(node.elts) <= 8:
+        return [v for element in node.elts for v in _literal_numbers(element)][:16]
+    return []
+
+
+def numeric_cad_features(source: object) -> list[float]:
+    if isinstance(source,bytes):
+        source=source.decode("utf-8",errors="replace")
+    if not isinstance(source,str) or not 0<len(source)<=200000:
+        return [0.0]*NUMERIC_DIM
+    try:
+        syntax=ast.parse(source)
+    except (SyntaxError,ValueError,RecursionError):
+        return [0.0]*NUMERIC_DIM
+    members={key:[] for key in NUMERIC_GROUPS}
+    supported_calls=0
+    for node in ast.walk(syntax):
+        if not isinstance(node,ast.Call) or not isinstance(node.func,ast.Attribute):
+            continue
+        operation=canonical(node.func.attr)
+        if not operation:
+            continue
+        supported_calls+=1
+        if supported_calls>128:
+            break
+        literal_values=[v for argument in node.args[:8] for v in _literal_numbers(argument)]
+        literal_values += [v for kw in node.keywords[:8] for v in _literal_numbers(kw.value)]
+        for key, names in NUMERIC_GROUPS.items():
+            if operation in names:
+                members[key].extend(literal_values[:16])
+                break
+    features=[]
+    observed=0
+    for key in NUMERIC_GROUPS:
+        values=members[key][:512]
+        observed+=len(values)
+        if not values:
+            features.extend((0.0,0.0,0.0,0.0))
+            continue
+        count=min(1.0,len(values)/24.0)
+        mean_abs=sum(abs(v) for v in values)/len(values)
+        max_abs=max(abs(v) for v in values)
+        signed=sum(1 if v>0 else -1 if v<0 else 0 for v in values)/len(values)
+        features.extend((count,min(1.0,math.log1p(mean_abs)/8.0),
+                         min(1.0,math.log1p(max_abs)/8.0),signed))
+    features.extend((min(1.0,supported_calls/64.0),
+                     min(1.0,observed/128.0)))
+    assert len(features)==NUMERIC_DIM
+    return features
+
 
 
 def digest(path: Path) -> str:
@@ -79,6 +150,7 @@ def ingest(split: str, revision: str, *, offset: int, count: int,
         if row["source_id"] in ids or row["code_sha256"] in hashes:
             rejected["duplicate_cad_source"] += 1
             continue
+        row["numeric_cad_features"] = numeric_cad_features(raw.get("cadquery_file"))
         save_views(raw, row, images)
         accepted.append(row)
         ids.add(row["source_id"])
@@ -88,7 +160,8 @@ def ingest(split: str, revision: str, *, offset: int, count: int,
     document = {"schema": SCHEMA, "dataset": DATASET, "license": LICENSE,
                 "dataset_revision": revision, "split": split, "records": accepted,
                 "offset": offset, "scanned": scanned, "accepted": len(accepted),
-                "teacher_views": list(VIEWS), "rejections": dict(rejected),
+                "teacher_views": list(VIEWS), "numeric_feature_schema": NUMERIC_SCHEMA,
+                "rejections": dict(rejected),
                 "raw_python_executed": False, "external_meshes_exported": False}
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(document, indent=2) + "\n")
