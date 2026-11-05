@@ -1,0 +1,164 @@
+name: AssetWright Preserve Verified Native Branch Learning Checkpoint
+
+# One-time source-stable archive of the previously PASSED research study.
+# Does NOT re-train or re-evaluate the now-exposed synthetic holdouts.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/archive-native-branch.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  preserve:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ORIGINAL_RUN: '41944304381'
+      ORIGINAL_COMMIT: a4248753b47387879eb48948b9daca8fd40bad67
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch source-stable PASS artifact without repeating training
+        run: |
+          git merge-base --is-ancestor "$ORIGINAL_COMMIT" "$GITHUB_SHA"
+          mkdir -p local-data/branch-preserved
+          gh run download "$ORIGINAL_RUN" \
+            --repo "$GITHUB_REPOSITORY" \
+            --name assetwright-connected-branch-source-and-learning \
+            --dir local-data/branch-preserved
+      - name: Reconcile every source, reconstruction, model and saved audit
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path("local-data/branch-preserved")
+          report=json.loads((root/"evaluation/branch_report.json").read_text())
+          forward=json.loads((root/"evaluation/forward_branch_audit.json").read_text())
+          model=json.loads((root/"evaluation/candidate_branch_student.json").read_text())
+          predictions=json.loads((root/"evaluation/heldout_predictions.json").read_text())
+          visual=json.loads((root/"previews/review_manifest.json").read_text())
+          assert report["schema"]=="assetwright-native-branch-placement-study-v1"
+          assert report["status"]=="passed_development_only"
+          assert (report["original_kotlin_glbs"],report["training_source_glbs"],
+                  report["heldout_dimension_glbs"],report["heldout_aspect_glbs"])==(520,360,80,80)
+          assert len(report["checks"])==12 and all(report["checks"].values())
+          assert report["connected_manifold_genus_one_audits"]==520
+          assert forward["passed"] and len(forward["checks"])==5
+          assert all(forward["checks"].values()) and len(forward["cases"])==160
+          assert model["schema"]=="assetwright-owned-branch-site-and-socket-student-v1"
+          assert model["training_sources"]==360 and model["classes"]==20
+          assert model["android_deployable"] is False
+          assert model["previous_weights_modified"] is False
+          assert len(predictions["validation"])==80
+          assert len(predictions["aspect_shift"])==80
+          assert visual["render_count"]==80 and len(visual["images"])==80
+          sources={}
+          for file in (root/"source").glob("*.glb"):
+              manifest=json.loads(file.with_suffix(".json").read_text())
+              sha=hashlib.sha256(file.read_bytes()).hexdigest()
+              assert sha==manifest["source_glb_sha256"]
+              assert manifest["generator"]=="AssetWright-NativeBranchLab"
+              sources[file.stem]=sha
+          assert len(sources)==520 and len(set(sources.values()))==520
+          reconstructed={}
+          for file in (root/"reconstructed").glob("*.glb"):
+              sha=hashlib.sha256(file.read_bytes()).hexdigest()
+              assert sha==file.with_suffix(".sha256").read_text().strip()
+              reconstructed[file.stem]=sha
+          assert len(reconstructed)==160 and len(set(reconstructed.values()))==160
+          assert set(reconstructed)<=set(sources)
+          for case in forward["cases"]:
+              stem=case["source"]
+              assert case["original_source_sha256"]==sources[stem]
+              assert case["student_reconstruction_sha256"]==reconstructed[stem]
+              assert case["connected_through_bore_and_blind_socket"] is True
+          trainhashes=sorted(x for k,x in sources.items() if k.startswith("train__"))
+          assert len(trainhashes)==360
+          assert hashlib.sha256("\n".join(trainhashes).encode()).hexdigest()==\
+              model["source_train_hash_digest"]
+          for name,key in (("validation","dimension_holdout"),
+                           ("aspect_shift","aspect_holdout")):
+              labelhashes=sorted(x for k,x in sources.items() if k.startswith(name+"__"))
+              assert len(labelhashes)==80
+              assert report[key]["sources"]==80
+              assert report[key]["exact_site_accuracy"]>=.90
+          images=[]
+          for case in visual["images"]:
+              path=root/"previews"/case["file"]
+              assert hashlib.sha256(path.read_bytes()).hexdigest()==case["image_sha256"]
+              images.append(path)
+          assert len(images)==80
+          dest=Path("training/checkpoints/native_branch_a4248753")
+          dest.mkdir(parents=True,exist_ok=True)
+          mapping={
+              "evaluation/candidate_branch_student.json":"validated_branch_student.json",
+              "evaluation/branch_report.json":"branch_report.json",
+              "evaluation/forward_branch_audit.json":"forward_branch_audit.json",
+              "evaluation/heldout_predictions.json":"heldout_predictions.json",
+              "previews/review_manifest.json":"review_manifest.json"
+          }
+          for src,name in mapping.items():
+              (dest/name).write_bytes((root/src).read_bytes())
+          (dest/"source_hash_manifest.json").write_text(json.dumps(sources,indent=1)+"\n")
+          (dest/"reconstruction_hash_manifest.json").write_text(
+              json.dumps(reconstructed,indent=1)+"\n")
+          weights=(dest/"validated_branch_student.json").read_bytes()
+          checkpoint={
+              "schema":"assetwright-native-branch-placement-checkpoint-v1",
+              "original_source_commit":"a4248753b47387879eb48948b9daca8fd40bad67",
+              "verified_source_run":41944304381,
+              "model_sha256":hashlib.sha256(weights).hexdigest(),
+              "source_glbs":520,
+              "student_reconstructed_glbs":160,
+              "source_hashes_reconciled":True,
+              "reconstruction_hashes_reconciled":True,
+              "source_topology_genus_one_checks_passed":True,
+              "learning_gates_passed":12,
+              "forward_geometry_gates_passed":5,
+              "source_verified_visual_previews":80,
+              "train_model_again_in_archival":False,
+              "evaluations_retired_for_future_blind_testing":True,
+              "regular_android_model_deployed":False,
+              "human_approved":False
+          }
+          (dest/"checkpoint_provenance.json").write_text(
+              json.dumps(checkpoint,indent=2)+"\n")
+          (dest/"RESEARCH_ONLY.md").write_text(
+              "Native AssetWright Kotlin side-branch placement study.\n"
+              "520 original joined GLBs; 160 student-controlled reconstructed GLBs.\n"
+              "One through-bore parent, one blind side socket, 20 discrete sites.\n"
+              "Model is a source-morphology site classifier and strength regressor.\n"
+              "No semantic branch placement, arbitrary-angle geometry, full CSG,\n"
+              "production visual approval, or deployment to Android.\n"
+              "Training and evaluation were NOT repeated by this archive job.\n")
+          print("Frozen source-hashed model and reports preserved.")
+          PY
+      - name: Upload verified 80 original clay/wire views and checkpoint
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-native-branch-80-views-validated-checkpoint
+          path: |
+            local-data/branch-preserved/previews/*.png
+            local-data/branch-preserved/previews/*.json
+            training/checkpoints/native_branch_a4248753/*
+          if-no-files-found: warn
+          retention-days: 21
+      - name: Commit verified research checkpoint, never Android assets
+        if: success()
+        run: |
+          git config user.name "AssetWright research checkpoint bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add training/checkpoints/native_branch_a4248753/
+          git commit -m "research: freeze 20-site native branch learner and 680 GLB source hashes"
+          git push origin HEAD:refs/heads/main

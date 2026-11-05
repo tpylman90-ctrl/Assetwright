@@ -107,3 +107,46 @@ automatically repeating or promoting an exposed synthetic benchmark on
 subsequent commits. Any correction involving the student, measurements,
 native shapes or testing thresholds must establish fresh, untouched
 evaluation families first. This does not affect the already-running run.
+
+## First full study — verified original results and visual review limitations
+
+Original source commit:
+a4248753b47387879eb48948b9daca8fd40bad67
+
+Fully successful original geometry-learning workflow:
+https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41944304381
+
+The experiment generated **520** source-hashed Kotlin GLBs, checked the
+complete welded-branch topology and independently reconstructed **160**
+held-out student GLBs. The 20-way classifier correctly located **80/80**
+attachment sites on ordinary new dimensions and **80/80** on extreme
+aspect-ratio families. Mean three-control absolute errors:
+
+- Standard dimensions: 0.00008644094980937145 (constant-strength
+  baseline 0.17624999795833332).
+- Aspect shift: 0.00008651940991315545 (constant-strength baseline
+  0.17615000779166667).
+
+Independent normalized forward surface RMS:
+
+- Standard dimensions: 0.0000014657261223365509.
+- Aspect shift: 0.0000014673128101410924.
+
+Every one of the **12 original learning checks** and **5 forward source/mesh
+checks** passed, plus all 80 source-verified clay/wire views generated.
+No thresholds were weakened and no earlier checkpoint was modified.
+
+### Visual-quality reality check
+
+The integrated branch and socket are real manifold geometry, but visual
+inspection shows a still angular, somewhat chunky shoulder/junction. This
+is NOT an approved production fillet or a smoothly sculpted vehicle
+body. The next modeling pass should explicitly improve the support
+fairing and curved cross-sectional transitions under independently
+measured normals/curvature and triangle budgets, not simply increase
+mesh resolution or infer a known numerical control with more precision.
+
+The source-only synthetic evaluation sets are exposed after this
+initial study and permanently retired as future pristine blind tests.
+The archival workflow copies the **exact previous successful result**
+and reconciles its hashes; it never trains or evaluates the model again.
