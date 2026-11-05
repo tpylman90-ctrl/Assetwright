@@ -252,6 +252,15 @@ def main():
     (a.out/"evaluation.json").write_text(json.dumps(report,indent=2)+"\n")
     (a.out/"candidate_pixel_student.json").write_text(json.dumps(package)+"\n")
     (a.out/"candidate_native_proposals.json").write_text(json.dumps(proposals,indent=2)+"\n")
+    lines=["schema=assetwright-native-visual-proposals-v1",
+           "external_mesh_used=false",
+           "count="+str(len(proposals["samples"]))]
+    for i,row in enumerate(proposals["samples"]):
+        for key in ("case","source_glb_sha256","predicted_operation",
+                    "predicted_strength","length","width","height"):
+            lines.append(f"proposal{i}.{key}={row[key]}")
+    (a.out/"candidate_native_proposals.properties").write_text("\n".join(lines)+"\n")
+
     (a.out/"validated_research_student.json").unlink(missing_ok=True)
     if report["status"]=="validated_research_visual_to_native":
         (a.out/"validated_research_student.json").write_text(json.dumps(package)+"\n")
