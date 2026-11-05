@@ -61,9 +61,11 @@ def disposition(visual:dict,forward:dict,student:dict)->dict:
         raise ValueError("Invalid or inconsistent geometric improvement measurements")
     checks={
         "validated_on_heldout_visual_transfer":
-            visual.get("status")=="validated_research_visual_to_native" and\n            accuracy>=.55 and strength<=.20 and recorded_joint_gain>=.03,
+            visual.get("status")=="validated_research_visual_to_native" and
+            accuracy>=.55 and strength<=.20 and recorded_joint_gain>=.03,
         "independent_forward_geometry_gate":
-            forward.get("strict_forward_geometry_gate") is True and\n            forward_gain>=.10 and accuracy>=.55,
+            forward.get("strict_forward_geometry_gate") is True and
+            forward_gain>=.10 and accuracy>=.55,
         "all_real_target_and_reconstruction_meshes_valid":
             forward["all_meshes_independently_structurally_valid"] is True,
         "source_hash_and_prediction_metrics_agree": True,
