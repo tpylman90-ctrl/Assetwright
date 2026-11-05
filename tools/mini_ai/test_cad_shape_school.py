@@ -78,6 +78,10 @@ class CadShapeSchoolTest(unittest.TestCase):
                          ["profile","volume","finish"])
 
     def test_geometry_proxy_does_not_include_face_target_as_feature(self):
+        try:
+            import numpy  # Optional on normal Android CI; installed in CAD research job.
+        except ImportError:
+            self.skipTest("Owned CAD face regression requires optional NumPy")
         records=manifest(360,"train")["records"]
         model=fit_faces(records)
         evaluation=evaluate_faces(model,manifest(110,"validation")["records"])
