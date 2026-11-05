@@ -9,6 +9,7 @@ import com.assetwright.app.mini.GlbWriter
 import com.assetwright.app.mini.MiniAi
 import com.assetwright.app.mini.MiniGeometry
 import com.assetwright.app.mini.MiniPreview
+import com.assetwright.app.mini.NativeGeometrySkillCard
 import com.assetwright.app.mini.TrainingStore
 import com.assetwright.app.mini.DeviceShapeTrainer
 import com.assetwright.app.mini.ForgeLessonStore
@@ -278,6 +279,9 @@ private fun AssetwrightScreen() {
 
             item {
                 PreviewCard(generatedAsset)
+            }
+            item {
+                NativeGeometrySkillCard(prompt) { message -> status = message }
             }
 
             item {
