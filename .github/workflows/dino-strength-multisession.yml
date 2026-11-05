@@ -1,0 +1,137 @@
+name: AssetWright DINO Multi-Session Native Strength School
+
+# Fresh source families, eight paired seeds, 16 CPU training sessions.
+# DINO teaches numerical shape changes. Only our Kotlin creates GLBs.
+# No Android deployment or automatic checkpoint approval.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/dino-strength-multisession.yml'
+      - 'tools/mini_ai/dino_strength_*.py'
+      - 'tools/mini_ai/test_dino_strength_lab.py'
+      - 'app/src/test/java/com/assetwright/app/mini/DinoStrengthGeometryBatchTest.kt'
+      - 'app/src/test/java/com/assetwright/app/mini/DinoStrengthReconstructionTest.kt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: assetwright-dino-strength-independent-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-and-release-safety:
+    name: Verify fresh geometry cohort and no automatic Android promotion
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ASSETWRIGHT_DINO_STUDY: strength_v2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run strict 16-session source-cohort and native-protection tests
+        run: python -m unittest discover -s tools/mini_ai -p 'test_dino_strength_lab.py'
+
+  sixteen-independent-training-sessions:
+    name: 974 Kotlin source GLBs, 16 CPU students, 192 true native reconstructions
+    needs: source-and-release-safety
+    runs-on: ubuntu-24.04
+    timeout-minutes: 145
+    env:
+      ASSETWRIGHT_DINO_STUDY: strength_v2
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ASSETWRIGHT_DINO_STRENGTH_SOURCE: ${{ github.workspace }}/local-data/dino-strength/source
+      ASSETWRIGHT_DINO_STRENGTH_PREDICTIONS: ${{ github.workspace }}/local-data/dino-strength/student/native_proposals.properties
+      ASSETWRIGHT_DINO_STRENGTH_RECON: ${{ github.workspace }}/local-data/dino-strength/reconstructed
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Install free Android SDK needed for original Kotlin GLB generator tests
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Export 974 original indexed Kotlin GLBs from fresh source families
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoStrengthGeometryBatchTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/dino-strength/source -maxdepth 1 -name '*.glb' | wc -l)" -eq 974
+      - name: Install free CPU torch, Pillow and frozen DINO teaching dependencies
+        run: |
+          python -m pip install --upgrade 'Pillow==11.3.0' 'numpy>=1.26,<3' 'transformers>=4.45,<5' 'safetensors>=0.4,<1'
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Independently audit original geometry, render 1948 camera-aligned source views
+        run: |
+          python tools/mini_ai/dino_delta_school.py render \
+            --source local-data/dino-strength/source \
+            --images local-data/dino-strength/images \
+            --out local-data/dino-strength/manifest.json
+      - name: Freeze DINOv2 before/after numerical teacher without generating any meshes
+        run: |
+          python tools/mini_ai/dino_delta_school.py teach \
+            --manifest local-data/dino-strength/manifest.json \
+            --images local-data/dino-strength/images \
+            --out local-data/dino-strength/frozen_dino_teacher.json
+      - name: Run 8 independent DINO-guided and 8 matched teacher-free original training sessions
+        run: |
+          python tools/mini_ai/dino_strength_student.py \
+            --manifest local-data/dino-strength/manifest.json \
+            --teacher local-data/dino-strength/frozen_dino_teacher.json \
+            --images local-data/dino-strength/images \
+            --out local-data/dino-strength/student
+      - name: Rebuild 192 independent actual Kotlin GLBs from frozen winning students
+        run: |
+          test -s "$ASSETWRIGHT_DINO_STRENGTH_PREDICTIONS"
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoStrengthReconstructionTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/dino-strength/reconstructed -maxdepth 1 -name '*.glb' | wc -l)" -eq 192
+      - name: Compare original indexed vertex buffers, topology and operation-specific effects
+        run: |
+          python tools/mini_ai/dino_delta_forward_audit.py \
+            --source local-data/dino-strength/source \
+            --reconstructed local-data/dino-strength/reconstructed \
+            --out local-data/dino-strength/forward_audit.json
+      - name: Enforce final unseen accuracy, strength and reconstruction evidence
+        run: |
+          python tools/mini_ai/dino_strength_acceptance.py \
+            --visual local-data/dino-strength/student/evaluation.json \
+            --forward local-data/dino-strength/forward_audit.json \
+            --checkpoint local-data/dino-strength/student/candidate_student.json \
+            --out local-data/dino-strength/student
+      - name: Retain full evidence for failed or successful research comparisons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-dino-native-strength-16-training-sessions
+          path: |
+            local-data/dino-strength/source/*.json
+            local-data/dino-strength/source/*.glb
+            local-data/dino-strength/images/*.png
+            local-data/dino-strength/manifest.json
+            local-data/dino-strength/frozen_dino_teacher.json
+            local-data/dino-strength/student/*.json
+            local-data/dino-strength/student/*.properties
+            local-data/dino-strength/reconstructed/*.glb
+            local-data/dino-strength/reconstructed/*.json
+            local-data/dino-strength/forward_audit.json
+          if-no-files-found: warn
+          retention-days: 30
