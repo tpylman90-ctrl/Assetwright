@@ -1,0 +1,58 @@
+{
+  "schema": "assetwright-cad-shape-school-history-v1",
+  "date": "2026-11-04",
+  "source_dataset": "ADSKAILab/Zero-To-CAD-100k",
+  "source_license": "Apache-2.0",
+  "dataset_commit": "48bcf0a8c6fbfb47a27f5662007c24dff8d754ae",
+  "original_source_revision": "3c2da575a3e441f7d34c85b5fab8791498d487f5",
+  "training_run": 41951784006,
+  "training_url": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41951784006",
+  "archive_run": 41952122873,
+  "archive_url": "https://github.com/tpylman90-ctrl/Assetwright/actions/runs/41952122873",
+  "checkpoint_path": "training/checkpoints/cad_shape_school_3c2da575",
+  "status": "passed_research_only",
+  "train_sources": 1600,
+  "validation_sources": 400,
+  "validation_prefix_rows_retired_before_this_study": 256,
+  "new_holdout_exposed_retired_after_this_study": true,
+  "CAD_operation_training_transitions": 13162,
+  "CAD_operation_validation_transitions": 3342,
+  "operation_names_observed_in_training": 40,
+  "baseline_unigram_next_concept_accuracy": 0.2540394973070018,
+  "owned_contextual_next_concept_accuracy": 0.4473369239976062,
+  "baseline_unigram_cross_entropy": 1.7007502518987923,
+  "owned_contextual_cross_entropy": 1.2649161959132191,
+  "cross_entropy_gain_fraction": 0.2562598803081104,
+  "top1_accuracy_gain_points": 19.32974266906044,
+  "CAD_face_complexity_log_MAE": {
+    "owned_student": 0.4757745864697228,
+    "training_median_baseline": 0.5336396052696601,
+    "sequence_length_only_baseline": 0.5214002326423361,
+    "vs_median_gain_fraction": 0.10843464058612517
+  },
+  "undertrained_target_concepts": {
+    "pattern": {
+      "heldout_count": 274,
+      "correct": 0
+    },
+    "transform": {
+      "heldout_count": 253,
+      "correct": 0
+    }
+  },
+  "accepted_research_gates": 7,
+  "observational_lesson_cards": 12,
+  "native_geometry_generated_from_external_dataset_in_this_study": false,
+  "downloaded_CadQuery_scripts_executed": false,
+  "external_final_mesh_generation": false,
+  "regular_android_model_deployed": false,
+  "human_visual_approval": false,
+  "separate_visual_teacher_status": "No combined visual-to-native claim supported by this operation-only study.",
+  "important_limitations": [
+    "External CAD programs and source BRep face counts teach construction concepts and complexity proxies, not actual reconstructed 3D geometry.",
+    "Pattern and transform recognition 0% top1 on the 400-program official validation batch; must train under fresh untouched splits.",
+    "Sources are curated synthetic CAD programs, not real-world human-engineered CAD design labels.",
+    "Native Kotlin geometry students and accepted checkpoints remain frozen and separate."
+  ],
+  "next_milestone": "Use a bounded separate STEP/STL descriptor teacher and new untouched validation source region to learn shape proportions, curvature, surface interfaces and rare pattern/transform operations; independently audit native generated GLBs and human visual quality."
+}
