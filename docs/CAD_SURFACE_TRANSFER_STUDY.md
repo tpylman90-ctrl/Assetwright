@@ -81,3 +81,52 @@ The subsequent native stage should learn how to modify its own Kotlin
 surfaces to match measured proportions and smoothness *without copying
 the training source meshes*, and audit source-hashed GLBs, manifoldness,
 curvature transitions, and human clay/wire approval.
+
+
+## Measured first and second studies — mandatory rejection history
+
+2026-11-04, official original source revision
+48bcf0a8c6fbfb47a27f5662007c24dff8d754ae.
+
+First run 41958208141 extracted 320 new STL training measurements and
+96 validation measurements but the student input auditor correctly stopped
+on a BUG in a legal signed numerical feature: a group can be exactly -1,
+not strictly greater than -0.999999. The audit bound and unit test were
+corrected. Those first 96 validation records (offset 1700) were retired.
+
+Second run 41959059624 re-used only the *identical original* 320 train
+records, then measured 96 new official validation STL records at offset 2600.
+
+**Reject the first numerical surface candidate.** Heldout normalized MAE:
+- Train-only median: 0.14302803019270835.
+- Operations-only learned baseline: 0.12386975301530968.
+- Operations plus simple 18-number numeric summary: 0.12332584793985785.
+- That is 13.78% better than a constant baseline but only 0.439%
+  better than the genuinely stronger learned operations-only baseline.
+- Original accuracy gate demanded at least 1.5% better than the
+  operations-only baseline: FAILED, and the other six checks passed.
+
+The student is NOT accepted. Its data and rejected candidate remain in
+GitHub Actions evidence. This measured failure suggests source numerical
+features have lost critical relational structure: a mean of CAD dimensions
+is not the same as a width/height or fillet/body proportion.
+
+## Third pre-registered experiment: explicit CAD relative geometry
+
+Code: cad_surface_profile_features.py, cad_surface_student_v2.py.
+Original training offset 2300 (320 STL shapes) and *fresh*, disjoint
+official validation offset 3700 (96 STLs). The new source parser recognizes
+literal geometry arguments without evaluating Python and computes
+relative profile dimensions, extrusion-to-body ratios, hole/cut-to-body
+ratios, blend/fillet ratios, and pattern/transform magnitudes.
+
+Three students are trained and compared fairly using only a train-internal
+development split for model choices: original operations-only, older
+aggregate numeric, and richer explicit proportions. Heldout acceptance
+keeps all original 7 thresholds and **adds** a new predeclared minimum
+1% improvement over the older numeric source-summary model. No foreign
+meshes become generated AssetWright meshes.
+
+A rejected result must remain rejected, documented, and measured again
+only with new untouched CAD source families. This is a geometry-learning
+program over months, not a demand for a single quick positive score.
