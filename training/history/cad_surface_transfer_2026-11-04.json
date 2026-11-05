@@ -1,0 +1,48 @@
+{
+  "schema": "assetwright-cad-physical-surface-study-history-v1",
+  "date": "2026-11-04",
+  "source_dataset": "ADSKAILab/Zero-To-CAD-100k",
+  "license": "Apache-2.0",
+  "dataset_revision": "48bcf0a8c6fbfb47a27f5662007c24dff8d754ae",
+  "source_geometry_kind": "transient bounded binary STL teaching only",
+  "five_measured_targets": [
+    "middle_over_major",
+    "minor_over_major",
+    "surface_over_box",
+    "strong_crease_edge_fraction",
+    "moderate_crease_edge_fraction"
+  ],
+  "first_failed_before_training": {
+    "run": 41958208141,
+    "source_train": 320,
+    "source_validation": 96,
+    "rejection": "Source audit numeric signed parameter -1 was wrongly outside [-0.999999,1]; corrected to [-1.000001,1].",
+    "source_validation_offset": 1700,
+    "official_validation_retired": true
+  },
+  "second_checked_study": {
+    "run": 41959059624,
+    "source_training_reused_exact_hashes": 320,
+    "new_official_validation_sources": 96,
+    "source_validation_offset": 2600,
+    "status": "rejected_original_frozen_learning_gate",
+    "all_original_real_stl_measured": true,
+    "train_internal_model_selection": true,
+    "baseline_train_median_normalized_mae": 0.14302803019270835,
+    "operations_only_normalized_mae": 0.12386975301530968,
+    "operations_and_numeric_normalized_mae": 0.12332584793985785,
+    "improvement_over_constant": 0.13775049706204323,
+    "improvement_over_operations_only": 0.0043909434079892895,
+    "required_improvement_over_operations_only": 0.015,
+    "passed_gates": 6,
+    "total_gates": 7,
+    "validation_retired": true
+  },
+  "checkpoint_accepted": false,
+  "android_model_deployed": false,
+  "external_geometry_imported_into_app": false,
+  "downloaded_scripts_executed": false,
+  "human_visual_approval": false,
+  "main_learning": "Simple aggregated numeric literals do not add enough genuine shape-predictive value beyond CAD operation features; retain failure and design richer source-geometric literal features.",
+  "next_unseen_validation": "Use new official offset beyond previously inspected validation cohorts, ideally >=3500; preserve all original thresholds."
+}
