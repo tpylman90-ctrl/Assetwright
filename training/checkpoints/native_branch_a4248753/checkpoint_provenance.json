@@ -1,0 +1,18 @@
+{
+  "schema": "assetwright-native-branch-placement-checkpoint-v1",
+  "original_source_commit": "a4248753b47387879eb48948b9daca8fd40bad67",
+  "verified_source_run": 41944304381,
+  "model_sha256": "f96fb3a489ebee10ec5bd86f116849b503ae95e2a3dec30ae023b5fd7c27157b",
+  "source_glbs": 520,
+  "student_reconstructed_glbs": 160,
+  "source_hashes_reconciled": true,
+  "reconstruction_hashes_reconciled": true,
+  "source_topology_genus_one_checks_passed": true,
+  "learning_gates_passed": 12,
+  "forward_geometry_gates_passed": 5,
+  "source_verified_visual_previews": 80,
+  "train_model_again_in_archival": false,
+  "evaluations_retired_for_future_blind_testing": true,
+  "regular_android_model_deployed": false,
+  "human_approved": false
+}

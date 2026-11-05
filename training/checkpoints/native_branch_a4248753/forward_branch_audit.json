@@ -1,0 +1,1473 @@
+{
+  "schema": "assetwright-native-branch-forward-audit-v1",
+  "status": "passed_development_only",
+  "source_comparison": "original Kotlin native hull target vs student-driven Kotlin reconstruction",
+  "groups": {
+    "validation": {
+      "sources": 80,
+      "mean_surface_rms": 1.4657261223365509e-06,
+      "worst_surface_rms": 3.882889124859102e-06,
+      "mean_p95_distance": 1.323415916071972e-08
+    },
+    "aspect_shift": {
+      "sources": 80,
+      "mean_surface_rms": 1.4673128101410924e-06,
+      "worst_surface_rms": 3.769963438822277e-06,
+      "mean_p95_distance": 1.8163544501293084e-08
+    }
+  },
+  "checks": {
+    "160_source_sha256_and_genus_one_integrity_verified": true,
+    "dimension_mean_surface_rms": true,
+    "aspect_mean_surface_rms": true,
+    "dimension_worst_surface_rms": true,
+    "aspect_worst_surface_rms": true
+  },
+  "cases": [
+    {
+      "source": "aspect_shift__b01__site00__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "53bac407e6a018fe0acd891dcec12cfe6c7767368b994f12ef8b49d0b390ab54",
+      "student_reconstruction_sha256": "db7c5d3eba3bda9195a626d2d666065bdf4fff4778f30a9ed03c16f1f62d4262",
+      "normalized_surface_rms": 1.7327227858429887e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site00__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "c7214fb6bf6e509c02c80473a4a0e97b68572aad37997cd3d7b3bd8009927c48",
+      "student_reconstruction_sha256": "30b3600ba9879b960a8f6aa0c01c429aacedb1185a1191335abcb40606e9c74a",
+      "normalized_surface_rms": 2.365513957773008e-06,
+      "p95_normalized_distance": 1.1802899955522896e-07,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site01__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "6628deeb70fe18a15b19669c84baecc3d830886f28ff7bdafc11dde4c3c001c8",
+      "student_reconstruction_sha256": "8b07de78ccc6afb31c9133b0d7a3ad48c6ee4cc27b2f317d293f5a2612cd1ca2",
+      "normalized_surface_rms": 9.026714720093588e-07,
+      "p95_normalized_distance": 7.268859118950076e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site01__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "71d92de43d9552536072288b0bd9215921b438b0465994f12fe1f20cd2db19ce",
+      "student_reconstruction_sha256": "5b675b6d3c0f34edb58323ca025d3687321a3cf9e73617469b0a96ddcc78b8a3",
+      "normalized_surface_rms": 1.8420975719954492e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site02__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "8ddc229c07d3993a32fc823bec52ff121265ae737024be57c050b3ec4ebade4a",
+      "student_reconstruction_sha256": "9cc234ce1bba405965b02390d32143b8b1a67d7fa7f01c5825e928f6e0d1fd4c",
+      "normalized_surface_rms": 1.736791901081885e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site02__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "d12407087a01dfda25ae45dcd1d3f21f9e24284c42e4142a22ebde2afd9429b5",
+      "student_reconstruction_sha256": "49f7b743a0aa10511fcd7180e53278f2e2660b21aa9a9ba8a329937ebe6a253c",
+      "normalized_surface_rms": 1.7096166003662759e-06,
+      "p95_normalized_distance": 5.901449977761448e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site03__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "5ab13abc78caf56d83bf4820413db714a59eab2110cfc6881e092cc86ef8a2b5",
+      "student_reconstruction_sha256": "699d7866ae93fd271910b901b3759c56c50c3345a3cdcd2a4c35195ea11e6958",
+      "normalized_surface_rms": 7.914363178696938e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site03__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "bbbb9efcd394d98479ffe1deac59d55e6c6ee2abc3277b7de7dced750d2f5358",
+      "student_reconstruction_sha256": "cb2e3baeb94621858b421205fd56c052fd159df7c6c8c224318b6e51beb4f9a2",
+      "normalized_surface_rms": 1.011538380757041e-06,
+      "p95_normalized_distance": 7.268859118950076e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site04__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "959375a59def063d1efedc3c5cf946d0b41e3c3de2e2dda7af1b69487295dde4",
+      "student_reconstruction_sha256": "8560295fb3117fb263056d89d0ff2ee4777c9ae22d17c57ab691c0f5adf11244",
+      "normalized_surface_rms": 1.6273621441892079e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site04__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "1efedb478f79555cb6a5dfcf7fbc672a03343c234382a606be6fb3ac52d66d64",
+      "student_reconstruction_sha256": "ada8b65ab089bd8466ab223d1456ac2879f20486f409b7619082039372ed160c",
+      "normalized_surface_rms": 1.5450437554894153e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site05__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "06a9d7be2e1bb5e6f10712c4302c70cb50d3db3b9ebf5bb65f9b01b75bebaf81",
+      "student_reconstruction_sha256": "efc39015f1f355f40a33e5af8c5436b0473e3ad9b115a3d2cc5ae701ef361517",
+      "normalized_surface_rms": 1.329173417280501e-06,
+      "p95_normalized_distance": 7.268859118950076e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site05__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "bfda36070a1ade48ff59663263fc0d5f111553dddd1391746cbc3ceffb2ca096",
+      "student_reconstruction_sha256": "86c7dae8544fb39cac2618c55f28bf93a35be8a576008f16e8f07fbe5e2c3ac8",
+      "normalized_surface_rms": 1.0325441223327919e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site06__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "7e8306a1d6571c0be2090d9e68e8ffa07896a080b933ab8c5bb4d64e372ef967",
+      "student_reconstruction_sha256": "777e4e05c76e620cf88dea093a59fd0bde35b28715c44b4672f6a2e37406ab58",
+      "normalized_surface_rms": 9.539932521690428e-07,
+      "p95_normalized_distance": 5.901449977761448e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site06__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "585ba1e5757a092698f61a52087d5ef1edc6ef2995ee2d9d07d9bde16a527182",
+      "student_reconstruction_sha256": "354ded2c3cd7dc7672b2742ce155cc80a637cc7f953ce54c1119b2bc5cfd7e73",
+      "normalized_surface_rms": 1.5426908289849458e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site07__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "291ff91d0087d6522126a0d00af2b43f72563eedd598113cdd15c236af81338b",
+      "student_reconstruction_sha256": "0f4e257bf6ce4958c83581174ce5ce7207f50a5a1b0fe402c69a832ceca7d006",
+      "normalized_surface_rms": 1.7762223993596513e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site07__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "5b798b66a64315dbb950c81a5c95ab78c5e2f580c3fc81e156569879bbf4ba1b",
+      "student_reconstruction_sha256": "e2c5c2ef779071181eb47c6b8d4003ba4678d3f45b793e6b3461d910c58ebdbd",
+      "normalized_surface_rms": 1.3900822176395404e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site08__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "32e0a876d2adc8ab3bc563ae1b4e045b28bf0d052ce5a96e5233dd0b112fffd7",
+      "student_reconstruction_sha256": "839121772bad5033e49eae926653e7824f7c85632f734376e1802ffbacc04d01",
+      "normalized_surface_rms": 1.5174522692578496e-06,
+      "p95_normalized_distance": 5.901449977761448e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site08__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "dbc532adabe81577434ee71fe1ac46e4060a9517a0d4c961547fb8aa8e4b49a9",
+      "student_reconstruction_sha256": "221e8a9eb473942f6c5a70b8207881e1deb6d389c3cc88e3b20c100ef4957fbf",
+      "normalized_surface_rms": 8.66501729340076e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site09__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "9fc7c30752cfe3bb4c95d7f6edda6a9c6288875a820b619be0f2b2cb39a727ed",
+      "student_reconstruction_sha256": "388ecd12a75436511e1c73b9297441e3bf021f91b36e7aaac47a4c126875392e",
+      "normalized_surface_rms": 1.8350013733430877e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site09__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "bf19a6a16b4a0507c1f52316cdb247a13a632b0a731ec1e4bb0d4a7b997b6d7a",
+      "student_reconstruction_sha256": "2b7b4985397414a423c878c7c55720a28ac4436bcbe9594fcefeaea5dada6be7",
+      "normalized_surface_rms": 2.3161191472422686e-06,
+      "p95_normalized_distance": 7.268859118950076e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site10__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "2d01b8b22ae580b09d2326d3abc7591dd8a3d550c714fbc1b09425b1541bd69c",
+      "student_reconstruction_sha256": "de6572091a021e6bbfb4f25611c116c41f9c4916ae67b1286d79b3628145a19f",
+      "normalized_surface_rms": 5.293036921895021e-07,
+      "p95_normalized_distance": 5.901449977761448e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site10__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "adf5279992d3bf8fe0d374e7a9273593f56c894d028b0bb28ce246ca5799c654",
+      "student_reconstruction_sha256": "19478d443d950cba641f6ea854249dde2fe9c02755b5e9e6ea04a721b356effe",
+      "normalized_surface_rms": 1.408614783966921e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site11__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "3a5d5a20ca54616016cdc7a56684b1fd2a39d99b4693715816216cd24e5be3ec",
+      "student_reconstruction_sha256": "b0f10cbf3f1a89e73256c15afe84a7b35c4fb800d28720b84011c7c6609de5c0",
+      "normalized_surface_rms": 3.3187858221168083e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site11__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "d4bdd656baeaa391add8c74a47333726de55bf15b81e3dfced77982751d161d9",
+      "student_reconstruction_sha256": "abe61c78ce29194660f7fc8ffe932fea3c1a14edd3283f619f8d5c703f9315a9",
+      "normalized_surface_rms": 1.897738369254495e-06,
+      "p95_normalized_distance": 7.268859118950076e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site12__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "0362bcddc293c54b93447ac415b13029fab5b688776ab857478d5dbf8aa2a9fc",
+      "student_reconstruction_sha256": "f2035abad232f642450111cf067373f5b6ed9ca668b506fc0bf5d25e5421cb5a",
+      "normalized_surface_rms": 1.0711882064756272e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site12__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "c6de8e50572d3588d3a423b6af44b34f02bee7d4b147ed06aa5e24ab15766dd2",
+      "student_reconstruction_sha256": "1727b13047c7d5da3de338ad5bd1a1545151839f74952120828eba6cc193c94e",
+      "normalized_surface_rms": 3.8789515575731037e-07,
+      "p95_normalized_distance": 1.1802899955522896e-07,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site13__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "91e2083c91c6663496af00d0219cddd2e905dd551cf428524e1c6c3f2843c26d",
+      "student_reconstruction_sha256": "b6f79fd6f9dad9e778e18f2c1400071fd331f87cc9536cbc2e2a2e97f4d1226b",
+      "normalized_surface_rms": 2.097255294004789e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site13__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "1048abd28362364d635fe9fbf59e95d8b9d5ecc7cf07ac22a4f74753a02c85e2",
+      "student_reconstruction_sha256": "8692c1baede23ce5cd00f4be1a828f217436be70968921b25c697232d93ee2b0",
+      "normalized_surface_rms": 3.769963438822277e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site14__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "3f9089d4405575bd9f655a7bca378fd633bfa540c0059855a0810e2c2dac845f",
+      "student_reconstruction_sha256": "c5cf60eae00a9e97132909c01d0b9438ca7a54d14d2de0cbf559f10e8ebdbccd",
+      "normalized_surface_rms": 1.6877753903351156e-07,
+      "p95_normalized_distance": 1.1802899955522896e-07,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site14__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "95f88bf1e21f2a37d9841b3efaa0cad8446d58a3b5c4a1a4d1473344bb725f78",
+      "student_reconstruction_sha256": "86310944dfaf66ec60ab8b820c55920e336e0e3357dcf20ef285d200ea7b3473",
+      "normalized_surface_rms": 9.182691452175552e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site15__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "3c870e340ffe1f610ad4e484c095c3dd2ee062681f0f93a3db55283328db9d0e",
+      "student_reconstruction_sha256": "f5d21fed502494d7a5894d62df11b9fda86e309b2c435c738504a01e1abe7fbc",
+      "normalized_surface_rms": 3.306639635554435e-06,
+      "p95_normalized_distance": 7.268859118950076e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site15__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "816b8f31fbd027809eb990fb9a3b80dbd1690ce3432121a22eb3b507e3e0dbf5",
+      "student_reconstruction_sha256": "a03bf4ed9c7971311435fb8e13bc46514daa2f3a07821135f8d4abdb56a3af96",
+      "normalized_surface_rms": 2.1266936975517897e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site16__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "0dbfcd4695a3899206a6c5c56d589deefbfbef1330c38f61d3b9e8b338002c5f",
+      "student_reconstruction_sha256": "6b8950816cacc69eaeeff4e6f8513054b12aa5863d1f76eccd10e0143f0d2014",
+      "normalized_surface_rms": 3.665075977885295e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site16__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "875dfaf30954192c11770b674e1e8589611389c616231f603c5015f76ffc99bd",
+      "student_reconstruction_sha256": "947ec38d1e2ccdd3d9b9907928a91031c0d8d1c364b569bfb26605721cf67dc8",
+      "normalized_surface_rms": 2.9090171066160124e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site17__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "64ce77cd4fee113d6fbaaefee5ae71daf84572c6ee37460f2929b73fa3ab0319",
+      "student_reconstruction_sha256": "dcf3d61cc3233545d1d987ba91bda13c0c29c92fc7860a6222889015466e4402",
+      "normalized_surface_rms": 1.9406315355844598e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site17__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "a843562e8194168fa8d871fab8d04e3fa4de6230ae5609995048486982c53704",
+      "student_reconstruction_sha256": "212eaf0847473a689f19dae539bd4cc5e8a22c03a6833e744a84e11643e6726a",
+      "normalized_surface_rms": 2.7712626389635146e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site18__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "02c562cc149c7b4e08dd6ea9e5b96c3717c3e16b993564bbbec1cdf8566e1ec7",
+      "student_reconstruction_sha256": "48cf7774e5310185678ed456b1c59cd3e1d12b8937c66ae02e99d055b3172715",
+      "normalized_surface_rms": 7.136033373771579e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site18__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "a9785848465bc89aa953bf97e5499ed240e61a3170ab7456f591b7a037f7eb17",
+      "student_reconstruction_sha256": "fab096b70fc5a4ea6f5942c96f7d49ccf259095c3ea34e06831c762b366cb437",
+      "normalized_surface_rms": 1.8303744180355862e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site19__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "666c856fbc461b09e66370f02bc596d6886dd301c4381603d435f04f40e6ba69",
+      "student_reconstruction_sha256": "d2ef43e17ce85e7cb8f44d6d67ddce572cba407569709856647187d87f03990c",
+      "normalized_surface_rms": 2.1000443071544705e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b01__site19__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "840c49bb515d557a1edf3f577f73dcfa10999a07ceed728f7ac3f56a228797ad",
+      "student_reconstruction_sha256": "bce4bd393aeb288422ad413539657b2ed2f3e3670add88b967ebb566a6176048",
+      "normalized_surface_rms": 1.9306913883745098e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site00__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "f9a63b35726540624a21f667a2de39e2dce17f56ba063f6638585cbd59e35b1d",
+      "student_reconstruction_sha256": "994ae2a33415e5eb5ab8309d33764cb64ae42b926419c8b2adeca3faf54f77c8",
+      "normalized_surface_rms": 1.2109063860094673e-06,
+      "p95_normalized_distance": 3.506155575022978e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site00__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "3fd2c50b608fc7f818b2006bc8fc704352b725136eab91961920ff5ed431cc26",
+      "student_reconstruction_sha256": "0946b603d0fbe749a2484f72084c7f3d30c7a3a29ad10d1903bdf760f2eba083",
+      "normalized_surface_rms": 1.5147748687926953e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site01__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "5173d3084733996dd3dd2832cfb734c281251c3e33506bd6aee942f2cda32df9",
+      "student_reconstruction_sha256": "540599cb6aa5119a0de2edd6697e97402aed40384dcdeba6e516c392c4770999",
+      "normalized_surface_rms": 1.3370040341328418e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site01__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "a060b06df080b98ec6e6f472771c4c9a807c4fe87d0c4e3d8363f95dc910a44c",
+      "student_reconstruction_sha256": "5bf0d6cf3876854fb1d18541033fe1d01797caf5219db715ed8cd6086b6a49ed",
+      "normalized_surface_rms": 1.2584479800664403e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site02__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "032b68184a7d368140899031388047bc041b1af00ec617161a9a2396527fc625",
+      "student_reconstruction_sha256": "c2fcc6d5611ffe810c7622886b217ebf185f7ea3cc15c0b3543f3d63b186c4fb",
+      "normalized_surface_rms": 1.3464329555095354e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site02__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "7c90fffb60d637f6f6e46848bf5cd0f44a49c73bd5341d648c8233de04891d9f",
+      "student_reconstruction_sha256": "2ea8f21d83a5ee117b285290374e07a8e3f034e6064337935dcebcfc88bf4a28",
+      "normalized_surface_rms": 1.0179902345904463e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site03__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "9b750b57e5e7dd00c343425141d3bd20a06a8f6247f9ad6fb67d42be85db4aa8",
+      "student_reconstruction_sha256": "7ff893fded40ceedcffa529290afb10eb58f176339203d2ab0b29a5104cfaeee",
+      "normalized_surface_rms": 1.510260839992969e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site03__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "dd7e9a05c14285e9a8a7395f194b6979343563d218a09507101ba548fda89d6a",
+      "student_reconstruction_sha256": "2f2ad216c44d3838bd230b7f693eca506bc93eb3074b7c03af811535af3b7a70",
+      "normalized_surface_rms": 1.599559080481522e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site04__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "7659191494ce4551809ca81db07359f80d297a4efd60f0b050083026c9d103c6",
+      "student_reconstruction_sha256": "a21c6da21961bacf35dee1d1dd90fbd4f3136e6b90ba83fb613ed23d2940101b",
+      "normalized_surface_rms": 4.7236968051177253e-07,
+      "p95_normalized_distance": 3.506155575022978e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site04__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "163e1463d53566559abbe38e035770223ca4eb1de60a09fb755b4f4a623a7cf9",
+      "student_reconstruction_sha256": "0dd45c736e6d866d6632a82231f30d2188dc55a5374d7df3f5a747a91132f48b",
+      "normalized_surface_rms": 1.268279848685083e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site05__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "bd49f9c9275b1306cd54e2a9fead3337463b625aa9ca231af9bbf3f1e2767ce7",
+      "student_reconstruction_sha256": "481be788d766afa6a9e0e88d1611c143211074a7461ef40e445c30e3f92b5783",
+      "normalized_surface_rms": 2.7020914669725447e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site05__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "3162e97b2bf74ce859c42df8d5e9cd86927b31f8a759361b0b76a3cbac5cf28e",
+      "student_reconstruction_sha256": "e0c6f6593ea21d035276d3f7f721489f9916de7675365c4f7e21e3ee5fbb8449",
+      "normalized_surface_rms": 1.551331987003785e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site06__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "339c9d56b91a22d0361fa94f7eab7fe35f8b2fd2b5eaea158cf01cfbbef55418",
+      "student_reconstruction_sha256": "e5a41cb5b149fae22a75422815b6ac86d40efc2ed3b53fef7a7d02527a283839",
+      "normalized_surface_rms": 9.825339708541206e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site06__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "ae5bebfcefbb92e561862ae567d95b42d87622530eb07993b124b39d41ea7df2",
+      "student_reconstruction_sha256": "68ddabf8393b97fe10dd4f7d8e6bc1f0512487cddeca31b4158ca53cf2ce8508",
+      "normalized_surface_rms": 3.049785578064812e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site07__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "735f5faca4dbbd3dd00d5fe6bb1c93fd1f4d8b534c151ae1cf82c5e83f5a7619",
+      "student_reconstruction_sha256": "c108d0f22d6648094a2f7a6796e559a914a81e8f8ac987ca235d972850f8c1ab",
+      "normalized_surface_rms": 1.7176681020637276e-06,
+      "p95_normalized_distance": 5.7312158437875596e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site07__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "8a959d9b50195092a4c3740996cec0fd169b53a7348189495ffbda18d74895f5",
+      "student_reconstruction_sha256": "422b4a17be24ba26dc030105f7371cf460c1fbc1ca8c52d02430abcecee19e00",
+      "normalized_surface_rms": 3.015255991190908e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site08__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "3ed9dfb9d1e7518ea4e8c18b6bd1c230ae0c2a0496e95a95d60b8658fbf89a8f",
+      "student_reconstruction_sha256": "590909331aaf9222d686ff8e22311199b9fb9c83ad8c90bf5a010ecd8b076c67",
+      "normalized_surface_rms": 2.1511571576331484e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site08__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "d143b957a3ec2e9a4d732da8decafcd4fd6b7ff22e26f100f6103c705a0d3a30",
+      "student_reconstruction_sha256": "7798715a267a564333407b4084da4dce4171c6c683639368de1094b259eb452b",
+      "normalized_surface_rms": 9.665419327456554e-07,
+      "p95_normalized_distance": 3.506155575022978e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site09__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "32b02b67ee0fc54b8268ffd7b038a8d1864b111c33c59ca1f4a788baa530ca94",
+      "student_reconstruction_sha256": "f82a69f958e3a4dd9e827f61c68b226247306e019faa1eb321da429ce57c104f",
+      "normalized_surface_rms": 3.573198608028864e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site09__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "a44a48aa6fc1e8235f449e578ecd47244062c4b07b41b4ff610fa6d53696db5d",
+      "student_reconstruction_sha256": "a0b97f5449d7bf5cc03a9d86c16dc4215a19cb64c4a261b8f1510cc1977ce8bb",
+      "normalized_surface_rms": 1.972224676769737e-06,
+      "p95_normalized_distance": 1.1462431687575119e-07,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site10__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "0f04c534224426e01758c5e74db23e6936aac7644a385064e207c6c0ffa59228",
+      "student_reconstruction_sha256": "5afbb40dda5ca97ee3fd8c02d92ec5309c204863e650392673b072f123e4ce66",
+      "normalized_surface_rms": 4.98262350062044e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site10__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "947531043ac51eb77245ff2c9f364ff7cb4301b2f0cfff895c2f8d6bcd63ee3e",
+      "student_reconstruction_sha256": "81c7c5382ad4917bb371a262a4c6407beb6e1b847817a538c38a9a5229401e6b",
+      "normalized_surface_rms": 3.5245698034287166e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site11__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "a8af700ff78f08a57ef859ebc0822cd45e03436a4ae8f62a61e3064052be508a",
+      "student_reconstruction_sha256": "39843de885fd5d07d1acfcc5bfa25a0e1261238393246ac41a28b36fe46f73af",
+      "normalized_surface_rms": 2.046003772812241e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site11__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "e92feb4e2102aead98cdd50a1d70527557f01ac7c673db99d795f9f45935db40",
+      "student_reconstruction_sha256": "4b43c07d752b5b9e5f530966268ccb57e4b0b26fcb8cd71b8b3cb98fafc3e166",
+      "normalized_surface_rms": 3.3564653724939398e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site12__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "b023dfcf6e49b68564c7bafc90aedbb87d4e394951ba9dbdf360319136afb1e7",
+      "student_reconstruction_sha256": "7bdbcdea900bc5b7d176daaa2151619798b8f038c002b943f8e78c0e82211741",
+      "normalized_surface_rms": 8.466640687204778e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site12__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "d1ca6a90943344b76d64408cbfb7c2102f60a87953f2ca840d0113d29168abc5",
+      "student_reconstruction_sha256": "2316de0d5480fcb9bf1d11c1349bd845ec618b2c7a21c0ee2b75ba8c07f8ade3",
+      "normalized_surface_rms": 3.2740280393692144e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site13__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "ab5c580ff63c7a24cf0c347950ca1a864d48b4922a6166ab7b537d882a9508a0",
+      "student_reconstruction_sha256": "ea1ff832dc882fa37af0cf13f5d9b186501141da7999a0ca9b71cdf31fa683f4",
+      "normalized_surface_rms": 2.6733976716891496e-06,
+      "p95_normalized_distance": 1.1462431687575119e-07,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site13__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "3e05926727bd8532fdf65c7b499435693595ad2ddf2260fc5c9406ee008874b1",
+      "student_reconstruction_sha256": "850ef115ac120399561fd462386dc858d34fd38bc14d5a53f262600c5fa105c1",
+      "normalized_surface_rms": 2.09602888448127e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site14__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "fa8fd729466a3d9f45d503b67bc4cabd25445c7ae66dbb3e169e7483a2f971f4",
+      "student_reconstruction_sha256": "fa29d53a98eaddde512f62945f7225ea01b5939f345fa6578c427504b3ebd328",
+      "normalized_surface_rms": 3.0892522657465764e-07,
+      "p95_normalized_distance": 3.506155575022978e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site14__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "f0f5906a81e09969f4662b351f72921aa9c1dadfd3141b00d1263657fd628d6f",
+      "student_reconstruction_sha256": "58894979cd95c680176914b8646444a8cd6099157705cc9bd26d2d436fa9ec69",
+      "normalized_surface_rms": 9.905546698800658e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site15__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "e0e50b306375f6b95cc9a61c03fe59875cead8f1d3fb0f592fb0fd3c1e7acda8",
+      "student_reconstruction_sha256": "86541a6a4f83369dca4648a4470040df5dec74f728d648701c57807626fbe592",
+      "normalized_surface_rms": 2.047155335961069e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site15__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "e0ae705cd30c352d4015b63287b60560036fb6cee6d15ec265804237f6d4c7d2",
+      "student_reconstruction_sha256": "60db942b20bd8d45dfc2b03cb909fb96b686456fb727ef0ba0e2d2e19a806275",
+      "normalized_surface_rms": 2.4397479602163543e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site16__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "7230b6a42240048b38cbefa4c5efb4835817f7dcf22683123a84f5a6a55613c7",
+      "student_reconstruction_sha256": "1a94e57d5de24b21f7dc968ef08f61293146635fe25eccfc9b263f50c5b414a2",
+      "normalized_surface_rms": 1.0015648561045557e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site16__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "34a9a8eee5aed0870c58c231eb26c20ba7a298ba683ef7781104420db5ca863a",
+      "student_reconstruction_sha256": "2afc1176e9cc6aaf9d7688ae072ea2a17ad17c7c340c7c7932f2f58e22e70efe",
+      "normalized_surface_rms": 5.19165725713895e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site17__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "2a59a33c0f25c27f4dc1620c2624a2b38d062dda82635900151855e3d46bfe07",
+      "student_reconstruction_sha256": "9a8725d3592c8ef991d61f589056adaf0ad6aad25b77b77c5842e0b55635f2f6",
+      "normalized_surface_rms": 1.5433144326793316e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site17__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "7c6f6783185fda82ccdb8407f71c6f209a1b1e7abb5fb328195b6413b67ffc9f",
+      "student_reconstruction_sha256": "818ade52919e93fdb988b01132aae52c920ba70c4c7a8f98a831f27902a9c47b",
+      "normalized_surface_rms": 1.7926098832643094e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site18__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "f7f2475cf2477a2e84962b868f3dd2b320d04a7bf56d0e2b3dd50febe2f83b70",
+      "student_reconstruction_sha256": "91cf1080c887db0198bd96856057e2c77a012602d9b601841c28df3817c58db1",
+      "normalized_surface_rms": 1.2153200407652963e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site18__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "3fe1d13b919e768a360b1774d349e3f0fc35c975ca655fba9c155b0ee29f7505",
+      "student_reconstruction_sha256": "6ad9f1f0d25493d4d7a1e65fb0518f43fef575ea5877ad23f607d0bbd3600ade",
+      "normalized_surface_rms": 1.3473726707542926e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site19__v0",
+      "phase": "aspect_shift",
+      "original_source_sha256": "0b97cbe12be54d228559c01f2f3639255813dd42a55a704f6e0ede897bfcc3c8",
+      "student_reconstruction_sha256": "a43bb6f4e5104d4c03aae2a6297355f6cf5510c1e8905c990ff8c5a9583a0a73",
+      "normalized_surface_rms": 1.6366721753610975e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "aspect_shift__b02__site19__v1",
+      "phase": "aspect_shift",
+      "original_source_sha256": "cb2c87275b1b8f5c68f2f432cd682f75380fa689b63872693be287d0a5e136af",
+      "student_reconstruction_sha256": "ab3bfb1d5b67dab9b5e5794559414b446f222b1365bfcf8aa71f48d3934af6a1",
+      "normalized_surface_rms": 1.34448044432059e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site00__v0",
+      "phase": "validation",
+      "original_source_sha256": "b152cf77094772fffa000c421d990570c6c96f74dfdd0b1b15d2bf74039456b5",
+      "student_reconstruction_sha256": "f06e6a76ef9404557256c0bef419bfa51bfd75f114c23a22e4bfef756411f36f",
+      "normalized_surface_rms": 1.7167482570840793e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site00__v1",
+      "phase": "validation",
+      "original_source_sha256": "251dea4955048a5ab4522c4d4ed8091298badc081918754694656158f801bd6b",
+      "student_reconstruction_sha256": "2085082c8452b9ac3ee70e33ce9a41b232ab2750ad8838749c19081fc09286fc",
+      "normalized_surface_rms": 2.3098428462279197e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site01__v0",
+      "phase": "validation",
+      "original_source_sha256": "b0ce1476f92280dd26314a0b1c85b62bcccb02a7ddf30f0a237961dda8407788",
+      "student_reconstruction_sha256": "341f475fbdc1be175f34ead9f00e8c5bd8057401b60574387209782356d0c182",
+      "normalized_surface_rms": 9.354428891972188e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site01__v1",
+      "phase": "validation",
+      "original_source_sha256": "d4bf88b9a9de5f31b74d9d2133fc8dcaa67fea88ecbc920ae324fc0919086ecf",
+      "student_reconstruction_sha256": "8edad94a74b9115dade7d9da8b85abdfcf62c1c10859322bd0ba8aaff02de0e1",
+      "normalized_surface_rms": 2.5180904589081265e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site02__v0",
+      "phase": "validation",
+      "original_source_sha256": "8a361ba5822f60030647a866c40f590cf3dfccdcb7ee72500e261048a5f02931",
+      "student_reconstruction_sha256": "ce02dcfcb5fef574d3aa98f6684c64f323fed0176d8885055572b36003a227b0",
+      "normalized_surface_rms": 1.6779246556030083e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site02__v1",
+      "phase": "validation",
+      "original_source_sha256": "012099a146f015a6a653645b9362f15ea569b0960ca4279bfb70e7156f45b10b",
+      "student_reconstruction_sha256": "b2ac94aceb3e35a43516b1ea4d5affa4f7987ac3dbc1050d186ae5dfe601d793",
+      "normalized_surface_rms": 1.6980681460145664e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site03__v0",
+      "phase": "validation",
+      "original_source_sha256": "79965e3bc7c22c1e9cb0d7d430679489574247722c3963b9a9ebd0831853e648",
+      "student_reconstruction_sha256": "0c15bd6aaa008e00d8245f65773d5c45b0ea3b5e8f9f4ad64089209a95dccacc",
+      "normalized_surface_rms": 8.564912181708835e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site03__v1",
+      "phase": "validation",
+      "original_source_sha256": "eec8221f91592cec98de0e2b4ebe20153f3f95b6bcba28f1b201434521d3f40a",
+      "student_reconstruction_sha256": "35d8a2c044a0e8e105575f76f3b2f7785f305d7edcc372494d771d2245d08a8b",
+      "normalized_surface_rms": 1.0465451214269206e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site04__v0",
+      "phase": "validation",
+      "original_source_sha256": "ad2e849a196d6dbe61019260c785de158596523c6521a5be323d396f91a274cf",
+      "student_reconstruction_sha256": "c6faecd4e5f47a853ef58e8a452c19575415727ac11004514fc4826d1f141423",
+      "normalized_surface_rms": 1.6117957634005716e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site04__v1",
+      "phase": "validation",
+      "original_source_sha256": "8f4440305664bce9c24fad0849c183b59046d51c3c6f4c4d0a498c6b05d1dfe4",
+      "student_reconstruction_sha256": "7ea299c36f4d8b841e9120774dff633658cec206579c6a1b25c4c8fe2053d7dd",
+      "normalized_surface_rms": 1.4864346560346161e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site05__v0",
+      "phase": "validation",
+      "original_source_sha256": "aecd335f0b9810a1b347cb650e5212e03b57b83613de90b7a14b4ccc55f061a8",
+      "student_reconstruction_sha256": "6bb34f04c41d6aa55ed571b419cb313fd524f549f8069f72518cb45376369372",
+      "normalized_surface_rms": 1.3647220138242848e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site05__v1",
+      "phase": "validation",
+      "original_source_sha256": "82e29defdd2c07758604ec179388d80932ef7932ffe6ad9f398b4616e69463d1",
+      "student_reconstruction_sha256": "897f813db9c26426c293c263cf28f18df9f5da3a36b6bb35e448ee6519844357",
+      "normalized_surface_rms": 1.1032190890987005e-06,
+      "p95_normalized_distance": 1.0366025178328805e-07,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site06__v0",
+      "phase": "validation",
+      "original_source_sha256": "3057eccccc50f08fb9b8cb6a14974e7ff7f7eea9588e35da197aaaeddd289f22",
+      "student_reconstruction_sha256": "cba62ed1b2a7862f6ce9a1d643aad9f03a1fb898fa0646deb9779ac3f2c648b4",
+      "normalized_surface_rms": 8.968199619060198e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site06__v1",
+      "phase": "validation",
+      "original_source_sha256": "2890fec6dbe79ea92cbb0f4f2736d3ec556aff2e17d23eced82adaaea1580044",
+      "student_reconstruction_sha256": "ee90e544194c3d7ac6aa36be8940b41588ba9c4fe6b02f9b9a17c8ecba4c4070",
+      "normalized_surface_rms": 1.5255161908250526e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site07__v0",
+      "phase": "validation",
+      "original_source_sha256": "ebfe0d6abab1f54ff784f469638da7b71083fa64a9cac823ec55cd44218db8cc",
+      "student_reconstruction_sha256": "310ca15e4e12454d0cf9f62ad9b118ba58198c108de648fa521ec32607553b38",
+      "normalized_surface_rms": 1.8590661466968332e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site07__v1",
+      "phase": "validation",
+      "original_source_sha256": "9542a1fc31367c254c72c902f45a733162f5cd6e59207522d2050c484db643e1",
+      "student_reconstruction_sha256": "d63daf2b58ea4c0efb5cde8b96c21133dd8323bf65e239ac2b2dc1c8ab48cc3b",
+      "normalized_surface_rms": 1.41458713570824e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site08__v0",
+      "phase": "validation",
+      "original_source_sha256": "5dc53a47a17208031ef47c71d76bf8315ca721d167add006dcabbaa869a7129b",
+      "student_reconstruction_sha256": "485eedf0bd4bbf38f0969a99998c342f0622bddaa454e3b232def3b1680bb551",
+      "normalized_surface_rms": 1.4806609669965103e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site08__v1",
+      "phase": "validation",
+      "original_source_sha256": "76e23df6318be388b6e6628d491a8af4c5cdc340b5938c79c5caa6ad2d66779f",
+      "student_reconstruction_sha256": "e9de0318acb9426aa8143a32d0dba3d5b053a7f0fc57cf6e21c6ef9b3870fe55",
+      "normalized_surface_rms": 8.108552464797767e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site09__v0",
+      "phase": "validation",
+      "original_source_sha256": "5d569fe0f551597304ec1db86c4065b6c086e6152562f22b1ecf2ff3a70ca8f8",
+      "student_reconstruction_sha256": "f1f64370e16aa250f03c553a88ec0cc423599944fe0aa00f82355d8cb8dc0a02",
+      "normalized_surface_rms": 1.8497847218341595e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site09__v1",
+      "phase": "validation",
+      "original_source_sha256": "3b623b8545ec0e80fd5453b4f8c632099de9b6471e16561ede10d07444a3c435",
+      "student_reconstruction_sha256": "87840cb84b3d258d9ed97622a9e86a3eeab9957fac8cb75cb5ef5b4688577030",
+      "normalized_surface_rms": 2.417110242976801e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site10__v0",
+      "phase": "validation",
+      "original_source_sha256": "611628dcf089acf1158d97ba4663de6085198680c962aaf91b8cbaffbf0654e6",
+      "student_reconstruction_sha256": "ac9a8c741c24883a090f30cb5c5c777b9912426d4a81afd0c042b583a60b2cc4",
+      "normalized_surface_rms": 4.802214525942666e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site10__v1",
+      "phase": "validation",
+      "original_source_sha256": "7a8a7bfefa1efa01804f03108cde4318a866e8d0644df5cb93a290d92c2a1bc1",
+      "student_reconstruction_sha256": "dc0fa57996e6a5a8222f196596e19a1ee73250cdd0e3fdd3e2b837ab926a1d40",
+      "normalized_surface_rms": 1.3796555054584106e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site11__v0",
+      "phase": "validation",
+      "original_source_sha256": "c3fadc8ceac67216eb8966e58b8654306bdca1d218daba9cf2b4fc12a1745ca9",
+      "student_reconstruction_sha256": "9dd46dbae9c75aff650412f7c21ff14b09df997094600a0b341b7636c3652ffb",
+      "normalized_surface_rms": 3.4335082094687487e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site11__v1",
+      "phase": "validation",
+      "original_source_sha256": "a6a3900bae383029cafb99a0bb9305038cfa21629e068a640f17a9092d4d116b",
+      "student_reconstruction_sha256": "9940b24acb973e066e32c2111864a5463f7cbba9623b73f0a00e2d212fa938cd",
+      "normalized_surface_rms": 1.9128722359665295e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site12__v0",
+      "phase": "validation",
+      "original_source_sha256": "80199f0151e6b65638e422508b4486552039ca68904e833a6c3e00ad336ae94b",
+      "student_reconstruction_sha256": "4603f62374911b215385d7f690aea45ecec177a3d3e446e4542cc70ead8475aa",
+      "normalized_surface_rms": 1.027950695592711e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site12__v1",
+      "phase": "validation",
+      "original_source_sha256": "dcd7f4e223676456a659a6a668487c04eb4fc426b14c116f799eb4a4015b853d",
+      "student_reconstruction_sha256": "78a40e782bd8a975445d467e51b4d83ba19ce02384e64dcaef6c69c3e2b6648d",
+      "normalized_surface_rms": 3.3550053426905195e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site13__v0",
+      "phase": "validation",
+      "original_source_sha256": "5f7be040eb67e88bb7f522d361ac50f396a4e7adb441d2bbae328bea91207e15",
+      "student_reconstruction_sha256": "b75c7aeeee52e12b70862bec2736e2ca0b90cb73085b4f332582d5d78aaea770",
+      "normalized_surface_rms": 2.1032513917957974e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site13__v1",
+      "phase": "validation",
+      "original_source_sha256": "f0c244f8d188eeeabedd771dd50f62a769c565cb8b3614d980cbb108490586d4",
+      "student_reconstruction_sha256": "bf080485088dc77d618b292db2a9b1239eb0eab0d0164032e56a2fddc195179f",
+      "normalized_surface_rms": 3.882889124859102e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site14__v0",
+      "phase": "validation",
+      "original_source_sha256": "55fe083b875e49d0b4f1c4732c01767456df307c2989aed024bd96a2f5700fcd",
+      "student_reconstruction_sha256": "579cceb3fc4e0f2de7818f7d6cc8f70d6ba112f2e8a52886e585d6d9141b5fad",
+      "normalized_surface_rms": 2.1078774276156678e-07,
+      "p95_normalized_distance": 5.518948590313946e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site14__v1",
+      "phase": "validation",
+      "original_source_sha256": "ad892c8c354175192afa118c89c2ac6907b99d5a20f8f295af2e598ac69c4441",
+      "student_reconstruction_sha256": "f1681d93f29d2ad4cf238517784a1b7753e49d7a0d84485b4e21a97e372cf1a6",
+      "normalized_surface_rms": 8.692245410579384e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site15__v0",
+      "phase": "validation",
+      "original_source_sha256": "4c3b4eb61385eb6256d2c82da8a676c97f897b624aecdae52c55213874e89867",
+      "student_reconstruction_sha256": "948b763c2441d9a5bf374162aae9e041c8ede32ffed990938eb03686b337121b",
+      "normalized_surface_rms": 3.2422383117905844e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site15__v1",
+      "phase": "validation",
+      "original_source_sha256": "e75c06f58d155d3f5c4555f1758966221b587de68c5be09c9a7027c58d850b20",
+      "student_reconstruction_sha256": "e3044a60ed8471b77a8f84e30762ddc714eb0bfbb685a38ef8a51ee94f135118",
+      "normalized_surface_rms": 2.1264021921049774e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site16__v0",
+      "phase": "validation",
+      "original_source_sha256": "50d11bc3b6128520e1cd03cea78b7bbe0376387518a1004ddf3563103ac84f0a",
+      "student_reconstruction_sha256": "02591cb8b35a83c5d3347f8ccf7375ad1a50044279297713a6d86e599c0d3c1f",
+      "normalized_surface_rms": 3.0206201860041984e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site16__v1",
+      "phase": "validation",
+      "original_source_sha256": "db00810d1caecef1d977bfa2bee77e2f29ebc48b6ab851da7c57d9a76c6862a1",
+      "student_reconstruction_sha256": "0abe70e6a955dc9216825019f08d397c29d441431ffad9dd0469783c2092bea6",
+      "normalized_surface_rms": 3.3360458297896084e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site17__v0",
+      "phase": "validation",
+      "original_source_sha256": "8a0f3e0428e333d49871de279f4054ac5cec0b43d7476aeda126391748213777",
+      "student_reconstruction_sha256": "619c031c4e72465858209deaf6339f26e23f0d23ac0310b15dee3e58142d63f2",
+      "normalized_surface_rms": 1.9300363320763467e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site17__v1",
+      "phase": "validation",
+      "original_source_sha256": "534f28182f0f18cda40a71d33aaeb8f33b1377e40a7327803731b73cce1d09a2",
+      "student_reconstruction_sha256": "f76562fee2ebf2eacd4a602de10826853ddc9458156ba180e58ead22b8df5ea9",
+      "normalized_surface_rms": 2.6984590963232146e-06,
+      "p95_normalized_distance": 1.0366025178328805e-07,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site18__v0",
+      "phase": "validation",
+      "original_source_sha256": "339dd404a4d5e08c80a92bc6c5798c97681de46d7991b3a39fb7b1243267d6ca",
+      "student_reconstruction_sha256": "5fd2bdf31f0f4b8b9f76a9bb893a07660377155b3aab173a61a84b1dba91794c",
+      "normalized_surface_rms": 7.455563537526994e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site18__v1",
+      "phase": "validation",
+      "original_source_sha256": "049f33cd5a4cc56319c821e8b8561380111991eeea7faa7c6b4224333b81593a",
+      "student_reconstruction_sha256": "9f348bb36feedefb7ddbcb903fa5719d14790e6bb431b08540cbf19baa712632",
+      "normalized_surface_rms": 1.1669857087065521e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site19__v0",
+      "phase": "validation",
+      "original_source_sha256": "195cc4680a029333085c40aafac78dd0c81fcd2ad1e41ff05e91cbfc3992e090",
+      "student_reconstruction_sha256": "f6de905dd5d436432f957f3ea7f3ac8d97fd2c39b0280107c430159572a833a3",
+      "normalized_surface_rms": 2.0356193646646693e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b01__site19__v1",
+      "phase": "validation",
+      "original_source_sha256": "c029bc801cfc8019002a265617a0074175fca196c06681354450a132edf8003c",
+      "student_reconstruction_sha256": "94a80424969ee486851198c017571f7310ac1ba405d7d7e61a9dff04541ca546",
+      "normalized_surface_rms": 1.9206174490665352e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site00__v0",
+      "phase": "validation",
+      "original_source_sha256": "17f6ef67f35af7b793f2de9e628db95265a461f03627c119cec70fee91efbe8d",
+      "student_reconstruction_sha256": "a637004bf8378e86336554cc4551c1f7dbf2a11fa5a2f772bebee3fd229763d5",
+      "normalized_surface_rms": 1.1532543270071732e-06,
+      "p95_normalized_distance": 1.281820317750336e-07,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site00__v1",
+      "phase": "validation",
+      "original_source_sha256": "98ea605af64f8068b03e9d6346c905f1d0bb7c62ddd0990b286630045a1b8228",
+      "student_reconstruction_sha256": "f35c47a91a6415da80c2565b64498c835689c5774386f49070c274002ca9662f",
+      "normalized_surface_rms": 1.4979886471732467e-06,
+      "p95_normalized_distance": 1.281820317750336e-07,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site01__v0",
+      "phase": "validation",
+      "original_source_sha256": "72c23e6a256abbc51cd77e07085da9a3e9d0f92c996174bf519e1102f0a563ac",
+      "student_reconstruction_sha256": "d39e34df8710751b5376a93b097a67c98f66dbfe4bebc8ce627333e1f4ef3cff",
+      "normalized_surface_rms": 1.4179767233804135e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site01__v1",
+      "phase": "validation",
+      "original_source_sha256": "3d67fc3798edb85032ca39e059933142d7b84bafa47d8522294e84a79d9e7cb6",
+      "student_reconstruction_sha256": "95fd06ab560f9e05027d4e8120aed7b260b4abe4154e3507ebd3148c644d156d",
+      "normalized_surface_rms": 1.2813719916065589e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site02__v0",
+      "phase": "validation",
+      "original_source_sha256": "e26e9a9ad98bb35d10a68ebecb9da895103370a98d06a9b269a44a25ead04ed3",
+      "student_reconstruction_sha256": "e9bc3200b8ecc5b876b4d0389a88375b8b458b48a774962df3e42848038ec4d2",
+      "normalized_surface_rms": 1.3239023405112729e-06,
+      "p95_normalized_distance": 1.281820317750336e-07,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site02__v1",
+      "phase": "validation",
+      "original_source_sha256": "89434036456e6acb287aebd86e49994fc4228e70f0645984d8754ecafacef042",
+      "student_reconstruction_sha256": "ae311ae757723fe020564ef0207059b32bed2d8bc97ecce13f76a370cb5e7d56",
+      "normalized_surface_rms": 9.65094629976143e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site03__v0",
+      "phase": "validation",
+      "original_source_sha256": "cc6efdcc82884593d5051f4307adb560053ea09b7cc381dc1ee89247aadc38ca",
+      "student_reconstruction_sha256": "8595cc95cfad9ba73839dbc90283c0fb25349cc6250414cdda619b3c552de2a5",
+      "normalized_surface_rms": 1.526375511590055e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site03__v1",
+      "phase": "validation",
+      "original_source_sha256": "6938c5aac8274b5ffbef3c39351243fdf3ae3470f3ba1b864ce1c93d0916425c",
+      "student_reconstruction_sha256": "d1f0ab11fe2e2836ae81aeef3c8712f92c298187de7f574cc388586fc10539ff",
+      "normalized_surface_rms": 1.685134963741675e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site04__v0",
+      "phase": "validation",
+      "original_source_sha256": "c7e58ce443dfdfd5617545d86d3394cbbba8d4b726fd49aa73b99a7339331fc6",
+      "student_reconstruction_sha256": "401c0ad63ea9f5f2fb7390c40eea4e32310912dd94cc879a048ad2c8dacbb762",
+      "normalized_surface_rms": 4.224620146512486e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site04__v1",
+      "phase": "validation",
+      "original_source_sha256": "b7ec11f9ab66d0c6f5a3d1389e06a2682764e0b17ca55630353cf804af01a41c",
+      "student_reconstruction_sha256": "ffda8523ed3d0f1092330d5422c3ff8c553777acbb97ec49441d28327dc683fc",
+      "normalized_surface_rms": 1.2437002707682089e-06,
+      "p95_normalized_distance": 6.40910158875168e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site05__v0",
+      "phase": "validation",
+      "original_source_sha256": "073aae956b36402584a2223264b04ad99d94fd7c389208a443fb289e68287c60",
+      "student_reconstruction_sha256": "8811cc4aaa255d33d15543bbde6aa9b1784aec25597c003092ac8b4214dcfe38",
+      "normalized_surface_rms": 2.7884107581674907e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site05__v1",
+      "phase": "validation",
+      "original_source_sha256": "9be5e7b75b96cab4b420e572516b4feabc55270ed3c83402933b8a379beeb7d4",
+      "student_reconstruction_sha256": "6b193c7ab0770debfcd4a16e11d61b8059c5c3c1f1f733e1ccaf6e61fd7e5e97",
+      "normalized_surface_rms": 1.561029342888497e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site06__v0",
+      "phase": "validation",
+      "original_source_sha256": "8c0aeea0b825a61b1e09c705c27beaab7f8f86967b4ccc623d24aa9a60dec4b0",
+      "student_reconstruction_sha256": "b97693047c5f88e08ee55035b223409077c6810843bfc61f0d71418b370990a8",
+      "normalized_surface_rms": 9.375549747580564e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site06__v1",
+      "phase": "validation",
+      "original_source_sha256": "a7d773850c7a9029ee0e2d7638eddf0a39a3c28eb92ac3591a21536be3bdd746",
+      "student_reconstruction_sha256": "63afc9ed2e02ab80b45eab42db1f206fe5cc0f73634df8503bded1f89bbe6c1d",
+      "normalized_surface_rms": 2.509846715940102e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site07__v0",
+      "phase": "validation",
+      "original_source_sha256": "f988ba5e2d519f14645b18e48dc309cbcc897c1d2028e894e1a094eb93eb1c2e",
+      "student_reconstruction_sha256": "a68556a53788b87238f71bf4a093e22389dac689ac6fffaf528a043a5258789b",
+      "normalized_surface_rms": 1.7224547537870303e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site07__v1",
+      "phase": "validation",
+      "original_source_sha256": "8e800408f820738243bf3f991cced7a721837520fda64067c664bf5b56107d78",
+      "student_reconstruction_sha256": "75ec2072bc4bc6f6305ed026b89ec9b1c4cc59dde1fae3ede4124d83ec8788c9",
+      "normalized_surface_rms": 3.1183257868085154e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site08__v0",
+      "phase": "validation",
+      "original_source_sha256": "362fe1a141a22053fabd4bf680bf72f72943f89f13457d433e03ef56855c3e68",
+      "student_reconstruction_sha256": "c1e864750f26017edf50b2e9c75bafe1f618394de609415c9345b93ce89c1840",
+      "normalized_surface_rms": 2.6511185851112635e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site08__v1",
+      "phase": "validation",
+      "original_source_sha256": "2ba2eef8390412737b673bcf15cb4c4b3188d6be01f29fa89adb9da468b238aa",
+      "student_reconstruction_sha256": "0bba02cdfe7ecaede382a46b2e75b766035320ed694dfdc1aeca143cd800f2b4",
+      "normalized_surface_rms": 9.23969421695907e-07,
+      "p95_normalized_distance": 6.40910158875168e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site09__v0",
+      "phase": "validation",
+      "original_source_sha256": "d1e7ec7eaf28624b080e2d3ac226e563b8b36fb9b2766a94cc89674b624b9dc1",
+      "student_reconstruction_sha256": "754b7fa4e5fb59591753e3bb7a6c2b2cfcd63cf1af49272d03a66bf0097f4059",
+      "normalized_surface_rms": 3.502264725699122e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site09__v1",
+      "phase": "validation",
+      "original_source_sha256": "5921d0297565d40d82f4b9f417ad3f04e21c01d36622cbfa28b28362bf088c38",
+      "student_reconstruction_sha256": "e91f4829bc0c543756b0f53e0b553ba47d4bc51e66c5f201abe964ae7cbbc36b",
+      "normalized_surface_rms": 1.983216258650706e-06,
+      "p95_normalized_distance": 7.313453346673696e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site10__v0",
+      "phase": "validation",
+      "original_source_sha256": "d89edc684ceb1a2afb179d49efe2f06eeb2fb83b0fef734228e98a5ceb478544",
+      "student_reconstruction_sha256": "e5f362b1520aa28545007d3018c365710763589dd083569c823325b0a934e0c0",
+      "normalized_surface_rms": 4.469740995271046e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site10__v1",
+      "phase": "validation",
+      "original_source_sha256": "5c455d68d3e8e7666ca68c697c22412960b4364e2863da978e1a335c09a2f5d0",
+      "student_reconstruction_sha256": "160064ceb0bdfb32ca081487c93af0f55be396887e1cece678a9cf6121e1b190",
+      "normalized_surface_rms": 3.92330887569566e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site11__v0",
+      "phase": "validation",
+      "original_source_sha256": "ac69c3e65f169bc6169a8484bdfe44a1d71985e86c3edc589cff527d8d223d2b",
+      "student_reconstruction_sha256": "cf760a39780f246e69c3b64d13a624f0282a27ddc398773005544cf633cf40ad",
+      "normalized_surface_rms": 2.044016361622731e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site11__v1",
+      "phase": "validation",
+      "original_source_sha256": "c911f0f4537e903a1892030e626941cd4d4e3d53d268122fdf495162efd6e6e4",
+      "student_reconstruction_sha256": "1a695a474a9e22fe110bae85fc860fc0e67d2f1ff5e212e28e1fccd782d60cef",
+      "normalized_surface_rms": 3.2900428196508426e-06,
+      "p95_normalized_distance": 1.4626906693347393e-07,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site12__v0",
+      "phase": "validation",
+      "original_source_sha256": "391953d8f1f60c3a87af6e0a00e62cc419b1f1b3f08fb0958cdd311b993424f2",
+      "student_reconstruction_sha256": "785d4a0a31bf715dc6cae1d066c47faf7872ab20a4dd37000944221c8b066a64",
+      "normalized_surface_rms": 8.894632271098986e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site12__v1",
+      "phase": "validation",
+      "original_source_sha256": "42b1813f8680521b266c6a1e3bca7a4a917c8b46fadd42109def4834d67e01f1",
+      "student_reconstruction_sha256": "be7bf65134594e3984a258103a443cdef77e12cda424deca626a2df4eaed6379",
+      "normalized_surface_rms": 2.5345287385363396e-07,
+      "p95_normalized_distance": 6.40910158875168e-08,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site13__v0",
+      "phase": "validation",
+      "original_source_sha256": "1203ea539dafd54b9beae0ac606fac4f8411196ddd86fe531f83e25c59130135",
+      "student_reconstruction_sha256": "9cce5defc7ddb6d692f10b0ed463c31a3d314f76d4dda6d5fedce20b43fceb96",
+      "normalized_surface_rms": 2.6040590615910903e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site13__v1",
+      "phase": "validation",
+      "original_source_sha256": "e1440950a978b9132fffd062c9fe50a6aaa1b79d131cc8bf3e606f599bd5fe81",
+      "student_reconstruction_sha256": "0cacb62a000b22f5c2db8bc995fbc7c2ceb70cb0a4d5cc94c34229d0f440f1fe",
+      "normalized_surface_rms": 2.083905466553004e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site14__v0",
+      "phase": "validation",
+      "original_source_sha256": "415fa04b67c3232c32749915710528f074e6dc9d8777a12891305d87a30f780f",
+      "student_reconstruction_sha256": "7149e5f0a378e2de2dbb041a2246bfd32c00f36338dd5f31272c17b707a87f4f",
+      "normalized_surface_rms": 3.811371561635173e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site14__v1",
+      "phase": "validation",
+      "original_source_sha256": "f702d2debb728c5650742a344d7759e00262bb7061c3c8e3c589868d5fd4a187",
+      "student_reconstruction_sha256": "3afbf88c9191e7b66fbd3a5d173f34ecb91b7a94385b9d819ebea2400bf9d1c6",
+      "normalized_surface_rms": 1.0291592983252371e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site15__v0",
+      "phase": "validation",
+      "original_source_sha256": "82b74464250a64c5b2652f5be8b4d15d42788e1af73abe741d23cbce770dc77f",
+      "student_reconstruction_sha256": "c85d55a7daba25361eaaa67cbd2a92ee88246d5f89248d835e085c284a4fc978",
+      "normalized_surface_rms": 2.0398877891943596e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site15__v1",
+      "phase": "validation",
+      "original_source_sha256": "1efce1e4edfecdbf489ec396a8278e0b86f31c54bdd04c90606c9d1d683d1770",
+      "student_reconstruction_sha256": "1b7c54743c3a0be4019fa4082aceee25691d7f8cc8984d67d3a58d1bb883c017",
+      "normalized_surface_rms": 2.365295881267114e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site16__v0",
+      "phase": "validation",
+      "original_source_sha256": "ea45ac7c697d929d0edcb8ddea60b00d2764e4454dd9addda486a4b4e80b5fa3",
+      "student_reconstruction_sha256": "e6cdbf7e36ab2c050a0abe8a331c3f5d70e2c1020fde68bd2fc76dbfd8dd0f3b",
+      "normalized_surface_rms": 1.029114091509388e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site16__v1",
+      "phase": "validation",
+      "original_source_sha256": "2285fef62a7e7b7f12299a171557c48465bad68e0fa82f0a02d908d9dbbd797b",
+      "student_reconstruction_sha256": "167d0c068eca77ff636c9383aee316fb217b5def16f968c26abd90671f6fdd27",
+      "normalized_surface_rms": 5.895021664605103e-07,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site17__v0",
+      "phase": "validation",
+      "original_source_sha256": "dfd14844048ade4446be5d1eac33aa9a09e3e1400ec54cd24a4db400ed2d78f2",
+      "student_reconstruction_sha256": "e12298ad6ac1eb224685b6a87aad1a2509424edd0dda895987a76e14e9e4bf22",
+      "normalized_surface_rms": 1.4873659816898328e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site17__v1",
+      "phase": "validation",
+      "original_source_sha256": "e6d6d86811855a853253e34c984ff1d57e51659fe3595647d9d60f0db9482aff",
+      "student_reconstruction_sha256": "1f05e53a00a3d66cdb47b36a14c35dd8726f604c8f31a3cfa923cb10906d1b64",
+      "normalized_surface_rms": 1.7818945162666954e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site18__v0",
+      "phase": "validation",
+      "original_source_sha256": "706eda65fb994ad41854e15ed865495ac71681fef37db90f195682c27ae01df8",
+      "student_reconstruction_sha256": "fb63c605decbbbf9c82fb5b294682037486c04eaec6ff9b375d890b47d3269fa",
+      "normalized_surface_rms": 1.2909216989253305e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site18__v1",
+      "phase": "validation",
+      "original_source_sha256": "2d72768507e4c4fe7a5e8838b8ebfc53eba90b64b1f912b783ddf9d5254dca7b",
+      "student_reconstruction_sha256": "9206857adb75ccf2853b2b1f3634b85cbedeeafd99bd6a0c48a672394332d2c1",
+      "normalized_surface_rms": 1.3785817323649484e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site19__v0",
+      "phase": "validation",
+      "original_source_sha256": "2e9c9c70b99ed51ecf350685dcef7ecb82520f4cc8744d62de378f872c09f9b1",
+      "student_reconstruction_sha256": "7b09f91b58f7b9756f635db9a521796bacdd6d3177874c7fdc383f85e5610b16",
+      "normalized_surface_rms": 1.617523051993704e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    },
+    {
+      "source": "validation__b02__site19__v1",
+      "phase": "validation",
+      "original_source_sha256": "8e787abb175d74bc7b32f65ec62506b9024d2d2de23791ffc791f18ab4b948d0",
+      "student_reconstruction_sha256": "54b2769dc693d1199a4046138f9ea1024eeca7a845d93fa42017197f976aeb11",
+      "normalized_surface_rms": 1.2922776308689862e-06,
+      "p95_normalized_distance": 0.0,
+      "connected_through_bore_and_blind_socket": true
+    }
+  ],
+  "passed": true,
+  "actual_source_geometry_used": true,
+  "human_approved": false,
+  "android_deployed": false,
+  "limitations": "Known topology, source-vertex correspondence; no semantic design or general-purpose mesh Boolean."
+}
