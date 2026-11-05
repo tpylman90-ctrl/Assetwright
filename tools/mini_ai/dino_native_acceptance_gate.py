@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 
 
@@ -46,11 +47,23 @@ def disposition(visual:dict,forward:dict,student:dict)->dict:
         or student.get("android_deployable") is not False
         or student.get("approved_for_geometry_generation") is not False):
         raise ValueError("Unsafe native GLB production boundary")
+    accuracy=float(metrics.get("accuracy",-1))
+    strength=float(metrics.get("strength_mae",-1))
+    forward_gain=float(forward.get("forward_improvement_fraction",-1))
+    recorded_joint_gain=float(visual.get("evaluation_improvement",{}).get("joint_fraction",-1))
+    comparison=float(forward.get("constant_mean_normalized_vertex_rmse",-1))
+    student_error=float(forward.get("student_mean_normalized_vertex_rmse",-1))
+    if (not all(math.isfinite(v) for v in
+                (accuracy,strength,forward_gain,recorded_joint_gain,
+                 comparison,student_error))
+        or comparison<=0 or student_error<0
+        or abs(forward_gain-(comparison-student_error)/comparison)>1.e-5):
+        raise ValueError("Invalid or inconsistent geometric improvement measurements")
     checks={
         "validated_on_heldout_visual_transfer":
-            visual.get("status")=="validated_research_visual_to_native",
+            visual.get("status")=="validated_research_visual_to_native" and\n            accuracy>=.55 and strength<=.20 and recorded_joint_gain>=.03,
         "independent_forward_geometry_gate":
-            forward.get("strict_forward_geometry_gate") is True,
+            forward.get("strict_forward_geometry_gate") is True and\n            forward_gain>=.10 and accuracy>=.55,
         "all_real_target_and_reconstruction_meshes_valid":
             forward["all_meshes_independently_structurally_valid"] is True,
         "source_hash_and_prediction_metrics_agree": True,
