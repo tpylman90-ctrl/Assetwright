@@ -1,0 +1,29 @@
+{
+  "schema": "assetwright-permanent-original-mini-native-knowledge-v1",
+  "research_run_id": 42080318206,
+  "source_commit_sha": "38d5780adaa20a342546f514ecf8cbc8045a142f",
+  "source_artifacts": [
+    "assetwright-32minute-DINO-training-and-192-GLB-results",
+    "assetwright-marathon-888-own-GLBs-and-teacher"
+  ],
+  "student": "original from-scratch teacher-free native geometry",
+  "condition": "teacher_free",
+  "selected_seed": 2029,
+  "development_selected_checkpoint": 2800,
+  "saved_weights_sha256": "1d32f74b9e05ab79196b906f88dde823fdbcc1eae0bea8a3b62a0a631cf00c21",
+  "parameter_count": 160938,
+  "original_source_GLBS_verified": 888,
+  "new_native_reconstructions_verified": 192,
+  "heldout_count": 96,
+  "heldout_source_digest": "a14c184e021529b8d4d78cb2351e663bc8d8b89795e307d29c3f4df98681e770",
+  "heldout_operation_accuracy": 0.9375,
+  "heldout_strength_mae": 0.12705983221530914,
+  "heldout_true_GLb_vertex_RMSE": 0.004200405922361637,
+  "teacher_used_for_student": false,
+  "external_3d_generator_used": false,
+  "android_installed": false,
+  "approved_for_production": false,
+  "review_status": "research_verified_human_review_pending",
+  "validation_cohort": "exposed_retired_do_not_reuse_as_blind",
+  "next_usage": "explicit warm-start with old-train replay and NEW independent heldout families"
+}
