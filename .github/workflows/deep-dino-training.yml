@@ -31,6 +31,7 @@ jobs:
       - name: Validate our native-source and visual-teacher safety rules
         run: |
           python -m unittest discover -s tools/mini_ai -p 'test_deep_dino_curriculum.py'
+          python -m unittest discover -s tools/mini_ai -p 'test_deep_dino_geometry_student.py'
           python -m unittest discover -s tools/mini_ai -p 'test_zero_to_cad_visual.py'
           python -m unittest discover -s tools/mini_ai -p 'test_zero_to_cad.py'
 
@@ -69,24 +70,24 @@ jobs:
         run: |
           if [ "$GITHUB_EVENT_NAME" = schedule ]; then
             week="$(date -u +%V)"
-            offset=$((160 + (10#$week % 6) * 480))
+            offset=$((160 + (10#$week % 6) * 600))
           else
             offset=160
           fi
           echo "TRAIN_OFFSET=$offset" >> "$GITHUB_ENV"
-          echo "CAD cohort offset: $offset (four views, 320 sources)"
-      - name: Stream 320 licensed training programs and original source images
+          echo "CAD cohort offset: $offset (four views, 480 sources)"
+      - name: Stream 480 licensed training programs and original source images
         run: |
           python tools/mini_ai/deep_dino_curriculum.py ingest \
             --split train --revision "$(cat local-data/deep-dino/source_revision)" \
-            --offset "$TRAIN_OFFSET" --count 320 --scan-limit 800 \
+            --offset "$TRAIN_OFFSET" --count 480 --scan-limit 1000 \
             --images local-data/deep-dino/images \
             --output local-data/deep-dino/train.json
-      - name: Stream 80 separate official validation programs from an unseen offset
+      - name: Stream 96 separate OFFICIALLY fresh validation programs from offset 240
         run: |
           python tools/mini_ai/deep_dino_curriculum.py ingest \
             --split validation --revision "$(cat local-data/deep-dino/source_revision)" \
-            --offset 80 --count 80 --scan-limit 320 \
+            --offset 240 --count 96 --scan-limit 400 \
             --images local-data/deep-dino/images \
             --output local-data/deep-dino/validation.json
       - name: Freeze multi-view DINOv2 image signatures; no downloaded meshes
@@ -99,9 +100,9 @@ jobs:
             --manifest local-data/deep-dino/validation.json \
             --images local-data/deep-dino/images \
             --output local-data/deep-dino/validation-teacher.json
-      - name: Train OUR staged Mini AI research student and check independent baselines
+      - name: Train geometry-parameter Mini AI and compare to source-only ablation
         run: |
-          python tools/mini_ai/deep_dino_student.py \
+          python tools/mini_ai/deep_dino_geometry_student.py \
             --train local-data/deep-dino/train.json \
             --train-teacher local-data/deep-dino/train-teacher.json \
             --validation local-data/deep-dino/validation.json \
