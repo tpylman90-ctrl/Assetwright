@@ -68,7 +68,15 @@ object NativeBranchLab {
             val quad=faceOrdinal/4
             val removed=quad<outerInnerQuads && faceOrdinal%4<2 &&
                 inPatch(quad/RADIAL,quad%RADIAL)
-            if(!removed) for (i in 0..2) faces.add(parent.indices[triangle+i])
+            if(!removed) {
+                // NativeInterfaceLab already flips its finished outward shell.
+                // The new branch strips use the original inward construction
+                // winding, so bring the parent back to THAT same orientation
+                // before doing the final global signed-volume correction.
+                faces.add(parent.indices[triangle])
+                faces.add(parent.indices[triangle+2])
+                faces.add(parent.indices[triangle+1])
+            }
         }
         val boundary=ArrayList<Int>(2*(PATCH_ANGULAR+PATCH_AXIAL))
         for(k in 0 until PATCH_ANGULAR)
