@@ -23,7 +23,10 @@ class NativeDinoSchoolTests(unittest.TestCase):
             self.assertFalse(set(LEVELS[a])&set(LEVELS[b]))
 
     def test_pixel_student_has_no_filename_label_inputs(self):
-        from PIL import Image,ImageDraw
+        try:
+            from PIL import Image,ImageDraw
+        except ImportError:
+            self.skipTest("Pillow native-DINO study requires optional research dependencies")
         with tempfile.TemporaryDirectory() as tmp:
             source=Path(tmp)
             files=[]
@@ -43,7 +46,10 @@ class NativeDinoSchoolTests(unittest.TestCase):
             self.assertNotEqual(x,image_features(files))
 
     def test_manifest_rejects_image_swap_and_duplicate_source(self):
-        from PIL import Image
+        try:
+            from PIL import Image
+        except ImportError:
+            self.skipTest("Pillow native-DINO study requires optional research dependencies")
         with tempfile.TemporaryDirectory() as tmp:
             directory=Path(tmp)
             observations=[]
