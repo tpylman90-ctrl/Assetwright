@@ -8,6 +8,8 @@ on:
     paths:
       - 'tools/mini_ai/dino_native_visual_*.py'
       - 'tools/mini_ai/dino_native_forward_audit.py'
+      - 'tools/mini_ai/dino_native_acceptance_gate.py'
+      - 'tools/mini_ai/test_dino_native_acceptance_gate.py'
       - 'tools/mini_ai/test_dino_native_visual_school.py'
       - 'app/src/test/java/com/assetwright/app/mini/DinoNativeGeometrySchoolTest.kt'
       - 'app/src/test/java/com/assetwright/app/mini/DinoVisualReconstructionTest.kt'
@@ -35,6 +37,8 @@ jobs:
         run: python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3'
       - name: Run native visual source and frozen teacher integrity tests
         run: python -m unittest discover -s tools/mini_ai -p 'test_dino_native_visual_school.py'
+      - name: Test cross-checked geometry promotion evidence
+        run: python -m unittest discover -s tools/mini_ai -p 'test_dino_native_acceptance_gate.py'
 
   native-geometry-vision:
     name: Source GLBs -> DINO teacher -> own pixel student -> reconstructed GLBs
@@ -109,6 +113,13 @@ jobs:
             --source local-data/dino-school/native-source \
             --reconstructed local-data/dino-school/reconstructed \
             --out local-data/dino-school/forward_audit.json
+      - name: Reconcile visual improvement and actual native GLB quality before research eligibility
+        run: |
+          python tools/mini_ai/dino_native_acceptance_gate.py \
+            --evaluation local-data/dino-school/students/evaluation.json \
+            --forward local-data/dino-school/forward_audit.json \
+            --candidate local-data/dino-school/students/candidate_pixel_student.json \
+            --out local-data/dino-school/students
       - name: Preserve original meshes, rejected students and independently tested geometry
         if: always()
         uses: actions/upload-artifact@v4
