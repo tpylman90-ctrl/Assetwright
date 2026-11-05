@@ -30,7 +30,7 @@ MAX_STL_BYTES=5_500_000
 MAX_TRIANGLES=100_000
 # Prior CAD study inspected validation first 656 scans, and DINO work
 # sampled 240..336. Start beyond this region with a separate cohort.
-ALLOWED_OFFSETS={"train":(2200,4000),"validation":(1500,4000)}
+ALLOWED_OFFSETS={"train":(2200,4000),"validation":(1500,6000)}
 
 def safe_stl_bytes(raw:object)->bytes:
     if isinstance(raw,dict):

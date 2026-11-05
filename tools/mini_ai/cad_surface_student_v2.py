@@ -66,11 +66,13 @@ def predict(model,rows):
     prediction=prediction*np.asarray(model["target_std"])+np.asarray(model["target_mean"])
     return np.maximum(0.,np.minimum(prediction,np.asarray([1,1,4,1,1])))
 
-def run(trainfile:Path,validationfile:Path,out:Path):
+def run(trainfile:Path,validationfile:Path,out:Path,validation_offset:int=3700):
     train_doc=json.loads(trainfile.read_text())
     validation_doc=json.loads(validationfile.read_text())
     train,validation=verify(train_doc,validation_doc)
-    if train_doc["source_offset"]!=2300 or validation_doc["source_offset"]!=3700:
+    if validation_offset not in (3700,5000):
+        raise ValueError("Unapproved synthetic or reused validation cohort")
+    if train_doc["source_offset"]!=2300 or validation_doc["source_offset"]!=validation_offset:
         raise ValueError("No reuse of prior exposed surface validation families")
     fit_rows,dev_rows=split_internal(train)
     options={}
@@ -113,7 +115,10 @@ def run(trainfile:Path,validationfile:Path,out:Path):
         "license":train_doc["license"],
         "train_original_STL_sources":len(train),
         "fresh_official_validation_STL_sources":len(validation),
-        "train_source_offset":2300,"validation_source_offset":3700,
+        "train_source_offset":2300,"validation_source_offset":validation_offset,
+        "train_profile_coverage":sum(
+            bool(row["profile_geometry_features"][18] or row["profile_geometry_features"][19])
+            for row in train)/len(train),
         "teacher_only_licensed_STL_hashes":True,
         "internal_fit_sources":len(fit_rows),
         "internal_dev_sources":len(dev_rows),
@@ -162,7 +167,8 @@ def main():
     p.add_argument("--train",type=Path,required=True)
     p.add_argument("--validation",type=Path,required=True)
     p.add_argument("--out",type=Path,required=True)
+    p.add_argument("--validation-offset",type=int,choices=(3700,5000),default=3700)
     a=p.parse_args()
-    run(a.train,a.validation,a.out)
+    run(a.train,a.validation,a.out,a.validation_offset)
 
 if __name__=="__main__":main()
