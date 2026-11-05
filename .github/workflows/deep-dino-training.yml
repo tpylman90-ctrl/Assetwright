@@ -71,11 +71,14 @@ jobs:
           if [ "$GITHUB_EVENT_NAME" = schedule ]; then
             week="$(date -u +%V)"
             offset=$((160 + (10#$week % 6) * 600))
+            validation_offset=$((600 + (10#$week % 30) * 120))
           else
             offset=160
+            validation_offset=360
           fi
           echo "TRAIN_OFFSET=$offset" >> "$GITHUB_ENV"
-          echo "CAD cohort offset: $offset (four views, 480 sources)"
+          echo "VAL_OFFSET=$validation_offset" >> "$GITHUB_ENV"
+          echo "CAD cohort offset: $offset; official validation offset: $validation_offset"
       - name: Stream 480 licensed training programs and original source images
         run: |
           python tools/mini_ai/deep_dino_curriculum.py ingest \
@@ -83,11 +86,11 @@ jobs:
             --offset "$TRAIN_OFFSET" --count 480 --scan-limit 1000 \
             --images local-data/deep-dino/images \
             --output local-data/deep-dino/train.json
-      - name: Stream 96 separate OFFICIALLY fresh validation programs from offset 240
+      - name: Stream bounded disjoint validation cohort with non-reused weekly source offset
         run: |
           python tools/mini_ai/deep_dino_curriculum.py ingest \
             --split validation --revision "$(cat local-data/deep-dino/source_revision)" \
-            --offset 240 --count 96 --scan-limit 400 \
+            --offset "$VAL_OFFSET" --count 96 --scan-limit 400 \
             --images local-data/deep-dino/images \
             --output local-data/deep-dino/validation.json
       - name: Freeze multi-view DINOv2 image signatures; no downloaded meshes
