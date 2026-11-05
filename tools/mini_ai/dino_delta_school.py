@@ -73,6 +73,19 @@ elif STUDY=="strength_continual_v4":
         "development":(.10,.40,.60,.90),
         "validation":(.07,.27,.73,.95)
     }
+elif STUDY=="geometry_aware_v5":
+    # Never-inspected bg_ families and strength levels; prior bd, bs, bm, bc
+    # cohorts are retired as blind validation after prior official studies.
+    FAMILIES={
+        "train":tuple("bg_train%02d"%i for i in range(1,13)),
+        "development":tuple("bg_dev%02d"%i for i in range(1,5)),
+        "validation":tuple("bg_blind%02d"%i for i in range(1,5))
+    }
+    LEVELS={
+        "train":(.02,.14,.30,.46,.63,.81,.99),
+        "development":(.12,.38,.58,.88),
+        "validation":(.085,.295,.705,.965)
+    }
 elif STUDY!="delta_v1":
     raise ValueError("Unapproved native source curriculum")
 EXPECTED=sum(len(FAMILIES[phase])*6*len(LEVELS[phase])
