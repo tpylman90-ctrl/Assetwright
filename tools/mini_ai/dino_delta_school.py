@@ -47,6 +47,19 @@ if STUDY=="strength_v2":
         "development":(.11,.39,.71,.91),
         "validation":(.09,.43,.67,.93)
     }
+elif STUDY=="strength_marathon_v3":
+    # NEW sources and validation strengths. Old strength_v2 and delta_v1
+    # validation cohorts have already been inspected.
+    FAMILIES={
+        "train":tuple("bm_train%02d"%i for i in range(1,17)),
+        "development":tuple("bm_dev%02d"%i for i in range(1,5)),
+        "validation":tuple("bm_blind%02d"%i for i in range(1,5))
+    }
+    LEVELS={
+        "train":(.06,.20,.34,.50,.65,.79,.94),
+        "development":(.13,.37,.61,.87),
+        "validation":(.075,.455,.735,.975)
+    }
 elif STUDY!="delta_v1":
     raise ValueError("Unapproved native source curriculum")
 EXPECTED=sum(len(FAMILIES[phase])*6*len(LEVELS[phase])
