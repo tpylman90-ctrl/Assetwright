@@ -9,6 +9,8 @@ on:
     paths:
       - '.github/workflows/dino-strength-multisession.yml'
       - 'tools/mini_ai/dino_strength_*.py'
+      - 'tools/mini_ai/dino_delta_school.py'
+      - 'tools/mini_ai/dino_delta_forward_audit.py'
       - 'tools/mini_ai/test_dino_strength_lab.py'
       - 'app/src/test/java/com/assetwright/app/mini/DinoStrengthGeometryBatchTest.kt'
       - 'app/src/test/java/com/assetwright/app/mini/DinoStrengthReconstructionTest.kt'
@@ -84,6 +86,18 @@ jobs:
             --source local-data/dino-strength/source \
             --images local-data/dino-strength/images \
             --out local-data/dino-strength/manifest.json
+      - name: Fail closed on the 974-GLB source manifest before loading frozen teacher
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest=json.loads(Path('local-data/dino-strength/manifest.json').read_text())
+          assert manifest['study_id']=='strength_v2'
+          assert manifest['source_count']==974
+          assert manifest['paired_examples']==948
+          assert manifest['external_geometry_used'] is False
+          print('Source and rendered manifest agree: 974 original GLBs, 948 shape changes')
+          PY
       - name: Freeze DINOv2 before/after numerical teacher without generating any meshes
         run: |
           python tools/mini_ai/dino_delta_school.py teach \
