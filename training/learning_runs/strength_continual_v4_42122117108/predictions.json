@@ -1,0 +1,1929 @@
+{
+  "schema": "assetwright-continuing-native-proposals-v4",
+  "original_blind_hashes": "5ab2c8e23c118461288cf85408bc2c95c189ed85719e4a439669222daf83c8cf",
+  "external_mesh_used": false,
+  "prior": [
+    {
+      "case": "validation__bc_blind01__lower_recess__s070",
+      "source_glb_sha256": "473d2c29d6721f45fbc5e2294a0eb83b64559d7c45de933039f0e98fd3be90a4",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.1070299,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__lower_recess__s270",
+      "source_glb_sha256": "b576319b3bf974fe51d65eea5fb0ccae68b7b9a3e581262d5fe98595ea484412",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.2792597,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__lower_recess__s730",
+      "source_glb_sha256": "0759197400fa9199decfc98cd34b9d208d91f6a4413d24ec8bb22cffb92c568b",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.7801087,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__lower_recess__s950",
+      "source_glb_sha256": "6b651359aac6517533b148b48d6358abb2f0b4d5ee4867944489dbb7c3bc5e4b",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.948958,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__ribbed_fairing__s070",
+      "source_glb_sha256": "0cb8a70eec778cf52cf6beb6c6af328c918d5748c4d8ba055706e7ac1ce127a0",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.0214155,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__ribbed_fairing__s270",
+      "source_glb_sha256": "af9ea08e11875d4d421ff3647d5944992f46a5e2a1c84f990dd844bf1d034da9",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.1993713,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__ribbed_fairing__s730",
+      "source_glb_sha256": "a07b06ad6525953f81c6931086dbe742b5779ed029fe44e88e4dbb1668e4dd85",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.7439982,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__ribbed_fairing__s950",
+      "source_glb_sha256": "1e51b5464b4fd8404613575fb2c4df3356f954ee0d90e548a02321ff358909fa",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.9394944,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_loft__s070",
+      "source_glb_sha256": "0f87594dea2cc078c4cc3f0555a8384d4437f53b535f0b4053b06b4992a2d8cb",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.0359098,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_loft__s270",
+      "source_glb_sha256": "c554da1f703d42a0a3870fddb7cf6b0962356661e8fc299337c5506fc0297908",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.3122755,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_loft__s730",
+      "source_glb_sha256": "7966770cf4e1617f507e6ff8e71231a80a0bb3bce9629aeb834c4ce1940e3b7c",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.8487446,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_loft__s950",
+      "source_glb_sha256": "3d8a5c7fa78e2c7cae34304ec06e510539db72eec6846c3d6df8aad7acf358b5",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.916831,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_twist__s070",
+      "source_glb_sha256": "6fd9cca2c12ca39afd16dd7af1c2a30eef666bad6335df3f4deb84f0d30d63eb",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.0599126,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_twist__s270",
+      "source_glb_sha256": "27219cd9ada6610fefccd3e0bda7719ae4ee19a30e78850dff9ecd11c9afa6b2",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.1273805,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_twist__s730",
+      "source_glb_sha256": "21067215b16e72e1279d5437a49f574f84478b04c150cd69d6dc8df33fe48f1f",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.7132329,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_twist__s950",
+      "source_glb_sha256": "af21bd5dc4f8c6db4c0d36718d0ef57d5ad36777ba7320299af081578ec5bcd3",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.9304346,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__superellipse_profile__s070",
+      "source_glb_sha256": "84bf0c138dbffdb79f9ff3dd1a342e12a411b309a6f740c8f2b6b6bf0cd0842b",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.056664,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__superellipse_profile__s270",
+      "source_glb_sha256": "665b4aa750568064981e991ad9c4084b3b933be951e414fb6a81458fb4dd992a",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.35258,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__superellipse_profile__s730",
+      "source_glb_sha256": "034c45f5574a05cf534784bbc3668f0f2f22aca863008fdc802fb98eb9b37783",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.8621745,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__superellipse_profile__s950",
+      "source_glb_sha256": "043af19f6585683bf275ebfc1d73dd898531380d154c8bf534df94a0ee09c9ab",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.9586776,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__tangent_sweep__s070",
+      "source_glb_sha256": "d93e34d66cca8503b99f9b24f902c8ae7594d66a0c88c64e97353783fa553e52",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.0510079,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__tangent_sweep__s270",
+      "source_glb_sha256": "83a3aa5189dfd3ac8877d2fb592fc16dda09977da21aa7f0fb8da28bded971e1",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.3703667,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__tangent_sweep__s730",
+      "source_glb_sha256": "ef0ed402157860d1fc182cb696e6442388d89ea3176b7acd7922c88aa9950874",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.9425082,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__tangent_sweep__s950",
+      "source_glb_sha256": "8941f8aa0d22981e2709235fb9e4c543eefbc69be95bb03630e14c5a63bbf790",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.9529133,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind02__lower_recess__s070",
+      "source_glb_sha256": "5dba380df3b5aaf36aab4420a57370feb8732085707994873fd8546865440281",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.1342596,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__lower_recess__s270",
+      "source_glb_sha256": "8a6136f0c45bccf427409cc63d3c899cc69b11c233a4ad03c169a487c9a86ed5",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.2917167,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__lower_recess__s730",
+      "source_glb_sha256": "d53c0dddc474fe5b897b05e336cb2c2f3ca83f7dfaf685c44b27282964a1eeac",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.7323707,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__lower_recess__s950",
+      "source_glb_sha256": "ba510ab04ccf76cb6e2b8197bfe9b5d065c5010a50e289e36e919fc1827daed5",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.9405429,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__ribbed_fairing__s070",
+      "source_glb_sha256": "5dd4c2daff18b549c8e69661b9da815df0d5fa2bc3da066e68af22c9fac731df",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.0417096,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__ribbed_fairing__s270",
+      "source_glb_sha256": "10e48ca5a1d962048048f3efb4b37313f681fa8f94d2b592ea7214a03da73eb0",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.1207689,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__ribbed_fairing__s730",
+      "source_glb_sha256": "206fd59d0c6a002292681b788b847ed1a672ebb7343069692960e176dd8b148f",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.5513464,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__ribbed_fairing__s950",
+      "source_glb_sha256": "3a1132e59446bfbc77c37d352b770da3716975d6dd654eab6750428ce1366386",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.8639849,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_loft__s070",
+      "source_glb_sha256": "de22a3a45165a3c70be62529594511abb9bc9d749562fcb1c814ea0ee6885276",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.0334095,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_loft__s270",
+      "source_glb_sha256": "005e2ea44b825333735254663ed30697394d69d5f4ac7db75fac47b90b302579",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.1929664,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_loft__s730",
+      "source_glb_sha256": "71264f58c59438996a51ab6abdb4bf6e22cf6270da2e8898fb0139bb1d16a026",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.7441844,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_loft__s950",
+      "source_glb_sha256": "f135b10f5c7f336b1ea4755b8cb23c49ab21870b22d627dd7e76d61d98088206",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.7856492,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_twist__s070",
+      "source_glb_sha256": "726e92686d41ba4b56741ea8052de3f0d1a6f0c9400332e921f45ec7d10c452c",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.1384317,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_twist__s270",
+      "source_glb_sha256": "c3b3eb12b3f11e77787de58192629f0ac8ebf6ba94124bfeb977115fac336b04",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.0845204,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_twist__s730",
+      "source_glb_sha256": "153622a824985fc1acefef94ded6f097fbe6d766f9d7d7664263c86cbcffa48a",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.0762573,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_twist__s950",
+      "source_glb_sha256": "4aac3d79687ea8916a30e9f81213a9903188a606d34256101cacaf6d2735e5ac",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.0603729,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__superellipse_profile__s070",
+      "source_glb_sha256": "131d63fad90114ef94ced746eadf98f953e79d3e66dfbdd451efd384a15d05a9",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.0269274,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__superellipse_profile__s270",
+      "source_glb_sha256": "9762d2c4946fe1d1f448dc591ff3cccf59928a2f1f21141c4a025f5af4d180de",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.3026966,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__superellipse_profile__s730",
+      "source_glb_sha256": "443cda45a67eff01db5fe04bc9967d8e21f8388337d6c1a497b7efb2d37a5e44",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.7965593,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__superellipse_profile__s950",
+      "source_glb_sha256": "cf64403afb9a64dfa46f6a904e285fd01499d76dbe9ed2e76f62240569427a80",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.9213696,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__tangent_sweep__s070",
+      "source_glb_sha256": "8bcf7bafe5423df35e723f6720662511339ccf8b3394b35b8189a676782b53f0",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.1009518,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__tangent_sweep__s270",
+      "source_glb_sha256": "7eb3ae8bdc517373fa76664aee585aa2ac2c707f94c81fb1625d493d86bf4f56",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.3228996,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__tangent_sweep__s730",
+      "source_glb_sha256": "bdc15154695fc63dbf6138fb2473eeb91fff910a4b34a265a61bba924f68e4fa",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.7962677,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__tangent_sweep__s950",
+      "source_glb_sha256": "baa0fe40f44ae1bef1ed703529b8527aaf48cf3043cce9485dfd453ca7115c68",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.9328749,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind03__lower_recess__s070",
+      "source_glb_sha256": "bd6577aeefad38db5944a59d9b3c335a7b826e44cd9e6691ec006a6f98ced294",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.136522,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__lower_recess__s270",
+      "source_glb_sha256": "f5fbefc42c3ccff479f9a05ccb76247dfda9c132d91686b700be7a4a87a9ab3e",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.6588454,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__lower_recess__s730",
+      "source_glb_sha256": "9b188abcd53f77c0a27d251ea8522c69846bf15030bab8d9f2f327c4e256e37d",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.9059565,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__lower_recess__s950",
+      "source_glb_sha256": "66ef3886d312cf8a276351f7b29b4a3f75dc81ba5b339155d453e94ae98d0384",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.9306405,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__ribbed_fairing__s070",
+      "source_glb_sha256": "676dfe396ba596dc8470b24340df62b5854b311eca6641af638ab18af5c18aad",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.5106975,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__ribbed_fairing__s270",
+      "source_glb_sha256": "88ee8287bb0dd6d6916f8ee4de91537edb9af9f5ef793975a8bf5366e5406fa1",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.7265172,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__ribbed_fairing__s730",
+      "source_glb_sha256": "e694cc83f1a96be4b1902acc55f7e91e9df22ec6326191c510672fd36e21dea0",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.9703407,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__ribbed_fairing__s950",
+      "source_glb_sha256": "5716f48c09c0e47561ccf063f7a92d032d6f80ab34d9543dc174b6e453abd469",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.976914,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_loft__s070",
+      "source_glb_sha256": "a4afa624ace0bbf4891217ce97203024a620960d812df17d19b14b053d67f8e3",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.4452233,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_loft__s270",
+      "source_glb_sha256": "492bb3b41cb9b77e2bbc9e1f6c53372c60bca774ca10dd202fc47fac185c7bdc",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.9375034,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_loft__s730",
+      "source_glb_sha256": "7ed766d5584ac74b8dd061185fe12940faae8abd51d7086d6eeeb468a6e2032f",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.9665387,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_loft__s950",
+      "source_glb_sha256": "6e2bfb16ab5e7206fcf5278550c51e1901ce44df62eec980829fe6c852090809",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.9661422,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_twist__s070",
+      "source_glb_sha256": "8aba7ba6128885eea81853de2eee9c9807c10e77605b2e7ed06ac3f83b199e2f",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.0732626,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_twist__s270",
+      "source_glb_sha256": "60e9037128d325b7b9fa94aac01ff2d6ccab71a01436ca3807c84cdfe72247be",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.1611383,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_twist__s730",
+      "source_glb_sha256": "c48d73f0de5fb50d357c573b5c4dda309d0d57cb57aadbc39acb1ccbd6375da2",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.6441264,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_twist__s950",
+      "source_glb_sha256": "251c0466d139b0c4aad737fcecca3d630172a73d60e0b2c2793e90531dc6d3cb",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.9414119,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__superellipse_profile__s070",
+      "source_glb_sha256": "c7a0fc4db6833e55258041a6b8cfa0f874781ec64116fbef0fa5c8fe4116734a",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.1479854,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__superellipse_profile__s270",
+      "source_glb_sha256": "aa20a8662ea1c28b824765f4c7c58d2baa2ce91cf7a0fcdd40928c680208d6a4",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.1624459,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__superellipse_profile__s730",
+      "source_glb_sha256": "ff123f2e3ec2c02ab73bc2de9cebce4426fbe439aab572e0bdfb535ca0966e81",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.2111409,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__superellipse_profile__s950",
+      "source_glb_sha256": "e515aca0a32c94f2a2124b1487eff82a54d946c4a55991941758c2c79f80b061",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.2374701,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__tangent_sweep__s070",
+      "source_glb_sha256": "e06195138cb071df00f3201e6c8638348edebcc2651663c02d608019cd2a33b5",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.402377,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__tangent_sweep__s270",
+      "source_glb_sha256": "4cc1b27fe701225fa14cab333f99769afba03a4d75325112145944b5240d2d57",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.7174098,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__tangent_sweep__s730",
+      "source_glb_sha256": "40d70f672a6de0aed3a147d73b8d85fd1a05e6098512be37e804f8cce652d494",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.9391338,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__tangent_sweep__s950",
+      "source_glb_sha256": "f59ff161fc3074944120b6ff7f48d62b27facc71b2355b1eedca88208265a72f",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.9463552,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind04__lower_recess__s070",
+      "source_glb_sha256": "b72454249551dd51249ec4feeed0d83a7b8b54831744072d626adeaaeecd84c2",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.1380167,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__lower_recess__s270",
+      "source_glb_sha256": "33ba51fa2d6ea47bc7e3adc1975435409b10f85804f8220041a995b5d76a9608",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.3566374,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__lower_recess__s730",
+      "source_glb_sha256": "e6fd1d707560f5c1f58474be65988bb43002238ca9cb8d42b40c6b027623e998",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.8029618,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__lower_recess__s950",
+      "source_glb_sha256": "35627525b2f996c8f577bcb987e13b19532fe87c12fe2332461af54676aa09d1",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.9612693,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__ribbed_fairing__s070",
+      "source_glb_sha256": "9c4a4600f87043d6842cf617e95af6e8989813bd2ca5aad33cc0c3112fcf6e28",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.0510968,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__ribbed_fairing__s270",
+      "source_glb_sha256": "f12d34591e574c4d244eb865865e7dad5cac6f58ffd5ae6e6e03091a177b7d48",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.0988187,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__ribbed_fairing__s730",
+      "source_glb_sha256": "9744cedde52876afc259ab5fec1c03c375ac3a2557d071ef4ab9a2bc73c55df3",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.5303979,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__ribbed_fairing__s950",
+      "source_glb_sha256": "34ae683b9fd440c5823f8481248746675ecd40b47bfa5df453eb9bd1566321b3",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.7696604,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_loft__s070",
+      "source_glb_sha256": "16bc5e567dcb0b02dc29dc3da2582d2e6caca1de0e0dee29aba775c6b0ac62a3",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.0378364,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_loft__s270",
+      "source_glb_sha256": "c5b228f626b3b3e50d6874662bd2e051014b7dc2dc8cfdf42d21695c4dc43573",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.1758225,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_loft__s730",
+      "source_glb_sha256": "f50eb89cbbecd82a1e3e1cba15f8d1540f93e8521f72df18cb82c8b31ee9ed8e",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.5699806,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_loft__s950",
+      "source_glb_sha256": "e4fc0926be74fd74c4db2ae4dbf7ed5f01911f7006a1262e36086b05bca28918",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.6453627,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_twist__s070",
+      "source_glb_sha256": "870c9ebe6bb26e576f398b21dfb1df2ed4b3ea92a55332febb23d114c7950769",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.1064949,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_twist__s270",
+      "source_glb_sha256": "413e20b7d406489ffd2b566457db37276339505cd88513193a65a26e820f954b",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.2356178,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_twist__s730",
+      "source_glb_sha256": "35a971f7b4e5b41d007dbd756ba7a50c72e05dc5e38f49f6af925f294779758c",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.5346115,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_twist__s950",
+      "source_glb_sha256": "5af044eeb479e8e869e8aa44f9921eda1f90ed66bd581da4a4c39f3700dba74a",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.1688545,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__superellipse_profile__s070",
+      "source_glb_sha256": "20db8b7973d6b04e8a87211a3a3ba0c5654fcdc5d64a0fc030dbeaa7e2a34bac",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.0282571,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__superellipse_profile__s270",
+      "source_glb_sha256": "231a8998a3a0ad9700006341b6a14dc3079f6fc4bdc18f74cceb7ae71ca467ae",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.3419524,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__superellipse_profile__s730",
+      "source_glb_sha256": "e93e681b7ff921de215c8173dd276e7d7384813decc3fe334e53d36174b0cdd3",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.9228789,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__superellipse_profile__s950",
+      "source_glb_sha256": "3868f4a5c9b82ac0e9715c3909fc12cdc17a0f313a9dc78efe3039241beffe90",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.9241592,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__tangent_sweep__s070",
+      "source_glb_sha256": "49a758b62c0cb33269dba2c43a74a5cdd0c919919e69eaa4814a95fad3a78225",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.0353785,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__tangent_sweep__s270",
+      "source_glb_sha256": "40f217443ec12f5c93a96c292c1b5b8bdece6ca8dee4e4f2683bfae6abee5375",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.2129054,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__tangent_sweep__s730",
+      "source_glb_sha256": "903861739ed0d19bd7d1fb62d5460075133ea7792efe5a0cf0dcce02b48c1537",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.494331,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__tangent_sweep__s950",
+      "source_glb_sha256": "c1d3625e18612e8fe397cb874ba1c531c80bc067582478266a62ae942c1434f1",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.702093,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    }
+  ],
+  "continued": [
+    {
+      "case": "validation__bc_blind01__lower_recess__s070",
+      "source_glb_sha256": "473d2c29d6721f45fbc5e2294a0eb83b64559d7c45de933039f0e98fd3be90a4",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.1193494,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__lower_recess__s270",
+      "source_glb_sha256": "b576319b3bf974fe51d65eea5fb0ccae68b7b9a3e581262d5fe98595ea484412",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.2718853,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__lower_recess__s730",
+      "source_glb_sha256": "0759197400fa9199decfc98cd34b9d208d91f6a4413d24ec8bb22cffb92c568b",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.7317616,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__lower_recess__s950",
+      "source_glb_sha256": "6b651359aac6517533b148b48d6358abb2f0b4d5ee4867944489dbb7c3bc5e4b",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.9580105,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__ribbed_fairing__s070",
+      "source_glb_sha256": "0cb8a70eec778cf52cf6beb6c6af328c918d5748c4d8ba055706e7ac1ce127a0",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.0223983,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__ribbed_fairing__s270",
+      "source_glb_sha256": "af9ea08e11875d4d421ff3647d5944992f46a5e2a1c84f990dd844bf1d034da9",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.2182114,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__ribbed_fairing__s730",
+      "source_glb_sha256": "a07b06ad6525953f81c6931086dbe742b5779ed029fe44e88e4dbb1668e4dd85",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.7105498,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__ribbed_fairing__s950",
+      "source_glb_sha256": "1e51b5464b4fd8404613575fb2c4df3356f954ee0d90e548a02321ff358909fa",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.9332874,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_loft__s070",
+      "source_glb_sha256": "0f87594dea2cc078c4cc3f0555a8384d4437f53b535f0b4053b06b4992a2d8cb",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.0356574,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_loft__s270",
+      "source_glb_sha256": "c554da1f703d42a0a3870fddb7cf6b0962356661e8fc299337c5506fc0297908",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.2595141,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_loft__s730",
+      "source_glb_sha256": "7966770cf4e1617f507e6ff8e71231a80a0bb3bce9629aeb834c4ce1940e3b7c",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.8887146,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_loft__s950",
+      "source_glb_sha256": "3d8a5c7fa78e2c7cae34304ec06e510539db72eec6846c3d6df8aad7acf358b5",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.9392299,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_twist__s070",
+      "source_glb_sha256": "6fd9cca2c12ca39afd16dd7af1c2a30eef666bad6335df3f4deb84f0d30d63eb",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.0655828,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_twist__s270",
+      "source_glb_sha256": "27219cd9ada6610fefccd3e0bda7719ae4ee19a30e78850dff9ecd11c9afa6b2",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.1474277,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_twist__s730",
+      "source_glb_sha256": "21067215b16e72e1279d5437a49f574f84478b04c150cd69d6dc8df33fe48f1f",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.5179876,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__section_twist__s950",
+      "source_glb_sha256": "af21bd5dc4f8c6db4c0d36718d0ef57d5ad36777ba7320299af081578ec5bcd3",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.9179255,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__superellipse_profile__s070",
+      "source_glb_sha256": "84bf0c138dbffdb79f9ff3dd1a342e12a411b309a6f740c8f2b6b6bf0cd0842b",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.0299233,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__superellipse_profile__s270",
+      "source_glb_sha256": "665b4aa750568064981e991ad9c4084b3b933be951e414fb6a81458fb4dd992a",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.3504557,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__superellipse_profile__s730",
+      "source_glb_sha256": "034c45f5574a05cf534784bbc3668f0f2f22aca863008fdc802fb98eb9b37783",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.9008963,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__superellipse_profile__s950",
+      "source_glb_sha256": "043af19f6585683bf275ebfc1d73dd898531380d154c8bf534df94a0ee09c9ab",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.9839229,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__tangent_sweep__s070",
+      "source_glb_sha256": "d93e34d66cca8503b99f9b24f902c8ae7594d66a0c88c64e97353783fa553e52",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.03952,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__tangent_sweep__s270",
+      "source_glb_sha256": "83a3aa5189dfd3ac8877d2fb592fc16dda09977da21aa7f0fb8da28bded971e1",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.30402,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__tangent_sweep__s730",
+      "source_glb_sha256": "ef0ed402157860d1fc182cb696e6442388d89ea3176b7acd7922c88aa9950874",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.9247367,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind01__tangent_sweep__s950",
+      "source_glb_sha256": "8941f8aa0d22981e2709235fb9e4c543eefbc69be95bb03630e14c5a63bbf790",
+      "baseline_glb_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.971983,
+      "length": 3.64,
+      "width": 2.39,
+      "height": 1.87
+    },
+    {
+      "case": "validation__bc_blind02__lower_recess__s070",
+      "source_glb_sha256": "5dba380df3b5aaf36aab4420a57370feb8732085707994873fd8546865440281",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.0964406,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__lower_recess__s270",
+      "source_glb_sha256": "8a6136f0c45bccf427409cc63d3c899cc69b11c233a4ad03c169a487c9a86ed5",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.3187023,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__lower_recess__s730",
+      "source_glb_sha256": "d53c0dddc474fe5b897b05e336cb2c2f3ca83f7dfaf685c44b27282964a1eeac",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.7255636,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__lower_recess__s950",
+      "source_glb_sha256": "ba510ab04ccf76cb6e2b8197bfe9b5d065c5010a50e289e36e919fc1827daed5",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.952102,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__ribbed_fairing__s070",
+      "source_glb_sha256": "5dd4c2daff18b549c8e69661b9da815df0d5fa2bc3da066e68af22c9fac731df",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.0173731,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__ribbed_fairing__s270",
+      "source_glb_sha256": "10e48ca5a1d962048048f3efb4b37313f681fa8f94d2b592ea7214a03da73eb0",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.1418274,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__ribbed_fairing__s730",
+      "source_glb_sha256": "206fd59d0c6a002292681b788b847ed1a672ebb7343069692960e176dd8b148f",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.649646,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__ribbed_fairing__s950",
+      "source_glb_sha256": "3a1132e59446bfbc77c37d352b770da3716975d6dd654eab6750428ce1366386",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.9268863,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_loft__s070",
+      "source_glb_sha256": "de22a3a45165a3c70be62529594511abb9bc9d749562fcb1c814ea0ee6885276",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.0259589,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_loft__s270",
+      "source_glb_sha256": "005e2ea44b825333735254663ed30697394d69d5f4ac7db75fac47b90b302579",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.2005086,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_loft__s730",
+      "source_glb_sha256": "71264f58c59438996a51ab6abdb4bf6e22cf6270da2e8898fb0139bb1d16a026",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.7684171,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_loft__s950",
+      "source_glb_sha256": "f135b10f5c7f336b1ea4755b8cb23c49ab21870b22d627dd7e76d61d98088206",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.9244656,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_twist__s070",
+      "source_glb_sha256": "726e92686d41ba4b56741ea8052de3f0d1a6f0c9400332e921f45ec7d10c452c",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.0831558,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_twist__s270",
+      "source_glb_sha256": "c3b3eb12b3f11e77787de58192629f0ac8ebf6ba94124bfeb977115fac336b04",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.0798889,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_twist__s730",
+      "source_glb_sha256": "153622a824985fc1acefef94ded6f097fbe6d766f9d7d7664263c86cbcffa48a",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.0445436,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__section_twist__s950",
+      "source_glb_sha256": "4aac3d79687ea8916a30e9f81213a9903188a606d34256101cacaf6d2735e5ac",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.0199442,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__superellipse_profile__s070",
+      "source_glb_sha256": "131d63fad90114ef94ced746eadf98f953e79d3e66dfbdd451efd384a15d05a9",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.0304463,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__superellipse_profile__s270",
+      "source_glb_sha256": "9762d2c4946fe1d1f448dc591ff3cccf59928a2f1f21141c4a025f5af4d180de",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.3117746,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__superellipse_profile__s730",
+      "source_glb_sha256": "443cda45a67eff01db5fe04bc9967d8e21f8388337d6c1a497b7efb2d37a5e44",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.7954125,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__superellipse_profile__s950",
+      "source_glb_sha256": "cf64403afb9a64dfa46f6a904e285fd01499d76dbe9ed2e76f62240569427a80",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.9545916,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__tangent_sweep__s070",
+      "source_glb_sha256": "8bcf7bafe5423df35e723f6720662511339ccf8b3394b35b8189a676782b53f0",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.0673897,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__tangent_sweep__s270",
+      "source_glb_sha256": "7eb3ae8bdc517373fa76664aee585aa2ac2c707f94c81fb1625d493d86bf4f56",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.3046455,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__tangent_sweep__s730",
+      "source_glb_sha256": "bdc15154695fc63dbf6138fb2473eeb91fff910a4b34a265a61bba924f68e4fa",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.8994501,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind02__tangent_sweep__s950",
+      "source_glb_sha256": "baa0fe40f44ae1bef1ed703529b8527aaf48cf3043cce9485dfd453ca7115c68",
+      "baseline_glb_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.9745896,
+      "length": 5.84,
+      "width": 2.18,
+      "height": 2.09
+    },
+    {
+      "case": "validation__bc_blind03__lower_recess__s070",
+      "source_glb_sha256": "bd6577aeefad38db5944a59d9b3c335a7b826e44cd9e6691ec006a6f98ced294",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.0533062,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__lower_recess__s270",
+      "source_glb_sha256": "f5fbefc42c3ccff479f9a05ccb76247dfda9c132d91686b700be7a4a87a9ab3e",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.0963242,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__lower_recess__s730",
+      "source_glb_sha256": "9b188abcd53f77c0a27d251ea8522c69846bf15030bab8d9f2f327c4e256e37d",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.5135128,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__lower_recess__s950",
+      "source_glb_sha256": "66ef3886d312cf8a276351f7b29b4a3f75dc81ba5b339155d453e94ae98d0384",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.6835701,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__ribbed_fairing__s070",
+      "source_glb_sha256": "676dfe396ba596dc8470b24340df62b5854b311eca6641af638ab18af5c18aad",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.1200771,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__ribbed_fairing__s270",
+      "source_glb_sha256": "88ee8287bb0dd6d6916f8ee4de91537edb9af9f5ef793975a8bf5366e5406fa1",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.325912,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__ribbed_fairing__s730",
+      "source_glb_sha256": "e694cc83f1a96be4b1902acc55f7e91e9df22ec6326191c510672fd36e21dea0",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.9561626,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__ribbed_fairing__s950",
+      "source_glb_sha256": "5716f48c09c0e47561ccf063f7a92d032d6f80ab34d9543dc174b6e453abd469",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.9820049,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_loft__s070",
+      "source_glb_sha256": "a4afa624ace0bbf4891217ce97203024a620960d812df17d19b14b053d67f8e3",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.2996744,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_loft__s270",
+      "source_glb_sha256": "492bb3b41cb9b77e2bbc9e1f6c53372c60bca774ca10dd202fc47fac185c7bdc",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.7531517,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_loft__s730",
+      "source_glb_sha256": "7ed766d5584ac74b8dd061185fe12940faae8abd51d7086d6eeeb468a6e2032f",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.9600587,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_loft__s950",
+      "source_glb_sha256": "6e2bfb16ab5e7206fcf5278550c51e1901ce44df62eec980829fe6c852090809",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.9576192,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_twist__s070",
+      "source_glb_sha256": "8aba7ba6128885eea81853de2eee9c9807c10e77605b2e7ed06ac3f83b199e2f",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.0565106,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_twist__s270",
+      "source_glb_sha256": "60e9037128d325b7b9fa94aac01ff2d6ccab71a01436ca3807c84cdfe72247be",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.2428796,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_twist__s730",
+      "source_glb_sha256": "c48d73f0de5fb50d357c573b5c4dda309d0d57cb57aadbc39acb1ccbd6375da2",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.7272531,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__section_twist__s950",
+      "source_glb_sha256": "251c0466d139b0c4aad737fcecca3d630172a73d60e0b2c2793e90531dc6d3cb",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.9553099,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__superellipse_profile__s070",
+      "source_glb_sha256": "c7a0fc4db6833e55258041a6b8cfa0f874781ec64116fbef0fa5c8fe4116734a",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.0908259,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__superellipse_profile__s270",
+      "source_glb_sha256": "aa20a8662ea1c28b824765f4c7c58d2baa2ce91cf7a0fcdd40928c680208d6a4",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.123805,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__superellipse_profile__s730",
+      "source_glb_sha256": "ff123f2e3ec2c02ab73bc2de9cebce4426fbe439aab572e0bdfb535ca0966e81",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.3011548,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__superellipse_profile__s950",
+      "source_glb_sha256": "e515aca0a32c94f2a2124b1487eff82a54d946c4a55991941758c2c79f80b061",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.3939753,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__tangent_sweep__s070",
+      "source_glb_sha256": "e06195138cb071df00f3201e6c8638348edebcc2651663c02d608019cd2a33b5",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.3962093,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__tangent_sweep__s270",
+      "source_glb_sha256": "4cc1b27fe701225fa14cab333f99769afba03a4d75325112145944b5240d2d57",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.7851909,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__tangent_sweep__s730",
+      "source_glb_sha256": "40d70f672a6de0aed3a147d73b8d85fd1a05e6098512be37e804f8cce652d494",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.9565564,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind03__tangent_sweep__s950",
+      "source_glb_sha256": "f59ff161fc3074944120b6ff7f48d62b27facc71b2355b1eedca88208265a72f",
+      "baseline_glb_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.9732057,
+      "length": 4.92,
+      "width": 2.99,
+      "height": 1.21
+    },
+    {
+      "case": "validation__bc_blind04__lower_recess__s070",
+      "source_glb_sha256": "b72454249551dd51249ec4feeed0d83a7b8b54831744072d626adeaaeecd84c2",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.1201914,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__lower_recess__s270",
+      "source_glb_sha256": "33ba51fa2d6ea47bc7e3adc1975435409b10f85804f8220041a995b5d76a9608",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.3191852,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__lower_recess__s730",
+      "source_glb_sha256": "e6fd1d707560f5c1f58474be65988bb43002238ca9cb8d42b40c6b027623e998",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.7707788,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__lower_recess__s950",
+      "source_glb_sha256": "35627525b2f996c8f577bcb987e13b19532fe87c12fe2332461af54676aa09d1",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.971329,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__ribbed_fairing__s070",
+      "source_glb_sha256": "9c4a4600f87043d6842cf617e95af6e8989813bd2ca5aad33cc0c3112fcf6e28",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.0377646,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__ribbed_fairing__s270",
+      "source_glb_sha256": "f12d34591e574c4d244eb865865e7dad5cac6f58ffd5ae6e6e03091a177b7d48",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.1158448,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__ribbed_fairing__s730",
+      "source_glb_sha256": "9744cedde52876afc259ab5fec1c03c375ac3a2557d071ef4ab9a2bc73c55df3",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.4871904,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__ribbed_fairing__s950",
+      "source_glb_sha256": "34ae683b9fd440c5823f8481248746675ecd40b47bfa5df453eb9bd1566321b3",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "RIBBED_FAIRING",
+      "predicted_strength": 0.8521219,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_loft__s070",
+      "source_glb_sha256": "16bc5e567dcb0b02dc29dc3da2582d2e6caca1de0e0dee29aba775c6b0ac62a3",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.0274746,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_loft__s270",
+      "source_glb_sha256": "c5b228f626b3b3e50d6874662bd2e051014b7dc2dc8cfdf42d21695c4dc43573",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.1667856,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_loft__s730",
+      "source_glb_sha256": "f50eb89cbbecd82a1e3e1cba15f8d1540f93e8521f72df18cb82c8b31ee9ed8e",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.5917157,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_loft__s950",
+      "source_glb_sha256": "e4fc0926be74fd74c4db2ae4dbf7ed5f01911f7006a1262e36086b05bca28918",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SECTION_LOFT",
+      "predicted_strength": 0.6914057,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_twist__s070",
+      "source_glb_sha256": "870c9ebe6bb26e576f398b21dfb1df2ed4b3ea92a55332febb23d114c7950769",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.1077856,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_twist__s270",
+      "source_glb_sha256": "413e20b7d406489ffd2b566457db37276339505cd88513193a65a26e820f954b",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.105887,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_twist__s730",
+      "source_glb_sha256": "35a971f7b4e5b41d007dbd756ba7a50c72e05dc5e38f49f6af925f294779758c",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SECTION_TWIST",
+      "predicted_strength": 0.2704914,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__section_twist__s950",
+      "source_glb_sha256": "5af044eeb479e8e869e8aa44f9921eda1f90ed66bd581da4a4c39f3700dba74a",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "LOWER_RECESS",
+      "predicted_strength": 0.108414,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__superellipse_profile__s070",
+      "source_glb_sha256": "20db8b7973d6b04e8a87211a3a3ba0c5654fcdc5d64a0fc030dbeaa7e2a34bac",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.0434748,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__superellipse_profile__s270",
+      "source_glb_sha256": "231a8998a3a0ad9700006341b6a14dc3079f6fc4bdc18f74cceb7ae71ca467ae",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.2287436,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__superellipse_profile__s730",
+      "source_glb_sha256": "e93e681b7ff921de215c8173dd276e7d7384813decc3fe334e53d36174b0cdd3",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.9040434,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__superellipse_profile__s950",
+      "source_glb_sha256": "3868f4a5c9b82ac0e9715c3909fc12cdc17a0f313a9dc78efe3039241beffe90",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "SUPERELLIPSE_PROFILE",
+      "predicted_strength": 0.9111663,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__tangent_sweep__s070",
+      "source_glb_sha256": "49a758b62c0cb33269dba2c43a74a5cdd0c919919e69eaa4814a95fad3a78225",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.0146822,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__tangent_sweep__s270",
+      "source_glb_sha256": "40f217443ec12f5c93a96c292c1b5b8bdece6ca8dee4e4f2683bfae6abee5375",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.2538475,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__tangent_sweep__s730",
+      "source_glb_sha256": "903861739ed0d19bd7d1fb62d5460075133ea7792efe5a0cf0dcce02b48c1537",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.563074,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    },
+    {
+      "case": "validation__bc_blind04__tangent_sweep__s950",
+      "source_glb_sha256": "c1d3625e18612e8fe397cb874ba1c531c80bc067582478266a62ae942c1434f1",
+      "baseline_glb_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "predicted_operation": "TANGENT_SWEEP",
+      "predicted_strength": 0.7301911,
+      "length": 6.51,
+      "width": 2.44,
+      "height": 1.81
+    }
+  ]
+}

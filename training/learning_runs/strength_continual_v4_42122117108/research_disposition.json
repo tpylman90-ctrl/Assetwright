@@ -1,0 +1,31 @@
+{
+  "schema": "assetwright-forge-mini-continued-research-acceptance-v4",
+  "status": "candidate_not_promoted_parent_retained",
+  "checks": {
+    "old_training_operation_skill_retained": true,
+    "old_training_strength_skill_retained": true,
+    "fresh_operation_accuracy_not_worse_than_parent": true,
+    "fresh_strength_calibration_not_regressed": true,
+    "real_native_GLBS_at_least_2pct_better_than_parent": false,
+    "real_native_GLBS_at_least_10pct_better_than_no_change": true,
+    "independent_old_weights_reloaded_and_rehearsed": true,
+    "separate_new_blind_sources_and_heldout_GLBS": true,
+    "no_Android_automatic_promotion": true
+  },
+  "prior_checkpoint_sha256": "1d32f74b9e05ab79196b906f88dde823fdbcc1eae0bea8a3b62a0a631cf00c21",
+  "new_candidate_source_hash": "5ab2c8e23c118461288cf85408bc2c95c189ed85719e4a439669222daf83c8cf",
+  "training_sessions": 8,
+  "active_gradient_seconds": 1920.024,
+  "previous_operation_accuracy_on_fresh_blind": 0.875,
+  "continued_operation_accuracy_on_fresh_blind": 0.8854166865348816,
+  "previous_strength_mae_on_fresh_blind": 0.13832634687423706,
+  "continued_strength_mae_on_fresh_blind": 0.12381318211555481,
+  "previous_vertex_rmse_on_real_GLBS": 0.004996267446095483,
+  "continued_vertex_rmse_on_real_GLBS": 0.005099327756757533,
+  "real_geometry_improvement_fraction": -0.02062746075424575,
+  "old_training_retention_accuracy_before": 0.9940476417541504,
+  "old_training_retention_accuracy_after": 1.0,
+  "android_installed": false,
+  "human_visual_review_required": true,
+  "parent_original_checkpoint_unchanged": true
+}

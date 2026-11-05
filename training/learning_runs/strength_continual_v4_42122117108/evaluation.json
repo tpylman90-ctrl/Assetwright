@@ -1,0 +1,1058 @@
+{
+  "schema": "assetwright-forge-mini-native-continued-training-v4",
+  "study": "strength_continual_v4",
+  "old_prior_saved_hash": "1d32f74b9e05ab79196b906f88dde823fdbcc1eae0bea8a3b62a0a631cf00c21",
+  "warm_start_verified_from_original": true,
+  "rebased_max_logit_difference": 2.86102294921875e-06,
+  "prior_training_sources_rehearsed": 672,
+  "prior_development_retention_examples": 96,
+  "historical_validation_leaked_into_training": false,
+  "new_training_examples": 504,
+  "new_development_examples": 96,
+  "new_unseen_validation_examples": 96,
+  "old_rehearsal_hash": "6fed40c3a37f59312e6f05ad31abc4757dc1be9c61c62348f69d7b2bf7ca1252",
+  "new_blind_original_mesh_hash": "5ab2c8e23c118461288cf85408bc2c95c189ed85719e4a439669222daf83c8cf",
+  "measured_training_seconds": 1920.024,
+  "configured_training_seconds": 1920,
+  "training_sessions_completed": 8,
+  "sessions": [
+    {
+      "mode": "balanced_replay",
+      "seed": 117,
+      "active_training_seconds": 240.0,
+      "optimizer_updates": 61937,
+      "selected_development_step": 75,
+      "selected_on_new_development_only": true,
+      "source_replay_examples_per_batch": 64,
+      "new_source_examples_per_batch": 96,
+      "new_development": {
+        "accuracy": 0.90625,
+        "strength_mae": 0.14138519763946533,
+        "oracle_strength_mae": 0.13144414126873016,
+        "cross_entropy": 0.3633732497692108,
+        "dev_priority": 0.7548912906646729,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 16,
+            "correct": 14,
+            "strength_mae": 0.15668562054634094
+          },
+          "TANGENT_SWEEP": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.08761592209339142
+          },
+          "SECTION_TWIST": {
+            "total": 16,
+            "correct": 12,
+            "strength_mae": 0.22306567430496216
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 16,
+            "correct": 14,
+            "strength_mae": 0.21344521641731262
+          },
+          "LOWER_RECESS": {
+            "total": 16,
+            "correct": 16,
+            "strength_mae": 0.04917611554265022
+          },
+          "RIBBED_FAIRING": {
+            "total": 16,
+            "correct": 16,
+            "strength_mae": 0.1183227002620697
+          }
+        }
+      },
+      "old_training_retention": {
+        "accuracy": 1.0,
+        "strength_mae": 0.01536534819751978,
+        "oracle_strength_mae": 0.01536534819751978,
+        "cross_entropy": 0.0020799196790903807,
+        "dev_priority": 0.06108961299061775,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.01783621869981289
+          },
+          "TANGENT_SWEEP": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.019974591210484505
+          },
+          "SECTION_TWIST": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.01413678377866745
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.014044628478586674
+          },
+          "LOWER_RECESS": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.012564783915877342
+          },
+          "RIBBED_FAIRING": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.01363507192581892
+          }
+        }
+      },
+      "checkpoint_file": "balanced_replay__seed_117.safetensors"
+    },
+    {
+      "mode": "balanced_replay",
+      "seed": 701,
+      "active_training_seconds": 240.003,
+      "optimizer_updates": 61638,
+      "selected_development_step": 75,
+      "selected_on_new_development_only": true,
+      "source_replay_examples_per_batch": 64,
+      "new_source_examples_per_batch": 96,
+      "new_development": {
+        "accuracy": 0.8958333134651184,
+        "strength_mae": 0.14095138013362885,
+        "oracle_strength_mae": 0.13241459429264069,
+        "cross_entropy": 0.34270086884498596,
+        "dev_priority": 0.7416228690743446,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 16,
+            "correct": 14,
+            "strength_mae": 0.1572083681821823
+          },
+          "TANGENT_SWEEP": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.0903126671910286
+          },
+          "SECTION_TWIST": {
+            "total": 16,
+            "correct": 12,
+            "strength_mae": 0.22061194479465485
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 16,
+            "correct": 14,
+            "strength_mae": 0.2180236428976059
+          },
+          "LOWER_RECESS": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.04389956220984459
+          },
+          "RIBBED_FAIRING": {
+            "total": 16,
+            "correct": 16,
+            "strength_mae": 0.11565208435058594
+          }
+        }
+      },
+      "old_training_retention": {
+        "accuracy": 1.0,
+        "strength_mae": 0.01563677191734314,
+        "oracle_strength_mae": 0.01563677191734314,
+        "cross_entropy": 0.0027302741073071957,
+        "dev_priority": 0.06251236397773027,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.01637732982635498
+          },
+          "TANGENT_SWEEP": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.019657637923955917
+          },
+          "SECTION_TWIST": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.014127795584499836
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.014588601887226105
+          },
+          "LOWER_RECESS": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.01295902393758297
+          },
+          "RIBBED_FAIRING": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.016110245138406754
+          }
+        }
+      },
+      "checkpoint_file": "balanced_replay__seed_701.safetensors"
+    },
+    {
+      "mode": "balanced_replay",
+      "seed": 1601,
+      "active_training_seconds": 240.004,
+      "optimizer_updates": 61562,
+      "selected_development_step": 75,
+      "selected_on_new_development_only": true,
+      "source_replay_examples_per_batch": 64,
+      "new_source_examples_per_batch": 96,
+      "new_development": {
+        "accuracy": 0.8958333134651184,
+        "strength_mae": 0.14469395577907562,
+        "oracle_strength_mae": 0.1346808224916458,
+        "cross_entropy": 0.3550528585910797,
+        "dev_priority": 0.7631360283493995,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 16,
+            "correct": 14,
+            "strength_mae": 0.1610611379146576
+          },
+          "TANGENT_SWEEP": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.09484878182411194
+          },
+          "SECTION_TWIST": {
+            "total": 16,
+            "correct": 12,
+            "strength_mae": 0.21902954578399658
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 16,
+            "correct": 14,
+            "strength_mae": 0.2221544086933136
+          },
+          "LOWER_RECESS": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.052474189549684525
+          },
+          "RIBBED_FAIRING": {
+            "total": 16,
+            "correct": 16,
+            "strength_mae": 0.11859570443630219
+          }
+        }
+      },
+      "old_training_retention": {
+        "accuracy": 0.9985119104385376,
+        "strength_mae": 0.01575414650142193,
+        "oracle_strength_mae": 0.015789717435836792,
+        "cross_entropy": 0.0028420411981642246,
+        "dev_priority": 0.06303271442651749,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.01743786595761776
+          },
+          "TANGENT_SWEEP": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.017300421372056007
+          },
+          "SECTION_TWIST": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.017283791676163673
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.013985981233417988
+          },
+          "LOWER_RECESS": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.013097311370074749
+          },
+          "RIBBED_FAIRING": {
+            "total": 112,
+            "correct": 111,
+            "strength_mae": 0.015419517643749714
+          }
+        }
+      },
+      "checkpoint_file": "balanced_replay__seed_1601.safetensors"
+    },
+    {
+      "mode": "balanced_replay",
+      "seed": 3209,
+      "active_training_seconds": 240.003,
+      "optimizer_updates": 63319,
+      "selected_development_step": 75,
+      "selected_on_new_development_only": true,
+      "source_replay_examples_per_batch": 64,
+      "new_source_examples_per_batch": 96,
+      "new_development": {
+        "accuracy": 0.875,
+        "strength_mae": 0.14487211406230927,
+        "oracle_strength_mae": 0.13555200397968292,
+        "cross_entropy": 0.3658721148967743,
+        "dev_priority": 0.7698896291851997,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 16,
+            "correct": 13,
+            "strength_mae": 0.1610608547925949
+          },
+          "TANGENT_SWEEP": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.09540574252605438
+          },
+          "SECTION_TWIST": {
+            "total": 16,
+            "correct": 12,
+            "strength_mae": 0.21969367563724518
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 16,
+            "correct": 13,
+            "strength_mae": 0.22134265303611755
+          },
+          "LOWER_RECESS": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.05092178285121918
+          },
+          "RIBBED_FAIRING": {
+            "total": 16,
+            "correct": 16,
+            "strength_mae": 0.1208079531788826
+          }
+        }
+      },
+      "old_training_retention": {
+        "accuracy": 1.0,
+        "strength_mae": 0.015036333352327347,
+        "oracle_strength_mae": 0.015036333352327347,
+        "cross_entropy": 0.0017837719060480595,
+        "dev_priority": 0.05964061234146357,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.014557242393493652
+          },
+          "TANGENT_SWEEP": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.020150093361735344
+          },
+          "SECTION_TWIST": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.01585635542869568
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.013562929816544056
+          },
+          "LOWER_RECESS": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.012352711521089077
+          },
+          "RIBBED_FAIRING": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.013738674111664295
+          }
+        }
+      },
+      "checkpoint_file": "balanced_replay__seed_3209.safetensors"
+    },
+    {
+      "mode": "replay_and_distill",
+      "seed": 117,
+      "active_training_seconds": 240.004,
+      "optimizer_updates": 51660,
+      "selected_development_step": 51000,
+      "selected_on_new_development_only": true,
+      "source_replay_examples_per_batch": 64,
+      "new_source_examples_per_batch": 96,
+      "new_development": {
+        "accuracy": 0.9375,
+        "strength_mae": 0.11880093812942505,
+        "oracle_strength_mae": 0.11634089797735214,
+        "cross_entropy": 0.31022757291793823,
+        "dev_priority": 0.6370510995388031,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.14566542208194733
+          },
+          "TANGENT_SWEEP": {
+            "total": 16,
+            "correct": 16,
+            "strength_mae": 0.096316397190094
+          },
+          "SECTION_TWIST": {
+            "total": 16,
+            "correct": 12,
+            "strength_mae": 0.19562217593193054
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 16,
+            "correct": 16,
+            "strength_mae": 0.11781950294971466
+          },
+          "LOWER_RECESS": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.06428098678588867
+          },
+          "RIBBED_FAIRING": {
+            "total": 16,
+            "correct": 16,
+            "strength_mae": 0.09310111403465271
+          }
+        }
+      },
+      "old_training_retention": {
+        "accuracy": 1.0,
+        "strength_mae": 0.00221259705722332,
+        "oracle_strength_mae": 0.00221259705722332,
+        "cross_entropy": 0.0051030972972512245,
+        "dev_priority": 0.011486863009631634,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0019257935928180814
+          },
+          "TANGENT_SWEEP": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0018780792597681284
+          },
+          "SECTION_TWIST": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0012240844080224633
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0014493035851046443
+          },
+          "LOWER_RECESS": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0031835350673645735
+          },
+          "RIBBED_FAIRING": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0036147874779999256
+          }
+        }
+      },
+      "checkpoint_file": "replay_and_distill__seed_117.safetensors"
+    },
+    {
+      "mode": "replay_and_distill",
+      "seed": 701,
+      "active_training_seconds": 240.004,
+      "optimizer_updates": 52114,
+      "selected_development_step": 49650,
+      "selected_on_new_development_only": true,
+      "source_replay_examples_per_batch": 64,
+      "new_source_examples_per_batch": 96,
+      "new_development": {
+        "accuracy": 0.9270833134651184,
+        "strength_mae": 0.11446857452392578,
+        "oracle_strength_mae": 0.11310196667909622,
+        "cross_entropy": 0.40220749378204346,
+        "dev_priority": 0.6716636371612549,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.12258707731962204
+          },
+          "TANGENT_SWEEP": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.08768177032470703
+          },
+          "SECTION_TWIST": {
+            "total": 16,
+            "correct": 12,
+            "strength_mae": 0.18508748710155487
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 16,
+            "correct": 16,
+            "strength_mae": 0.12555167078971863
+          },
+          "LOWER_RECESS": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.08352725207805634
+          },
+          "RIBBED_FAIRING": {
+            "total": 16,
+            "correct": 16,
+            "strength_mae": 0.08237622678279877
+          }
+        }
+      },
+      "old_training_retention": {
+        "accuracy": 0.9985119104385376,
+        "strength_mae": 0.0019343228777870536,
+        "oracle_strength_mae": 0.001892888336442411,
+        "cross_entropy": 0.005291198845952749,
+        "dev_priority": 0.010506930577103049,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0019219742389395833
+          },
+          "TANGENT_SWEEP": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0017950318288058043
+          },
+          "SECTION_TWIST": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0011706940131261945
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0013285019667819142
+          },
+          "LOWER_RECESS": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.003063363954424858
+          },
+          "RIBBED_FAIRING": {
+            "total": 112,
+            "correct": 111,
+            "strength_mae": 0.002326371381059289
+          }
+        }
+      },
+      "checkpoint_file": "replay_and_distill__seed_701.safetensors"
+    },
+    {
+      "mode": "replay_and_distill",
+      "seed": 1601,
+      "active_training_seconds": 240.003,
+      "optimizer_updates": 51857,
+      "selected_development_step": 51750,
+      "selected_on_new_development_only": true,
+      "source_replay_examples_per_batch": 64,
+      "new_source_examples_per_batch": 96,
+      "new_development": {
+        "accuracy": 0.9270833134651184,
+        "strength_mae": 0.11715435981750488,
+        "oracle_strength_mae": 0.11197254806756973,
+        "cross_entropy": 0.3479178249835968,
+        "dev_priority": 0.6517359852790833,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.14198987185955048
+          },
+          "TANGENT_SWEEP": {
+            "total": 16,
+            "correct": 16,
+            "strength_mae": 0.09906388819217682
+          },
+          "SECTION_TWIST": {
+            "total": 16,
+            "correct": 12,
+            "strength_mae": 0.17588433623313904
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.1347217708826065
+          },
+          "LOWER_RECESS": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.0651128739118576
+          },
+          "RIBBED_FAIRING": {
+            "total": 16,
+            "correct": 16,
+            "strength_mae": 0.08615340292453766
+          }
+        }
+      },
+      "old_training_retention": {
+        "accuracy": 1.0,
+        "strength_mae": 0.002048426540568471,
+        "oracle_strength_mae": 0.002048426540568471,
+        "cross_entropy": 0.004982751794159412,
+        "dev_priority": 0.010779204512946308,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.001782843959517777
+          },
+          "TANGENT_SWEEP": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0016305221943184733
+          },
+          "SECTION_TWIST": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0015765614807605743
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.001958003733307123
+          },
+          "LOWER_RECESS": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.00241192989051342
+          },
+          "RIBBED_FAIRING": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.002930697286501527
+          }
+        }
+      },
+      "checkpoint_file": "replay_and_distill__seed_1601.safetensors"
+    },
+    {
+      "mode": "replay_and_distill",
+      "seed": 3209,
+      "active_training_seconds": 240.003,
+      "optimizer_updates": 51492,
+      "selected_development_step": 48150,
+      "selected_on_new_development_only": true,
+      "source_replay_examples_per_batch": 64,
+      "new_source_examples_per_batch": 96,
+      "new_development": {
+        "accuracy": 0.9166666865348816,
+        "strength_mae": 0.12805135548114777,
+        "oracle_strength_mae": 0.12807875871658325,
+        "cross_entropy": 0.36805522441864014,
+        "dev_priority": 0.7055112120509148,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.1388254463672638
+          },
+          "TANGENT_SWEEP": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.09408694505691528
+          },
+          "SECTION_TWIST": {
+            "total": 16,
+            "correct": 12,
+            "strength_mae": 0.21083608269691467
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.14401553571224213
+          },
+          "LOWER_RECESS": {
+            "total": 16,
+            "correct": 15,
+            "strength_mae": 0.09632480144500732
+          },
+          "RIBBED_FAIRING": {
+            "total": 16,
+            "correct": 16,
+            "strength_mae": 0.08421940356492996
+          }
+        }
+      },
+      "old_training_retention": {
+        "accuracy": 1.0,
+        "strength_mae": 0.0018428554758429527,
+        "oracle_strength_mae": 0.0018428554758429527,
+        "cross_entropy": 0.005280336365103722,
+        "dev_priority": 0.0101441247202456,
+        "per_operation": {
+          "SECTION_LOFT": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0016571852611377835
+          },
+          "TANGENT_SWEEP": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0015222688671201468
+          },
+          "SECTION_TWIST": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0013613204937428236
+          },
+          "SUPERELLIPSE_PROFILE": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0017613599775359035
+          },
+          "LOWER_RECESS": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0020887027494609356
+          },
+          "RIBBED_FAIRING": {
+            "total": 112,
+            "correct": 112,
+            "strength_mae": 0.0026662948075681925
+          }
+        }
+      },
+      "checkpoint_file": "replay_and_distill__seed_3209.safetensors"
+    }
+  ],
+  "selected_candidate": {
+    "seed": 117,
+    "mode": "replay_and_distill",
+    "filename": "replay_and_distill__seed_117.safetensors",
+    "selected_step": 51000
+  },
+  "new_dev_prior": {
+    "accuracy": 0.8854166865348816,
+    "strength_mae": 0.13663513958454132,
+    "oracle_strength_mae": 0.13028930127620697,
+    "cross_entropy": 0.49243858456611633,
+    "dev_priority": 0.8086426517367363,
+    "per_operation": {
+      "SECTION_LOFT": {
+        "total": 16,
+        "correct": 14,
+        "strength_mae": 0.1542397141456604
+      },
+      "TANGENT_SWEEP": {
+        "total": 16,
+        "correct": 15,
+        "strength_mae": 0.08321720361709595
+      },
+      "SECTION_TWIST": {
+        "total": 16,
+        "correct": 12,
+        "strength_mae": 0.21523535251617432
+      },
+      "SUPERELLIPSE_PROFILE": {
+        "total": 16,
+        "correct": 13,
+        "strength_mae": 0.21272246539592743
+      },
+      "LOWER_RECESS": {
+        "total": 16,
+        "correct": 15,
+        "strength_mae": 0.040001869201660156
+      },
+      "RIBBED_FAIRING": {
+        "total": 16,
+        "correct": 16,
+        "strength_mae": 0.11439415067434311
+      }
+    }
+  },
+  "new_dev_candidate": {
+    "accuracy": 0.9375,
+    "strength_mae": 0.11880093812942505,
+    "oracle_strength_mae": 0.11634089797735214,
+    "cross_entropy": 0.31022757291793823,
+    "dev_priority": 0.6370510995388031,
+    "per_operation": {
+      "SECTION_LOFT": {
+        "total": 16,
+        "correct": 15,
+        "strength_mae": 0.14566542208194733
+      },
+      "TANGENT_SWEEP": {
+        "total": 16,
+        "correct": 16,
+        "strength_mae": 0.096316397190094
+      },
+      "SECTION_TWIST": {
+        "total": 16,
+        "correct": 12,
+        "strength_mae": 0.19562217593193054
+      },
+      "SUPERELLIPSE_PROFILE": {
+        "total": 16,
+        "correct": 16,
+        "strength_mae": 0.11781950294971466
+      },
+      "LOWER_RECESS": {
+        "total": 16,
+        "correct": 15,
+        "strength_mae": 0.06428098678588867
+      },
+      "RIBBED_FAIRING": {
+        "total": 16,
+        "correct": 16,
+        "strength_mae": 0.09310111403465271
+      }
+    }
+  },
+  "old_train_prior": {
+    "accuracy": 0.9940476417541504,
+    "strength_mae": 0.02180180326104164,
+    "oracle_strength_mae": 0.0218739602714777,
+    "cross_entropy": 0.0256928950548172,
+    "dev_priority": 0.09941505394876003,
+    "per_operation": {
+      "SECTION_LOFT": {
+        "total": 112,
+        "correct": 111,
+        "strength_mae": 0.02147461287677288
+      },
+      "TANGENT_SWEEP": {
+        "total": 112,
+        "correct": 112,
+        "strength_mae": 0.029839247465133667
+      },
+      "SECTION_TWIST": {
+        "total": 112,
+        "correct": 112,
+        "strength_mae": 0.015439001843333244
+      },
+      "SUPERELLIPSE_PROFILE": {
+        "total": 112,
+        "correct": 112,
+        "strength_mae": 0.023449227213859558
+      },
+      "LOWER_RECESS": {
+        "total": 112,
+        "correct": 112,
+        "strength_mae": 0.01808135211467743
+      },
+      "RIBBED_FAIRING": {
+        "total": 112,
+        "correct": 109,
+        "strength_mae": 0.022527378052473068
+      }
+    }
+  },
+  "old_train_candidate": {
+    "accuracy": 1.0,
+    "strength_mae": 0.00221259705722332,
+    "oracle_strength_mae": 0.00221259705722332,
+    "cross_entropy": 0.0051030972972512245,
+    "dev_priority": 0.011486863009631634,
+    "per_operation": {
+      "SECTION_LOFT": {
+        "total": 112,
+        "correct": 112,
+        "strength_mae": 0.0019257935928180814
+      },
+      "TANGENT_SWEEP": {
+        "total": 112,
+        "correct": 112,
+        "strength_mae": 0.0018780792597681284
+      },
+      "SECTION_TWIST": {
+        "total": 112,
+        "correct": 112,
+        "strength_mae": 0.0012240844080224633
+      },
+      "SUPERELLIPSE_PROFILE": {
+        "total": 112,
+        "correct": 112,
+        "strength_mae": 0.0014493035851046443
+      },
+      "LOWER_RECESS": {
+        "total": 112,
+        "correct": 112,
+        "strength_mae": 0.0031835350673645735
+      },
+      "RIBBED_FAIRING": {
+        "total": 112,
+        "correct": 112,
+        "strength_mae": 0.0036147874779999256
+      }
+    }
+  },
+  "old_dev_prior_retrospective": {
+    "accuracy": 0.8854166865348816,
+    "strength_mae": 0.19281738996505737,
+    "oracle_strength_mae": 0.19318848848342896,
+    "cross_entropy": 0.377287894487381,
+    "dev_priority": 0.9632690417766571,
+    "per_operation": {
+      "SECTION_LOFT": {
+        "total": 16,
+        "correct": 13,
+        "strength_mae": 0.20672905445098877
+      },
+      "TANGENT_SWEEP": {
+        "total": 16,
+        "correct": 15,
+        "strength_mae": 0.1700565367937088
+      },
+      "SECTION_TWIST": {
+        "total": 16,
+        "correct": 11,
+        "strength_mae": 0.2293340563774109
+      },
+      "SUPERELLIPSE_PROFILE": {
+        "total": 16,
+        "correct": 16,
+        "strength_mae": 0.20137259364128113
+      },
+      "LOWER_RECESS": {
+        "total": 16,
+        "correct": 15,
+        "strength_mae": 0.1318301409482956
+      },
+      "RIBBED_FAIRING": {
+        "total": 16,
+        "correct": 15,
+        "strength_mae": 0.21758189797401428
+      }
+    }
+  },
+  "old_dev_candidate_retrospective": {
+    "accuracy": 0.8645833134651184,
+    "strength_mae": 0.17367659509181976,
+    "oracle_strength_mae": 0.17173142731189728,
+    "cross_entropy": 0.7783527374267578,
+    "dev_priority": 1.1132162538170816,
+    "per_operation": {
+      "SECTION_LOFT": {
+        "total": 16,
+        "correct": 14,
+        "strength_mae": 0.20511646568775177
+      },
+      "TANGENT_SWEEP": {
+        "total": 16,
+        "correct": 16,
+        "strength_mae": 0.18184587359428406
+      },
+      "SECTION_TWIST": {
+        "total": 16,
+        "correct": 12,
+        "strength_mae": 0.1973823755979538
+      },
+      "SUPERELLIPSE_PROFILE": {
+        "total": 16,
+        "correct": 13,
+        "strength_mae": 0.1413927674293518
+      },
+      "LOWER_RECESS": {
+        "total": 16,
+        "correct": 12,
+        "strength_mae": 0.1481843888759613
+      },
+      "RIBBED_FAIRING": {
+        "total": 16,
+        "correct": 16,
+        "strength_mae": 0.16813777387142181
+      }
+    }
+  },
+  "new_blind": {
+    "prior": {
+      "accuracy": 0.875,
+      "strength_mae": 0.13832634687423706,
+      "oracle_strength_mae": 0.13887357711791992,
+      "cross_entropy": 0.49230146408081055,
+      "dev_priority": 0.8151615726947785,
+      "per_operation": {
+        "SECTION_LOFT": {
+          "total": 16,
+          "correct": 14,
+          "strength_mae": 0.15042775869369507
+        },
+        "TANGENT_SWEEP": {
+          "total": 16,
+          "correct": 16,
+          "strength_mae": 0.1293676197528839
+        },
+        "SECTION_TWIST": {
+          "total": 16,
+          "correct": 10,
+          "strength_mae": 0.20251984894275665
+        },
+        "SUPERELLIPSE_PROFILE": {
+          "total": 16,
+          "correct": 15,
+          "strength_mae": 0.13481691479682922
+        },
+        "LOWER_RECESS": {
+          "total": 16,
+          "correct": 15,
+          "strength_mae": 0.06780081987380981
+        },
+        "RIBBED_FAIRING": {
+          "total": 16,
+          "correct": 14,
+          "strength_mae": 0.14502519369125366
+        }
+      }
+    },
+    "continued": {
+      "accuracy": 0.8854166865348816,
+      "strength_mae": 0.12381318211555481,
+      "oracle_strength_mae": 0.12025520950555801,
+      "cross_entropy": 0.580194890499115,
+      "dev_priority": 0.8077805489301682,
+      "per_operation": {
+        "SECTION_LOFT": {
+          "total": 16,
+          "correct": 15,
+          "strength_mae": 0.11780747771263123
+        },
+        "TANGENT_SWEEP": {
+          "total": 16,
+          "correct": 16,
+          "strength_mae": 0.12886768579483032
+        },
+        "SECTION_TWIST": {
+          "total": 16,
+          "correct": 11,
+          "strength_mae": 0.23384469747543335
+        },
+        "SUPERELLIPSE_PROFILE": {
+          "total": 16,
+          "correct": 15,
+          "strength_mae": 0.11932709813117981
+        },
+        "LOWER_RECESS": {
+          "total": 16,
+          "correct": 14,
+          "strength_mae": 0.06109119951725006
+        },
+        "RIBBED_FAIRING": {
+          "total": 16,
+          "correct": 14,
+          "strength_mae": 0.08194095641374588
+        }
+      }
+    }
+  },
+  "heldout_strength_gain_vs_retained_prior_fraction": 0.1049197429603,
+  "teacher_used_in_this_training": false,
+  "external_AI_created_meshes": false,
+  "androiD_checkpoint_installed": false,
+  "automatic_production_promotion": false,
+  "actual_Kotlin_reconstruction_pending": true
+}

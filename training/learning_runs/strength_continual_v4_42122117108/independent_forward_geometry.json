@@ -1,0 +1,2663 @@
+{
+  "schema": "assetwright-original-continued-native-forward-audit-v4",
+  "study_id": "strength_continual_v4",
+  "source": "AssetWright AdvancedFormLab ONLY; all native GLBs tested",
+  "fresh_original_geometry_count": 96,
+  "reconstructed_original_geometry_count": 192,
+  "independent_family_count": 4,
+  "no_outside_3d": true,
+  "all_GLBS_structurally_valid": true,
+  "blinded_source_hashes_digest": "5ab2c8e23c118461288cf85408bc2c95c189ed85719e4a439669222daf83c8cf",
+  "unchanged_source_normalized_vertex_rmse": 0.013972174167339022,
+  "prior": {
+    "operation_accuracy": 0.875,
+    "strength_mae": 0.13832635312499997,
+    "normalized_vertex_rmse": 0.004996267446095483
+  },
+  "continued": {
+    "operation_accuracy": 0.8854166666666666,
+    "strength_mae": 0.12381318229166666,
+    "normalized_vertex_rmse": 0.005099327756757533
+  },
+  "continued_geometry_gain_vs_frozen_parent_fraction": -0.02062746075424575,
+  "operator_breakdown": {
+    "LOWER_RECESS": {
+      "examples": 16,
+      "prior_correct": 15,
+      "continued_correct": 14,
+      "prior_vertex_rmse": 0.0007555438638871302,
+      "continued_vertex_rmse": 0.001076397822435069
+    },
+    "RIBBED_FAIRING": {
+      "examples": 16,
+      "prior_correct": 14,
+      "continued_correct": 14,
+      "prior_vertex_rmse": 0.0008943186853428855,
+      "continued_vertex_rmse": 0.0006898062970409868
+    },
+    "SECTION_LOFT": {
+      "examples": 16,
+      "prior_correct": 14,
+      "continued_correct": 15,
+      "prior_vertex_rmse": 0.003102524952708632,
+      "continued_vertex_rmse": 0.0020779382412393285
+    },
+    "SECTION_TWIST": {
+      "examples": 16,
+      "prior_correct": 10,
+      "continued_correct": 11,
+      "prior_vertex_rmse": 0.01774105143788035,
+      "continued_vertex_rmse": 0.019557757329385007
+    },
+    "SUPERELLIPSE_PROFILE": {
+      "examples": 16,
+      "prior_correct": 15,
+      "continued_correct": 15,
+      "prior_vertex_rmse": 0.003668147803434743,
+      "continued_vertex_rmse": 0.003390147340953558
+    },
+    "TANGENT_SWEEP": {
+      "examples": 16,
+      "prior_correct": 16,
+      "continued_correct": 16,
+      "prior_vertex_rmse": 0.0038160179333191577,
+      "continued_vertex_rmse": 0.003803919509491236
+    }
+  },
+  "android_deployed": false,
+  "human_review_required": true,
+  "cases": [
+    {
+      "case": "validation__bc_blind01__lower_recess__s070",
+      "family": "bc_blind01",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.07,
+      "source_sha256": "473d2c29d6721f45fbc5e2294a0eb83b64559d7c45de933039f0e98fd3be90a4",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.0006174641258424673,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.1070299,
+        "correct_operation": true,
+        "strength_error": 0.03702989999999999,
+        "vertex_rmse": 0.00032663769057389934,
+        "triangles": 1200,
+        "generated_sha256": "ea90e1d843a83c35c588114db86016e5ab3a3fe79968c132705af83978fe9ec1"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.1193494,
+        "correct_operation": true,
+        "strength_error": 0.04934939999999999,
+        "vertex_rmse": 0.0004353067393548414,
+        "triangles": 1200,
+        "generated_sha256": "d965811cf6a0596e9adfaa9465f79fc336b1f04b479b43d70b71dd8d8b417d14"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__lower_recess__s270",
+      "family": "bc_blind01",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.27,
+      "source_sha256": "b576319b3bf974fe51d65eea5fb0ccae68b7b9a3e581262d5fe98595ea484412",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.0023816474749274222,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.2792597,
+        "correct_operation": true,
+        "strength_error": 0.009259699999999982,
+        "vertex_rmse": 8.167933121573964e-05,
+        "triangles": 1200,
+        "generated_sha256": "390f340dc648648371d5fe19de2dccdb13451b5c41c7c965bcde7e37b4971c57"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.2718853,
+        "correct_operation": true,
+        "strength_error": 0.0018852999999999787,
+        "vertex_rmse": 1.663042794162668e-05,
+        "triangles": 1200,
+        "generated_sha256": "59fea71ceea92c8b6aa2d9193ce920da1f26618e97bbf485a707d43c03bf2c19"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__lower_recess__s730",
+      "family": "bc_blind01",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.73,
+      "source_sha256": "0759197400fa9199decfc98cd34b9d208d91f6a4413d24ec8bb22cffb92c568b",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.006439270185647093,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.7801087,
+        "correct_operation": true,
+        "strength_error": 0.050108700000000006,
+        "vertex_rmse": 0.00044200399429202843,
+        "triangles": 1200,
+        "generated_sha256": "5a4b166d8b7a9d5ad5d4ddbf20d5783750dcf926bb6b8add4d52dab9d2cfeb69"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.7317616,
+        "correct_operation": true,
+        "strength_error": 0.0017616000000000298,
+        "vertex_rmse": 1.5538389709558656e-05,
+        "triangles": 1200,
+        "generated_sha256": "273638f2241c1c3ffbefd1be198b7294e5dad11b30f5030844923ee5ad126998"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__lower_recess__s950",
+      "family": "bc_blind01",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.95,
+      "source_sha256": "6b651359aac6517533b148b48d6358abb2f0b4d5ee4867944489dbb7c3bc5e4b",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.008379871884705343,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.948958,
+        "correct_operation": true,
+        "strength_error": 0.0010419999999999874,
+        "vertex_rmse": 9.191885963659116e-06,
+        "triangles": 1200,
+        "generated_sha256": "4a745e12137a1b433fe6e43aa666ac983838bbdf8bdceef872faf0c5de5ab769"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.9580105,
+        "correct_operation": true,
+        "strength_error": 0.008010500000000031,
+        "vertex_rmse": 7.065905654243415e-05,
+        "triangles": 1200,
+        "generated_sha256": "a05d1c4d12709ddc5c4dfaaef138d62ba06fc675578b7b3f93b9175bcd996103"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__ribbed_fairing__s070",
+      "family": "bc_blind01",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.07,
+      "source_sha256": "0cb8a70eec778cf52cf6beb6c6af328c918d5748c4d8ba055706e7ac1ce127a0",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.00048730383370385207,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.0214155,
+        "correct_operation": false,
+        "strength_error": 0.0485845,
+        "vertex_rmse": 0.0005224912413778276,
+        "triangles": 1200,
+        "generated_sha256": "0241e683a7dafc7012f146b78f26d63b6e72656a1fdbae02f52c13eea8a78ace"
+      },
+      "continued": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.0223983,
+        "correct_operation": true,
+        "strength_error": 0.04760170000000001,
+        "vertex_rmse": 0.00033137636429089864,
+        "triangles": 1200,
+        "generated_sha256": "94730ac06ac9fe89767dbacc9d03ede3ca7b4aac22cbda3218f2d866ed517943"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__ribbed_fairing__s270",
+      "family": "bc_blind01",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.27,
+      "source_sha256": "af9ea08e11875d4d421ff3647d5944992f46a5e2a1c84f990dd844bf1d034da9",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.001868061581412457,
+      "prior": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.1993713,
+        "correct_operation": true,
+        "strength_error": 0.07062870000000002,
+        "vertex_rmse": 0.000488661282174104,
+        "triangles": 1200,
+        "generated_sha256": "4f54520853f4c4e00645a3bb6c7ade85793dd3685acc4b3fad7e9a9d883a23ac"
+      },
+      "continued": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.2182114,
+        "correct_operation": true,
+        "strength_error": 0.05178860000000002,
+        "vertex_rmse": 0.00035830894278854195,
+        "triangles": 1200,
+        "generated_sha256": "09e1f321a21d17a23df54c51ae8863dad713f9cf86300107fa75b89173d68bf4"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__ribbed_fairing__s730",
+      "family": "bc_blind01",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.73,
+      "source_sha256": "a07b06ad6525953f81c6931086dbe742b5779ed029fe44e88e4dbb1668e4dd85",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.004978348581037452,
+      "prior": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.7439982,
+        "correct_operation": true,
+        "strength_error": 0.013998200000000072,
+        "vertex_rmse": 9.54633477917107e-05,
+        "triangles": 1200,
+        "generated_sha256": "a5d7c2e8661ff8b659a4b78d76530d0a1b857c007421df1d7be5b0e220d05cdb"
+      },
+      "continued": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.7105498,
+        "correct_operation": true,
+        "strength_error": 0.019450199999999973,
+        "vertex_rmse": 0.00013264394541139711,
+        "triangles": 1200,
+        "generated_sha256": "9b18df5f3b10082e7932fd510a46169e6e3ae16bc6a334c264615a936b18cec3"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__ribbed_fairing__s950",
+      "family": "bc_blind01",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.95,
+      "source_sha256": "1e51b5464b4fd8404613575fb2c4df3356f954ee0d90e548a02321ff358909fa",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.0064333953202471645,
+      "prior": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.9394944,
+        "correct_operation": true,
+        "strength_error": 0.010505600000000004,
+        "vertex_rmse": 7.114460953189462e-05,
+        "triangles": 1200,
+        "generated_sha256": "676c563d44097a129d6678f0c77b84e1058280979036917a7b1ec5ec7d90e142"
+      },
+      "continued": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.9332874,
+        "correct_operation": true,
+        "strength_error": 0.016712599999999966,
+        "vertex_rmse": 0.00011318021071248423,
+        "triangles": 1200,
+        "generated_sha256": "15acbc130e8fdd4ae7dfeca6f25079ca1c18e950cabe55ee75abc59d9d3197f0"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__section_loft__s070",
+      "family": "bc_blind01",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.07,
+      "source_sha256": "0f87594dea2cc078c4cc3f0555a8384d4437f53b535f0b4053b06b4992a2d8cb",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.0014428668518422952,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.0359098,
+        "correct_operation": true,
+        "strength_error": 0.03409020000000001,
+        "vertex_rmse": 0.0007026820150303869,
+        "triangles": 1200,
+        "generated_sha256": "d9a8495c8c7804875108175fe5556d8c13f58220b14f0637deca0d17c14c3c44"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.0356574,
+        "correct_operation": true,
+        "strength_error": 0.03434260000000001,
+        "vertex_rmse": 0.0007078856008926777,
+        "triangles": 1200,
+        "generated_sha256": "d5097985fb414290cbc88126f6801d611a792871478dbfa679ae180531a9fdb9"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__section_loft__s270",
+      "family": "bc_blind01",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.27,
+      "source_sha256": "c554da1f703d42a0a3870fddb7cf6b0962356661e8fc299337c5506fc0297908",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.005443958145202319,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.3122755,
+        "correct_operation": true,
+        "strength_error": 0.042275499999999966,
+        "vertex_rmse": 0.0008523923814962347,
+        "triangles": 1200,
+        "generated_sha256": "10bfe29a8c9254c2643401688cdf3a2622b838853cf3e25ed21363273eb090fd"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.2595141,
+        "correct_operation": true,
+        "strength_error": 0.010485899999999992,
+        "vertex_rmse": 0.0002114239888090492,
+        "triangles": 1200,
+        "generated_sha256": "47a99df4f72cd4da66cc135d518a4056e76a80bb49dbb2f60aaf0df270daff1b"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__section_loft__s730",
+      "family": "bc_blind01",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.73,
+      "source_sha256": "7966770cf4e1617f507e6ff8e71231a80a0bb3bce9629aeb834c4ce1940e3b7c",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.013976753119910985,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.8487446,
+        "correct_operation": true,
+        "strength_error": 0.11874459999999998,
+        "vertex_rmse": 0.002273512308982729,
+        "triangles": 1200,
+        "generated_sha256": "2271a973ddfaee3507b32ef8a8071f17bf7358d5267668fe3a71eb6da00b470f"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.8887146,
+        "correct_operation": true,
+        "strength_error": 0.15871460000000004,
+        "vertex_rmse": 0.0030387863665365857,
+        "triangles": 1200,
+        "generated_sha256": "bb9c3d1be309d26a94687730431509605f6961926cb2ed500d6f9feca705fb5b"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__section_loft__s950",
+      "family": "bc_blind01",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.95,
+      "source_sha256": "3d8a5c7fa78e2c7cae34304ec06e510539db72eec6846c3d6df8aad7acf358b5",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.017739118937070187,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.916831,
+        "correct_operation": true,
+        "strength_error": 0.033169000000000004,
+        "vertex_rmse": 0.0006193546309149303,
+        "triangles": 1200,
+        "generated_sha256": "fc7675081093f0878190451994428534f6b5a6dd80d100f2d498fa3cb2f5b910"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.9392299,
+        "correct_operation": true,
+        "strength_error": 0.010770100000000005,
+        "vertex_rmse": 0.00020110470135507188,
+        "triangles": 1200,
+        "generated_sha256": "ea667f244399a7df8b6b495c56e0b873955a7ea826de24c109f9974d28cfa9b2"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__section_twist__s070",
+      "family": "bc_blind01",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.07,
+      "source_sha256": "6fd9cca2c12ca39afd16dd7af1c2a30eef666bad6335df3f4deb84f0d30d63eb",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.00786553849807892,
+      "prior": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.0599126,
+        "correct_operation": true,
+        "strength_error": 0.010087400000000003,
+        "vertex_rmse": 0.0011337776367374114,
+        "triangles": 1200,
+        "generated_sha256": "3e8a637ee2008c8647470fb9dfab97a7f7f1a91b5c62cce445cbb0e595f02612"
+      },
+      "continued": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.0655828,
+        "correct_operation": true,
+        "strength_error": 0.00441720000000001,
+        "vertex_rmse": 0.0004964755311851237,
+        "triangles": 1200,
+        "generated_sha256": "135bd04da234b3319433759bcfc029a51ea21209a3d8127fe947466fcc41317a"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__section_twist__s270",
+      "family": "bc_blind01",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.27,
+      "source_sha256": "27219cd9ada6610fefccd3e0bda7719ae4ee19a30e78850dff9ecd11c9afa6b2",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.03000174587589552,
+      "prior": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.1273805,
+        "correct_operation": true,
+        "strength_error": 0.1426195,
+        "vertex_rmse": 0.01589488066354341,
+        "triangles": 1200,
+        "generated_sha256": "65296dd441ea95ebc62e7ca416f87ce145a4e8045a2e34ddce4c5a9a48f6ebf6"
+      },
+      "continued": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.1474277,
+        "correct_operation": true,
+        "strength_error": 0.12257230000000002,
+        "vertex_rmse": 0.013664752749856058,
+        "triangles": 1200,
+        "generated_sha256": "68f60ff888dc076e4db7c8fc6f84aeb161a44bdecbdc86fe9b8c876b0b085ad9"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__section_twist__s730",
+      "family": "bc_blind01",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.73,
+      "source_sha256": "21067215b16e72e1279d5437a49f574f84478b04c150cd69d6dc8df33fe48f1f",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.07685000686567484,
+      "prior": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.7132329,
+        "correct_operation": true,
+        "strength_error": 0.016767100000000035,
+        "vertex_rmse": 0.001819383619799103,
+        "triangles": 1200,
+        "generated_sha256": "518f1170a1a22e11cb638b36b088460df226a7e3445905ee828986a9299824d2"
+      },
+      "continued": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.5179876,
+        "correct_operation": true,
+        "strength_error": 0.2120124,
+        "vertex_rmse": 0.022946989817667914,
+        "triangles": 1200,
+        "generated_sha256": "cf53f9332ef3827e025e96e238a7eb364f2610f4067d3a2777d2f432bd61ef90"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__section_twist__s950",
+      "family": "bc_blind01",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.95,
+      "source_sha256": "af21bd5dc4f8c6db4c0d36718d0ef57d5ad36777ba7320299af081578ec5bcd3",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.09706980038610397,
+      "prior": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.9304346,
+        "correct_operation": true,
+        "strength_error": 0.019565399999999955,
+        "vertex_rmse": 0.002104423080938294,
+        "triangles": 1200,
+        "generated_sha256": "235e4438e113c8897a0a1e0c8e1fb4e56816be8dfc49abe2d540720074b98a79"
+      },
+      "continued": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.9179255,
+        "correct_operation": true,
+        "strength_error": 0.032074500000000006,
+        "vertex_rmse": 0.003449757002787981,
+        "triangles": 1200,
+        "generated_sha256": "dadb9c2301645ebaf366fc829fc0a7b231e4d60a5335901efd78728ae5545bfa"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__superellipse_profile__s070",
+      "family": "bc_blind01",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.07,
+      "source_sha256": "84bf0c138dbffdb79f9ff3dd1a342e12a411b309a6f740c8f2b6b6bf0cd0842b",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.0017276471669368627,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.056664,
+        "correct_operation": true,
+        "strength_error": 0.013336000000000008,
+        "vertex_rmse": 0.0003337306010567329,
+        "triangles": 1200,
+        "generated_sha256": "5be8f0db7f743bd50974645ac0189bf8b0442062e460a370733f819e2537b552"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.0299233,
+        "correct_operation": true,
+        "strength_error": 0.04007670000000001,
+        "vertex_rmse": 0.0009963603093418427,
+        "triangles": 1200,
+        "generated_sha256": "26b584d94f8980b523bf0c2ffda199e1d764b429f965d240c56b379bbd775afc"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__superellipse_profile__s270",
+      "family": "bc_blind01",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.27,
+      "source_sha256": "665b4aa750568064981e991ad9c4084b3b933be951e414fb6a81458fb4dd992a",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.00700828136474319,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.35258,
+        "correct_operation": true,
+        "strength_error": 0.08257999999999999,
+        "vertex_rmse": 0.002343719866021472,
+        "triangles": 1200,
+        "generated_sha256": "82a76a1fbb77e94addde90acf6de3c86188d4e1b711480a6d03384fb6faf8dde"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.3504557,
+        "correct_operation": true,
+        "strength_error": 0.08045569999999996,
+        "vertex_rmse": 0.0022821522299140765,
+        "triangles": 1200,
+        "generated_sha256": "5951a4794131e7dea245f35a607ae1713690540e071972de496408b0a07f231b"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__superellipse_profile__s730",
+      "family": "bc_blind01",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.73,
+      "source_sha256": "034c45f5574a05cf534784bbc3668f0f2f22aca863008fdc802fb98eb9b37783",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.021468391763562494,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.8621745,
+        "correct_operation": true,
+        "strength_error": 0.13217449999999997,
+        "vertex_rmse": 0.004896288864781058,
+        "triangles": 1200,
+        "generated_sha256": "f69f69bd16365d9b1ec787d8701c6bbfe70b6a490c293026cd5705e93fd69432"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.9008963,
+        "correct_operation": true,
+        "strength_error": 0.1708963,
+        "vertex_rmse": 0.006403025831936828,
+        "triangles": 1200,
+        "generated_sha256": "53cda5fd38bcc5df3da842c023f778bf2a7b75fbeeb82904422d464a410a4dd8"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__superellipse_profile__s950",
+      "family": "bc_blind01",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.95,
+      "source_sha256": "043af19f6585683bf275ebfc1d73dd898531380d154c8bf534df94a0ee09c9ab",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.02979749518181144,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.9586776,
+        "correct_operation": true,
+        "strength_error": 0.008677600000000063,
+        "vertex_rmse": 0.00035249178839944086,
+        "triangles": 1200,
+        "generated_sha256": "9711a9057e95e8d4b8530c59bbebea7870d294cff8da78eb8be5d25b1b10918f"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.9839229,
+        "correct_operation": true,
+        "strength_error": 0.03392290000000009,
+        "vertex_rmse": 0.0013883391246835672,
+        "triangles": 1200,
+        "generated_sha256": "52214d0a2112533283d1fc9dc67c6f14998bd49fe2cf5230b88555d6213da6bf"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__tangent_sweep__s070",
+      "family": "bc_blind01",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.07,
+      "source_sha256": "d93e34d66cca8503b99f9b24f902c8ae7594d66a0c88c64e97353783fa553e52",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.002137206489801647,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.0510079,
+        "correct_operation": true,
+        "strength_error": 0.018992100000000005,
+        "vertex_rmse": 0.0005798381927200907,
+        "triangles": 1200,
+        "generated_sha256": "989b2d51576e4e67646a061f0010368e64ca5e7b80379af13591d60bf596dc3d"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.03952,
+        "correct_operation": true,
+        "strength_error": 0.030480000000000007,
+        "vertex_rmse": 0.0009305796410632196,
+        "triangles": 1200,
+        "generated_sha256": "45d15237b04e4ed358fb807606393f25eeb518c4666119a832701820d27a1582"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__tangent_sweep__s270",
+      "family": "bc_blind01",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.27,
+      "source_sha256": "83a3aa5189dfd3ac8877d2fb592fc16dda09977da21aa7f0fb8da28bded971e1",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.00803708135948968,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.3703667,
+        "correct_operation": true,
+        "strength_error": 0.10036669999999998,
+        "vertex_rmse": 0.0029835905569663246,
+        "triangles": 1200,
+        "generated_sha256": "01c7e0e2f366e7e2c3f966e9add9fb91f1b31f0f873ba306246598285befae7c"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.30402,
+        "correct_operation": true,
+        "strength_error": 0.034019999999999995,
+        "vertex_rmse": 0.0010116865661668848,
+        "triangles": 1200,
+        "generated_sha256": "7941ace74bcfaa9f7612bf274eebe836271a1e27bbb9f734df5ed559b03e57a5"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__tangent_sweep__s730",
+      "family": "bc_blind01",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.73,
+      "source_sha256": "ef0ed402157860d1fc182cb696e6442388d89ea3176b7acd7922c88aa9950874",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.02053674872225909,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.9425082,
+        "correct_operation": true,
+        "strength_error": 0.21250820000000004,
+        "vertex_rmse": 0.005927792186046583,
+        "triangles": 1200,
+        "generated_sha256": "910378b349d665819c1ea42a3dc49a33bc29545b4052f090c5b99baccf6cc5a3"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.9247367,
+        "correct_operation": true,
+        "strength_error": 0.19473669999999998,
+        "vertex_rmse": 0.0054334442846947885,
+        "triangles": 1200,
+        "generated_sha256": "b2be9b8523fffbc4cd7d5e5902eeefee12a58d992a341329512130652b9c8ee2"
+      }
+    },
+    {
+      "case": "validation__bc_blind01__tangent_sweep__s950",
+      "family": "bc_blind01",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.95,
+      "source_sha256": "8941f8aa0d22981e2709235fb9e4c543eefbc69be95bb03630e14c5a63bbf790",
+      "baseline_sha256": "ef27562020218c3aad06682c0377023de61ed1eee5c7d9faada249dfd3e31189",
+      "unchanged_vertex_rmse": 0.0260433623948435,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.9529133,
+        "correct_operation": true,
+        "strength_error": 0.0029133000000000076,
+        "vertex_rmse": 7.911873887069339e-05,
+        "triangles": 1200,
+        "generated_sha256": "da2ec77da48754c0110d8c05419ddcd99a6e0ff6c10cef26b7c090bebfaec367"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.971983,
+        "correct_operation": true,
+        "strength_error": 0.021983000000000086,
+        "vertex_rmse": 0.0005968358976381785,
+        "triangles": 1200,
+        "generated_sha256": "69a455e4fcb301e1a77147e4bccc543069d46542e43766be5273d1c2abacfb0c"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__lower_recess__s070",
+      "family": "bc_blind02",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.07,
+      "source_sha256": "5dba380df3b5aaf36aab4420a57370feb8732085707994873fd8546865440281",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.0004287375176219742,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.1342596,
+        "correct_operation": true,
+        "strength_error": 0.0642596,
+        "vertex_rmse": 0.0003935781423389519,
+        "triangles": 1200,
+        "generated_sha256": "05a7a77439cfaa47a9b33b014b2b267e5267c3f571142d4acfdce6df8517b9b9"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.0964406,
+        "correct_operation": true,
+        "strength_error": 0.026440599999999995,
+        "vertex_rmse": 0.00016194369782084397,
+        "triangles": 1200,
+        "generated_sha256": "79e3d832e97cf45a5cf03c9cbe583e95e77143ab6d51c6c25da2465e7b3b21a4"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__lower_recess__s270",
+      "family": "bc_blind02",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.27,
+      "source_sha256": "8a6136f0c45bccf427409cc63d3c899cc69b11c233a4ad03c169a487c9a86ed5",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.0016537014135293044,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.2917167,
+        "correct_operation": true,
+        "strength_error": 0.021716699999999978,
+        "vertex_rmse": 0.0001330109569389193,
+        "triangles": 1200,
+        "generated_sha256": "432068ed760da25de48fad17379a22cc415abdf4d5f05ece2bdf2c4270bfd902"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.3187023,
+        "correct_operation": true,
+        "strength_error": 0.048702299999999976,
+        "vertex_rmse": 0.00029829276282884395,
+        "triangles": 1200,
+        "generated_sha256": "1e85b0454612eda3aaf452929816acd647b30f3678f17effd8e81d57bfec989b"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__lower_recess__s730",
+      "family": "bc_blind02",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.73,
+      "source_sha256": "d53c0dddc474fe5b897b05e336cb2c2f3ca83f7dfaf685c44b27282964a1eeac",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.0044711188922801045,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.7323707,
+        "correct_operation": true,
+        "strength_error": 0.002370700000000059,
+        "vertex_rmse": 1.4520058995175064e-05,
+        "triangles": 1200,
+        "generated_sha256": "c61a183e172d4f1f275a396c0cdb44d94680be580a54910307b25b11d0389f76"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.7255636,
+        "correct_operation": true,
+        "strength_error": 0.004436400000000007,
+        "vertex_rmse": 2.7172252531688564e-05,
+        "triangles": 1200,
+        "generated_sha256": "a06fb5de9f5f34a6a041089527c359c5adfe9fd964799ef767c1da90e629131f"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__lower_recess__s950",
+      "family": "bc_blind02",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.95,
+      "source_sha256": "ba510ab04ccf76cb6e2b8197bfe9b5d065c5010a50e289e36e919fc1827daed5",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.005818579408008663,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.9405429,
+        "correct_operation": true,
+        "strength_error": 0.009457099999999996,
+        "vertex_rmse": 5.7923330589733236e-05,
+        "triangles": 1200,
+        "generated_sha256": "90fe5a0ed6da9762ed845c982a0c3e62db4c26163e435f55b1e1e1e29ff86268"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.952102,
+        "correct_operation": true,
+        "strength_error": 0.0021020000000000483,
+        "vertex_rmse": 1.287407442222728e-05,
+        "triangles": 1200,
+        "generated_sha256": "ebc81dbd4ec9f8e3117e29cc02a94517e9bf88a5cd40e037304708c77d92cf38"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__ribbed_fairing__s070",
+      "family": "bc_blind02",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.07,
+      "source_sha256": "5dd4c2daff18b549c8e69661b9da815df0d5fa2bc3da066e68af22c9fac731df",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.00032077938240206134,
+      "prior": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.0417096,
+        "correct_operation": true,
+        "strength_error": 0.028290400000000007,
+        "vertex_rmse": 0.00012964338205947906,
+        "triangles": 1200,
+        "generated_sha256": "e131e315da7fa5fc8cf8ab92b1b6b8cebd976f79b10d9bd6031283125033858f"
+      },
+      "continued": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.0173731,
+        "correct_operation": true,
+        "strength_error": 0.052626900000000004,
+        "vertex_rmse": 0.00024116554471190503,
+        "triangles": 1200,
+        "generated_sha256": "4be1a69a3953d5600ff947b9f530ccae20ccc10fbc05c238a12b9f38395a6351"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__ribbed_fairing__s270",
+      "family": "bc_blind02",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.27,
+      "source_sha256": "10e48ca5a1d962048048f3efb4b37313f681fa8f94d2b592ea7214a03da73eb0",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.0012339818017564315,
+      "prior": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.1207689,
+        "correct_operation": true,
+        "strength_error": 0.1492311,
+        "vertex_rmse": 0.0006820310368513896,
+        "triangles": 1200,
+        "generated_sha256": "2788bd525f04cd99446090c2f6148b5c723929146664663288b11f31ef4748dd"
+      },
+      "continued": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.1418274,
+        "correct_operation": true,
+        "strength_error": 0.12817260000000003,
+        "vertex_rmse": 0.0005857873220246639,
+        "triangles": 1200,
+        "generated_sha256": "8da8f2e0502301657028e4e4e7826ad2c9b39ebb86b1f7a670b46a96bf107acb"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__ribbed_fairing__s730",
+      "family": "bc_blind02",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.73,
+      "source_sha256": "206fd59d0c6a002292681b788b847ed1a672ebb7343069692960e176dd8b148f",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.00331521577322904,
+      "prior": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.5513464,
+        "correct_operation": true,
+        "strength_error": 0.17865359999999997,
+        "vertex_rmse": 0.000811336408449962,
+        "triangles": 1200,
+        "generated_sha256": "f2af08ee80e86068aec293be6c90a38afe2284b06596f409badce8433469866b"
+      },
+      "continued": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.649646,
+        "correct_operation": true,
+        "strength_error": 0.08035400000000004,
+        "vertex_rmse": 0.00036491914945641985,
+        "triangles": 1200,
+        "generated_sha256": "e145aa457dbeeea0f9bbcf2c4d3877ffc114ab750c79fa131cfe2d5246e2e095"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__ribbed_fairing__s950",
+      "family": "bc_blind02",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.95,
+      "source_sha256": "3a1132e59446bfbc77c37d352b770da3716975d6dd654eab6750428ce1366386",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.004300871455152941,
+      "prior": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.8639849,
+        "correct_operation": true,
+        "strength_error": 0.08601510000000001,
+        "vertex_rmse": 0.00038941104345320825,
+        "triangles": 1200,
+        "generated_sha256": "1eca2398a6e0e4a451b04868ac989ae776241a00e6c1de5d3b2cac9d43972fcd"
+      },
+      "continued": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.9268863,
+        "correct_operation": true,
+        "strength_error": 0.023113699999999904,
+        "vertex_rmse": 0.00010464101296575278,
+        "triangles": 1200,
+        "generated_sha256": "c5344b43675585e66b6707bf4719ee76d615822b593e6d36483ff70b858ef0d2"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__section_loft__s070",
+      "family": "bc_blind02",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.07,
+      "source_sha256": "de22a3a45165a3c70be62529594511abb9bc9d749562fcb1c814ea0ee6885276",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.000962658047790749,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.0334095,
+        "correct_operation": true,
+        "strength_error": 0.036590500000000005,
+        "vertex_rmse": 0.000503202981491706,
+        "triangles": 1200,
+        "generated_sha256": "47171ad64678cc05dc4f9977624d86f39bdd5b25e10de115c29121238b064bab"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.0259589,
+        "correct_operation": true,
+        "strength_error": 0.04404110000000001,
+        "vertex_rmse": 0.0006056646024300473,
+        "triangles": 1200,
+        "generated_sha256": "17eb5fbb77e0e4afcd0c944b6242af5eadc91e30aa6e1e820b301e810725b6cc"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__section_loft__s270",
+      "family": "bc_blind02",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.27,
+      "source_sha256": "005e2ea44b825333735254663ed30697394d69d5f4ac7db75fac47b90b302579",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.003674243527926262,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.1929664,
+        "correct_operation": true,
+        "strength_error": 0.07703360000000001,
+        "vertex_rmse": 0.001048297525702767,
+        "triangles": 1200,
+        "generated_sha256": "0212f712d35fd1941fb0faab31a16fde3d0916879852fc4544acbbad2731bdcc"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.2005086,
+        "correct_operation": true,
+        "strength_error": 0.06949140000000001,
+        "vertex_rmse": 0.0009456601531574802,
+        "triangles": 1200,
+        "generated_sha256": "e0978f78bd8120fb55129200e39a972055bcb48f4f2f083fc86a2c24e0ef2d50"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__section_loft__s730",
+      "family": "bc_blind02",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.73,
+      "source_sha256": "71264f58c59438996a51ab6abdb4bf6e22cf6270da2e8898fb0139bb1d16a026",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.009683634178992727,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.7441844,
+        "correct_operation": true,
+        "strength_error": 0.014184399999999986,
+        "vertex_rmse": 0.00018815990705519172,
+        "triangles": 1200,
+        "generated_sha256": "fb15cea6141b82e3e45ba86246de014a58df0442aab4a7c286c355807f37a8fc"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.7684171,
+        "correct_operation": true,
+        "strength_error": 0.03841709999999998,
+        "vertex_rmse": 0.0005096127016627905,
+        "triangles": 1200,
+        "generated_sha256": "d34af797e43d4a7b9638be2e6eadedf268613c77d566bfe0cd5696b66ee1482f"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__section_loft__s950",
+      "family": "bc_blind02",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.95,
+      "source_sha256": "f135b10f5c7f336b1ea4755b8cb23c49ab21870b22d627dd7e76d61d98088206",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.012441792952525298,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.7856492,
+        "correct_operation": true,
+        "strength_error": 0.1643507999999999,
+        "vertex_rmse": 0.0021524407932550947,
+        "triangles": 1200,
+        "generated_sha256": "061be706842018681dcf07899a5fc6f518c0765799864852d6ce900cf589f5e1"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.9244656,
+        "correct_operation": true,
+        "strength_error": 0.025534399999999957,
+        "vertex_rmse": 0.00033441264833186624,
+        "triangles": 1200,
+        "generated_sha256": "290fc90c26a21a3ba542b3dda3f89f7bebb4c2045861bbefaabf78717b856daf"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__section_twist__s070",
+      "family": "bc_blind02",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.07,
+      "source_sha256": "726e92686d41ba4b56741ea8052de3f0d1a6f0c9400332e921f45ec7d10c452c",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.005642217504803542,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.1384317,
+        "correct_operation": false,
+        "strength_error": 0.06843169999999998,
+        "vertex_rmse": 0.005696843935974296,
+        "triangles": 1200,
+        "generated_sha256": "a3dd220946d366995a9f77c5bae654327c4d27d6fa6faefd69d59fd9010f5615"
+      },
+      "continued": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.0831558,
+        "correct_operation": true,
+        "strength_error": 0.013155799999999995,
+        "vertex_rmse": 0.0010606835487837647,
+        "triangles": 1200,
+        "generated_sha256": "9601a6acad1a94445ab357a31b3a2c26f2c4ed8178ecc0f89949fddeb7cce882"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__section_twist__s270",
+      "family": "bc_blind02",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.27,
+      "source_sha256": "c3b3eb12b3f11e77787de58192629f0ac8ebf6ba94124bfeb977115fac336b04",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.021672608736042126,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.0845204,
+        "correct_operation": false,
+        "strength_error": 0.18547960000000002,
+        "vertex_rmse": 0.021658053302880346,
+        "triangles": 1200,
+        "generated_sha256": "058ca6904474e9c1a95d9d176b78af8a6e694233b19600f3b58214680a5885bc"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.0798889,
+        "correct_operation": false,
+        "strength_error": 0.19011110000000003,
+        "vertex_rmse": 0.02165853091023639,
+        "triangles": 1200,
+        "generated_sha256": "ab6833757085ea9b95253c7091e85195d4d040eab4186ac0328b08567c48b7cb"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__section_twist__s730",
+      "family": "bc_blind02",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.73,
+      "source_sha256": "153622a824985fc1acefef94ded6f097fbe6d766f9d7d7664263c86cbcffa48a",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.056912120312127334,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.0762573,
+        "correct_operation": false,
+        "strength_error": 0.6537427,
+        "vertex_rmse": 0.056863970992525735,
+        "triangles": 1200,
+        "generated_sha256": "e9a4c1910ed5198de7592954355cf1d9bedf395d5f631faaa5f9421d7b1b7dca"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.0445436,
+        "correct_operation": false,
+        "strength_error": 0.6854564,
+        "vertex_rmse": 0.056883537420332766,
+        "triangles": 1200,
+        "generated_sha256": "9710830af624279d02ca4eaf00482b05c116df76f8fd0df86b46e1f900018525"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__section_twist__s950",
+      "family": "bc_blind02",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.95,
+      "source_sha256": "4aac3d79687ea8916a30e9f81213a9903188a606d34256101cacaf6d2735e5ac",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.07246423843740081,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.0603729,
+        "correct_operation": false,
+        "strength_error": 0.8896271,
+        "vertex_rmse": 0.07241396076092325,
+        "triangles": 1200,
+        "generated_sha256": "4cf5569543fa14a38d7f2871f28c21a587876b800dc73ccadb00ab04d4003667"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.0199442,
+        "correct_operation": false,
+        "strength_error": 0.9300558,
+        "vertex_rmse": 0.07244742596640337,
+        "triangles": 1200,
+        "generated_sha256": "c7602218b28f986a11e5e987ad583021ac1d7244ba195a4dcc19b79bf10eec32"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__superellipse_profile__s070",
+      "family": "bc_blind02",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.07,
+      "source_sha256": "131d63fad90114ef94ced746eadf98f953e79d3e66dfbdd451efd384a15d05a9",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.0012393023108100212,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.0269274,
+        "correct_operation": true,
+        "strength_error": 0.0430726,
+        "vertex_rmse": 0.0007675910354334188,
+        "triangles": 1200,
+        "generated_sha256": "47566be247b78d1c337eb02bd35ef8260189f6a20f9027b1da700137ab3e6ca6"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.0304463,
+        "correct_operation": true,
+        "strength_error": 0.03955370000000001,
+        "vertex_rmse": 0.0007054873832545662,
+        "triangles": 1200,
+        "generated_sha256": "18ea0ad071ad9de96884b4d261220c3c65fd5f84f7460ae068f3ce39e3aa8dc5"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__superellipse_profile__s270",
+      "family": "bc_blind02",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.27,
+      "source_sha256": "9762d2c4946fe1d1f448dc591ff3cccf59928a2f1f21141c4a025f5af4d180de",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.005027278833047874,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.3026966,
+        "correct_operation": true,
+        "strength_error": 0.032696599999999965,
+        "vertex_rmse": 0.0006570300738637812,
+        "triangles": 1200,
+        "generated_sha256": "4eb1ab9b8e7a1f4f25482518fffe50e506e93ea543f1e8dd6ab0762b23d03b27"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.3117746,
+        "correct_operation": true,
+        "strength_error": 0.041774599999999995,
+        "vertex_rmse": 0.0008414396798331288,
+        "triangles": 1200,
+        "generated_sha256": "bee7bfece1660a556ba9601f437a5dd74cd4c35b4a064ee45f24c22cabbb218b"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__superellipse_profile__s730",
+      "family": "bc_blind02",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.73,
+      "source_sha256": "443cda45a67eff01db5fe04bc9967d8e21f8388337d6c1a497b7efb2d37a5e44",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.015400007160193883,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.7965593,
+        "correct_operation": true,
+        "strength_error": 0.06655929999999999,
+        "vertex_rmse": 0.0017353134339636814,
+        "triangles": 1200,
+        "generated_sha256": "beea9ff2bb19cdf1e12d5e02180d9a851b0d25ea6a10aebd81f3acc3ddcb604c"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.7954125,
+        "correct_operation": true,
+        "strength_error": 0.06541249999999998,
+        "vertex_rmse": 0.0017048534990053244,
+        "triangles": 1200,
+        "generated_sha256": "192b57ec81041871d286837bf429dab287f524a0f4cde4a40fd800f2ec2194aa"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__superellipse_profile__s950",
+      "family": "bc_blind02",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.95,
+      "source_sha256": "cf64403afb9a64dfa46f6a904e285fd01499d76dbe9ed2e76f62240569427a80",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.021374756643980617,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.9213696,
+        "correct_operation": true,
+        "strength_error": 0.028630399999999945,
+        "vertex_rmse": 0.0008250976935367442,
+        "triangles": 1200,
+        "generated_sha256": "fca8f715786b2ea61b9b14c38eb18ab24c667ab81b304af7870f35b71ed55dff"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.9545916,
+        "correct_operation": true,
+        "strength_error": 0.004591600000000029,
+        "vertex_rmse": 0.0001336290541883888,
+        "triangles": 1200,
+        "generated_sha256": "4d2c8b7036e092cba9a14d884f111e7a7bd29dc44f7bea9b2897d59c85713251"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__tangent_sweep__s070",
+      "family": "bc_blind02",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.07,
+      "source_sha256": "8bcf7bafe5423df35e723f6720662511339ccf8b3394b35b8189a676782b53f0",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.0020061819621595743,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.1009518,
+        "correct_operation": true,
+        "strength_error": 0.030951799999999988,
+        "vertex_rmse": 0.0008870371043732207,
+        "triangles": 1200,
+        "generated_sha256": "c6c31d486bf5dcba55e61ae98cd387e3885b6297575fb66bb8c260f87641d62c"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.0673897,
+        "correct_operation": true,
+        "strength_error": 0.00261030000000001,
+        "vertex_rmse": 7.480937950755141e-05,
+        "triangles": 1200,
+        "generated_sha256": "0601a3f1e3f2f9933621ea7fe384fc56daf622a4e1ac8f4de2f177c064ac249d"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__tangent_sweep__s270",
+      "family": "bc_blind02",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.27,
+      "source_sha256": "7eb3ae8bdc517373fa76664aee585aa2ac2c707f94c81fb1625d493d86bf4f56",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.007599814830229054,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.3228996,
+        "correct_operation": true,
+        "strength_error": 0.05289959999999999,
+        "vertex_rmse": 0.0014883913797067206,
+        "triangles": 1200,
+        "generated_sha256": "4cf521354edae7bc9117f9517eb6a0bd2badeca9315e5269eb5d416cd23e7e9b"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.3046455,
+        "correct_operation": true,
+        "strength_error": 0.034645499999999996,
+        "vertex_rmse": 0.0009748266067343409,
+        "triangles": 1200,
+        "generated_sha256": "79331537434b15daf023ffce5f1b53b6d097f895d543a933d96c388683bab0a9"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__tangent_sweep__s730",
+      "family": "bc_blind02",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.73,
+      "source_sha256": "bdc15154695fc63dbf6138fb2473eeb91fff910a4b34a265a61bba924f68e4fa",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.019736034135188717,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.7962677,
+        "correct_operation": true,
+        "strength_error": 0.06626770000000004,
+        "vertex_rmse": 0.0017872407646108064,
+        "triangles": 1200,
+        "generated_sha256": "66ced6c370554b80d4c8bb456154fa652dae2390fc29375e510afc21d46e9d02"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.8994501,
+        "correct_operation": true,
+        "strength_error": 0.16945010000000005,
+        "vertex_rmse": 0.004567708486507652,
+        "triangles": 1200,
+        "generated_sha256": "4af9d8aa4ed79550fe31548215fded73f93ea24d9f7893768afc4549f7872230"
+      }
+    },
+    {
+      "case": "validation__bc_blind02__tangent_sweep__s950",
+      "family": "bc_blind02",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.95,
+      "source_sha256": "baa0fe40f44ae1bef1ed703529b8527aaf48cf3043cce9485dfd453ca7115c68",
+      "baseline_sha256": "8bf591edb52e3a3ed8196d6a16bc23b29b84e4b0fcb1c4457bbb97f638364557",
+      "unchanged_vertex_rmse": 0.025212827861319953,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.9328749,
+        "correct_operation": true,
+        "strength_error": 0.017125100000000004,
+        "vertex_rmse": 0.0004529554525006249,
+        "triangles": 1200,
+        "generated_sha256": "34ee16c3e8de723a3634722c50940789374d2d6ad92f60fa8755a99a4ae902cd"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.9745896,
+        "correct_operation": true,
+        "strength_error": 0.02458959999999999,
+        "vertex_rmse": 0.0006502371165660757,
+        "triangles": 1200,
+        "generated_sha256": "aacc91f9858b94cebfdb19e87ac923caf83e6afef4363c5802af2688daf7ba73"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__lower_recess__s070",
+      "family": "bc_blind03",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.07,
+      "source_sha256": "bd6577aeefad38db5944a59d9b3c335a7b826e44cd9e6691ec006a6f98ced294",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.0005674192306248249,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.136522,
+        "correct_operation": false,
+        "strength_error": 0.066522,
+        "vertex_rmse": 0.004492436321922361,
+        "triangles": 1200,
+        "generated_sha256": "a96cb3d61a93bdc4d32ff3c660634922728a2c3f30d4a76063a1660266c93fd4"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.0533062,
+        "correct_operation": false,
+        "strength_error": 0.01669380000000001,
+        "vertex_rmse": 0.0018303987205976577,
+        "triangles": 1200,
+        "generated_sha256": "b0512c8de96db055ffab211f7ff123cffe0c762de769207981da6b1a591c14c7"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__lower_recess__s270",
+      "family": "bc_blind03",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.27,
+      "source_sha256": "f5fbefc42c3ccff479f9a05ccb76247dfda9c132d91686b700be7a4a87a9ab3e",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.0021886155204800745,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.6588454,
+        "correct_operation": true,
+        "strength_error": 0.3888454,
+        "vertex_rmse": 0.00315197494864657,
+        "triangles": 1200,
+        "generated_sha256": "b305dc54d0d709d03615f2d6a3a7a4dc10f33536f76ba948c63fcb85cd6a937e"
+      },
+      "continued": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.0963242,
+        "correct_operation": false,
+        "strength_error": 0.17367580000000002,
+        "vertex_rmse": 0.009490942399475136,
+        "triangles": 1200,
+        "generated_sha256": "e8dbf3dbc76802e7f50d6ab59748cb2f49c29d3f6b65e2b9ada29f32967e07b4"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__lower_recess__s730",
+      "family": "bc_blind03",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.73,
+      "source_sha256": "9b188abcd53f77c0a27d251ea8522c69846bf15030bab8d9f2f327c4e256e37d",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.005917368512673389,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.9059565,
+        "correct_operation": true,
+        "strength_error": 0.17595650000000007,
+        "vertex_rmse": 0.0014263010148030456,
+        "triangles": 1200,
+        "generated_sha256": "8ef783e27ed5783e95f8b87f66771ed50ef946165e6ba5118bdff412d9183f7e"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.5135128,
+        "correct_operation": true,
+        "strength_error": 0.2164872,
+        "vertex_rmse": 0.001754841720961119,
+        "triangles": 1200,
+        "generated_sha256": "d64f6aa495c7daffe6031a078f6157cfd1c286ceaa922ed930e97da7841ba5b9"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__lower_recess__s950",
+      "family": "bc_blind03",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.95,
+      "source_sha256": "66ef3886d312cf8a276351f7b29b4a3f75dc81ba5b339155d453e94ae98d0384",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.007700684855604528,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.9306405,
+        "correct_operation": true,
+        "strength_error": 0.019359499999999974,
+        "vertex_rmse": 0.000156927126097911,
+        "triangles": 1200,
+        "generated_sha256": "defb3c55496c36684c301f153b211bdbf42d9ba12c968acb72e190ea8d1e2981"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.6835701,
+        "correct_operation": true,
+        "strength_error": 0.2664299,
+        "vertex_rmse": 0.0021596761527454,
+        "triangles": 1200,
+        "generated_sha256": "741addb8092499286833a47b14dc064a3ab790b2504c0752fe4491fd8a2f9e56"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__ribbed_fairing__s070",
+      "family": "bc_blind03",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.07,
+      "source_sha256": "676dfe396ba596dc8470b24340df62b5854b311eca6641af638ab18af5c18aad",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.0004910749916721591,
+      "prior": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.5106975,
+        "correct_operation": true,
+        "strength_error": 0.4406975,
+        "vertex_rmse": 0.0030916555049091254,
+        "triangles": 1200,
+        "generated_sha256": "5bca2ba2e20e85e527c296092c734324e3275e7ae56ab902885d10b2d846cf30"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.1200771,
+        "correct_operation": false,
+        "strength_error": 0.0500771,
+        "vertex_rmse": 0.003942575992424377,
+        "triangles": 1200,
+        "generated_sha256": "94fe1388e64cd3dca2b57f42b042b48653821332fc3aeb1d41bbf24fe60925e3"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__ribbed_fairing__s270",
+      "family": "bc_blind03",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.27,
+      "source_sha256": "88ee8287bb0dd6d6916f8ee4de91537edb9af9f5ef793975a8bf5366e5406fa1",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.001882330676192352,
+      "prior": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.7265172,
+        "correct_operation": true,
+        "strength_error": 0.45651719999999996,
+        "vertex_rmse": 0.003182652729497359,
+        "triangles": 1200,
+        "generated_sha256": "4d49f8add16d87eb9519721583f67270bd52c7b6d65383af8d58eda0d46e61ef"
+      },
+      "continued": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.325912,
+        "correct_operation": true,
+        "strength_error": 0.05591199999999996,
+        "vertex_rmse": 0.00038979362003578214,
+        "triangles": 1200,
+        "generated_sha256": "93c0c15e16942fb11182e641d4c7e57852969d442aa82f2c7a7b13f590f06c1e"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__ribbed_fairing__s730",
+      "family": "bc_blind03",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.73,
+      "source_sha256": "e694cc83f1a96be4b1902acc55f7e91e9df22ec6326191c510672fd36e21dea0",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.005015277687713597,
+      "prior": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.9703407,
+        "correct_operation": true,
+        "strength_error": 0.24034069999999996,
+        "vertex_rmse": 0.001651198003978687,
+        "triangles": 1200,
+        "generated_sha256": "5873645243010e22f89f20ab0588d320336cc01e4b4834d4f098e81abe476988"
+      },
+      "continued": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.9561626,
+        "correct_operation": true,
+        "strength_error": 0.2261626,
+        "vertex_rmse": 0.0015537920106317464,
+        "triangles": 1200,
+        "generated_sha256": "6bc5ec340ba1faafa99753f79f29c537d41c5f3a0d876ca56cb3bc5c970bcc5d"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__ribbed_fairing__s950",
+      "family": "bc_blind03",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.95,
+      "source_sha256": "5716f48c09c0e47561ccf063f7a92d032d6f80ab34d9543dc174b6e453abd469",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.006480442895178763,
+      "prior": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.976914,
+        "correct_operation": true,
+        "strength_error": 0.026913999999999993,
+        "vertex_rmse": 0.00018359581294064497,
+        "triangles": 1200,
+        "generated_sha256": "ed172f78a771aee41947197271382e66727a7477b63826dbef6c3f44e906af36"
+      },
+      "continued": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.9820049,
+        "correct_operation": true,
+        "strength_error": 0.0320049,
+        "vertex_rmse": 0.00021832303385098444,
+        "triangles": 1200,
+        "generated_sha256": "41b42f4fe57824b7c786985428d972ba34abcb7b51f7073877f86bdef54d24aa"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__section_loft__s070",
+      "family": "bc_blind03",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.07,
+      "source_sha256": "a4afa624ace0bbf4891217ce97203024a620960d812df17d19b14b053d67f8e3",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.0014322640828233488,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.4452233,
+        "correct_operation": false,
+        "strength_error": 0.3752233,
+        "vertex_rmse": 0.014515431740359502,
+        "triangles": 1200,
+        "generated_sha256": "fa62bbc491bf9f159e5bc84d4e58e0df5dc482aa8c6860e1feb88e24be02e558"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.2996744,
+        "correct_operation": true,
+        "strength_error": 0.2296744,
+        "vertex_rmse": 0.0046993444059573175,
+        "triangles": 1200,
+        "generated_sha256": "0743a08f2b7f8795d1a599a3295c26eff7c9edd465495e1f3750e66412b819f3"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__section_loft__s270",
+      "family": "bc_blind03",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.27,
+      "source_sha256": "492bb3b41cb9b77e2bbc9e1f6c53372c60bca774ca10dd202fc47fac185c7bdc",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.005416241551000865,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.9375034,
+        "correct_operation": true,
+        "strength_error": 0.6675034,
+        "vertex_rmse": 0.013390224408152514,
+        "triangles": 1200,
+        "generated_sha256": "fe6fa0c7281ebb152e1529277bc843c678240184a09dbb50ec58a15ac7a58029"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.7531517,
+        "correct_operation": true,
+        "strength_error": 0.48315169999999996,
+        "vertex_rmse": 0.009692102487542405,
+        "triangles": 1200,
+        "generated_sha256": "7403e471d22b884990b1c38e880a0235552b5017d85bfde8f14b4a21ea37cb50"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__section_loft__s730",
+      "family": "bc_blind03",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.73,
+      "source_sha256": "7ed766d5584ac74b8dd061185fe12940faae8abd51d7086d6eeeb468a6e2032f",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.013970411960442158,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.9665387,
+        "correct_operation": true,
+        "strength_error": 0.2365387,
+        "vertex_rmse": 0.004526773526110952,
+        "triangles": 1200,
+        "generated_sha256": "f0cdb88c09e60408c8aa5a76c74d114e00e5916af7dff9b35e8b25d7c81588f9"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.9600587,
+        "correct_operation": true,
+        "strength_error": 0.23005870000000006,
+        "vertex_rmse": 0.004402760186710158,
+        "triangles": 1200,
+        "generated_sha256": "2d56d768ad9a08e0234ca2ec27c7f34c27f95909a915b42523a78a0cd01bf774"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__section_loft__s950",
+      "family": "bc_blind03",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.95,
+      "source_sha256": "6e2bfb16ab5e7206fcf5278550c51e1901ce44df62eec980829fe6c852090809",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.017765762639720253,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.9661422,
+        "correct_operation": true,
+        "strength_error": 0.016142199999999995,
+        "vertex_rmse": 0.0003018725424989245,
+        "triangles": 1200,
+        "generated_sha256": "94213a03b4fc30206b2e21bd9609650fdd90cd22efa1b57adfba73cb764a099a"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.9576192,
+        "correct_operation": true,
+        "strength_error": 0.007619200000000048,
+        "vertex_rmse": 0.00014248642393798258,
+        "triangles": 1200,
+        "generated_sha256": "8d6463f89af5eb9304029b2012b0ba91c2a16889b0cc24872f48f134257c78ec"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__section_twist__s070",
+      "family": "bc_blind03",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.07,
+      "source_sha256": "8aba7ba6128885eea81853de2eee9c9807c10e77605b2e7ed06ac3f83b199e2f",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.0067269122861875206,
+      "prior": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.0732626,
+        "correct_operation": true,
+        "strength_error": 0.0032625999999999905,
+        "vertex_rmse": 0.0003136191464495819,
+        "triangles": 1200,
+        "generated_sha256": "7a2b18330864f8b05e5317b67c475a43f88984d834e84ea79d9470c75c57df78"
+      },
+      "continued": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.0565106,
+        "correct_operation": true,
+        "strength_error": 0.013489400000000006,
+        "vertex_rmse": 0.0012966615274136982,
+        "triangles": 1200,
+        "generated_sha256": "beb5dc30299890214689c8df41b6b0cb31a37b29c5d91e0163655830d76f55f7"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__section_twist__s270",
+      "family": "bc_blind03",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.27,
+      "source_sha256": "60e9037128d325b7b9fa94aac01ff2d6ccab71a01436ca3807c84cdfe72247be",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.025465588376523338,
+      "prior": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.1611383,
+        "correct_operation": true,
+        "strength_error": 0.1088617,
+        "vertex_rmse": 0.010303147891146513,
+        "triangles": 1200,
+        "generated_sha256": "eef9ba0f579827d33e47859eaf369ad3f86c4991ed0aa61cf22b988b70c7aec2"
+      },
+      "continued": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.2428796,
+        "correct_operation": true,
+        "strength_error": 0.027120400000000017,
+        "vertex_rmse": 0.002568413765802013,
+        "triangles": 1200,
+        "generated_sha256": "f7ce5ae00c72a5070a6e0f6a3f9dd8b9cceced1b5032ddf2a06772d454542814"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__section_twist__s730",
+      "family": "bc_blind03",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.73,
+      "source_sha256": "c48d73f0de5fb50d357c573b5c4dda309d0d57cb57aadbc39acb1ccbd6375da2",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.06308742168608322,
+      "prior": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.6441264,
+        "correct_operation": true,
+        "strength_error": 0.0858736,
+        "vertex_rmse": 0.007646261110141021,
+        "triangles": 1200,
+        "generated_sha256": "59699d4d5206333be95d5b454994616645c344c8602bcbae8a59bb4d52d03bc9"
+      },
+      "continued": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.7272531,
+        "correct_operation": true,
+        "strength_error": 0.0027468999999999966,
+        "vertex_rmse": 0.00024469110956779164,
+        "triangles": 1200,
+        "generated_sha256": "ec38e1d0d2ecb1f34c1e19427262b73af42e617281cf136197a3bb5733a39ec6"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__section_twist__s950",
+      "family": "bc_blind03",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.95,
+      "source_sha256": "251c0466d139b0c4aad737fcecca3d630172a73d60e0b2c2793e90531dc6d3cb",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.07899392827663768,
+      "prior": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.9414119,
+        "correct_operation": true,
+        "strength_error": 0.008588099999999987,
+        "vertex_rmse": 0.0007517225256465597,
+        "triangles": 1200,
+        "generated_sha256": "cb5ec48983089a7c6e9476450e314adaf6e75da818baa2d6e55a72c9e2120f5f"
+      },
+      "continued": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.9553099,
+        "correct_operation": true,
+        "strength_error": 0.0053099000000000895,
+        "vertex_rmse": 0.00046478484643701324,
+        "triangles": 1200,
+        "generated_sha256": "ee1c4f1b843dc166b8710f0e5fdb6c410f0bd57a1cf9bfc74d154a0cd9a1922b"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__superellipse_profile__s070",
+      "family": "bc_blind03",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.07,
+      "source_sha256": "c7a0fc4db6833e55258041a6b8cfa0f874781ec64116fbef0fa5c8fe4116734a",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.0014792464353149757,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.1479854,
+        "correct_operation": false,
+        "strength_error": 0.07798539999999998,
+        "vertex_rmse": 0.002688911629663881,
+        "triangles": 1200,
+        "generated_sha256": "38ad1fb8e986330234c3859275544daf6d750ef38eb9b8d8ba768c886a289048"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.0908259,
+        "correct_operation": false,
+        "strength_error": 0.020825899999999994,
+        "vertex_rmse": 0.0017548622012878035,
+        "triangles": 1200,
+        "generated_sha256": "19625e489267ee0afd932b1d93b5450167e244292d4b167927096bb996a62a5f"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__superellipse_profile__s270",
+      "family": "bc_blind03",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.27,
+      "source_sha256": "aa20a8662ea1c28b824765f4c7c58d2baa2ce91cf7a0fcdd40928c680208d6a4",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.006000623544050683,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.1624459,
+        "correct_operation": true,
+        "strength_error": 0.10755410000000001,
+        "vertex_rmse": 0.002488635444840468,
+        "triangles": 1200,
+        "generated_sha256": "6bb2050eb956fc133d62f6e651097f0f174f778e03a6d5da9bfb18dccd9d2654"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.123805,
+        "correct_operation": true,
+        "strength_error": 0.14619500000000002,
+        "vertex_rmse": 0.0033500173444331077,
+        "triangles": 1200,
+        "generated_sha256": "7fe6c793813013675f615a9fb1ab70a3c81687cd0847475213d6dfd690e138ca"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__superellipse_profile__s730",
+      "family": "bc_blind03",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.73,
+      "source_sha256": "ff123f2e3ec2c02ab73bc2de9cebce4426fbe439aab572e0bdfb535ca0966e81",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.018381646349261295,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.2111409,
+        "correct_operation": true,
+        "strength_error": 0.5188591,
+        "vertex_rmse": 0.013773332993173624,
+        "triangles": 1200,
+        "generated_sha256": "be3452109f64e3ddf42168b5e056edbb974964b5debb50e80fb0cad06417e70e"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.3011548,
+        "correct_operation": true,
+        "strength_error": 0.4288452,
+        "vertex_rmse": 0.011651232226534337,
+        "triangles": 1200,
+        "generated_sha256": "478631986b2279ff9aa01adedb9060985fe49e4cf69e3de5c5882ce818f82ca8"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__superellipse_profile__s950",
+      "family": "bc_blind03",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.95,
+      "source_sha256": "e515aca0a32c94f2a2124b1487eff82a54d946c4a55991941758c2c79f80b061",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.0255131838621508,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.2374701,
+        "correct_operation": true,
+        "strength_error": 0.7125298999999999,
+        "vertex_rmse": 0.02030849951347037,
+        "triangles": 1200,
+        "generated_sha256": "7ae0a0a1da0c3876ccb9c9a1ecb348de163d73b643d31254358fe63fb4861b96"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.3939753,
+        "correct_operation": true,
+        "strength_error": 0.5560247,
+        "vertex_rmse": 0.016507455037016346,
+        "triangles": 1200,
+        "generated_sha256": "ed0ad36fa079f5a52a73a32dc49dbfb7636d8c55462ee2a31e7a598ee8cac78c"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__tangent_sweep__s070",
+      "family": "bc_blind03",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.07,
+      "source_sha256": "e06195138cb071df00f3201e6c8638348edebcc2651663c02d608019cd2a33b5",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.0022632871229951784,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.402377,
+        "correct_operation": true,
+        "strength_error": 0.332377,
+        "vertex_rmse": 0.010735023743366089,
+        "triangles": 1200,
+        "generated_sha256": "b0f08de565d24209200f36d62c763f0dcabb4751244135f79abb874ddb336a75"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.3962093,
+        "correct_operation": true,
+        "strength_error": 0.3262093,
+        "vertex_rmse": 0.01053614653553795,
+        "triangles": 1200,
+        "generated_sha256": "02d9fa68ba2022e81b9c43f4327f79fe3d84500e984b020422d93f6984ce20e9"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__tangent_sweep__s270",
+      "family": "bc_blind03",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.27,
+      "source_sha256": "4cc1b27fe701225fa14cab333f99769afba03a4d75325112145944b5240d2d57",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.00849200835524996,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.7174098,
+        "correct_operation": true,
+        "strength_error": 0.44740979999999997,
+        "vertex_rmse": 0.014018660464251608,
+        "triangles": 1200,
+        "generated_sha256": "4bb51c8d5d8b6b00b2c7fcf2030cf2086a73ffa072837502c4cf88823cb1ba01"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.7851909,
+        "correct_operation": true,
+        "strength_error": 0.5151909,
+        "vertex_rmse": 0.01613188766479591,
+        "triangles": 1200,
+        "generated_sha256": "60b2db268eee0e998363d0c781faf241943318d4e40ded65b94bc010501c9e33"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__tangent_sweep__s730",
+      "family": "bc_blind03",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.73,
+      "source_sha256": "40d70f672a6de0aed3a147d73b8d85fd1a05e6098512be37e804f8cce652d494",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.021607898010020003,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.9391338,
+        "correct_operation": true,
+        "strength_error": 0.20913380000000004,
+        "vertex_rmse": 0.006143282572028689,
+        "triangles": 1200,
+        "generated_sha256": "102e101fd1f77c6c78f790427a3e65ba5de6a8a5335185a775ec985942835bd9"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.9565564,
+        "correct_operation": true,
+        "strength_error": 0.2265564,
+        "vertex_rmse": 0.006653559601047956,
+        "triangles": 1200,
+        "generated_sha256": "bacf8c7f2f4d125d62496b55e4261cd783d8e2953c98629f6edc0412cb1a4539"
+      }
+    },
+    {
+      "case": "validation__bc_blind03__tangent_sweep__s950",
+      "family": "bc_blind03",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.95,
+      "source_sha256": "f59ff161fc3074944120b6ff7f48d62b27facc71b2355b1eedca88208265a72f",
+      "baseline_sha256": "bc3e248b752a551f75a20aa0a3209d55e9a7fbda130c95ec86cc09e8f17bec5e",
+      "unchanged_vertex_rmse": 0.027358320621517024,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.9463552,
+        "correct_operation": true,
+        "strength_error": 0.0036448000000000036,
+        "vertex_rmse": 0.0001040870939110192,
+        "triangles": 1200,
+        "generated_sha256": "372903b50baa6bd7d81219a94e4fbc6988f6f3863ac8a54cdad59383860619aa"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.9732057,
+        "correct_operation": true,
+        "strength_error": 0.023205699999999996,
+        "vertex_rmse": 0.0006624562783482169,
+        "triangles": 1200,
+        "generated_sha256": "3dd10080b2b5569609d32ab286fd08c6c0c0d9f7e58cb4a8f877633f54d8181a"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__lower_recess__s070",
+      "family": "bc_blind04",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.07,
+      "source_sha256": "b72454249551dd51249ec4feeed0d83a7b8b54831744072d626adeaaeecd84c2",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.00041097661308308144,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.1380167,
+        "correct_operation": true,
+        "strength_error": 0.06801669999999999,
+        "vertex_rmse": 0.00039933203755557255,
+        "triangles": 1200,
+        "generated_sha256": "303caae9fdbfb0d3be430a6a91e4417fe29883fb200916a982a195e85912cfb7"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.1201914,
+        "correct_operation": true,
+        "strength_error": 0.0501914,
+        "vertex_rmse": 0.000294678497930837,
+        "triangles": 1200,
+        "generated_sha256": "c86e03b7f9a373f50dff1a153b7abc4a5d94462af8e989d2c79f7514b05d38c3"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__lower_recess__s270",
+      "family": "bc_blind04",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.27,
+      "source_sha256": "33ba51fa2d6ea47bc7e3adc1975435409b10f85804f8220041a995b5d76a9608",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.001585195289760616,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.3566374,
+        "correct_operation": true,
+        "strength_error": 0.08663739999999998,
+        "vertex_rmse": 0.0005086558828982064,
+        "triangles": 1200,
+        "generated_sha256": "5c9486d2b7b7597f1593b0fbade3f36758dd7ca6453ef1d7375371937cab2859"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.3191852,
+        "correct_operation": true,
+        "strength_error": 0.049185199999999984,
+        "vertex_rmse": 0.00028877072277017405,
+        "triangles": 1200,
+        "generated_sha256": "986652526e4317e08dd81dfdedff7776874c0d79f735331bb6047bdba7dbcc37"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__lower_recess__s730",
+      "family": "bc_blind04",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.73,
+      "source_sha256": "e6fd1d707560f5c1f58474be65988bb43002238ca9cb8d42b40c6b027623e998",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.004285898032330395,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.8029618,
+        "correct_operation": true,
+        "strength_error": 0.07296179999999997,
+        "vertex_rmse": 0.00042836599857221444,
+        "triangles": 1200,
+        "generated_sha256": "76ed38afc6de1fde97be83b13b1c2618a584f0e92a4e7f1dd522d35c662641f5"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.7707788,
+        "correct_operation": true,
+        "strength_error": 0.040778800000000004,
+        "vertex_rmse": 0.00023941568849720777,
+        "triangles": 1200,
+        "generated_sha256": "e749e3d5c08418940aae4863d8c6783b0a44d6622198fa1c8f8c66409691a111"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__lower_recess__s950",
+      "family": "bc_blind04",
+      "actual_operation": "LOWER_RECESS",
+      "actual_strength": 0.95,
+      "source_sha256": "35627525b2f996c8f577bcb987e13b19532fe87c12fe2332461af54676aa09d1",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.005577538530526353,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.9612693,
+        "correct_operation": true,
+        "strength_error": 0.011269300000000038,
+        "vertex_rmse": 6.616310079009762e-05,
+        "triangles": 1200,
+        "generated_sha256": "cd9a87a67c1e89aec9f5f8e409d65e3bb78345394832452c16f6579cfe58890c"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.971329,
+        "correct_operation": true,
+        "strength_error": 0.021329000000000042,
+        "vertex_rmse": 0.00012522385483150673,
+        "triangles": 1200,
+        "generated_sha256": "8fc87ab4fff38e3602f41362193381ee74b6ea9b4c0d6586ad0a97dac81d1cd1"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__ribbed_fairing__s070",
+      "family": "bc_blind04",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.07,
+      "source_sha256": "9c4a4600f87043d6842cf617e95af6e8989813bd2ca5aad33cc0c3112fcf6e28",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.00032856811945628536,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.0510968,
+        "correct_operation": false,
+        "strength_error": 0.01890320000000001,
+        "vertex_rmse": 0.000444722753425158,
+        "triangles": 1200,
+        "generated_sha256": "33597ebd3ec75d5602ab2e45c8b2911277f13b682cf7883f8f4c35da0593dd02"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.0377646,
+        "correct_operation": false,
+        "strength_error": 0.032235400000000004,
+        "vertex_rmse": 0.0003962586212046712,
+        "triangles": 1200,
+        "generated_sha256": "efb87214b0bb0dc1681dbffa99bc511a543705b3b5462f0fcdd799d77095fd73"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__ribbed_fairing__s270",
+      "family": "bc_blind04",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.27,
+      "source_sha256": "f12d34591e574c4d244eb865865e7dad5cac6f58ffd5ae6e6e03091a177b7d48",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.0012637809651809796,
+      "prior": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.0988187,
+        "correct_operation": true,
+        "strength_error": 0.17118130000000004,
+        "vertex_rmse": 0.0008012433332438509,
+        "triangles": 1200,
+        "generated_sha256": "31eed30739ec499c8c37b2e2cfc09c4284715506511b4257b35b5e72993ba6b2"
+      },
+      "continued": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.1158448,
+        "correct_operation": true,
+        "strength_error": 0.15415520000000002,
+        "vertex_rmse": 0.000721549306643799,
+        "triangles": 1200,
+        "generated_sha256": "8ef418c6ecf6ddf6ae1fe63fc6f9858e001721195ceb473c534e5464e4532a7c"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__ribbed_fairing__s730",
+      "family": "bc_blind04",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.73,
+      "source_sha256": "9744cedde52876afc259ab5fec1c03c375ac3a2557d071ef4ab9a2bc73c55df3",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.003394229862450341,
+      "prior": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.5303979,
+        "correct_operation": true,
+        "strength_error": 0.1996021,
+        "vertex_rmse": 0.0009280754748573044,
+        "triangles": 1200,
+        "generated_sha256": "0b3bb263e32d0272ab3ce36f74ca76497683441bd9d8494a7a54087fb61c8ba3"
+      },
+      "continued": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.4871904,
+        "correct_operation": true,
+        "strength_error": 0.24280959999999996,
+        "vertex_rmse": 0.0011289746086640357,
+        "triangles": 1200,
+        "generated_sha256": "d89a09ca0bc0d94d235228f6083ca8cd759c7df2a6b9134eaa96848587fb939d"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__ribbed_fairing__s950",
+      "family": "bc_blind04",
+      "actual_operation": "RIBBED_FAIRING",
+      "actual_strength": 0.95,
+      "source_sha256": "34ae683b9fd440c5823f8481248746675ecd40b47bfa5df453eb9bd1566321b3",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.004402717891094659,
+      "prior": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.7696604,
+        "correct_operation": true,
+        "strength_error": 0.18033959999999993,
+        "vertex_rmse": 0.0008357730009444632,
+        "triangles": 1200,
+        "generated_sha256": "bf20ed8e164e4d4f50739dc68fbaf3115a288e0c5d7d68accc930832cb80b897"
+      },
+      "continued": {
+        "operation": "RIBBED_FAIRING",
+        "strength": 0.8521219,
+        "correct_operation": true,
+        "strength_error": 0.09787809999999997,
+        "vertex_rmse": 0.00045361106683833026,
+        "triangles": 1200,
+        "generated_sha256": "726a61c61c991d7619104b7d92f28a3decea4db408ba488a7e06777ebaf07b24"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__section_loft__s070",
+      "family": "bc_blind04",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.07,
+      "source_sha256": "16bc5e567dcb0b02dc29dc3da2582d2e6caca1de0e0dee29aba775c6b0ac62a3",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.000973711698624621,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.0378364,
+        "correct_operation": false,
+        "strength_error": 0.03216360000000001,
+        "vertex_rmse": 0.001075540892906263,
+        "triangles": 1200,
+        "generated_sha256": "724aa137fb4151dbe4ddc8f55e30a6cd6404adbce7972d07b90e946e2fbd175c"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.0274746,
+        "correct_operation": false,
+        "strength_error": 0.042525400000000005,
+        "vertex_rmse": 0.0010439805368814958,
+        "triangles": 1200,
+        "generated_sha256": "eb91a57bca36577cfca2d528befc3ad37487db6b5bb6ab0ea71c0610acff201b"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__section_loft__s270",
+      "family": "bc_blind04",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.27,
+      "source_sha256": "c5b228f626b3b3e50d6874662bd2e051014b7dc2dc8cfdf42d21695c4dc43573",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.0037182251207971474,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.1758225,
+        "correct_operation": true,
+        "strength_error": 0.09417750000000003,
+        "vertex_rmse": 0.0012969373554219533,
+        "triangles": 1200,
+        "generated_sha256": "508bb955704f06129703001f961798a362b90a686ca29e750a530d456d26171e"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.1667856,
+        "correct_operation": true,
+        "strength_error": 0.10321440000000001,
+        "vertex_rmse": 0.0014213858420118815,
+        "triangles": 1200,
+        "generated_sha256": "a7da5d108e4cc599d4703a6ce86673650b57b4bc7f461085ce0c0b88915d8a30"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__section_loft__s730",
+      "family": "bc_blind04",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.73,
+      "source_sha256": "f50eb89cbbecd82a1e3e1cba15f8d1540f93e8521f72df18cb82c8b31ee9ed8e",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.009809434348898756,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.5699806,
+        "correct_operation": true,
+        "strength_error": 0.16001940000000003,
+        "vertex_rmse": 0.0021502742138970925,
+        "triangles": 1200,
+        "generated_sha256": "6ed2694c16ff1bf8f5ab3370a68adf7d983eddfe4bc34c6ef43854ea2e1bfa40"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.5917157,
+        "correct_operation": true,
+        "strength_error": 0.13828430000000003,
+        "vertex_rmse": 0.001858206746881174,
+        "triangles": 1200,
+        "generated_sha256": "816344dbb80cd07635a9cc34422f35507bde12f6abe780df54fec8b6b0d4e9a6"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__section_loft__s950",
+      "family": "bc_blind04",
+      "actual_operation": "SECTION_LOFT",
+      "actual_strength": 0.95,
+      "source_sha256": "e4fc0926be74fd74c4db2ae4dbf7ed5f01911f7006a1262e36086b05bca28918",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.012608885382334028,
+      "prior": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.6453627,
+        "correct_operation": true,
+        "strength_error": 0.3046373,
+        "vertex_rmse": 0.004043302020061875,
+        "triangles": 1200,
+        "generated_sha256": "70abf5b23de1e94e3522e35e569d8a98bea1d21e68ed24e58a4ccfaea9a3ac22"
+      },
+      "continued": {
+        "operation": "SECTION_LOFT",
+        "strength": 0.6914057,
+        "correct_operation": true,
+        "strength_error": 0.25859429999999994,
+        "vertex_rmse": 0.0034321944667312716,
+        "triangles": 1200,
+        "generated_sha256": "69ee7c08ff97309a45f580b39eb4884f95d7b80759a3400350521b346b0cf430"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__section_twist__s070",
+      "family": "bc_blind04",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.07,
+      "source_sha256": "870c9ebe6bb26e576f398b21dfb1df2ed4b3ea92a55332febb23d114c7950769",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.00519447005077511,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.1064949,
+        "correct_operation": false,
+        "strength_error": 0.0364949,
+        "vertex_rmse": 0.005225640038052247,
+        "triangles": 1200,
+        "generated_sha256": "410f751bfb9149e878aa8bc67926fc8bec760fa14747f9b6b4cc0126437cfe76"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.1077856,
+        "correct_operation": false,
+        "strength_error": 0.03778559999999999,
+        "vertex_rmse": 0.005226475463824194,
+        "triangles": 1200,
+        "generated_sha256": "2be67e6d5676b58ddcf16c203428b9a9084f5e511835e582e7ad118946f84eab"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__section_twist__s270",
+      "family": "bc_blind04",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.27,
+      "source_sha256": "413e20b7d406489ffd2b566457db37276339505cd88513193a65a26e820f954b",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.019881109847711943,
+      "prior": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.2356178,
+        "correct_operation": true,
+        "strength_error": 0.03438220000000003,
+        "vertex_rmse": 0.0025420168041166186,
+        "triangles": 1200,
+        "generated_sha256": "a1936fe822cd0fb00b206b4e8b6079b993616518f72697687a420b985e384491"
+      },
+      "continued": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.105887,
+        "correct_operation": true,
+        "strength_error": 0.164113,
+        "vertex_rmse": 0.012115823779667917,
+        "triangles": 1200,
+        "generated_sha256": "34f9e3ccec0a7ff5708c44de5f81bc3bc763c5bc818c8e2d38bc20678a0edc08"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__section_twist__s730",
+      "family": "bc_blind04",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.73,
+      "source_sha256": "35a971f7b4e5b41d007dbd756ba7a50c72e05dc5e38f49f6af925f294779758c",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.05157760194050618,
+      "prior": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.5346115,
+        "correct_operation": true,
+        "strength_error": 0.19538849999999996,
+        "vertex_rmse": 0.01419866768203953,
+        "triangles": 1200,
+        "generated_sha256": "3e87bc30547e127e37ba022ebd3c0f7782fcce0fb9b58319224b7d8bf9b68e93"
+      },
+      "continued": {
+        "operation": "SECTION_TWIST",
+        "strength": 0.2704914,
+        "correct_operation": true,
+        "strength_error": 0.4595086,
+        "vertex_rmse": 0.033065626663644564,
+        "triangles": 1200,
+        "generated_sha256": "f8a475cb797bbd2f7a0f2c36f6a68976d86f6ca41a3fa13ff684b91b9e4e11f7"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__section_twist__s950",
+      "family": "bc_blind04",
+      "actual_operation": "SECTION_TWIST",
+      "actual_strength": 0.95,
+      "source_sha256": "5af044eeb479e8e869e8aa44f9921eda1f90ed66bd581da4a4c39f3700dba74a",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.06541520587935253,
+      "prior": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.1688545,
+        "correct_operation": false,
+        "strength_error": 0.7811454999999999,
+        "vertex_rmse": 0.0652904538151717,
+        "triangles": 1200,
+        "generated_sha256": "5e2b9e46af41eb0a7e2107b6d8eb3e730431498edae11f895eec5ba6918f392a"
+      },
+      "continued": {
+        "operation": "LOWER_RECESS",
+        "strength": 0.108414,
+        "correct_operation": false,
+        "strength_error": 0.841586,
+        "vertex_rmse": 0.06533348716654958,
+        "triangles": 1200,
+        "generated_sha256": "eb29672532ff4437ccfcc7f89ee25aa3481cd240ab2f9c50b3516f46c6e97008"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__superellipse_profile__s070",
+      "family": "bc_blind04",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.07,
+      "source_sha256": "20db8b7973d6b04e8a87211a3a3ba0c5654fcdc5d64a0fc030dbeaa7e2a34bac",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.0011409543158856748,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.0282571,
+        "correct_operation": true,
+        "strength_error": 0.041742900000000006,
+        "vertex_rmse": 0.0006850840676498028,
+        "triangles": 1200,
+        "generated_sha256": "34c193c7a5b9a7865c674a568f71840d6b01b312afeda3a64c7700dcb1f42a41"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.0434748,
+        "correct_operation": true,
+        "strength_error": 0.026525200000000006,
+        "vertex_rmse": 0.00043695624277871245,
+        "triangles": 1200,
+        "generated_sha256": "1e193d9208addcbb12e27941aee23c99f54cd8126a10735a6b28d4685479f9e9"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__superellipse_profile__s270",
+      "family": "bc_blind04",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.27,
+      "source_sha256": "231a8998a3a0ad9700006341b6a14dc3079f6fc4bdc18f74cceb7ae71ca467ae",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.004628330475013643,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.3419524,
+        "correct_operation": true,
+        "strength_error": 0.07195239999999997,
+        "vertex_rmse": 0.0013448549298842795,
+        "triangles": 1200,
+        "generated_sha256": "a1b93526e24abc347dbc20749fdae08df324151f2c30285f82440cba4cb88196"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.2287436,
+        "correct_operation": true,
+        "strength_error": 0.041256400000000026,
+        "vertex_rmse": 0.0007488143157410948,
+        "triangles": 1200,
+        "generated_sha256": "578b585ac1d56a1d9e4ed154c9932915d956c39f5d165f2bd0903bcfda8c29d7"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__superellipse_profile__s730",
+      "family": "bc_blind04",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.73,
+      "source_sha256": "e93e681b7ff921de215c8173dd276e7d7384813decc3fe334e53d36174b0cdd3",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.014177913723883393,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.9228789,
+        "correct_operation": true,
+        "strength_error": 0.19287889999999996,
+        "vertex_rmse": 0.0048036118118979535,
+        "triangles": 1200,
+        "generated_sha256": "3354e22f38d94e5a315d87886ce56037194d531c74c29ddb4337e8d727ebeace"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.9040434,
+        "correct_operation": true,
+        "strength_error": 0.17404340000000007,
+        "vertex_rmse": 0.0043104789579345324,
+        "triangles": 1200,
+        "generated_sha256": "7e3da32f3e48348b41f905d6e21d8b7304e7d3ab92931f2e50aa465c5fb235be"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__superellipse_profile__s950",
+      "family": "bc_blind04",
+      "actual_operation": "SUPERELLIPSE_PROFILE",
+      "actual_strength": 0.95,
+      "source_sha256": "3868f4a5c9b82ac0e9715c3909fc12cdc17a0f313a9dc78efe3039241beffe90",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.01967852638537033,
+      "prior": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.9241592,
+        "correct_operation": true,
+        "strength_error": 0.025840799999999997,
+        "vertex_rmse": 0.0006861711073191728,
+        "triangles": 1200,
+        "generated_sha256": "636e2ccdda90ae6602c8f4c17c74b32a535893ab1309f99afa50e1f0850f06d1"
+      },
+      "continued": {
+        "operation": "SUPERELLIPSE_PROFILE",
+        "strength": 0.9111663,
+        "correct_operation": true,
+        "strength_error": 0.03883369999999997,
+        "vertex_rmse": 0.0010272540173732793,
+        "triangles": 1200,
+        "generated_sha256": "73208b5e57e51d205fec30a5f2d52eabb04e3511b589d1ea14d2bcf67263aa0b"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__tangent_sweep__s070",
+      "family": "bc_blind04",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.07,
+      "source_sha256": "49a758b62c0cb33269dba2c43a74a5cdd0c919919e69eaa4814a95fad3a78225",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.002055670986096676,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.0353785,
+        "correct_operation": true,
+        "strength_error": 0.034621500000000006,
+        "vertex_rmse": 0.0010167125082269327,
+        "triangles": 1200,
+        "generated_sha256": "8331decf394d70f73f7451acf30ac760518d19f1581f64e1f3332ccf22f6539c"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.0146822,
+        "correct_operation": true,
+        "strength_error": 0.05531780000000001,
+        "vertex_rmse": 0.0016244991899565138,
+        "triangles": 1200,
+        "generated_sha256": "ed16c8cab8031bb2cf178295d524e41b1769da70803fd7a429e21ec86260a524"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__tangent_sweep__s270",
+      "family": "bc_blind04",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.27,
+      "source_sha256": "40f217443ec12f5c93a96c292c1b5b8bdece6ca8dee4e4f2683bfae6abee5375",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.007780629710863913,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.2129054,
+        "correct_operation": true,
+        "strength_error": 0.05709460000000002,
+        "vertex_rmse": 0.0016449560152759482,
+        "triangles": 1200,
+        "generated_sha256": "630873ca461ad8262a5c19140acc418a0cf3f5779039cc74a86a655b8bd2fd05"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.2538475,
+        "correct_operation": true,
+        "strength_error": 0.016152500000000014,
+        "vertex_rmse": 0.00046533968310856976,
+        "triangles": 1200,
+        "generated_sha256": "d2892757ae41091f6c7e4e36baba2879d495cea0820d6f79b081d5a6e8b12e3a"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__tangent_sweep__s730",
+      "family": "bc_blind04",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.73,
+      "source_sha256": "903861739ed0d19bd7d1fb62d5460075133ea7792efe5a0cf0dcce02b48c1537",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.020169727410658565,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.494331,
+        "correct_operation": true,
+        "strength_error": 0.23566899999999996,
+        "vertex_rmse": 0.006503745722779199,
+        "triangles": 1200,
+        "generated_sha256": "61bfbd711e750474a72c0a8b4e97a724ac745c627375e004bb1c9bd148606a73"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.563074,
+        "correct_operation": true,
+        "strength_error": 0.16692600000000002,
+        "vertex_rmse": 0.004605467836471398,
+        "triangles": 1200,
+        "generated_sha256": "6ddf57cd21354706df9f842fe2ff22a471baf1325a0522d1d7301b71370694c8"
+      }
+    },
+    {
+      "case": "validation__bc_blind04__tangent_sweep__s950",
+      "family": "bc_blind04",
+      "actual_operation": "TANGENT_SWEEP",
+      "actual_strength": 0.95,
+      "source_sha256": "c1d3625e18612e8fe397cb874ba1c531c80bc067582478266a62ae942c1434f1",
+      "baseline_sha256": "3f148eb31c9c414de6263aebeb33a35f18691fc6d520597faac45c9d839983c8",
+      "unchanged_vertex_rmse": 0.025747388764504033,
+      "prior": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.702093,
+        "correct_operation": true,
+        "strength_error": 0.247907,
+        "vertex_rmse": 0.00670385443747197,
+        "triangles": 1200,
+        "generated_sha256": "c4cdd854ff3dbcd16d2110167e9b0906c8d87d667ae07f65ffdf99060683ede2"
+      },
+      "continued": {
+        "operation": "TANGENT_SWEEP",
+        "strength": 0.7301911,
+        "correct_operation": true,
+        "strength_error": 0.21980889999999997,
+        "vertex_rmse": 0.005943227383714557,
+        "triangles": 1200,
+        "generated_sha256": "adbf0ffd17db2ba84a3b624d453c88bc9de0fdff83273abd8f58167172ed9a69"
+      }
+    }
+  ]
+}

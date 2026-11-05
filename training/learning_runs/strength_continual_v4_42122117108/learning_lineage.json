@@ -1,0 +1,21 @@
+{
+  "schema": "assetwright-original-continual-learning-persistent-run-v4",
+  "github_actions_run": 42122117108,
+  "source_study": "strength_continual_v4",
+  "parent_original_sha256": "1d32f74b9e05ab79196b906f88dde823fdbcc1eae0bea8a3b62a0a631cf00c21",
+  "child_trained_weights_sha256": "a3c2b07d2b893bcf6983def9493214e2768612b6a9cd6210ad262f9b750a52fb",
+  "parameter_count": 160938,
+  "rehearsed_earlier_training_examples": 672,
+  "new_training_examples": 504,
+  "new_development_examples": 96,
+  "fresh_blind_original_targets": 96,
+  "original_Kotlin_GLBS_verified": 716,
+  "actual_student_GLBS_verified": 192,
+  "heldout_sha256": "5ab2c8e23c118461288cf85408bc2c95c189ed85719e4a439669222daf83c8cf",
+  "independent_geometry_improvement": -0.02062746075424575,
+  "learned_successor_research_eligible": false,
+  "parent_checkpoint_immutable": true,
+  "candidate_remains_available_for_future_comparisons": true,
+  "Android_installed": false,
+  "human_visual_review_required": true
+}
