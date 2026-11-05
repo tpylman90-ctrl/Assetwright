@@ -1,4 +1,5 @@
 name: AssetWright Safe CAD Parameter Coverage Clinic
+# Re-run train-only coverage after strict unsupported-source zero-vector fix.
 on:
   push:
     branches: [main]
