@@ -131,7 +131,7 @@ def proxy_loss(logits,heads,basis,targets,operator_ids,*,geometry_weight=1.0):
     mesh_error=F.smooth_l1_loss(predicted,targets,beta=.006)
     # Teacher-forced geometry term informs strength on the TRUE native op.
     idx=torch.arange(logits.shape[0],device=logits.device)
-    operator_delta=heads[idx,operator_ids,None]*basis[idx,operator_ids]
+    operator_delta=heads[idx,operator_ids][:,None]*basis[idx,operator_ids]
     strength_geometry=F.smooth_l1_loss(operator_delta,targets,beta=.006)
     return geometry_weight*(24.*mesh_error+12.*strength_geometry)
 
