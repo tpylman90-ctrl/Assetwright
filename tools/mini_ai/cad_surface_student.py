@@ -61,7 +61,7 @@ def verify(train:dict,valid:dict)->tuple[list[dict],list[dict]]:
                 any(type(v) not in (int,float) or not math.isfinite(v)
                     for v in (*x,*y)) or
                 any(v<0 or v>4 for v in y) or
-                any(v<-.999999 or v>1.000001 for v in x)):
+                any(v<-1.000001 or v>1.000001 for v in x)):
                 raise ValueError("Invalid independently measured geometry vector")
             if not isinstance(r.get("operations"),list) or len(r["operations"])<3:
                 raise ValueError("Untrusted source program")
