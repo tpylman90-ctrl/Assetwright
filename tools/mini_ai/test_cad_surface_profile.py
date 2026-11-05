@@ -24,6 +24,21 @@ class CadSurfaceProfileTests(unittest.TestCase):
         self.assertEqual(x[NAMES.index("cut_depth_sign")],-1.)
         self.assertTrue(all(np.isfinite(x)))
 
+    def test_statics_resolve_safe_assigned_dimensions_without_executing_python(self):
+        source=("unit=2.0\n"
+                "width=unit*3\n"
+                "height=width/3\n"
+                "depth=unit+1\n"
+                "result=cq.Workplane('XY').rect(width,height).extrude(depth).fillet(unit/8)\n")
+        data=extract(source)
+        self.assertAlmostEqual(data[NAMES.index("base_min_over_major")],1/3,places=6)
+        self.assertAlmostEqual(data[NAMES.index("extrude_over_base")],.5,places=6)
+        self.assertAlmostEqual(data[NAMES.index("fillet_radius_over_base")],.25/6,places=6)
+        from safe_cad_numeric_resolver import pure_numeric
+        import ast
+        self.assertIsNone(pure_numeric(ast.parse("unknown(2)",mode="eval").body,{}))
+        self.assertIsNone(pure_numeric(ast.parse("10**999",mode="eval").body,{}))
+
     def test_untrusted_expressions_cannot_execute_or_create_model(self):
         from pathlib import Path
         sentinel=Path("/tmp/assetwright-cad-v2-must-not-execute")
