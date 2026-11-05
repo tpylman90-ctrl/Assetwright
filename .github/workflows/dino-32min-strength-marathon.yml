@@ -1,0 +1,177 @@
+name: AssetWright DINO 32-Minute Native Geometry Marathon
+
+# Research only: own Kotlin geometry, frozen DINOv2 visual teacher,
+# eight matched seeds in two groups with 32 minutes of active CPU optimization.
+# No student promoted to Android. Inspected validation sets are never reused.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/dino-32min-strength-marathon.yml'
+      - 'tools/mini_ai/dino_marathon_*.py'
+      - 'tools/mini_ai/test_dino_marathon_lab.py'
+      - 'app/src/test/java/com/assetwright/app/mini/DinoMarathonGeometryBatchTest.kt'
+      - 'app/src/test/java/com/assetwright/app/mini/DinoMarathonReconstructionTest.kt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: assetwright-marathon-research-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  clean-data-and-teacher:
+    name: Export and verify 888 novel native GLBs, then freeze visual teacher
+    runs-on: ubuntu-24.04
+    timeout-minutes: 29
+    env:
+      ASSETWRIGHT_DINO_STUDY: strength_marathon_v3
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ASSETWRIGHT_DINO_MARATHON_SOURCE: ${{ github.workspace }}/local-data/dino-marathon/source
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Verify entirely new train/development/blind families and strict gates
+        run: python -m unittest discover -s tools/mini_ai -p 'test_dino_marathon_lab.py'
+      - name: Install free Android SDK needed to execute only our native Kotlin mesh generator
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Export 888 source-hashed, original closed native GLBs
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoMarathonGeometryBatchTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/dino-marathon/source -maxdepth 1 -name '*.glb' | wc -l)" -eq 888
+      - name: Install CPU PyTorch, neutral render tools and frozen pretrained vision teacher
+        run: |
+          python -m pip install --upgrade 'Pillow==11.3.0' 'numpy>=1.26,<3' 'transformers>=4.45,<5' 'safetensors>=0.4,<1'
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Audit indexed Kotlin mesh topology and render 1776 common-camera images
+        run: |
+          python tools/mini_ai/dino_delta_school.py render \
+            --source local-data/dino-marathon/source \
+            --images local-data/dino-marathon/images \
+            --out local-data/dino-marathon/manifest.json
+      - name: Validate source inventory before loading any teacher weights
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('local-data/dino-marathon/manifest.json').read_text())
+          assert m["study_id"]=="strength_marathon_v3"
+          assert m["source_count"]==888 and m["paired_examples"]==864
+          assert m["external_geometry_used"] is False
+          print("Strict source inventory passed",flush=True)
+          PY
+      - name: Extract frozen source-hashed DINOv2 before/after lessons
+        run: |
+          python tools/mini_ai/dino_delta_school.py teach \
+            --manifest local-data/dino-marathon/manifest.json \
+            --images local-data/dino-marathon/images \
+            --out local-data/dino-marathon/teacher.json
+      - name: Keep every original source and teacher artifact even if later training rejects
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-marathon-888-own-GLBs-and-teacher
+          path: local-data/dino-marathon/
+          if-no-files-found: warn
+          retention-days: 35
+
+  thirty-two-minute-active-training:
+    name: 32 minutes of actual training, then 192 Kotlin GLB forward evaluations
+    needs: clean-data-and-teacher
+    runs-on: ubuntu-24.04
+    timeout-minutes: 46
+    env:
+      ASSETWRIGHT_DINO_STUDY: strength_marathon_v3
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ASSETWRIGHT_DINO_MARATHON_PREDICTIONS: ${{ github.workspace }}/local-data/dino-marathon/student/native_proposals.properties
+      ASSETWRIGHT_DINO_MARATHON_RECON: ${{ github.workspace }}/local-data/dino-marathon/reconstructed
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: assetwright-marathon-888-own-GLBs-and-teacher
+          path: local-data/dino-marathon/
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Install original Kotlin reconstruction SDK and free CPU training dependencies
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+          python -m pip install --upgrade 'Pillow==11.3.0' 'numpy>=1.26,<3' 'transformers>=4.45,<5' 'safetensors>=0.4,<1'
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Run real 1920-second optimizer across sixteen independent original Mini AI sessions
+        run: |
+          test -s local-data/dino-marathon/teacher.json
+          python -u tools/mini_ai/dino_marathon_student.py \
+            --manifest local-data/dino-marathon/manifest.json \
+            --teacher local-data/dino-marathon/teacher.json \
+            --images local-data/dino-marathon/images \
+            --out local-data/dino-marathon/student \
+            --training-seconds 1920
+      - name: Reconstruct 192 TRUE Kotlin GLBs using ONLY learned operations and strength
+        run: |
+          test -s "$ASSETWRIGHT_DINO_MARATHON_PREDICTIONS"
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoMarathonReconstructionTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/dino-marathon/reconstructed -maxdepth 1 -name '*.glb' | wc -l)" -eq 192
+      - name: Independent 3D source vs student GLB vertex and topology audit
+        run: |
+          python tools/mini_ai/dino_delta_forward_audit.py \
+            --source local-data/dino-marathon/source \
+            --reconstructed local-data/dino-marathon/reconstructed \
+            --out local-data/dino-marathon/forward_audit.json
+      - name: Require original heldout shape accuracy, calibrated physical strength, real GLB gains
+        run: |
+          python tools/mini_ai/dino_marathon_acceptance.py \
+            --visual local-data/dino-marathon/student/evaluation.json \
+            --forward local-data/dino-marathon/forward_audit.json \
+            --checkpoint local-data/dino-marathon/student/candidate_student.json \
+            --out local-data/dino-marathon/student
+      - name: Archive all sixteen original student checkpoints and independent native GLBs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-32minute-DINO-training-and-192-GLB-results
+          path: |
+            local-data/dino-marathon/student/*.json
+            local-data/dino-marathon/student/*.properties
+            local-data/dino-marathon/student/seed_checkpoints/*.safetensors
+            local-data/dino-marathon/reconstructed/*.json
+            local-data/dino-marathon/reconstructed/*.glb
+            local-data/dino-marathon/forward_audit.json
+          if-no-files-found: warn
+          retention-days: 45
