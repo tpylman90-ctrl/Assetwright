@@ -1,0 +1,247 @@
+name: Forge Mini — Three-View Shape Identity Learning v7
+
+# Correct v6's generic-geometry confusion using a SEPARATE, source-hashed
+# 32x32 side/front/top original form encoder. Old action/strength weights
+# FROZEN. All methods chosen on new development forms; v7 blind checked
+# only once and every true Kotlin GLB scored independently. Research-only.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/forge-mini-shape-identity-v7.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: assetwright-novel-threeview-form-v7
+  cancel-in-progress: false
+
+jobs:
+  generate-form-counterbalanced-source:
+    name: 2040 original GLBs, balanced eight archetypes, 16 untouched blind families
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      ASSETWRIGHT_DINO_STUDY: shape_identity_v7
+      ASSETWRIGHT_SHAPE_IDENTITY_SOURCE: ${{ github.workspace }}/local-data/shape_identity_v7/new/source
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Install original neutral renderer and numpy for geometry/identity tests
+        run: python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3'
+      - name: Verify v7 source split and predeclared no-forgetting/no-collapse gate
+        run: |
+          python -m compileall -q \
+            tools/mini_ai/native_shape_identity_views.py \
+            tools/mini_ai/native_shape_identity_student.py \
+            tools/mini_ai/native_shape_identity_forward_audit.py \
+            tools/mini_ai/native_shape_identity_acceptance.py \
+            tools/mini_ai/retain_shape_identity_learning.py
+          python -m unittest discover -s tools/mini_ai \
+            -p 'test_native_shape_identity_v7.py' -v
+      - name: Free original Kotlin geometry test SDK
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Generate 2040 new Kotlin GLBs, 40 TRAIN families and 16 independent dev/blind
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoShapeIdentityBatchTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/shape_identity_v7/new/source -maxdepth 1 -name '*.glb' | wc -l)" -eq 2040
+      - name: Audit source topology and render 4080 neutral before/after images
+        run: |
+          python tools/mini_ai/dino_delta_school.py render \
+            --source local-data/shape_identity_v7/new/source \
+            --images local-data/shape_identity_v7/new/images \
+            --out local-data/shape_identity_v7/new/manifest.json
+      - name: Produce 144 new original baseline TOP/FRONT identity views
+        run: |
+          python tools/mini_ai/native_shape_identity_views.py \
+            --manifest local-data/shape_identity_v7/new/manifest.json \
+            --source local-data/shape_identity_v7/new/source \
+            --images local-data/shape_identity_v7/new/images \
+            --out local-data/shape_identity_v7/new/identity
+      - name: Audit the strict anti-shortcut, form-count and heldout source invariants
+        run: |
+          python - <<'PY'
+          import json
+          from collections import defaultdict
+          from pathlib import Path
+          p=Path('local-data/shape_identity_v7/new/manifest.json')
+          m=json.loads(p.read_text())
+          assert m['study_id']=='shape_identity_v7'
+          assert m['source_count']==2040 and m['paired_examples']==1968
+          assert m['external_geometry_used'] is False
+          expected={'train':1200,'development':384,'validation':384}
+          assert {s:sum(x['split']==s for x in m['records'])
+                  for s in expected}==expected
+          index=json.loads(Path('local-data/shape_identity_v7/new/identity/index.json').read_text())
+          assert index['source_count']==72
+          for split in ('train','development','validation'):
+              by_family={}
+              for row in m['records']:
+                  if row['split']==split:
+                      by_family[row['family']]=row
+              n=len(by_family)
+              assert n=={'train':40,'development':16,'validation':16}[split]
+              families=list(sorted(by_family))
+              groups=defaultdict(list)
+              for family in families:
+                  i=int(family[-2:])
+                  v=(i-1)//8
+                  record=by_family[family]
+                  groups[v].append((
+                      record['archetype'],record['length'],
+                      record['width'],record['height']))
+              for group in groups.values():
+                  assert len(group)==8
+                  assert len({item[0] for item in group})==8
+                  assert len({item[1:] for item in group})==1, 'dimension to class shortcut'
+              if split=='validation':
+                  assert all(f.startswith('si_blind') for f in by_family)
+          print('Counterbalanced eight-form source and untouched new blind verified',flush=True)
+          PY
+      - name: Archive original 2040 Kotlin forms and 3-view baseline identity evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-mini-v7-2040-forms-and-three-view-identity
+          path: local-data/shape_identity_v7/new/
+          if-no-files-found: warn
+          retention-days: 45
+
+  frozen-action-neural-identity-training:
+    name: 30 real minutes identity training; old action weights frozen; 1536 independent GLBs
+    needs: generate-form-counterbalanced-source
+    runs-on: ubuntu-24.04
+    timeout-minutes: 88
+    env:
+      ASSETWRIGHT_DINO_STUDY: shape_identity_v7
+      ASSETWRIGHT_SHAPE_IDENTITY_PREDICTIONS: ${{ github.workspace }}/local-data/shape_identity_v7/student/native_proposals.properties
+      ASSETWRIGHT_SHAPE_IDENTITY_RECON: ${{ github.workspace }}/local-data/shape_identity_v7/reconstructed
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      GH_TOKEN: ${{ github.token }}
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: forge-mini-v7-2040-forms-and-three-view-identity
+          path: local-data/shape_identity_v7/new/
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Reuse ONLY v6 previously labelled TRAINING forms; exclude inspected v6 blind
+        run: |
+          test -s training/learning_runs/multiform_v6_42151392636/balanced_forms.safetensors
+          mkdir -p local-data/shape_identity_v7/legacy_v6
+          gh run download 42151392636 --repo "$GITHUB_REPOSITORY" \
+            --name forge-mini-v6-1088-real-diverse-native-GLBs \
+            --dir local-data/shape_identity_v7/legacy_v6
+          test -s local-data/shape_identity_v7/legacy_v6/manifest.json
+          test -s local-data/shape_identity_v7/legacy_v6/source/train__mf_train01__baseline.glb
+      - name: Install free CPU Torch and true cross-topology 3D GLB evaluator
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+          python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'safetensors>=0.4,<1'
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Render source-verified legacy TRAIN baseline front/top views only
+        run: |
+          python tools/mini_ai/native_shape_identity_views.py \
+            --manifest local-data/shape_identity_v7/legacy_v6/manifest.json \
+            --source local-data/shape_identity_v7/legacy_v6/source \
+            --images local-data/shape_identity_v7/legacy_v6/images \
+            --out local-data/shape_identity_v7/legacy_v6/identity \
+            --train-only
+      - name: Verify 3-view input dimensions and independently defined source-blind acceptance
+        run: |
+          python -m unittest discover -s tools/mini_ai \
+            -p 'test_native_shape_identity_v7.py' -v
+      - name: Train 3 separately seeded identity strategies for 1800 measured CPU gradient seconds
+        run: |
+          python -u tools/mini_ai/native_shape_identity_student.py \
+            --new-manifest local-data/shape_identity_v7/new/manifest.json \
+            --new-images local-data/shape_identity_v7/new/images \
+            --new-views local-data/shape_identity_v7/new/identity \
+            --legacy-manifest local-data/shape_identity_v7/legacy_v6/manifest.json \
+            --legacy-images local-data/shape_identity_v7/legacy_v6/images \
+            --legacy-views local-data/shape_identity_v7/legacy_v6/identity \
+            --old-knowledge training/learning_runs/multiform_v6_42151392636 \
+            --out local-data/shape_identity_v7/student \
+            --training-seconds 1800
+      - name: Reconstruct 1536 REAL original Kotlin GLBs from predicted forms, operations and strength
+        run: |
+          test -s "$ASSETWRIGHT_SHAPE_IDENTITY_PREDICTIONS"
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoShapeIdentityReconstructionTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/shape_identity_v7/reconstructed -maxdepth 1 -name '*.glb' | wc -l)" -eq 1536
+      - name: Independently audit source-hashed 3D GLB surface distances and 8-way identity coverage
+        run: |
+          python tools/mini_ai/native_shape_identity_forward_audit.py \
+            --source local-data/shape_identity_v7/new/source \
+            --reconstructed local-data/shape_identity_v7/reconstructed \
+            --out local-data/shape_identity_v7/forward_audit.json
+      - name: Gate actual form generalization and physical source fidelity without changing old skills
+        run: |
+          python tools/mini_ai/native_shape_identity_acceptance.py \
+            --evaluation local-data/shape_identity_v7/student/evaluation.json \
+            --forward local-data/shape_identity_v7/forward_audit.json \
+            --lineage local-data/shape_identity_v7/student/lineage.json \
+            --out local-data/shape_identity_v7/student/research_disposition.json
+      - name: Durably commit all 3 REAL identity neural models, even if research gate rejects them
+        run: |
+          python tools/mini_ai/retain_shape_identity_learning.py \
+            --work local-data/shape_identity_v7 \
+            --old training/learning_runs/multiform_v6_42151392636 \
+            --out "training/learning_runs/shape_identity_v7_$GITHUB_RUN_ID" \
+            --run-id "$GITHUB_RUN_ID"
+          git config user.name "AssetWright original identity learning bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "training/learning_runs/shape_identity_v7_$GITHUB_RUN_ID"
+          git commit -m "research: retain frozen-action real shape identity weights and 1536 GLB proof [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:refs/heads/main
+      - name: Preserve all neural weights, honest disposition and 1536 GLBs in run artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-mini-v7-frozen-action-shape-learning-and-1536-GLBs
+          path: |
+            local-data/shape_identity_v7/student/*.json
+            local-data/shape_identity_v7/student/*.properties
+            local-data/shape_identity_v7/student/winners/*.safetensors
+            local-data/shape_identity_v7/student/sessions/*.safetensors
+            local-data/shape_identity_v7/forward_audit.json
+            local-data/shape_identity_v7/reconstructed/*.glb
+            local-data/shape_identity_v7/reconstructed/*.json
+            training/learning_runs/shape_identity_v7_*/**
+          if-no-files-found: warn
+          retention-days: 45
