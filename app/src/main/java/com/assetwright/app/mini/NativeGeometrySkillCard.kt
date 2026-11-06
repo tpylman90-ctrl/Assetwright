@@ -51,6 +51,7 @@ fun NativeGeometrySkillCard(prompt: String, onStatus: (String) -> Unit) {
     val context = LocalContext.current
     var operation by remember { mutableStateOf(AdvancedFormOperation.SECTION_LOFT) }
     var strength by remember { mutableStateOf(.53f) }
+    var archetype by remember { mutableStateOf(NativeFormArchetype.SPINDLE) }
     var preview by remember { mutableStateOf<GeneratedAsset?>(null) }
     var lessons by remember(context) { mutableStateOf(NativeSkillMemory.lessons(context).size) }
 
@@ -60,6 +61,7 @@ fun NativeGeometrySkillCard(prompt: String, onStatus: (String) -> Unit) {
             val recalled = NativeSkillMemory.infer(context, prompt)
             operation = recalled.operation
             strength = recalled.strength
+            archetype = recalled.archetype
         }
     }
     val export = rememberLauncherForActivityResult(
@@ -87,13 +89,36 @@ fun NativeGeometrySkillCard(prompt: String, onStatus: (String) -> Unit) {
         ) {
             Text("FORGE MINI · GEOMETRY SKILLS", color = Aqua,
                 fontWeight = FontWeight.Bold, fontSize = 12.sp)
-            Text("Use six real native shape transformations, inspect the GLB, " +
-                 "and approve the technique and strength to remember it for " +
-                 "similar future prompts. Memory stays on your phone.",
+            Text("Eight actual original shape families with different silhouettes " +
+                 "and topology. Select a form and native operation, inspect its " +
+                 "real GLB, then approve the shape, operation and strength.",
                  color = Muted, fontSize = 12.sp)
-            Text("Saved native technique lessons: " + lessons,
+            Text("Saved native technique + form lessons: " + lessons,
                 color = Main, fontSize = 12.sp)
-
+            Text("SHAPE FAMILY",color=Aqua,
+                fontWeight=FontWeight.Bold,fontSize=11.sp)
+            for (group in NativeFormArchetype.values().toList().chunked(2)) {
+                Row(horizontalArrangement=Arrangement.spacedBy(5.dp)) {
+                    for(choice in group) {
+                        OutlinedButton(
+                            onClick={ archetype=choice;preview=null },
+                            modifier=Modifier.weight(1f),
+                            shape=RoundedCornerShape(10.dp),
+                            colors=ButtonDefaults.outlinedButtonColors(
+                                containerColor=if(choice==archetype)
+                                    Aqua.copy(alpha=.13f) else Raised,
+                                contentColor=if(choice==archetype) Aqua else Muted
+                            )
+                        ) {
+                            Text(choice.name.replace('_',' ').lowercase()
+                                .replaceFirstChar { it.uppercase() },
+                                fontSize=11.sp,maxLines=1)
+                        }
+                    }
+                }
+            }
+            Text("NATIVE DEFORMATION",color=Aqua,
+                fontWeight=FontWeight.Bold,fontSize=11.sp)
             for (group in AdvancedFormOperation.values().toList().chunked(3)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                     for (choice in group) {
@@ -135,8 +160,10 @@ fun NativeGeometrySkillCard(prompt: String, onStatus: (String) -> Unit) {
                         require(prompt.isNotBlank()) {
                             "Enter a description above before generating geometry."
                         }
-                        preview = NativeSkillMemory.generate(prompt, operation, strength)
-                        onStatus("Original Kotlin " + operation.name + " geometry built. " +
+                        preview = NativeSkillMemory.generateDiverse(
+                            prompt,operation,strength,archetype)
+                        onStatus("Original Kotlin " + archetype.name + " / " +
+                            operation.name + " geometry built. " +
                             "Inspect the actual GLB before approving it.")
                     } catch (error: Exception) {
                         onStatus("Geometry lab: " + (error.message ?: "invalid form"))
@@ -170,11 +197,12 @@ fun NativeGeometrySkillCard(prompt: String, onStatus: (String) -> Unit) {
                             require(prompt.trim() == model.spec.sourcePrompt.trim()) {
                                 "The prompt changed; preview again before teaching."
                             }
-                            lessons = NativeSkillMemory.approve(context, prompt,
-                                operation, strength)
-                            onStatus("Forge Mini retained the approved " + operation.name +
-                                " operation at " + (strength * 100).toInt() +
-                                "% strength. It will recall this learning on new prompts.")
+                            lessons = NativeSkillMemory.approve(
+                                context,prompt,operation,strength,archetype)
+                            onStatus("Forge Mini retained " + archetype.name +
+                                " geometry, " + operation.name + " at " +
+                                (strength * 100).toInt() + "% strength. " +
+                                "It will recall this form on matching prompts.")
                         } catch (error: Exception) {
                             onStatus("Skill approval failed: " +
                                 (error.message ?: "invalid approved form"))
