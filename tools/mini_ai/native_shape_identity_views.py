@@ -14,9 +14,6 @@ import hashlib
 import json
 from pathlib import Path
 
-from PIL import Image
-import numpy as np
-
 from dino_delta_school import hash_file
 from render_native_rocker_v2 import load_meshes,render
 
@@ -32,6 +29,8 @@ def key_of(row):
 
 def generate(manifest_path:Path,source:Path,ordinary:Path,output:Path,
              *,allowed=("train","development","validation")):
+    from PIL import Image
+
     manifest=json.loads(manifest_path.read_text())
     if (manifest.get("schema")!="assetwright-native-before-after-observations-v1"
         or manifest.get("study_id") not in ("multiform_v6","shape_identity_v7","form_fidelity_v8")
@@ -103,6 +102,9 @@ def generate(manifest_path:Path,source:Path,ordinary:Path,output:Path,
 
 def features(row,ordinary:Path,extra:Path,index:dict):
     """Identity features contain no action label, strength or changed mesh."""
+    from PIL import Image
+    import numpy as np
+
     stem=key_of(row)
     entry=index["family_index"].get(stem)
     if (index.get("schema")!=SCHEMA or entry is None
