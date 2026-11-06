@@ -42,6 +42,7 @@ jobs:
           gradle-version: '9.3.0'
       - name: Require eight original native form classes and anti-generic output tests
         run: |
+          python -m compileall -q tools/mini_ai/dino_delta_school.py tools/mini_ai/native_multiform_student.py tools/mini_ai/native_multiform_forward_audit.py tools/mini_ai/native_multiform_vertex.py
           python -m unittest discover -s tools/mini_ai -p 'test_native_multiform_v6.py'
       - name: Original Kotlin 3D geometry generator SDK
         run: |
