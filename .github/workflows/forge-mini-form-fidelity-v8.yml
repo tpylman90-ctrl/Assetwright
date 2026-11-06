@@ -1,0 +1,235 @@
+name: Forge Mini — Form Fidelity & Geometry Retention v8
+
+# Real original multi-form geometry fidelity, not a generic shell.
+# Source SHA, development-only method selection, 288 fresh blind source
+# GLBs, 1152 independently generated Kotlin student GLBs, true physical
+# surface Chamfer. All old neural weights frozen and research only.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/forge-mini-form-fidelity-v8.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: assetwright-original-multiform-fidelity-v8
+  cancel-in-progress: false
+
+jobs:
+  original-multiform-source:
+    name: 1808 ORIGINAL Kotlin GLBs, eight balanced forms and 16 new blind families
+    runs-on: ubuntu-24.04
+    timeout-minutes: 56
+    env:
+      ASSETWRIGHT_DINO_STUDY: form_fidelity_v8
+      ASSETWRIGHT_FORM_FIDELITY_SOURCE: ${{ github.workspace }}/local-data/form_fidelity_v8/new/source
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Validate source-disjoint geometry curriculum and predeclared gate
+        run: |
+          python -m compileall -q \
+            tools/mini_ai/dino_delta_school.py \
+            tools/mini_ai/native_form_fidelity_v8.py \
+            tools/mini_ai/native_form_fidelity_forward_audit.py \
+            tools/mini_ai/native_form_fidelity_acceptance.py \
+            tools/mini_ai/retain_form_fidelity_v8.py
+          python -m unittest discover -s tools/mini_ai -p 'test_native_form_fidelity_v8.py' -v
+      - name: Free SDK to run ONLY our Kotlin original 3D geometry source
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Generate 1808 NEW native closed source GLBs and different archetypes
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoGeometryFidelityBatchTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/form_fidelity_v8/new/source -maxdepth 1 -name '*.glb' | wc -l)" -eq 1808
+      - name: Install free CPU neutral image and morphology dependencies
+        run: python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3'
+      - name: Verify all original source topology and render 3616 action/strength input views
+        run: |
+          python tools/mini_ai/dino_delta_school.py render \
+            --source local-data/form_fidelity_v8/new/source \
+            --images local-data/form_fidelity_v8/new/images \
+            --out local-data/form_fidelity_v8/new/manifest.json
+      - name: Render separate 160 original base-form front/top identity views
+        run: |
+          python tools/mini_ai/native_shape_identity_views.py \
+            --manifest local-data/form_fidelity_v8/new/manifest.json \
+            --source local-data/form_fidelity_v8/new/source \
+            --images local-data/form_fidelity_v8/new/images \
+            --out local-data/form_fidelity_v8/new/identity
+      - name: Require eight actual forms and blind class-balanced source dimensions
+        run: |
+          python - <<'PY'
+          import json
+          from collections import defaultdict
+          from pathlib import Path
+          m=json.loads(Path('local-data/form_fidelity_v8/new/manifest.json').read_text())
+          assert m['study_id']=='form_fidelity_v8'
+          assert m['source_count']==1808 and m['paired_examples']==1728
+          assert m['external_geometry_used'] is False
+          expected={'train':1152,'development':288,'validation':288}
+          assert {s:sum(r['split']==s for r in m['records'])
+                  for s in expected}==expected
+          j=json.loads(Path('local-data/form_fidelity_v8/new/identity/index.json').read_text())
+          assert j['source_count']==80
+          for split,number in [('train',48),('development',16),('validation',16)]:
+              by_family={}
+              for row in m['records']:
+                  if row['split']==split:by_family[row['family']]=row
+              assert len(by_family)==number
+              groups=defaultdict(list)
+              for f,r in sorted(by_family.items()):
+                  i=int(f[-2:]);template=(i-1)//8
+                  groups[template].append((r['archetype'],r['length'],r['width'],
+                                           r['height'],r['segments'],r['stations']))
+              for items in groups.values():
+                  assert len(items)==8 and len({x[0] for x in items})==8
+                  assert len({x[1:] for x in items})==1, 'shape classes cannot encode dimensions'
+              if split=='validation':
+                  assert all(f.startswith('sf_blind') for f in by_family)
+          print('Eight distinct forms and NEW source-disjoint blind geometry verified',flush=True)
+          PY
+      - name: Preserve the 1808 original native GLBs and all 3D source-matched views
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-mini-v8-1808-original-eight-form-sources
+          path: local-data/form_fidelity_v8/new/
+          if-no-files-found: warn
+          retention-days: 45
+
+  true-form-geometry-neural-training:
+    name: 1800s REAL native refinement, previous identity preserved, 1152 GLB audit
+    needs: original-multiform-source
+    runs-on: ubuntu-24.04
+    timeout-minutes: 88
+    env:
+      ASSETWRIGHT_DINO_STUDY: form_fidelity_v8
+      ASSETWRIGHT_FORM_FIDELITY_PREDICTIONS: ${{ github.workspace }}/local-data/form_fidelity_v8/student/native_proposals.properties
+      ASSETWRIGHT_FORM_FIDELITY_RECON: ${{ github.workspace }}/local-data/form_fidelity_v8/reconstructed
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      GH_TOKEN: ${{ github.token }}
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: forge-mini-v8-1808-original-eight-form-sources
+          path: local-data/form_fidelity_v8/new/
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Retrieve 1200 old original TRAINING-only shape/action pairs
+        run: |
+          test -s training/learning_runs/multiform_v6_42151392636/balanced_forms.safetensors
+          test -s training/learning_runs/shape_identity_v7_42233349361/hard_form_distinctions.safetensors
+          mkdir -p local-data/form_fidelity_v8/old
+          gh run download 42233349361 --repo "$GITHUB_REPOSITORY" \
+            --name forge-mini-v7-2040-forms-and-three-view-identity \
+            --dir local-data/form_fidelity_v8/old
+          test -s local-data/form_fidelity_v8/old/manifest.json
+          test -s local-data/form_fidelity_v8/old/identity/index.json
+      - name: Install free CPU PyTorch native vertex supervision and 3D Chamfer verifier
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+          python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'safetensors>=0.4,<1'
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify native blind research gating before spending CPU time
+        run: |
+          python -m unittest discover -s tools/mini_ai \
+            -p 'test_native_form_fidelity_v8.py' -v
+      - name: Train REAL source-conditioned native neural corrections for 1800 active gradient seconds
+        run: |
+          python -u tools/mini_ai/native_form_fidelity_v8.py \
+            --new-manifest local-data/form_fidelity_v8/new/manifest.json \
+            --new-images local-data/form_fidelity_v8/new/images \
+            --new-views local-data/form_fidelity_v8/new/identity \
+            --new-source local-data/form_fidelity_v8/new/source \
+            --old-manifest local-data/form_fidelity_v8/old/manifest.json \
+            --old-images local-data/form_fidelity_v8/old/images \
+            --old-views local-data/form_fidelity_v8/old/identity \
+            --old-source local-data/form_fidelity_v8/old/source \
+            --v6-knowledge training/learning_runs/multiform_v6_42151392636 \
+            --v7-knowledge training/learning_runs/shape_identity_v7_42233349361 \
+            --out local-data/form_fidelity_v8/student \
+            --training-seconds 1800
+      - name: Generate 1152 actual original Kotlin GLBs from model-selected native forms/actions
+        run: |
+          test -s "$ASSETWRIGHT_FORM_FIDELITY_PREDICTIONS"
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoFormFidelityReconstructionTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/form_fidelity_v8/reconstructed -maxdepth 1 -name '*.glb' | wc -l)" -eq 1152
+      - name: Independently compare actual 3D surface distances across eight different forms
+        run: |
+          python tools/mini_ai/native_form_fidelity_forward_audit.py \
+            --source local-data/form_fidelity_v8/new/source \
+            --reconstructed local-data/form_fidelity_v8/reconstructed \
+            --out local-data/form_fidelity_v8/forward_audit.json
+      - name: Require real source GLB fidelity and previous shape/action knowledge retained
+        run: |
+          python tools/mini_ai/native_form_fidelity_acceptance.py \
+            --evaluation local-data/form_fidelity_v8/student/evaluation.json \
+            --geometry local-data/form_fidelity_v8/forward_audit.json \
+            --lineage local-data/form_fidelity_v8/student/lineage.json \
+            --out local-data/form_fidelity_v8/student/research_disposition.json
+      - name: Keep ALL real new trained neural weights with 3D evidence, even if rejected
+        run: |
+          python tools/mini_ai/retain_form_fidelity_v8.py \
+            --workspace local-data/form_fidelity_v8 \
+            --v6 training/learning_runs/multiform_v6_42151392636 \
+            --v7 training/learning_runs/shape_identity_v7_42233349361 \
+            --out "training/learning_runs/form_fidelity_v8_$GITHUB_RUN_ID" \
+            --run-id "$GITHUB_RUN_ID"
+          git config user.name "AssetWright original geometry fidelity bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "training/learning_runs/form_fidelity_v8_$GITHUB_RUN_ID"
+          git commit -m "research: persist real source-conditioned native neural weights and 1152 GLB audit [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:refs/heads/main
+      - name: Preserve all trained research adapters and actual 3D GLB evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-mini-v8-real-3d-form-fidelity-and-1152-GLBs
+          path: |
+            local-data/form_fidelity_v8/student/*.json
+            local-data/form_fidelity_v8/student/*.properties
+            local-data/form_fidelity_v8/student/winners/*.safetensors
+            local-data/form_fidelity_v8/student/sessions/*.safetensors
+            local-data/form_fidelity_v8/forward_audit.json
+            local-data/form_fidelity_v8/reconstructed/*.glb
+            local-data/form_fidelity_v8/reconstructed/*.json
+            training/learning_runs/form_fidelity_v8_*/**
+          if-no-files-found: warn
+          retention-days: 45
