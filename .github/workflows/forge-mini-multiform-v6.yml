@@ -1,0 +1,226 @@
+name: Forge Mini — 8 Native Shape Families and Form Learning v6
+
+# A DIFFERENT native form on every archetype. Actual Mini AI must learn
+# 8-way form labels (and 6 transformations + continuous strength), not
+# simply output a universal tube. Changes only public Assetwright.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/forge-mini-multiform-v6.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: assetwright-multiform-original-neural-v6
+  cancel-in-progress: false
+
+jobs:
+  form-diverse-sources:
+    name: Eight independently shaped archetypes, 1088 original GLBs, four topologies
+    runs-on: ubuntu-24.04
+    timeout-minutes: 43
+    env:
+      ASSETWRIGHT_DINO_STUDY: multiform_v6
+      ASSETWRIGHT_MULTI_FORM_SOURCE: ${{ github.workspace }}/local-data/multiform_v6/new/source
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Require eight original native form classes and anti-generic output tests
+        run: |
+          python -m unittest discover -s tools/mini_ai -p 'test_native_multiform_v6.py'
+      - name: Original Kotlin 3D geometry generator SDK
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Require 8 actually DIFFERENT 3D forms and topology variations
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.NativeDiverseFormLabTest \
+            --rerun-tasks --stacktrace
+      - name: Export 1088 original source GLBs across 8 archetypes, 6 operations, 32 families
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoMultiFormGeometryBatchTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/multiform_v6/new/source -maxdepth 1 -name '*.glb' | wc -l)" -eq 1088
+      - name: Install free CPU native rendering requirements only
+        run: python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3'
+      - name: Validate all source triangle topology and render 2176 label-free 3D views
+        run: |
+          python tools/mini_ai/dino_delta_school.py render \
+            --source local-data/multiform_v6/new/source \
+            --images local-data/multiform_v6/new/images \
+            --out local-data/multiform_v6/new/manifest.json
+      - name: Verify 8 REAL original mesh classes, 4 topologies and untouched blind family split
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('local-data/multiform_v6/new/manifest.json')
+          m=json.loads(path.read_text())
+          assert m['study_id']=='multiform_v6'
+          assert m['source_count']==1088 and m['paired_examples']==1056
+          assert m['external_geometry_used'] is False
+          phases={p:[r for r in m['records'] if r['split']==p]
+                  for p in ('train','development','validation')}
+          assert {k:len(v) for k,v in phases.items()}=={
+              'train':672,'development':192,'validation':192}
+          assert all(len({r['archetype'] for r in batch})==8
+                     for batch in phases.values())
+          assert {(r['segments'],r['stations']) for r in m['records']}=={
+              (24,24),(32,24),(32,32),(40,32)}
+          assert all(r['family'].startswith('mf_blind')
+                     for r in phases['validation'])
+          print('Eight true native geometries and variable topologies verified',flush=True)
+          PY
+      - name: Archive all original 8-form geometry and source-aligned rendered views
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-mini-v6-1088-real-diverse-native-GLBs
+          path: local-data/multiform_v6/new/
+          if-no-files-found: warn
+          retention-days: 45
+
+  actual-form-neural-training:
+    name: Train neural 8-form selector for 30 active CPU minutes, rebuild 768 real GLBs
+    runs-on: ubuntu-24.04
+    needs: form-diverse-sources
+    timeout-minutes: 75
+    env:
+      ASSETWRIGHT_DINO_STUDY: multiform_v6
+      ASSETWRIGHT_MULTI_FORM_PREDICTIONS: ${{ github.workspace }}/local-data/multiform_v6/student/native_proposals.properties
+      ASSETWRIGHT_MULTI_FORM_RECON: ${{ github.workspace }}/local-data/multiform_v6/reconstructed
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      GH_TOKEN: ${{ github.token }}
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: forge-mini-v6-1088-real-diverse-native-GLBs
+          path: local-data/multiform_v6/new/
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Replay 1680 ACTUAL old lessons, not their formerly rejected candidate weights
+        run: |
+          test -s training/knowledge/native_strength_teacher_free_42080318206/owned_native_student.safetensors
+          mkdir -p local-data/multiform_v6/v3
+          mkdir -p local-data/multiform_v6/v4
+          mkdir -p local-data/multiform_v6/v5
+          gh run download 42080318206 --repo "$GITHUB_REPOSITORY" \
+            --name assetwright-marathon-888-own-GLBs-and-teacher \
+            --dir local-data/multiform_v6/v3
+          gh run download 42122117108 --repo "$GITHUB_REPOSITORY" \
+            --name forge-mini-continual-716-new-original-GLBs \
+            --dir local-data/multiform_v6/v4
+          gh run download 42133496987 --repo "$GITHUB_REPOSITORY" \
+            --name forge-mini-v5-716-new-original-geometry \
+            --dir local-data/multiform_v6/v5
+          test -s local-data/multiform_v6/v3/manifest.json
+          test -s local-data/multiform_v6/v4/manifest.json
+          test -s local-data/multiform_v6/v5/manifest.json
+      - name: Install free PyTorch CPU and normalized cross-topology 3D surface auditor
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+          python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'safetensors>=0.4,<1'
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify original checkpoint identity and independent differentiable shape head
+        run: |
+          python -m unittest discover -s tools/mini_ai -p 'test_native_studied_warm_start.py'
+          python -m unittest discover -s tools/mini_ai -p 'test_native_multiform_v6.py'
+      - name: TRUE 1800-second neural form learning with 8 distinct forms and three equal-budget recipes
+        run: |
+          python -u tools/mini_ai/native_multiform_student.py \
+            --new-manifest local-data/multiform_v6/new/manifest.json \
+            --new-images local-data/multiform_v6/new/images \
+            --new-source local-data/multiform_v6/new/source \
+            --v3-manifest local-data/multiform_v6/v3/manifest.json \
+            --v3-images local-data/multiform_v6/v3/images \
+            --v3-source local-data/multiform_v6/v3/source \
+            --v4-manifest local-data/multiform_v6/v4/manifest.json \
+            --v4-images local-data/multiform_v6/v4/images \
+            --v4-source local-data/multiform_v6/v4/source \
+            --v5-manifest local-data/multiform_v6/v5/manifest.json \
+            --v5-images local-data/multiform_v6/v5/images \
+            --v5-source local-data/multiform_v6/v5/source \
+            --knowledge training/knowledge/native_strength_teacher_free_42080318206 \
+            --out local-data/multiform_v6/student \
+            --training-seconds 1800
+      - name: Rebuild 768 real Kotlin GLBs from neural shape predictions without using correct archetype
+        run: |
+          test -s "$ASSETWRIGHT_MULTI_FORM_PREDICTIONS"
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoMultiFormReconstructionTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/multiform_v6/reconstructed -maxdepth 1 -name '*.glb' | wc -l)" -eq 768
+      - name: Independent 3D surface Chamfer audit across variable form topologies and 8 archetypes
+        run: |
+          python tools/mini_ai/native_multiform_forward_audit.py \
+            --source local-data/multiform_v6/new/source \
+            --reconstructed local-data/multiform_v6/reconstructed \
+            --out local-data/multiform_v6/forward_audit.json
+      - name: Reject generic mesh collapse, unseen form failure and physical geometry regressions
+        run: |
+          python tools/mini_ai/native_multiform_acceptance.py \
+            --evaluation local-data/multiform_v6/student/evaluation.json \
+            --forward local-data/multiform_v6/forward_audit.json \
+            --lineage local-data/multiform_v6/student/lineage.json \
+            --out local-data/multiform_v6/student/research_disposition.json
+      - name: Permanently retain all trained multi-form weights and independent real GLB evidence
+        run: |
+          python tools/mini_ai/retain_multiform_learning.py \
+            --local local-data/multiform_v6 \
+            --original training/knowledge/native_strength_teacher_free_42080318206 \
+            --out "training/learning_runs/multiform_v6_$GITHUB_RUN_ID" \
+            --run-id "$GITHUB_RUN_ID"
+          git config user.name "AssetWright genuine form learning bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "training/learning_runs/multiform_v6_$GITHUB_RUN_ID"
+          git commit -m "research: retain all original 8-form trained weights and 768 GLB comparisons [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:refs/heads/main
+      - name: Preserve original student weights and all 768 true Kotlin GLB reconstructions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-mini-eight-actual-form-learning-and-768-real-GLBs
+          path: |
+            local-data/multiform_v6/student/*.json
+            local-data/multiform_v6/student/*.properties
+            local-data/multiform_v6/student/winners/*.safetensors
+            local-data/multiform_v6/student/sessions/*.safetensors
+            local-data/multiform_v6/forward_audit.json
+            local-data/multiform_v6/reconstructed/*.glb
+            local-data/multiform_v6/reconstructed/*.json
+            training/learning_runs/multiform_v6_*/**
+          if-no-files-found: warn
+          retention-days: 45
