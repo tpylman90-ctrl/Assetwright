@@ -99,7 +99,7 @@ elif STUDY=="multiform_v6":
         "development":(.11,.41,.69,.91),
         "validation":(.075,.365,.725,.985)
     }
-elif STUDY=="shape_identity_v7":
+elif STUDY in ("shape_identity_v7","form_fidelity_v8"):
     FAMILIES={
         "train":tuple("si_train%02d"%i for i in range(1,41)),
         "development":tuple("si_dev%02d"%i for i in range(1,17)),
@@ -109,6 +109,19 @@ elif STUDY=="shape_identity_v7":
         "train":(.05,.25,.48,.72,.95),
         "development":(.15,.39,.63,.88),
         "validation":(.09,.32,.69,.975)
+    }
+elif STUDY=="form_fidelity_v8":
+    # Never inspected sf_blind source families. Completely separate
+    # from mf_blind / si_blind and all older source families.
+    FAMILIES={
+        "train":tuple("sf_train%02d"%i for i in range(1,49)),
+        "development":tuple("sf_dev%02d"%i for i in range(1,17)),
+        "validation":tuple("sf_blind%02d"%i for i in range(1,17))
+    }
+    LEVELS={
+        "train":(.075,.29,.56,.89),
+        "development":(.18,.52,.83),
+        "validation":(.12,.44,.96)
     }
 elif STUDY!="delta_v1":
     raise ValueError("Unapproved native source curriculum")
@@ -150,7 +163,7 @@ def read_case(root:Path,stem:str,expected:tuple,*,baseline:bool=False)->dict:
            or not math.isfinite(meta[name])
            or not .5<=meta[name]<=12 for name in ("length","width","height")):
         raise ValueError("Invalid physical original dimensions")
-    if STUDY in ("multiform_v6","shape_identity_v7"):
+    if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8"):
         forms=("SPINDLE","WEDGE","BOX_MODULE","BARREL","ARCH",
                "BLADE","CANOPY_POD","TRUSS_BEAM")
         i=int(family[-2:])
@@ -244,7 +257,7 @@ def native_delta(before:Path,after:Path)->tuple[list[float],float]:
     va=_accessor(adoc,abuf,pa["attributes"]["POSITION"],"positions")
     vb=_accessor(bdoc,bbuf,pb["attributes"]["POSITION"],"positions")
     if len(va)!=len(vb) or (
-        (STUDY not in ("multiform_v6","shape_identity_v7") and len(va)!=602) or
+        (STUDY not in ("multiform_v6","shape_identity_v7","form_fidelity_v8") and len(va)!=602) or
         (STUDY in ("multiform_v6","shape_identity_v7") and len(va) not in (602,802,1058,1322))
     ):
         raise ValueError("Native geometry lost true corresponding source vertices")
