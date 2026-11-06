@@ -165,9 +165,61 @@ def read_case(root:Path,stem:str,expected:tuple,*,baseline:bool=False)->dict:
     return {"source_sha256":digest,"meta":meta,"audit":audit}
 
 
+def multiform_section_features(path:Path)->list[float]:
+    """Shape-agnostic PHYSICAL descriptors for unequal native topologies.
+
+    Do NOT relax the historic reviewed 602-vertex features_from_glb.
+    Native v6 source families may have 602/802/1058/1322 vertices with
+    eight distinct longitudinal profiles and silhouettes; capture their
+    actual measured geometry rather than forcing a canonical 24x24 tube.
+    """
+    doc,blob,_=_read_glb(path)
+    if len(doc.get("meshes",[]))!=1 or len(doc["meshes"][0]["primitives"])!=1:
+        raise ValueError("Original v6 source must be one native closed shell")
+    prim=doc["meshes"][0]["primitives"][0]
+    points=_accessor(doc,blob,prim["attributes"]["POSITION"],"positions")
+    topology={602:(24,24),802:(32,24),1058:(32,32),1322:(40,32)}
+    if len(points) not in topology:
+        raise ValueError("Unrecognized diverse 3D source mesh topology")
+    segments,stations=topology[len(points)]
+    rings=[points[i*segments:(i+1)*segments] for i in range(stations+1)]
+    mins=[min(v[axis] for v in points) for axis in range(3)]
+    maxs=[max(v[axis] for v in points) for axis in range(3)]
+    diagonal=math.sqrt(sum((b-a)**2 for a,b in zip(mins,maxs)))
+    if not 1<=diagonal<=18:
+        raise ValueError("Original diverse form dimensions malformed")
+    def stats(u):
+        ring=rings[round(stations*u)]
+        xx=[p[0] for p in ring]
+        yy=[p[1] for p in ring]
+        return (
+            (max(xx)-min(xx))/2,
+            (max(yy)-min(yy))/2,
+            (max(xx)+min(xx))/2,
+            (max(yy)+min(yy))/2,
+        )
+    begin,quarter,middle,three_quarter,end=(
+        stats(u) for u in (0,.25,.5,.75,1))
+    measurements=[
+        (quarter[0]+three_quarter[0]-2*middle[0])/diagonal,
+        (middle[1]-(begin[1]+end[1])/2)/diagonal,
+        (middle[2]-(begin[2]+end[2])/2)/diagonal,
+        (middle[3]-(begin[3]+end[3])/2)/diagonal,
+        (quarter[1]-three_quarter[1])/diagonal,
+        (three_quarter[0]-quarter[0])/diagonal,
+    ]
+    if any(not math.isfinite(x) or abs(x)>3 for x in measurements):
+        raise ValueError("Physically impossible diverse GLB morphology")
+    return measurements
+
+
 def native_delta(before:Path,after:Path)->tuple[list[float],float]:
-    a,_=features_from_glb(before,24,24)
-    b,_=features_from_glb(after,24,24)
+    if STUDY=="multiform_v6":
+        a=multiform_section_features(before)
+        b=multiform_section_features(after)
+    else:
+        a,_=features_from_glb(before,24,24)
+        b,_=features_from_glb(after,24,24)
     delta=[bb-aa for aa,bb in zip(a,b)]
     adoc,abuf,_=_read_glb(before)
     bdoc,bbuf,_=_read_glb(after)
