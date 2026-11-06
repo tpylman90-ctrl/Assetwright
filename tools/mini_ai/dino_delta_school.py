@@ -102,8 +102,8 @@ elif STUDY=="multiform_v6":
 elif STUDY=="shape_identity_v7":
     FAMILIES={
         "train":tuple("si_train%02d"%i for i in range(1,41)),
-        "development":tuple("si_dev%02d"%i for i in range(1,9)),
-        "validation":tuple("si_blind%02d"%i for i in range(1,9))
+        "development":tuple("si_dev%02d"%i for i in range(1,17)),
+        "validation":tuple("si_blind%02d"%i for i in range(1,17))
     }
     LEVELS={
         "train":(.05,.25,.48,.72,.95),
