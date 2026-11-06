@@ -1,0 +1,22 @@
+{
+  "schema": "assetwright-8-original-form-neural-training-permanent-record-v6",
+  "study_run_id": 42151392636,
+  "parent_original_sha256": "1d32f74b9e05ab79196b906f88dde823fdbcc1eae0bea8a3b62a0a631cf00c21",
+  "expanded_trained_parameters": 161811,
+  "candidate_weight_sha256": {
+    "balanced_forms": "b4b43fe30b4865fc598d8673390ce0383ecfee614878a46cfb8f68f3952288db",
+    "geometry_forms": "908370c3dc0dc5a3b53ce8a504efab0cb6e4cc8661874e59e6dfecb27b1ce21f",
+    "geometry_hard_forms": "f815f38737ead5408845281857bebc3efcdcf3bbb75924a6eba3264e07fbd197"
+  },
+  "independent_validation_source_hash_sha256": "b2fbb5cdb4704228b78990b07bd674649c7e19f0af1a264af42a997646bdbcbd",
+  "original_diverse_training_and_validation_GLBS_verified": 1088,
+  "real_kotlin_candidate_GLBS_verified": 768,
+  "old_original_training_lessons_replayed": 1680,
+  "new_original_training_lessons": 672,
+  "eight_actual_distinct_forms": true,
+  "three_original_multi_form_models_preserved": true,
+  "research_gate": "research_not_promoted_legacy_checkpoint_retained",
+  "original_checkpoint_unchanged": true,
+  "Android_checkpoint_installed": false,
+  "human_visual_review_required": true
+}

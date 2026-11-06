@@ -1,0 +1,462 @@
+{
+  "schema": "assetwright-8-archetype-neural-continuation-v6",
+  "study_id": "multiform_v6",
+  "parent_sha256": "1d32f74b9e05ab79196b906f88dde823fdbcc1eae0bea8a3b62a0a631cf00c21",
+  "previous_owned_parameters_reused": 160938,
+  "unmodified_parent_predictions_max_abs_error": 7.3909759521484375e-06,
+  "old_original_replay_cases": 1680,
+  "new_multiform_train_examples": 672,
+  "new_multiform_dev_examples": 192,
+  "fresh_never_inspected_blind_examples": 192,
+  "training_archetypes": [
+    "SPINDLE",
+    "WEDGE",
+    "BOX_MODULE",
+    "BARREL",
+    "ARCH",
+    "BLADE",
+    "CANOPY_POD",
+    "TRUSS_BEAM"
+  ],
+  "train_family_count": 16,
+  "validation_family_count": 8,
+  "source_topologies": [
+    "24x24",
+    "32x24",
+    "32x32",
+    "40x32"
+  ],
+  "test_topology_never_trained": true,
+  "original_kotlin_vertex_supervision_sha": "992c5275c7c6254fdbb3738416c973aa513ee14228742f96871f0acfc3655c42",
+  "training_sessions": 6,
+  "session_results": [
+    {
+      "condition": "balanced_forms",
+      "seed": 157,
+      "actual_optimizer_seconds": 300.002,
+      "optimizer_updates": 60094,
+      "dev_selected_step": 880,
+      "development": {
+        "operation_accuracy": 0.9479166865348816,
+        "strength_mae": 0.13313613831996918,
+        "form_accuracy": 0.734375,
+        "distinct_predicted_forms": 9,
+        "form_cross_entropy": 0.8000636696815491,
+        "operation_cross_entropy": 0.3103073537349701,
+        "physical_proxy_rmse": 0.013942696154117584,
+        "development_priority": 1.836388848721981
+      },
+      "replayed_prior": {
+        "operation_accuracy": 0.973809540271759,
+        "strength_mae": 0.02316146530210972,
+        "form_accuracy": 1.0,
+        "distinct_predicted_forms": 1,
+        "form_cross_entropy": 0.01860477216541767,
+        "operation_cross_entropy": 0.07186420261859894
+      }
+    },
+    {
+      "condition": "balanced_forms",
+      "seed": 1801,
+      "actual_optimizer_seconds": 300.003,
+      "optimizer_updates": 59849,
+      "dev_selected_step": 960,
+      "development": {
+        "operation_accuracy": 0.9322916865348816,
+        "strength_mae": 0.13198116421699524,
+        "form_accuracy": 0.7291666865348816,
+        "distinct_predicted_forms": 9,
+        "form_cross_entropy": 0.8282338976860046,
+        "operation_cross_entropy": 0.3169277608394623,
+        "physical_proxy_rmse": 0.014427956193685532,
+        "development_priority": 1.8872666612267495
+      },
+      "replayed_prior": {
+        "operation_accuracy": 0.9732142686843872,
+        "strength_mae": 0.022389937192201614,
+        "form_accuracy": 1.0,
+        "distinct_predicted_forms": 1,
+        "form_cross_entropy": 0.01525179110467434,
+        "operation_cross_entropy": 0.0785844698548317
+      }
+    },
+    {
+      "condition": "geometry_forms",
+      "seed": 157,
+      "actual_optimizer_seconds": 300.002,
+      "optimizer_updates": 53681,
+      "dev_selected_step": 640,
+      "development": {
+        "operation_accuracy": 0.921875,
+        "strength_mae": 0.13072431087493896,
+        "form_accuracy": 0.7395833134651184,
+        "distinct_predicted_forms": 9,
+        "form_cross_entropy": 0.7923427224159241,
+        "operation_cross_entropy": 0.33729612827301025,
+        "physical_proxy_rmse": 0.01499101147055626,
+        "development_priority": 1.863025739789009
+      },
+      "replayed_prior": {
+        "operation_accuracy": 0.9696428775787354,
+        "strength_mae": 0.02954322099685669,
+        "form_accuracy": 1.0,
+        "distinct_predicted_forms": 1,
+        "form_cross_entropy": 0.046060703694820404,
+        "operation_cross_entropy": 0.08518330752849579
+      }
+    },
+    {
+      "condition": "geometry_forms",
+      "seed": 1801,
+      "actual_optimizer_seconds": 300.001,
+      "optimizer_updates": 53443,
+      "dev_selected_step": 720,
+      "development": {
+        "operation_accuracy": 0.921875,
+        "strength_mae": 0.13731332123279572,
+        "form_accuracy": 0.75,
+        "distinct_predicted_forms": 8,
+        "form_cross_entropy": 0.8229408860206604,
+        "operation_cross_entropy": 0.31140226125717163,
+        "physical_proxy_rmse": 0.01515684463083744,
+        "development_priority": 1.9089724615216257
+      },
+      "replayed_prior": {
+        "operation_accuracy": 0.9726190567016602,
+        "strength_mae": 0.026978764683008194,
+        "form_accuracy": 1.0,
+        "distinct_predicted_forms": 1,
+        "form_cross_entropy": 0.033190835267305374,
+        "operation_cross_entropy": 0.08037592470645905
+      }
+    },
+    {
+      "condition": "geometry_hard_forms",
+      "seed": 157,
+      "actual_optimizer_seconds": 300.005,
+      "optimizer_updates": 58001,
+      "dev_selected_step": 1360,
+      "development": {
+        "operation_accuracy": 0.9322916865348816,
+        "strength_mae": 0.1363646239042282,
+        "form_accuracy": 0.734375,
+        "distinct_predicted_forms": 8,
+        "form_cross_entropy": 0.7883097529411316,
+        "operation_cross_entropy": 0.3742656409740448,
+        "physical_proxy_rmse": 0.014519757591187954,
+        "development_priority": 1.8725046776235106
+      },
+      "replayed_prior": {
+        "operation_accuracy": 0.9720237851142883,
+        "strength_mae": 0.019342921674251556,
+        "form_accuracy": 1.0,
+        "distinct_predicted_forms": 1,
+        "form_cross_entropy": 0.008224274031817913,
+        "operation_cross_entropy": 0.07646787166595459
+      }
+    },
+    {
+      "condition": "geometry_hard_forms",
+      "seed": 1801,
+      "actual_optimizer_seconds": 300.005,
+      "optimizer_updates": 57869,
+      "dev_selected_step": 1200,
+      "development": {
+        "operation_accuracy": 0.9375,
+        "strength_mae": 0.13704663515090942,
+        "form_accuracy": 0.734375,
+        "distinct_predicted_forms": 9,
+        "form_cross_entropy": 0.8275208473205566,
+        "operation_cross_entropy": 0.3243013322353363,
+        "physical_proxy_rmse": 0.01427576132118702,
+        "development_priority": 1.8955272883176804
+      },
+      "replayed_prior": {
+        "operation_accuracy": 0.9744047522544861,
+        "strength_mae": 0.020793680101633072,
+        "form_accuracy": 1.0,
+        "distinct_predicted_forms": 1,
+        "form_cross_entropy": 0.010559247806668282,
+        "operation_cross_entropy": 0.06557614356279373
+      }
+    }
+  ],
+  "actual_optimizer_seconds": 1800.018,
+  "required_optimizer_seconds": 1800,
+  "same_cpu_budget_and_start": true,
+  "development_winner_per_method": {
+    "balanced_forms": {
+      "seed": 157,
+      "selected_step": 880
+    },
+    "geometry_forms": {
+      "seed": 157,
+      "selected_step": 640
+    },
+    "geometry_hard_forms": {
+      "seed": 157,
+      "selected_step": 1360
+    }
+  },
+  "development_only_method_selected": "balanced_forms",
+  "development_scores": {
+    "balanced_forms": {
+      "operation_accuracy": 0.9479166865348816,
+      "strength_mae": 0.13313613831996918,
+      "form_accuracy": 0.734375,
+      "distinct_predicted_forms": 9,
+      "form_cross_entropy": 0.8000636696815491,
+      "operation_cross_entropy": 0.3103073537349701,
+      "physical_proxy_rmse": 0.013942696154117584,
+      "development_priority": 1.836388848721981
+    },
+    "geometry_forms": {
+      "operation_accuracy": 0.921875,
+      "strength_mae": 0.13072431087493896,
+      "form_accuracy": 0.7395833134651184,
+      "distinct_predicted_forms": 9,
+      "form_cross_entropy": 0.7923427224159241,
+      "operation_cross_entropy": 0.33729612827301025,
+      "physical_proxy_rmse": 0.01499101147055626,
+      "development_priority": 1.863025739789009
+    },
+    "geometry_hard_forms": {
+      "operation_accuracy": 0.9322916865348816,
+      "strength_mae": 0.1363646239042282,
+      "form_accuracy": 0.734375,
+      "distinct_predicted_forms": 8,
+      "form_cross_entropy": 0.7883097529411316,
+      "operation_cross_entropy": 0.3742656409740448,
+      "physical_proxy_rmse": 0.014519757591187954,
+      "development_priority": 1.8725046776235106
+    }
+  },
+  "blind_source_sha256": "b2fbb5cdb4704228b78990b07bd674649c7e19f0af1a264af42a997646bdbcbd",
+  "frozen_blind_results": {
+    "prior": {
+      "form_accuracy": 0.0,
+      "operation_accuracy": 0.7604166666666666,
+      "strength_mae": 0.21781038570799857,
+      "distinct_predicted_archetypes": 0,
+      "per_form": {
+        "SPINDLE": {
+          "count": 24,
+          "form_correct": 0,
+          "operation_correct": 21
+        },
+        "WEDGE": {
+          "count": 24,
+          "form_correct": 0,
+          "operation_correct": 23
+        },
+        "BOX_MODULE": {
+          "count": 24,
+          "form_correct": 0,
+          "operation_correct": 14
+        },
+        "BARREL": {
+          "count": 24,
+          "form_correct": 0,
+          "operation_correct": 21
+        },
+        "ARCH": {
+          "count": 24,
+          "form_correct": 0,
+          "operation_correct": 19
+        },
+        "BLADE": {
+          "count": 24,
+          "form_correct": 0,
+          "operation_correct": 18
+        },
+        "CANOPY_POD": {
+          "count": 24,
+          "form_correct": 0,
+          "operation_correct": 14
+        },
+        "TRUSS_BEAM": {
+          "count": 24,
+          "form_correct": 0,
+          "operation_correct": 16
+        }
+      }
+    },
+    "balanced_forms": {
+      "form_accuracy": 0.6041666666666666,
+      "operation_accuracy": 0.9010416666666666,
+      "strength_mae": 0.12792421509201318,
+      "distinct_predicted_archetypes": 8,
+      "per_form": {
+        "SPINDLE": {
+          "count": 24,
+          "form_correct": 16,
+          "operation_correct": 23
+        },
+        "WEDGE": {
+          "count": 24,
+          "form_correct": 19,
+          "operation_correct": 23
+        },
+        "BOX_MODULE": {
+          "count": 24,
+          "form_correct": 7,
+          "operation_correct": 18
+        },
+        "BARREL": {
+          "count": 24,
+          "form_correct": 4,
+          "operation_correct": 22
+        },
+        "ARCH": {
+          "count": 24,
+          "form_correct": 20,
+          "operation_correct": 21
+        },
+        "BLADE": {
+          "count": 24,
+          "form_correct": 3,
+          "operation_correct": 23
+        },
+        "CANOPY_POD": {
+          "count": 24,
+          "form_correct": 24,
+          "operation_correct": 22
+        },
+        "TRUSS_BEAM": {
+          "count": 24,
+          "form_correct": 23,
+          "operation_correct": 21
+        }
+      }
+    },
+    "geometry_forms": {
+      "form_accuracy": 0.6145833333333334,
+      "operation_accuracy": 0.9010416666666666,
+      "strength_mae": 0.1255871751609568,
+      "distinct_predicted_archetypes": 8,
+      "per_form": {
+        "SPINDLE": {
+          "count": 24,
+          "form_correct": 17,
+          "operation_correct": 23
+        },
+        "WEDGE": {
+          "count": 24,
+          "form_correct": 20,
+          "operation_correct": 23
+        },
+        "BOX_MODULE": {
+          "count": 24,
+          "form_correct": 8,
+          "operation_correct": 18
+        },
+        "BARREL": {
+          "count": 24,
+          "form_correct": 5,
+          "operation_correct": 22
+        },
+        "ARCH": {
+          "count": 24,
+          "form_correct": 20,
+          "operation_correct": 21
+        },
+        "BLADE": {
+          "count": 24,
+          "form_correct": 1,
+          "operation_correct": 23
+        },
+        "CANOPY_POD": {
+          "count": 24,
+          "form_correct": 24,
+          "operation_correct": 22
+        },
+        "TRUSS_BEAM": {
+          "count": 24,
+          "form_correct": 23,
+          "operation_correct": 21
+        }
+      }
+    },
+    "geometry_hard_forms": {
+      "form_accuracy": 0.6354166666666666,
+      "operation_accuracy": 0.9114583333333334,
+      "strength_mae": 0.13356897731156386,
+      "distinct_predicted_archetypes": 8,
+      "per_form": {
+        "SPINDLE": {
+          "count": 24,
+          "form_correct": 22,
+          "operation_correct": 23
+        },
+        "WEDGE": {
+          "count": 24,
+          "form_correct": 23,
+          "operation_correct": 23
+        },
+        "BOX_MODULE": {
+          "count": 24,
+          "form_correct": 8,
+          "operation_correct": 19
+        },
+        "BARREL": {
+          "count": 24,
+          "form_correct": 0,
+          "operation_correct": 22
+        },
+        "ARCH": {
+          "count": 24,
+          "form_correct": 20,
+          "operation_correct": 22
+        },
+        "BLADE": {
+          "count": 24,
+          "form_correct": 1,
+          "operation_correct": 23
+        },
+        "CANOPY_POD": {
+          "count": 24,
+          "form_correct": 24,
+          "operation_correct": 22
+        },
+        "TRUSS_BEAM": {
+          "count": 24,
+          "form_correct": 24,
+          "operation_correct": 21
+        }
+      }
+    }
+  },
+  "prior_old_training_metrics": {
+    "operation_accuracy": 0.9458333253860474,
+    "strength_mae": 0.043597299605607986
+  },
+  "continued_old_training_metrics": {
+    "balanced_forms": {
+      "operation_accuracy": 0.973809540271759,
+      "strength_mae": 0.02316146530210972,
+      "form_accuracy": 1.0,
+      "distinct_predicted_forms": 1,
+      "form_cross_entropy": 0.01860477216541767,
+      "operation_cross_entropy": 0.07186420261859894
+    },
+    "geometry_forms": {
+      "operation_accuracy": 0.9696428775787354,
+      "strength_mae": 0.02954322099685669,
+      "form_accuracy": 1.0,
+      "distinct_predicted_forms": 1,
+      "form_cross_entropy": 0.046060703694820404,
+      "operation_cross_entropy": 0.08518330752849579
+    },
+    "geometry_hard_forms": {
+      "operation_accuracy": 0.9720237851142883,
+      "strength_mae": 0.019342921674251556,
+      "form_accuracy": 1.0,
+      "distinct_predicted_forms": 1,
+      "form_cross_entropy": 0.008224274031817913,
+      "operation_cross_entropy": 0.07646787166595459
+    }
+  },
+  "replay_old_model_retained": true,
+  "outside_geometry_model_used": false,
+  "android_deployed": false
+}
