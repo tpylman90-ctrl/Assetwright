@@ -1,8 +1,5 @@
 package com.assetwright.app.mini
 
-import kotlin.math.abs
-import kotlin.math.sqrt
-
 /**
  * First original, research-only MULTI-OPERATION native geometry lab.
  *
@@ -51,7 +48,7 @@ object NativeComposedFormLab {
             "Original native construction program violates canonical order"
         }
         require(commands.all { it.strength.isFinite() &&
-            it.strength in .02f.. .72f }) {
+            it.strength in 0.02f..0.72f }) {
             "All compound native deformation strengths must be bounded"
         }
         require(commands.sumOf { it.strength.toDouble() } <= 2.15) {
