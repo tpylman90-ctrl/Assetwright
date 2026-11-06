@@ -53,6 +53,36 @@ class NativeSkillMemoryTest {
         assertTrue(GlbWriter.encode(b).size > 2000)
     }
 
+
+    @Test
+    fun promptFormVocabularyDoesNotCollapseAllRequestsToGenericShell() {
+        val prompts = listOf(
+            "a fast spindle", "a tapered wedge", "a rectangular box module",
+            "a bulging barrel", "a stone arch", "a sharp blade",
+            "a smooth canopy pod", "a metal truss beam")
+        val forms = prompts.map { NativeSkillMemory.proposeForm(it) }
+        assertEquals(8, forms.distinct().size)
+        val meshes = forms.map {
+            NativeSkillMemory.generateDiverse(
+                "original different forms",AdvancedFormOperation.SECTION_LOFT,
+                .4f,it)
+        }
+        assertEquals(8,meshes.size)
+        assertEquals(8,meshes.map { it.parts[0].name }.distinct().size)
+    }
+
+    @Test
+    fun reviewedArchetypeIsRecalledInsteadOfGenericShape() {
+        val lesson=NativeSkillMemory.Lesson(
+            "advanced sculpted modular vehicle",
+            AdvancedFormOperation.LOWER_RECESS,.63f,
+            NativeFormArchetype.BOX_MODULE)
+        val answer=NativeSkillMemory.propose(
+            "advanced sculpted modular vehicle",listOf(lesson))
+        assertEquals(NativeFormArchetype.BOX_MODULE,answer.archetype)
+        assertEquals(.63f,answer.strength,.001f)
+    }
+
     @Test(expected=IllegalArgumentException::class)
     fun nativeGeometryDoesNotAcceptOutOfRangeUnreviewedStrength() {
         NativeSkillMemory.generate("curved beam",
