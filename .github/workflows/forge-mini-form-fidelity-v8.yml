@@ -41,6 +41,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.3.0'
+      - name: Install free image tools for strict original source/identity tests
+        run: python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3'
       - name: Validate source-disjoint geometry curriculum and predeclared gate
         run: |
           python -m compileall -q \
