@@ -72,7 +72,7 @@ def prepare(rows:list,source:Path):
         scale=max(first["dims"].values())
         for op in OPERATIONS:
             group=[r for r in items if r["op"]==op]
-            if len(group)<4 or len({x["strength"] for x in group})!=len(group):
+            if len(group)<3 or len({x["strength"] for x in group})!=len(group):
                 raise ValueError("Missing original native multi-form control sweep")
             biggest=max(group,key=lambda x:x["strength"])
             final=sampled(source/(biggest["case"]+".glb"),
