@@ -80,8 +80,8 @@ def unique_source_rows(manifest:dict,images:Path,extra:Path,
     for split in splits:
         items=[r for r in rows.values() if r["split"]==split]
         total=len(items)
-        if total%8 or {form:sum(x["form"]==form for x in items)
-            for form in FORMS[1:]}.values()!={total//8}:
+        if total%8 or set({form:sum(x["form"]==form for x in items)
+            for form in FORMS[1:]}.values())!={total//8}:
             raise ValueError("Form dataset not counterbalanced")
     return list(rows.values())
 
