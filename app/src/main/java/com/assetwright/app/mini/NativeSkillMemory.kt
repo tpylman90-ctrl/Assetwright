@@ -23,9 +23,41 @@ object NativeSkillMemory {
         "build", "create", "some", "and", "of", "a", "model", "shape", "asset")
 
     data class Lesson(val prompt: String, val operation: AdvancedFormOperation,
-                      val strength: Float)
+                      val strength: Float,
+                      val archetype: NativeFormArchetype? = null)
     data class Prediction(val operation: AdvancedFormOperation, val strength: Float,
-                          val origin: String, val similarity: Float)
+                          val origin: String, val similarity: Float,
+                          val archetype: NativeFormArchetype = NativeFormArchetype.SPINDLE)
+
+    /** Transparent ORIGINAL geometry form grammar. No DINO weights on Android. */
+    fun proposeForm(prompt: String): NativeFormArchetype {
+        val words=tokens(prompt)
+        return when {
+            words.any { it in setOf("wedge", "angular", "tapered", "taper") } ->
+                NativeFormArchetype.WEDGE
+            words.any { it in setOf("box", "boxy", "block", "rectangular", "module") } ->
+                NativeFormArchetype.BOX_MODULE
+            words.any { it in setOf("barrel", "bulging", "bulge", "rounded") } ->
+                NativeFormArchetype.BARREL
+            words.any { it in setOf("arch", "bridge", "arched", "bow") } ->
+                NativeFormArchetype.ARCH
+            words.any { it in setOf("blade", "knife", "sharp", "thin") } ->
+                NativeFormArchetype.BLADE
+            words.any { it in setOf("canopy", "pod", "cockpit", "cabin") } ->
+                NativeFormArchetype.CANOPY_POD
+            words.any { it in setOf("truss", "frame", "beam", "strut", "girder") } ->
+                NativeFormArchetype.TRUSS_BEAM
+            words.any { it in setOf("spindle", "torpedo", "teardrop", "bullet") } ->
+                NativeFormArchetype.SPINDLE
+            else -> {
+                // Do not force EVERY unknown prompt onto a universal shell.
+                // Stable prompt-dependent default, always user-overridable.
+                val forms=NativeFormArchetype.values()
+                forms[(prompt.trim().lowercase().hashCode().toLong()
+                    and 0x7fffffffL).rem(forms.size).toInt()]
+            }
+        }
+    }
 
     fun tokens(prompt: String): Set<String> =
         Regex("[a-z0-9]+").findAll(prompt.lowercase()).map { it.value }
@@ -41,7 +73,8 @@ object NativeSkillMemory {
             it.prompt.trim().equals(normalized, ignoreCase = true)
         }
         if (exact != null)
-            return Prediction(exact.operation, exact.strength, "approved exact lesson", 1f)
+            return Prediction(exact.operation, exact.strength, "approved exact lesson", 1f,
+                exact.archetype ?: proposeForm(exact.prompt))
 
         val words = tokens(prompt)
         val ranked = approved.map { lesson ->
@@ -54,7 +87,8 @@ object NativeSkillMemory {
         val closest = ranked.firstOrNull()
         if (closest != null && closest.second >= .55f)
             return Prediction(closest.first.operation, closest.first.strength,
-                "approved similar lesson", closest.second)
+                "approved similar lesson", closest.second,
+                closest.first.archetype ?: proposeForm(closest.first.prompt))
 
         val choice = when {
             words.any { it in setOf("twist", "twisted", "torsion", "spiral", "helical") } ->
@@ -74,7 +108,8 @@ object NativeSkillMemory {
             words.any { it in setOf("dramatic", "deep", "strong", "extreme", "large") } -> .82f
             else -> .53f
         }
-        return Prediction(choice, power, "native operation vocabulary", 0f)
+        return Prediction(choice, power, "native operation and form vocabulary", 0f,
+            proposeForm(prompt))
     }
 
     private fun destination(context: Context) =
@@ -91,7 +126,9 @@ object NativeSkillMemory {
             val item = rows.getJSONObject(index)
             val example = Lesson(item.getString("prompt"),
                 AdvancedFormOperation.valueOf(item.getString("operation")),
-                item.getDouble("strength").toFloat())
+                item.getDouble("strength").toFloat(),
+                if(item.has("archetype")) NativeFormArchetype.valueOf(
+                    item.getString("archetype")) else null)
             validate(example)
             example
         }
@@ -123,8 +160,8 @@ object NativeSkillMemory {
     /** Persist a single inspected lesson with atomic replacement. */
     @Synchronized
     fun approve(context: Context, prompt: String, operation: AdvancedFormOperation,
-                strength: Float): Int {
-        val next = Lesson(prompt.trim(), operation, strength)
+                strength: Float, form: NativeFormArchetype = proposeForm(prompt)): Int {
+        val next = Lesson(prompt.trim(), operation, strength, form)
         validate(next)
         val memory = readVerified(context).toMutableList()
         memory.removeAll { it.prompt.trim().equals(next.prompt, ignoreCase = true) }
@@ -134,7 +171,9 @@ object NativeSkillMemory {
         for (item in memory) {
             array.put(JSONObject().put("prompt", item.prompt)
                 .put("operation", item.operation.name)
-                .put("strength", item.strength.toDouble()))
+                .put("strength", item.strength.toDouble())
+                .put("archetype",
+                    (item.archetype ?: proposeForm(item.prompt)).name))
         }
         val payload = JSONObject().put("schema", SCHEMA)
             .put("count", memory.size).put("lessons", array)
@@ -154,6 +193,26 @@ object NativeSkillMemory {
     @Synchronized
     fun clear(context: Context) {
         destination(context).delete()
+    }
+
+    /**
+     * NEW visible geometry-lab generation: actually different native forms,
+     * no fallback to a single general-purpose render shell.
+     */
+    fun generateDiverse(
+        prompt:String, operation:AdvancedFormOperation,strength:Float,
+        archetype:NativeFormArchetype,
+        length:Float=4.8f,width:Float=2.1f,height:Float=1.5f
+    ):GeneratedAsset {
+        require(prompt.isNotBlank()&&prompt.length<=1000)
+        val native=NativeDiverseFormLab.generate(NativeDiverseFormSpec(
+            archetype,operation,length,width,height,strength))
+        val spec=VehicleSpec(
+            title="Forge Mini "+archetype.name.replace('_',' '),
+            length=length,width=width,roofHeight=height,
+            canopyLength=1.8f,noseTaper=.55f,rearHaunch=1.07f,
+            quality="Mobile",sourcePrompt=prompt)
+        return GeneratedAsset(spec,listOf(native))
     }
 
     fun generate(prompt: String, operation: AdvancedFormOperation, strength: Float,
