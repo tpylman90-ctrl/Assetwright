@@ -17,7 +17,7 @@ permissions:
 
 concurrency:
   group: assetwright-original-multiform-fidelity-v8
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   original-multiform-source:
