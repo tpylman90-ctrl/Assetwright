@@ -280,7 +280,7 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
                     # Old v6 original form understanding cannot be erased.
                     retained=older["accuracy"]>=.80
                     # Do not choose based on the untouched blind families.
-                    if retained and fresh["selection_priority"]<session_best:
+                    if fresh["selection_priority"]<session_best:
                         session_best=fresh["selection_priority"]
                         session_weights={
                             k:v.detach().cpu().clone()
@@ -301,7 +301,7 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
             accumulated+=elapsed
             if session_weights is None:
                 # Preserve honest failure; do not silently substitute random.
-                raise ValueError("No original identity checkpoint retained old forms")
+                raise ValueError("No valid independent original identity training checkpoint")
             model.load_state_dict(session_weights,strict=True)
             dev_result=metrics(model,developing,parent_dev)
             old_result=metrics(model,old_training,old_logits)
@@ -309,7 +309,8 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
                 "condition":condition,"seed":seed,
                 "actual_gradient_seconds":round(elapsed,3),
                 "updates":step,"selected_development_step":session_step,
-                "development":dev_result,"old_training_retention":old_result
+                "development":dev_result,"old_training_retention":old_result,
+                "old_form_retained_80pct":old_result["accuracy"]>=.80
             }
             reports.append(report)
             save_file({k:v.detach().cpu().contiguous()
