@@ -1,0 +1,32 @@
+{
+  "schema": "assetwright-original-3d-geometry-aware-deep-learning-gate-v5",
+  "disposition": "prior_checkpoint_retained_new_candidate_rejected",
+  "checks": {
+    "prior_original_geometric_skill_retained": true,
+    "prior_continuous_strength_skill_retained": true,
+    "new_geometry_operation_not_worse": true,
+    "new_geometry_strength_not_worse": true,
+    "physical_3D_mesh_better_than_stored_prior_by_2pct": true,
+    "physical_3D_mesh_better_than_equal_budget_replay_control_by_1pct": false,
+    "physical_3D_mesh_better_than_unchanged_by_10pct": true,
+    "native_strength_order_reversals_at_most_four": false,
+    "honest_full_384_own_GLBS_and_source_alignment": true,
+    "research_only_no_android_deployment": true
+  },
+  "selected_condition": "geometry_hard_mining",
+  "parent_checkpoint_sha256": "1d32f74b9e05ab79196b906f88dde823fdbcc1eae0bea8a3b62a0a631cf00c21",
+  "new_unseen_source_hashes_sha256": "30c619fcd712090c2426066c455ae7e0f62fb14dc33b4c3f1b71634f76a5a133",
+  "old_and_new_actual_training_GLBS": 1680,
+  "fresh_original_validation_GLBS": 96,
+  "actual_reconstructed_original_Kotlin_GLBS": 384,
+  "real_3D_RMSE_parent": 0.006819567483605291,
+  "real_3D_RMSE_replay_control": 0.0057248462400579375,
+  "real_3D_RMSE_selected_child": 0.005770495524124403,
+  "real_3D_gain_vs_parent_fraction": 0.1538326238435104,
+  "real_3D_gain_vs_replay_control_fraction": -0.007973888232499273,
+  "native_strength_order_reversals": 5,
+  "training_seconds_actually_measured": 1800.019,
+  "parent_weights_unchanged": true,
+  "human_review_required_for_mobile": true,
+  "android_deployed": false
+}

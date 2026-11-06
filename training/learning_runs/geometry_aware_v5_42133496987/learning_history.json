@@ -1,0 +1,26 @@
+{
+  "schema": "assetwright-native-3d-deep-learning-permanent-history-v5",
+  "run_id": 42133496987,
+  "original_model_sha256": "1d32f74b9e05ab79196b906f88dde823fdbcc1eae0bea8a3b62a0a631cf00c21",
+  "new_model_sha256": {
+    "replay_only": "6abbe94ef321e8ba90d67558bcfe833c2ee42950368eee7a3f3e6626078b1580",
+    "geometry_supervised": "62d0fbf6d533ef253fe7f13fe11a5df76a825ede6231bc535f62d9a82cd6e239",
+    "geometry_hard_mining": "5405b0ee67ea7401a04a8ddc2bbc295ca181438baa9b7ad96daad23c58c15d4e"
+  },
+  "source_hashes_sha256": "30c619fcd712090c2426066c455ae7e0f62fb14dc33b4c3f1b71634f76a5a133",
+  "original_v5_GLBS_audited": 716,
+  "old_train_examples_replayed": 1176,
+  "new_train_examples": 504,
+  "new_development_only_cases": 96,
+  "fresh_blind_GLBS": 96,
+  "original_reconstructions_verified": 384,
+  "genuine_trained_safetensors_per_condition": true,
+  "same_original_start": true,
+  "training_time_seconds": 1800.019,
+  "preselected_dev_winner": "geometry_hard_mining",
+  "independent_real_3D_gain_vs_parent": 0.1538326238435104,
+  "disposition": "prior_checkpoint_retained_new_candidate_rejected",
+  "prior_original_model_unmodified": true,
+  "new_weights_production_enabled": false,
+  "human_visual_review_required": true
+}

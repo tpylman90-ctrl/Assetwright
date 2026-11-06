@@ -1,0 +1,365 @@
+{
+  "schema": "assetwright-geometry-aware-continuation-evaluation-v5",
+  "study": "geometry_aware_v5",
+  "starting_learned_checkpoint_sha256": "1d32f74b9e05ab79196b906f88dde823fdbcc1eae0bea8a3b62a0a631cf00c21",
+  "retained_old_network_was_reloaded": true,
+  "normalization_rebase_max_prediction_error": 3.814697265625e-06,
+  "real_Kotlin_prior_training_GLBS_replayed": 1176,
+  "earlier_v3_source_examples": 672,
+  "earlier_v4_failed_candidate_correct_source_examples": 504,
+  "new_v5_training_examples": 504,
+  "new_v5_development_examples": 96,
+  "new_v5_blind_examples": 96,
+  "heldout_not_in_any_model_selection": true,
+  "source_replay_digest": "b5d178017109c044839e921559672315babca2a5f0cb5a9543a1c2216bfd25d6",
+  "actual_3d_geometry_supervision_digest": "8f6098ddf18f1b4a34f95f060cb819c97dff24cf8a429c7b9374e3b7a7855daf",
+  "sampled_native_vertices_per_training_target": 64,
+  "actual_training_optimizer_seconds": 1800.019,
+  "required_optimizer_seconds": 1800,
+  "completed_independent_sessions": 6,
+  "same_original_start_all_conditions": true,
+  "same_training_data_and_cpu_budget": true,
+  "condition_seeds": [
+    191,
+    1601
+  ],
+  "session_provenance": [
+    {
+      "condition": "replay_only",
+      "seed": 191,
+      "actual_optimizer_seconds": 300.004,
+      "gradient_updates": 63801,
+      "selected_fresh_development_step": 61900,
+      "fresh_development": {
+        "operation_accuracy": 0.8958333134651184,
+        "strength_mae": 0.17133839428424835,
+        "operator_cross_entropy": 0.5055831074714661,
+        "matched_native_vertex_proxy_rmse": 0.015085500665009022,
+        "selection_priority": 1.332286455258727
+      },
+      "old_source_replay_retention": {
+        "operation_accuracy": 0.9991496801376343,
+        "strength_mae": 0.002524975687265396,
+        "operator_cross_entropy": 0.013316767290234566,
+        "matched_native_vertex_proxy_rmse": 0.0036367459688335657,
+        "selection_priority": 0.12511701053008437
+      },
+      "weights": "replay_only__191.safetensors"
+    },
+    {
+      "condition": "replay_only",
+      "seed": 1601,
+      "actual_optimizer_seconds": 300.001,
+      "gradient_updates": 64477,
+      "selected_fresh_development_step": 60900,
+      "fresh_development": {
+        "operation_accuracy": 0.9166666865348816,
+        "strength_mae": 0.14343369007110596,
+        "operator_cross_entropy": 0.49035587906837463,
+        "matched_native_vertex_proxy_rmse": 0.015403041616082191,
+        "selection_priority": 1.233437589854002
+      },
+      "old_source_replay_retention": {
+        "operation_accuracy": 0.9982993006706238,
+        "strength_mae": 0.0022195347119122744,
+        "operator_cross_entropy": 0.014829248189926147,
+        "matched_native_vertex_proxy_rmse": 0.0036362090613693,
+        "selection_priority": 0.12478780586272478
+      },
+      "weights": "replay_only__1601.safetensors"
+    },
+    {
+      "condition": "geometry_supervised",
+      "seed": 191,
+      "actual_optimizer_seconds": 300.003,
+      "gradient_updates": 55404,
+      "selected_fresh_development_step": 55400,
+      "fresh_development": {
+        "operation_accuracy": 0.90625,
+        "strength_mae": 0.16964863240718842,
+        "operator_cross_entropy": 0.4382590353488922,
+        "matched_native_vertex_proxy_rmse": 0.014960860833525658,
+        "selection_priority": 1.2874556000530721
+      },
+      "old_source_replay_retention": {
+        "operation_accuracy": 0.9982993006706238,
+        "strength_mae": 0.0025613096076995134,
+        "operator_cross_entropy": 0.014623737893998623,
+        "matched_native_vertex_proxy_rmse": 0.00363227934576571,
+        "selection_priority": 0.12579343866556883
+      },
+      "weights": "geometry_supervised__191.safetensors"
+    },
+    {
+      "condition": "geometry_supervised",
+      "seed": 1601,
+      "actual_optimizer_seconds": 300.005,
+      "gradient_updates": 54657,
+      "selected_fresh_development_step": 2500,
+      "fresh_development": {
+        "operation_accuracy": 0.9166666865348816,
+        "strength_mae": 0.18541264533996582,
+        "operator_cross_entropy": 0.40032342076301575,
+        "matched_native_vertex_proxy_rmse": 0.016257157549262047,
+        "selection_priority": 1.3633684284985066
+      },
+      "old_source_replay_retention": {
+        "operation_accuracy": 0.9940476417541504,
+        "strength_mae": 0.00762321287766099,
+        "operator_cross_entropy": 0.01871505007147789,
+        "matched_native_vertex_proxy_rmse": 0.003651386359706521,
+        "selection_priority": 0.14671698318794368
+      },
+      "weights": "geometry_supervised__1601.safetensors"
+    },
+    {
+      "condition": "geometry_hard_mining",
+      "seed": 191,
+      "actual_optimizer_seconds": 300.003,
+      "gradient_updates": 54666,
+      "selected_fresh_development_step": 43200,
+      "fresh_development": {
+        "operation_accuracy": 0.9270833134651184,
+        "strength_mae": 0.1566990464925766,
+        "operator_cross_entropy": 0.43393388390541077,
+        "matched_native_vertex_proxy_rmse": 0.01452934555709362,
+        "selection_priority": 1.225642553716898
+      },
+      "old_source_replay_retention": {
+        "operation_accuracy": 0.9991496801376343,
+        "strength_mae": 0.0027296203188598156,
+        "operator_cross_entropy": 0.014007438905537128,
+        "matched_native_vertex_proxy_rmse": 0.0036342169623821974,
+        "selection_priority": 0.12613701025024057
+      },
+      "weights": "geometry_hard_mining__191.safetensors"
+    },
+    {
+      "condition": "geometry_hard_mining",
+      "seed": 1601,
+      "actual_optimizer_seconds": 300.004,
+      "gradient_updates": 55361,
+      "selected_fresh_development_step": 14600,
+      "fresh_development": {
+        "operation_accuracy": 0.8854166865348816,
+        "strength_mae": 0.17306627333164215,
+        "operator_cross_entropy": 0.6264064908027649,
+        "matched_native_vertex_proxy_rmse": 0.015123204328119755,
+        "selection_priority": 1.402466089054942
+      },
+      "old_source_replay_retention": {
+        "operation_accuracy": 0.9991496801376343,
+        "strength_mae": 0.004100081045180559,
+        "operator_cross_entropy": 0.01407190877944231,
+        "matched_native_vertex_proxy_rmse": 0.003639486851170659,
+        "selection_priority": 0.13126228986307978
+      },
+      "weights": "geometry_hard_mining__1601.safetensors"
+    }
+  ],
+  "development_selected": {
+    "replay_only": {
+      "condition": "replay_only",
+      "seed": 1601,
+      "selected_step": 60900
+    },
+    "geometry_supervised": {
+      "condition": "geometry_supervised",
+      "seed": 191,
+      "selected_step": 55400
+    },
+    "geometry_hard_mining": {
+      "condition": "geometry_hard_mining",
+      "seed": 191,
+      "selected_step": 43200
+    }
+  },
+  "fresh_development_model_comparison": {
+    "prior": {
+      "operation_accuracy": 0.8645833134651184,
+      "strength_mae": 0.2013346552848816,
+      "operator_cross_entropy": 0.5758945941925049,
+      "matched_native_vertex_proxy_rmse": 0.020729465410113335,
+      "selection_priority": 1.6461539103090763
+    },
+    "replay_only": {
+      "operation_accuracy": 0.9166666865348816,
+      "strength_mae": 0.14343369007110596,
+      "operator_cross_entropy": 0.49035587906837463,
+      "matched_native_vertex_proxy_rmse": 0.015403041616082191,
+      "selection_priority": 1.233437589854002
+    },
+    "geometry_supervised": {
+      "operation_accuracy": 0.90625,
+      "strength_mae": 0.16964863240718842,
+      "operator_cross_entropy": 0.4382590353488922,
+      "matched_native_vertex_proxy_rmse": 0.014960860833525658,
+      "selection_priority": 1.2874556000530721
+    },
+    "geometry_hard_mining": {
+      "operation_accuracy": 0.9270833134651184,
+      "strength_mae": 0.1566990464925766,
+      "operator_cross_entropy": 0.43393388390541077,
+      "matched_native_vertex_proxy_rmse": 0.01452934555709362,
+      "selection_priority": 1.225642553716898
+    }
+  },
+  "chosen_method_from_development_only": "geometry_hard_mining",
+  "retained_old_training_before": {
+    "operation_accuracy": 0.9710884094238281,
+    "strength_mae": 0.03230941668152809,
+    "operator_cross_entropy": 0.0947023406624794,
+    "matched_native_vertex_proxy_rmse": 0.004649548325687647,
+    "selection_priority": 0.30504556696861984
+  },
+  "retained_old_training_after": {
+    "replay_only": {
+      "operation_accuracy": 0.9982993006706238,
+      "strength_mae": 0.0022195347119122744,
+      "operator_cross_entropy": 0.014829248189926147,
+      "matched_native_vertex_proxy_rmse": 0.0036362090613693,
+      "selection_priority": 0.12478780586272478
+    },
+    "geometry_supervised": {
+      "operation_accuracy": 0.9982993006706238,
+      "strength_mae": 0.0025613096076995134,
+      "operator_cross_entropy": 0.014623737893998623,
+      "matched_native_vertex_proxy_rmse": 0.00363227934576571,
+      "selection_priority": 0.12579343866556883
+    },
+    "geometry_hard_mining": {
+      "operation_accuracy": 0.9991496801376343,
+      "strength_mae": 0.0027296203188598156,
+      "operator_cross_entropy": 0.014007438905537128,
+      "matched_native_vertex_proxy_rmse": 0.0036342169623821974,
+      "selection_priority": 0.12613701025024057
+    }
+  },
+  "blind_original_GLBS_digest": "30c619fcd712090c2426066c455ae7e0f62fb14dc33b4c3f1b71634f76a5a133",
+  "fresh_blind_results": {
+    "prior": {
+      "operation_accuracy": 0.8541666865348816,
+      "strength_mae": 0.1382095068693161,
+      "per_operation": {
+        "SECTION_LOFT": {
+          "count": 16,
+          "correct": 14
+        },
+        "TANGENT_SWEEP": {
+          "count": 16,
+          "correct": 16
+        },
+        "SECTION_TWIST": {
+          "count": 16,
+          "correct": 6
+        },
+        "SUPERELLIPSE_PROFILE": {
+          "count": 16,
+          "correct": 16
+        },
+        "LOWER_RECESS": {
+          "count": 16,
+          "correct": 16
+        },
+        "RIBBED_FAIRING": {
+          "count": 16,
+          "correct": 14
+        }
+      }
+    },
+    "replay_only": {
+      "operation_accuracy": 0.9166666865348816,
+      "strength_mae": 0.11183488368988037,
+      "per_operation": {
+        "SECTION_LOFT": {
+          "count": 16,
+          "correct": 16
+        },
+        "TANGENT_SWEEP": {
+          "count": 16,
+          "correct": 16
+        },
+        "SECTION_TWIST": {
+          "count": 16,
+          "correct": 9
+        },
+        "SUPERELLIPSE_PROFILE": {
+          "count": 16,
+          "correct": 16
+        },
+        "LOWER_RECESS": {
+          "count": 16,
+          "correct": 16
+        },
+        "RIBBED_FAIRING": {
+          "count": 16,
+          "correct": 15
+        }
+      }
+    },
+    "geometry_supervised": {
+      "operation_accuracy": 0.9166666865348816,
+      "strength_mae": 0.10426405072212219,
+      "per_operation": {
+        "SECTION_LOFT": {
+          "count": 16,
+          "correct": 16
+        },
+        "TANGENT_SWEEP": {
+          "count": 16,
+          "correct": 16
+        },
+        "SECTION_TWIST": {
+          "count": 16,
+          "correct": 9
+        },
+        "SUPERELLIPSE_PROFILE": {
+          "count": 16,
+          "correct": 16
+        },
+        "LOWER_RECESS": {
+          "count": 16,
+          "correct": 16
+        },
+        "RIBBED_FAIRING": {
+          "count": 16,
+          "correct": 15
+        }
+      }
+    },
+    "geometry_hard_mining": {
+      "operation_accuracy": 0.9270833134651184,
+      "strength_mae": 0.11326908320188522,
+      "per_operation": {
+        "SECTION_LOFT": {
+          "count": 16,
+          "correct": 16
+        },
+        "TANGENT_SWEEP": {
+          "count": 16,
+          "correct": 16
+        },
+        "SECTION_TWIST": {
+          "count": 16,
+          "correct": 10
+        },
+        "SUPERELLIPSE_PROFILE": {
+          "count": 16,
+          "correct": 16
+        },
+        "LOWER_RECESS": {
+          "count": 16,
+          "correct": 16
+        },
+        "RIBBED_FAIRING": {
+          "count": 16,
+          "correct": 15
+        }
+      }
+    }
+  },
+  "original_Kotlin_GLBS_reconstructed_yet": false,
+  "outside_pretrained_model_used": false,
+  "outside_mesh_generation_used": false,
+  "android_deployed": false
+}
