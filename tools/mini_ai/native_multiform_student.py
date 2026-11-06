@@ -510,6 +510,11 @@ def train(v6_manifest,v6_images,v6_source,
         "development_scores":dev_report,
         "blind_source_sha256":blind_hash,
         "frozen_blind_results":results,
+        "prior_old_training_metrics":previous_old,
+        "continued_old_training_metrics":{
+            name:stats(model,oldt,include_proxy=False)
+            for name,model in model_winners.items()
+        },
         "replay_old_model_retained":True,
         "outside_geometry_model_used":False,
         "android_deployed":False
