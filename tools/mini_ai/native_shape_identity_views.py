@@ -34,7 +34,7 @@ def generate(manifest_path:Path,source:Path,ordinary:Path,output:Path,
              *,allowed=("train","development","validation")):
     manifest=json.loads(manifest_path.read_text())
     if (manifest.get("schema")!="assetwright-native-before-after-observations-v1"
-        or manifest.get("study_id") not in ("multiform_v6","shape_identity_v7")
+        or manifest.get("study_id") not in ("multiform_v6","shape_identity_v7","form_fidelity_v8")
         or manifest.get("generator")!="AssetWright-Kotlin-AdvancedFormLab"
         or manifest.get("external_geometry_used") is not False):
         raise ValueError("Invalid source verified original form-identity study")
