@@ -27,21 +27,21 @@ class DinoShapeIdentityBatchTest {
     // Five independent TRAIN proportions per form, one dev and one blind.
     private fun family(tag:String,number:Int,phase:String):Family {
         val archetype=forms[(number-1)%8]
-        val variation=if(phase=="train") (number-1)/8 else 0
+        val variation=(number-1)/8
         val length=when(phase) {
             "train" -> floatArrayOf(3.1f,4.25f,5.55f,6.35f,4.85f)[variation]
-            "development" -> 5.05f
-            else -> 5.95f
+            "development" -> floatArrayOf(5.05f,4.12f)[variation]
+            else -> floatArrayOf(5.95f,3.71f)[variation]
         }
         val width=when(phase) {
             "train" -> floatArrayOf(1.30f,2.18f,2.68f,1.74f,2.38f)[variation]
-            "development" -> 1.98f
-            else -> 2.46f
+            "development" -> floatArrayOf(1.98f,2.27f)[variation]
+            else -> floatArrayOf(2.46f,1.61f)[variation]
         }
         val height=when(phase) {
             "train" -> floatArrayOf(1.07f,1.69f,1.91f,2.35f,1.43f)[variation]
-            "development" -> 2.09f
-            else -> 1.78f
+            "development" -> floatArrayOf(2.09f,1.58f)[variation]
+            else -> floatArrayOf(1.78f,2.32f)[variation]
         }
         return Family(tag+number.toString().padStart(2,'0'),
             archetype,length,width,height,
@@ -50,8 +50,8 @@ class DinoShapeIdentityBatchTest {
             if(phase=="train") 24 else 32)
     }
     private val train=(1..40).map { family("si_train",it,"train") }
-    private val dev=(1..8).map { family("si_dev",it,"development") }
-    private val blind=(1..8).map { family("si_blind",it,"validation") }
+    private val dev=(1..16).map { family("si_dev",it,"development") }
+    private val blind=(1..16).map { family("si_blind",it,"validation") }
     private val levels=mapOf(
         "train" to listOf(.05f,.25f,.48f,.72f,.95f),
         "development" to listOf(.15f,.39f,.63f,.88f),
@@ -116,8 +116,8 @@ class DinoShapeIdentityBatchTest {
                 }
             }
         }
-        assertEquals(1584,changed)
-        assertEquals(1640,Files.list(root).use { files ->
+        assertEquals(1968,changed)
+        assertEquals(2040,Files.list(root).use { files ->
             files.filter { it.fileName.toString().endsWith(".glb") }.count().toInt()
         })
     }
