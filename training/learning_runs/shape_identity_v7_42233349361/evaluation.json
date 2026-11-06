@@ -1,0 +1,875 @@
+{
+  "schema": "assetwright-original-shape-identity-training-v7",
+  "study": "shape_identity_v7",
+  "original_v6_experimental_parent_sha256": "b4b43fe30b4865fc598d8673390ce0383ecfee614878a46cfb8f68f3952288db",
+  "old_model_research_gate": "research_not_promoted_legacy_checkpoint_retained",
+  "original_operation_and_strength_weights_frozen": true,
+  "training_unique_native_form_baselines": 56,
+  "new_training_unique_form_baselines": 40,
+  "previous_training_only_unique_form_baselines": 16,
+  "previous_v6_blind_used_in_training": false,
+  "fresh_dev_unique_native_forms": 16,
+  "fresh_blind_unique_native_forms": 16,
+  "fresh_blind_new_native_transformations": 384,
+  "balanced_dimensions_across_all_eight_forms": true,
+  "separate_32x32_baseline_three_view_encoder": true,
+  "same_start_data_budget_all_conditions": true,
+  "optimizer_active_seconds": 1800.01,
+  "required_seconds": 1800,
+  "completed_independent_sessions": 6,
+  "sessions": [
+    {
+      "condition": "three_view",
+      "seed": 313,
+      "actual_gradient_seconds": 300.001,
+      "updates": 98614,
+      "selected_development_step": 42160,
+      "development": {
+        "accuracy": 1.0,
+        "cross_entropy": 6.750306056346744e-05,
+        "predicted_form_count": 8,
+        "legacy_shell_predictions": 0,
+        "weak_form_count": 0,
+        "per_form": {
+          "SPINDLE": {
+            "count": 2,
+            "correct": 2
+          },
+          "WEDGE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BOX_MODULE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BARREL": {
+            "count": 2,
+            "correct": 2
+          },
+          "ARCH": {
+            "count": 2,
+            "correct": 2
+          },
+          "BLADE": {
+            "count": 2,
+            "correct": 2
+          },
+          "CANOPY_POD": {
+            "count": 2,
+            "correct": 2
+          },
+          "TRUSS_BEAM": {
+            "count": 2,
+            "correct": 2
+          }
+        },
+        "selection_priority": 6.750306056346744e-05
+      },
+      "old_training_retention": {
+        "accuracy": 1.0,
+        "cross_entropy": 0.0,
+        "predicted_form_count": 8,
+        "legacy_shell_predictions": 0,
+        "weak_form_count": 0,
+        "per_form": {
+          "SPINDLE": {
+            "count": 2,
+            "correct": 2
+          },
+          "WEDGE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BOX_MODULE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BARREL": {
+            "count": 2,
+            "correct": 2
+          },
+          "ARCH": {
+            "count": 2,
+            "correct": 2
+          },
+          "BLADE": {
+            "count": 2,
+            "correct": 2
+          },
+          "CANOPY_POD": {
+            "count": 2,
+            "correct": 2
+          },
+          "TRUSS_BEAM": {
+            "count": 2,
+            "correct": 2
+          }
+        },
+        "selection_priority": 0.0
+      },
+      "old_form_retained_80pct": true
+    },
+    {
+      "condition": "three_view",
+      "seed": 1601,
+      "actual_gradient_seconds": 300.002,
+      "updates": 105112,
+      "selected_development_step": 27520,
+      "development": {
+        "accuracy": 1.0,
+        "cross_entropy": 8.013920887606218e-05,
+        "predicted_form_count": 8,
+        "legacy_shell_predictions": 0,
+        "weak_form_count": 0,
+        "per_form": {
+          "SPINDLE": {
+            "count": 2,
+            "correct": 2
+          },
+          "WEDGE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BOX_MODULE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BARREL": {
+            "count": 2,
+            "correct": 2
+          },
+          "ARCH": {
+            "count": 2,
+            "correct": 2
+          },
+          "BLADE": {
+            "count": 2,
+            "correct": 2
+          },
+          "CANOPY_POD": {
+            "count": 2,
+            "correct": 2
+          },
+          "TRUSS_BEAM": {
+            "count": 2,
+            "correct": 2
+          }
+        },
+        "selection_priority": 8.013920887606218e-05
+      },
+      "old_training_retention": {
+        "accuracy": 1.0,
+        "cross_entropy": 0.0,
+        "predicted_form_count": 8,
+        "legacy_shell_predictions": 0,
+        "weak_form_count": 0,
+        "per_form": {
+          "SPINDLE": {
+            "count": 2,
+            "correct": 2
+          },
+          "WEDGE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BOX_MODULE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BARREL": {
+            "count": 2,
+            "correct": 2
+          },
+          "ARCH": {
+            "count": 2,
+            "correct": 2
+          },
+          "BLADE": {
+            "count": 2,
+            "correct": 2
+          },
+          "CANOPY_POD": {
+            "count": 2,
+            "correct": 2
+          },
+          "TRUSS_BEAM": {
+            "count": 2,
+            "correct": 2
+          }
+        },
+        "selection_priority": 0.0
+      },
+      "old_form_retained_80pct": true
+    },
+    {
+      "condition": "contrastive_identity",
+      "seed": 313,
+      "actual_gradient_seconds": 300.003,
+      "updates": 89053,
+      "selected_development_step": 29920,
+      "development": {
+        "accuracy": 1.0,
+        "cross_entropy": 0.0010600871173664927,
+        "predicted_form_count": 8,
+        "legacy_shell_predictions": 0,
+        "weak_form_count": 0,
+        "per_form": {
+          "SPINDLE": {
+            "count": 2,
+            "correct": 2
+          },
+          "WEDGE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BOX_MODULE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BARREL": {
+            "count": 2,
+            "correct": 2
+          },
+          "ARCH": {
+            "count": 2,
+            "correct": 2
+          },
+          "BLADE": {
+            "count": 2,
+            "correct": 2
+          },
+          "CANOPY_POD": {
+            "count": 2,
+            "correct": 2
+          },
+          "TRUSS_BEAM": {
+            "count": 2,
+            "correct": 2
+          }
+        },
+        "selection_priority": 0.0010600871173664927
+      },
+      "old_training_retention": {
+        "accuracy": 1.0,
+        "cross_entropy": 7.450580152834618e-09,
+        "predicted_form_count": 8,
+        "legacy_shell_predictions": 0,
+        "weak_form_count": 0,
+        "per_form": {
+          "SPINDLE": {
+            "count": 2,
+            "correct": 2
+          },
+          "WEDGE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BOX_MODULE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BARREL": {
+            "count": 2,
+            "correct": 2
+          },
+          "ARCH": {
+            "count": 2,
+            "correct": 2
+          },
+          "BLADE": {
+            "count": 2,
+            "correct": 2
+          },
+          "CANOPY_POD": {
+            "count": 2,
+            "correct": 2
+          },
+          "TRUSS_BEAM": {
+            "count": 2,
+            "correct": 2
+          }
+        },
+        "selection_priority": 7.450580152834618e-09
+      },
+      "old_form_retained_80pct": true
+    },
+    {
+      "condition": "contrastive_identity",
+      "seed": 1601,
+      "actual_gradient_seconds": 300.001,
+      "updates": 88773,
+      "selected_development_step": 86560,
+      "development": {
+        "accuracy": 1.0,
+        "cross_entropy": 0.0077507467940449715,
+        "predicted_form_count": 8,
+        "legacy_shell_predictions": 0,
+        "weak_form_count": 0,
+        "per_form": {
+          "SPINDLE": {
+            "count": 2,
+            "correct": 2
+          },
+          "WEDGE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BOX_MODULE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BARREL": {
+            "count": 2,
+            "correct": 2
+          },
+          "ARCH": {
+            "count": 2,
+            "correct": 2
+          },
+          "BLADE": {
+            "count": 2,
+            "correct": 2
+          },
+          "CANOPY_POD": {
+            "count": 2,
+            "correct": 2
+          },
+          "TRUSS_BEAM": {
+            "count": 2,
+            "correct": 2
+          }
+        },
+        "selection_priority": 0.0077507467940449715
+      },
+      "old_training_retention": {
+        "accuracy": 1.0,
+        "cross_entropy": 0.0,
+        "predicted_form_count": 8,
+        "legacy_shell_predictions": 0,
+        "weak_form_count": 0,
+        "per_form": {
+          "SPINDLE": {
+            "count": 2,
+            "correct": 2
+          },
+          "WEDGE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BOX_MODULE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BARREL": {
+            "count": 2,
+            "correct": 2
+          },
+          "ARCH": {
+            "count": 2,
+            "correct": 2
+          },
+          "BLADE": {
+            "count": 2,
+            "correct": 2
+          },
+          "CANOPY_POD": {
+            "count": 2,
+            "correct": 2
+          },
+          "TRUSS_BEAM": {
+            "count": 2,
+            "correct": 2
+          }
+        },
+        "selection_priority": 0.0
+      },
+      "old_form_retained_80pct": true
+    },
+    {
+      "condition": "hard_form_distinctions",
+      "seed": 313,
+      "actual_gradient_seconds": 300.001,
+      "updates": 92999,
+      "selected_development_step": 80,
+      "development": {
+        "accuracy": 0.9375,
+        "cross_entropy": 0.13401547074317932,
+        "predicted_form_count": 8,
+        "legacy_shell_predictions": 0,
+        "weak_form_count": 0,
+        "per_form": {
+          "SPINDLE": {
+            "count": 2,
+            "correct": 1
+          },
+          "WEDGE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BOX_MODULE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BARREL": {
+            "count": 2,
+            "correct": 2
+          },
+          "ARCH": {
+            "count": 2,
+            "correct": 2
+          },
+          "BLADE": {
+            "count": 2,
+            "correct": 2
+          },
+          "CANOPY_POD": {
+            "count": 2,
+            "correct": 2
+          },
+          "TRUSS_BEAM": {
+            "count": 2,
+            "correct": 2
+          }
+        },
+        "selection_priority": 0.20901547074317933
+      },
+      "old_training_retention": {
+        "accuracy": 1.0,
+        "cross_entropy": 0.0022503254003822803,
+        "predicted_form_count": 8,
+        "legacy_shell_predictions": 0,
+        "weak_form_count": 0,
+        "per_form": {
+          "SPINDLE": {
+            "count": 2,
+            "correct": 2
+          },
+          "WEDGE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BOX_MODULE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BARREL": {
+            "count": 2,
+            "correct": 2
+          },
+          "ARCH": {
+            "count": 2,
+            "correct": 2
+          },
+          "BLADE": {
+            "count": 2,
+            "correct": 2
+          },
+          "CANOPY_POD": {
+            "count": 2,
+            "correct": 2
+          },
+          "TRUSS_BEAM": {
+            "count": 2,
+            "correct": 2
+          }
+        },
+        "selection_priority": 0.0022503254003822803
+      },
+      "old_form_retained_80pct": true
+    },
+    {
+      "condition": "hard_form_distinctions",
+      "seed": 1601,
+      "actual_gradient_seconds": 300.001,
+      "updates": 86661,
+      "selected_development_step": 160,
+      "development": {
+        "accuracy": 0.9375,
+        "cross_entropy": 0.17290376126766205,
+        "predicted_form_count": 8,
+        "legacy_shell_predictions": 0,
+        "weak_form_count": 0,
+        "per_form": {
+          "SPINDLE": {
+            "count": 2,
+            "correct": 1
+          },
+          "WEDGE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BOX_MODULE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BARREL": {
+            "count": 2,
+            "correct": 2
+          },
+          "ARCH": {
+            "count": 2,
+            "correct": 2
+          },
+          "BLADE": {
+            "count": 2,
+            "correct": 2
+          },
+          "CANOPY_POD": {
+            "count": 2,
+            "correct": 2
+          },
+          "TRUSS_BEAM": {
+            "count": 2,
+            "correct": 2
+          }
+        },
+        "selection_priority": 0.24790376126766206
+      },
+      "old_training_retention": {
+        "accuracy": 1.0,
+        "cross_entropy": 0.0005194063414819539,
+        "predicted_form_count": 8,
+        "legacy_shell_predictions": 0,
+        "weak_form_count": 0,
+        "per_form": {
+          "SPINDLE": {
+            "count": 2,
+            "correct": 2
+          },
+          "WEDGE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BOX_MODULE": {
+            "count": 2,
+            "correct": 2
+          },
+          "BARREL": {
+            "count": 2,
+            "correct": 2
+          },
+          "ARCH": {
+            "count": 2,
+            "correct": 2
+          },
+          "BLADE": {
+            "count": 2,
+            "correct": 2
+          },
+          "CANOPY_POD": {
+            "count": 2,
+            "correct": 2
+          },
+          "TRUSS_BEAM": {
+            "count": 2,
+            "correct": 2
+          }
+        },
+        "selection_priority": 0.0005194063414819539
+      },
+      "old_form_retained_80pct": true
+    }
+  ],
+  "development": {
+    "three_view": {
+      "accuracy": 1.0,
+      "cross_entropy": 6.750306056346744e-05,
+      "predicted_form_count": 8,
+      "legacy_shell_predictions": 0,
+      "weak_form_count": 0,
+      "per_form": {
+        "SPINDLE": {
+          "count": 2,
+          "correct": 2
+        },
+        "WEDGE": {
+          "count": 2,
+          "correct": 2
+        },
+        "BOX_MODULE": {
+          "count": 2,
+          "correct": 2
+        },
+        "BARREL": {
+          "count": 2,
+          "correct": 2
+        },
+        "ARCH": {
+          "count": 2,
+          "correct": 2
+        },
+        "BLADE": {
+          "count": 2,
+          "correct": 2
+        },
+        "CANOPY_POD": {
+          "count": 2,
+          "correct": 2
+        },
+        "TRUSS_BEAM": {
+          "count": 2,
+          "correct": 2
+        }
+      },
+      "selection_priority": 6.750306056346744e-05
+    },
+    "contrastive_identity": {
+      "accuracy": 1.0,
+      "cross_entropy": 0.0010600871173664927,
+      "predicted_form_count": 8,
+      "legacy_shell_predictions": 0,
+      "weak_form_count": 0,
+      "per_form": {
+        "SPINDLE": {
+          "count": 2,
+          "correct": 2
+        },
+        "WEDGE": {
+          "count": 2,
+          "correct": 2
+        },
+        "BOX_MODULE": {
+          "count": 2,
+          "correct": 2
+        },
+        "BARREL": {
+          "count": 2,
+          "correct": 2
+        },
+        "ARCH": {
+          "count": 2,
+          "correct": 2
+        },
+        "BLADE": {
+          "count": 2,
+          "correct": 2
+        },
+        "CANOPY_POD": {
+          "count": 2,
+          "correct": 2
+        },
+        "TRUSS_BEAM": {
+          "count": 2,
+          "correct": 2
+        }
+      },
+      "selection_priority": 0.0010600871173664927
+    },
+    "hard_form_distinctions": {
+      "accuracy": 0.9375,
+      "cross_entropy": 0.13401547074317932,
+      "predicted_form_count": 8,
+      "legacy_shell_predictions": 0,
+      "weak_form_count": 0,
+      "per_form": {
+        "SPINDLE": {
+          "count": 2,
+          "correct": 1
+        },
+        "WEDGE": {
+          "count": 2,
+          "correct": 2
+        },
+        "BOX_MODULE": {
+          "count": 2,
+          "correct": 2
+        },
+        "BARREL": {
+          "count": 2,
+          "correct": 2
+        },
+        "ARCH": {
+          "count": 2,
+          "correct": 2
+        },
+        "BLADE": {
+          "count": 2,
+          "correct": 2
+        },
+        "CANOPY_POD": {
+          "count": 2,
+          "correct": 2
+        },
+        "TRUSS_BEAM": {
+          "count": 2,
+          "correct": 2
+        }
+      },
+      "selection_priority": 0.20901547074317933
+    }
+  },
+  "development_only_method_selected": "three_view",
+  "development_checkpoint_choices": {
+    "three_view": {
+      "seed": 313,
+      "step": 42160
+    },
+    "contrastive_identity": {
+      "seed": 313,
+      "step": 29920
+    },
+    "hard_form_distinctions": {
+      "seed": 313,
+      "step": 80
+    }
+  },
+  "new_blind_source_sha256": "4f82a05b37cec12287b7b68ac81a499af235b65db4eb6f7693100dd1217e211d",
+  "new_blind_form_results": {
+    "prior": {
+      "source_form_accuracy": 0.6875,
+      "predicted_unique_form_types": 7,
+      "per_form": {
+        "SPINDLE": {
+          "count": 2,
+          "correct": 1
+        },
+        "WEDGE": {
+          "count": 2,
+          "correct": 2
+        },
+        "BOX_MODULE": {
+          "count": 2,
+          "correct": 0
+        },
+        "BARREL": {
+          "count": 2,
+          "correct": 2
+        },
+        "ARCH": {
+          "count": 2,
+          "correct": 2
+        },
+        "BLADE": {
+          "count": 2,
+          "correct": 1
+        },
+        "CANOPY_POD": {
+          "count": 2,
+          "correct": 2
+        },
+        "TRUSS_BEAM": {
+          "count": 2,
+          "correct": 1
+        }
+      }
+    },
+    "three_view": {
+      "source_form_accuracy": 0.75,
+      "predicted_unique_form_types": 8,
+      "per_form": {
+        "SPINDLE": {
+          "count": 2,
+          "correct": 1
+        },
+        "WEDGE": {
+          "count": 2,
+          "correct": 1
+        },
+        "BOX_MODULE": {
+          "count": 2,
+          "correct": 2
+        },
+        "BARREL": {
+          "count": 2,
+          "correct": 1
+        },
+        "ARCH": {
+          "count": 2,
+          "correct": 2
+        },
+        "BLADE": {
+          "count": 2,
+          "correct": 1
+        },
+        "CANOPY_POD": {
+          "count": 2,
+          "correct": 2
+        },
+        "TRUSS_BEAM": {
+          "count": 2,
+          "correct": 2
+        }
+      }
+    },
+    "contrastive_identity": {
+      "source_form_accuracy": 0.75,
+      "predicted_unique_form_types": 8,
+      "per_form": {
+        "SPINDLE": {
+          "count": 2,
+          "correct": 1
+        },
+        "WEDGE": {
+          "count": 2,
+          "correct": 1
+        },
+        "BOX_MODULE": {
+          "count": 2,
+          "correct": 2
+        },
+        "BARREL": {
+          "count": 2,
+          "correct": 2
+        },
+        "ARCH": {
+          "count": 2,
+          "correct": 2
+        },
+        "BLADE": {
+          "count": 2,
+          "correct": 1
+        },
+        "CANOPY_POD": {
+          "count": 2,
+          "correct": 2
+        },
+        "TRUSS_BEAM": {
+          "count": 2,
+          "correct": 1
+        }
+      }
+    },
+    "hard_form_distinctions": {
+      "source_form_accuracy": 0.875,
+      "predicted_unique_form_types": 8,
+      "per_form": {
+        "SPINDLE": {
+          "count": 2,
+          "correct": 1
+        },
+        "WEDGE": {
+          "count": 2,
+          "correct": 2
+        },
+        "BOX_MODULE": {
+          "count": 2,
+          "correct": 2
+        },
+        "BARREL": {
+          "count": 2,
+          "correct": 2
+        },
+        "ARCH": {
+          "count": 2,
+          "correct": 2
+        },
+        "BLADE": {
+          "count": 2,
+          "correct": 2
+        },
+        "CANOPY_POD": {
+          "count": 2,
+          "correct": 2
+        },
+        "TRUSS_BEAM": {
+          "count": 2,
+          "correct": 1
+        }
+      }
+    }
+  },
+  "native_real_GLBS_to_verify": 1536,
+  "no_pretrained_outside_AI": true,
+  "android_neural_deployed": false
+}
