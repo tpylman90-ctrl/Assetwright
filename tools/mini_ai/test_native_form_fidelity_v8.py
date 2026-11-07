@@ -106,6 +106,10 @@ def fake(geometry_is_better=True):
         "measured_optimizer_seconds":1800.06,
         "completed_sessions":6,"sessions":sessions,
         "development_selected":"physical_replay",
+        "development_checkpoint_seeds":{
+            name:{"seed":317,"selected_step":600}
+            for name in CONDITIONS
+        },
         "development_results":{
             "supervised_replay":{"development_priority":.84},
             "physical_replay":{"development_priority":.61},
