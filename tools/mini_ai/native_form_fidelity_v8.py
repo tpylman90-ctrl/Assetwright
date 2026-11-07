@@ -240,7 +240,10 @@ def train(new_manifest,new_images,new_views,new_source,
     # Cache all frozen features. The gradients can only update the original
     # adapter, not previously learned form or operation recognition weights.
     def cache(t):
-        with torch.inference_mode():
+        # Cache immutable parent features as ORDINARY no-grad tensors:
+        # inference_mode tensors cannot be saved for gradient computation
+        # in the adapter's trainable first Linear layer.
+        with torch.no_grad():
             old_score,old_power,h,old_form=parent(t[0])
             identity_score,ih=identity(t[1])
             frozen_forms=(identity_score+.18*old_form).argmax(1)
@@ -250,7 +253,10 @@ def train(new_manifest,new_images,new_views,new_source,
     new_cache=cache(fresh_t)
     dev_cache=cache(dev_t)
     def metrics(model,data,pred):
-        model.eval()
+        # The unmodified parent has no residual adapter; it is represented
+        # by None and must be scored without calling .eval() on None.
+        if model is not None:
+            model.eval()
         with torch.inference_mode():
             if model is None:
                 logits,powers=pred[0],pred[1]
@@ -284,6 +290,7 @@ def train(new_manifest,new_images,new_views,new_source,
     sessions=[]
     champions={}
     dev_results={}
+    selected_seeds={}
     spent=0.
     for condition in CONDITIONS:
         best_cond=float("inf");selected_state=None;selected_meta=None
@@ -394,6 +401,7 @@ def train(new_manifest,new_images,new_views,new_source,
         winner=Refinement()
         winner.load_state_dict(selected_state,strict=True)
         champions[condition]=winner
+        selected_seeds[condition]=selected_meta
         dev_results[condition]=metrics(winner,dev_t,dev_cache)
         save_file({k:v.detach().cpu().contiguous()
                    for k,v in winner.state_dict().items()},
@@ -467,6 +475,7 @@ def train(new_manifest,new_images,new_views,new_source,
         "previous_training_retention_before":prior_old,
         "previous_development_before":prior_dev,
         "development_results":dev_results,
+        "development_checkpoint_seeds":selected_seeds,
         "development_selected":method,
         "blind_source_sha256":sha,
         "blind_per_method_predictions":blind_results,
