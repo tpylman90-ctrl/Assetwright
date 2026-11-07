@@ -122,9 +122,20 @@ def assess(report,geometry,lineage):
             forms_inconsistent+=1
     old=report.get("previous_training_retention_before",{})
     recalled=report.get("sessions",[])
-    selected_replay=[x["old_training_retention"] for x in recalled
-                     if x["condition"]==selected]
-    retained=sorted(selected_replay,key=lambda x:x.get("native_3D_displacement_proxy_rmse",99))[0]
+    chosen_seeds=report.get("development_checkpoint_seeds",{})
+    if (set(chosen_seeds)!=set(CONDITIONS)
+        or any(chosen_seeds[k].get("seed") not in SEEDS
+               or chosen_seeds[k].get("selected_step",0)<100
+               for k in CONDITIONS)):
+        raise ValueError("Development-selected seed and checkpoint provenance missing")
+    matched=[x["old_training_retention"] for x in recalled
+             if x["condition"]==selected
+             and x["seed"]==chosen_seeds[selected]["seed"]
+             and x["selected_development_step"]==
+                 chosen_seeds[selected]["selected_step"]]
+    if len(matched)!=1:
+        raise ValueError("Old knowledge retention must match exact selected model")
+    retained=matched[0]
     if any(not isinstance(x.get(field),(int,float)) or
            not math.isfinite(x[field]) for x in (old,retained)
            for field in ("operation_accuracy","strength_mae")):
