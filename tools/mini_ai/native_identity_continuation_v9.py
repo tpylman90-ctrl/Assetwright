@@ -13,7 +13,7 @@ but their same-baseline 3-view descriptor is NOT counted as 1,200
 independent identity examples.
 
 Two per-form NEW dev families and two per-form fresh BLIND families
-never participate in gradient updates. All 384 blind transform targets
+never participate in gradient updates. All 288 blind transform targets
 are inspected just once AFTER condition and checkpoint selection.
 """
 from __future__ import annotations
@@ -448,7 +448,7 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
     heldout_sha=hashlib.sha256("\n".join(sorted(
         row["modified_glb_sha256"] for row in valid_source)).encode()).hexdigest()
     report={
-        "schema":SCHEMA,"study":"shape_identity_v7",
+        "schema":SCHEMA,"study":"identity_continuation_v9",
         "original_v6_experimental_parent_sha256":digest(path),
         "source_v7_hard_form_sha256":digest(teacher_path),
         "warm_started_from_existing_neural_weights":True,
