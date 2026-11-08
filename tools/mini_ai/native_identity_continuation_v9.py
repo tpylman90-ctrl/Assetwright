@@ -90,8 +90,10 @@ def unique_source_rows(manifest:dict,images:Path,extra:Path,
 
 
 def train(new_manifest:Path,new_images:Path,new_views:Path,
-          legacy_manifest:Path,legacy_images:Path,legacy_views:Path,
-          old_knowledge:Path,output:Path,active_seconds:int):
+          v6_manifest:Path,v6_images:Path,v6_views:Path,
+          v7_manifest:Path,v7_images:Path,v7_views:Path,
+          v8_manifest:Path,v8_images:Path,v8_views:Path,
+          v6_knowledge:Path,v7_knowledge:Path,output:Path,active_seconds:int):
     import numpy as np
     import torch
     import torch.nn as nn
@@ -103,32 +105,49 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
         raise ValueError("New shape training needs 20–35 CPU gradient minutes")
     source=json.loads(new_manifest.read_text())
     checked_manifest(source,new_images)  # all images/hashes, never train on blind
-    prior=json.loads(legacy_manifest.read_text())
-    old_rows=unique_source_rows(
-        prior,legacy_images,legacy_views,
+    # Replay ONLY original previously labelled TRAINING form baselines.
+    # No older mf/si/sf dev or blind families contribute to gradients.
+    old6=unique_source_rows(
+        json.loads(v6_manifest.read_text()),v6_images,v6_views,
         study="multiform_v6",splits=("train",))
+    old7=unique_source_rows(
+        json.loads(v7_manifest.read_text()),v7_images,v7_views,
+        study="shape_identity_v7",splits=("train",))
+    old8=unique_source_rows(
+        json.loads(v8_manifest.read_text()),v8_images,v8_views,
+        study="form_fidelity_v8",splits=("train",))
     rows=unique_source_rows(
-        source,new_images,new_views,study="shape_identity_v7",
+        source,new_images,new_views,study="identity_continuation_v9",
         splits=("train","development","validation"))
     new_train=[r for r in rows if r["split"]=="train"]
     dev=[r for r in rows if r["split"]=="development"]
     blind=[r for r in rows if r["split"]=="validation"]
-    if tuple(map(len,(old_rows,new_train,dev,blind)))!=(16,40,16,16):
-        raise ValueError("Incorrect genuinely independent native shape families")
-    # Check exact original v6 weights but never call them approved for mobile.
-    history=json.loads((old_knowledge/"learning_history.json").read_text())
-    lineage=json.loads((old_knowledge/"lineage.json").read_text())
-    path=old_knowledge/"balanced_forms.safetensors"
+    if tuple(map(len,(old6,old7,old8,new_train,dev,blind)))!=(
+        16,40,48,64,16,16):
+        raise ValueError("Incomplete 104 earlier and 64 novel original native forms")
+    old_rows=old6+old7+old8
+    if len({r["baseline_sha"] for r in old_rows+rows})!=len(old_rows+rows):
+        raise ValueError("Original native shape duplicated or blind source leaked")
+    history=json.loads((v6_knowledge/"learning_history.json").read_text())
+    lineage=json.loads((v6_knowledge/"lineage.json").read_text())
+    path=v6_knowledge/"balanced_forms.safetensors"
+    h7=json.loads((v7_knowledge/"learning_history.json").read_text())
+    norm7=json.loads((v7_knowledge/"lineage.json").read_text())
+    teacher_path=v7_knowledge/"hard_form_distinctions.safetensors"
     if (history.get("research_gate")!="research_not_promoted_legacy_checkpoint_retained"
         or history["candidate_weight_sha256"]["balanced_forms"]!=digest(path)
+        or h7.get("research_disposition")!="research_candidate_not_promoted"
+        or h7["new_neural_identity_weights_SHA256"]["hard_form_distinctions"]
+            !=digest(teacher_path)
+        or norm7["parent_source_weights_sha256"]!=digest(path)
         or lineage["schema"]!="assetwright-original-8-archetype-neural-weights-v6"
         or len(lineage["pixel_mean"])!=OLD_INPUT
         or len(lineage["pixel_std"])!=OLD_INPUT
-        or len(lineage["form_names"])!=9):
-        raise ValueError("Experimental original v6 parent checkpoint changed")
+        or len(norm7["identity_input_mean"])!=ID_INPUT
+        or len(norm7["identity_input_std"])!=ID_INPUT):
+        raise ValueError("Previously learned original research checkpoints failed integrity")
     old_mean=np.asarray(lineage["pixel_mean"],dtype=np.float32)
     old_std=np.asarray(lineage["pixel_std"],dtype=np.float32)
-
     class Parent(nn.Module):
         def __init__(self):
             super().__init__()
@@ -472,14 +491,18 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for name in ("new_manifest","new_images","new_views",
-                 "legacy_manifest","legacy_images","legacy_views",
-                 "old_knowledge","out"):
-        p.add_argument("--"+name.replace("_","-"),required=True,type=Path)
+                 "v6_manifest","v6_images","v6_views",
+                 "v7_manifest","v7_images","v7_views",
+                 "v8_manifest","v8_images","v8_views",
+                 "v6_knowledge","v7_knowledge","out"):
+        p.add_argument("--"+name.replace("_","-"),type=Path,required=True)
     p.add_argument("--training-seconds",type=int,default=1800)
     a=p.parse_args()
     train(a.new_manifest,a.new_images,a.new_views,
-          a.legacy_manifest,a.legacy_images,a.legacy_views,
-          a.old_knowledge,a.out,a.training_seconds)
+          a.v6_manifest,a.v6_images,a.v6_views,
+          a.v7_manifest,a.v7_images,a.v7_views,
+          a.v8_manifest,a.v8_images,a.v8_views,
+          a.v6_knowledge,a.v7_knowledge,a.out,a.training_seconds)
 
 
 if __name__=="__main__":
