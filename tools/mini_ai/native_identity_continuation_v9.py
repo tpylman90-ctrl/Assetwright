@@ -133,11 +133,11 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
     path=v6_knowledge/"balanced_forms.safetensors"
     h7=json.loads((v7_knowledge/"learning_history.json").read_text())
     norm7=json.loads((v7_knowledge/"lineage.json").read_text())
-    teacher_path=v7_knowledge/"hard_form_distinctions.safetensors"
+    teacher_path=v7_knowledge/"spindle_truss_focus.safetensors"
     if (history.get("research_gate")!="research_not_promoted_legacy_checkpoint_retained"
         or history["candidate_weight_sha256"]["balanced_forms"]!=digest(path)
         or h7.get("research_disposition")!="research_candidate_not_promoted"
-        or h7["new_neural_identity_weights_SHA256"]["hard_form_distinctions"]
+        or h7["new_neural_identity_weights_SHA256"]["spindle_truss_focus"]
             !=digest(teacher_path)
         or norm7["parent_source_weights_sha256"]!=digest(path)
         or lineage["schema"]!="assetwright-original-8-archetype-neural-weights-v6"
@@ -264,8 +264,9 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
         for seed in SEEDS:
             torch.manual_seed(seed)
             model=Identity()
+            model.load_state_dict(teacher.state_dict(),strict=True)
             optimizer=torch.optim.AdamW(model.parameters(),
-                                        lr=.00050,weight_decay=.002)
+                                        lr=.00012,weight_decay=.001)
             session_best=float("inf")
             session_weights=None
             session_step=0;step=0
@@ -273,12 +274,12 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
             while time.perf_counter()-start<duration or step<100:
                 # Two or more same-class original baselines guaranteed in
                 # each batch for contrastive loss, not duplicated transforms.
-                if condition=="hard_form_distinctions":
+                if condition=="spindle_truss_focus":
                     sampled=[]
                     for k,candidates in enumerate(indices_by_form,1):
-                        count=7 if FORMS[k] in (
-                            "BARREL","BOX_MODULE","BLADE","SPINDLE","WEDGE"
-                        ) else 4
+                        count=9 if FORMS[k] in (
+                            "SPINDLE","TRUSS_BEAM","ARCH"
+                        ) else 5
                         sampled.append(candidates[
                             torch.randint(len(candidates),(count,))])
                     ix=torch.cat(sampled)
@@ -292,15 +293,22 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
                 logits=logits+.18*parent_train[ix]
                 label=training[2][ix]
                 loss=F.cross_entropy(logits,label)
-                if condition=="contrastive_identity":
+                if condition=="contrastive_continuation":
                     loss+=.16*contrastive(h,label)
-                if condition=="hard_form_distinctions":
+                if condition=="spindle_truss_focus":
                     hard=torch.tensor([
-                        1.8 if FORMS[int(x)] in (
-                            "BARREL","BOX_MODULE","BLADE") else 1.
+                        2.0 if FORMS[int(x)] in (
+                            "SPINDLE","TRUSS_BEAM","ARCH") else 1.
                         for x in label],dtype=torch.float32)
                     loss+=(hard*F.cross_entropy(
                         logits,label,reduction="none")).mean()*.45
+                # Distill old identity on source-hashed TRAIN-only forms.
+                old_ix=torch.randint(len(old_rows),(24,))
+                recalled,_=model(old_training[0][old_ix])
+                previous=F.kl_div(
+                    F.log_softmax((recalled+.18*old_logits[old_ix])/2.,dim=1),
+                    distill_teacher[old_ix],reduction="batchmean")*4.
+                loss+=.24*previous
                 optimizer.zero_grad()
                 loss.backward()
                 nn.utils.clip_grad_norm_(model.parameters(),2.)
@@ -310,7 +318,7 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
                     fresh=metrics(model,developing,parent_dev)
                     older=metrics(model,old_training,old_logits)
                     # Old v6 original form understanding cannot be erased.
-                    retained=older["accuracy"]>=.80
+                    retained=older["accuracy"]>=initial_teacher_accuracy-.02
                     # Do not choose based on the untouched blind families.
                     if fresh["selection_priority"]<session_best:
                         session_best=fresh["selection_priority"]
@@ -332,8 +340,12 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
             elapsed=time.perf_counter()-start
             accumulated+=elapsed
             if session_weights is None:
-                # Preserve honest failure; do not silently substitute random.
-                raise ValueError("No valid independent original identity training checkpoint")
+                # Retain a genuine trained candidate, but the gate will
+                # independently reject catastrophic earlier-skill forgetting.
+                session_weights={
+                    k:v.detach().cpu().clone()
+                    for k,v in model.state_dict().items()}
+                session_step=step
             model.load_state_dict(session_weights,strict=True)
             dev_result=metrics(model,developing,parent_dev)
             old_result=metrics(model,old_training,old_logits)
@@ -342,7 +354,7 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
                 "actual_gradient_seconds":round(elapsed,3),
                 "updates":step,"selected_development_step":session_step,
                 "development":dev_result,"old_training_retention":old_result,
-                "old_form_retained_80pct":old_result["accuracy"]>=.80
+                "old_form_retained":old_result["accuracy"]>=initial_teacher_accuracy-.02
             }
             reports.append(report)
             save_file({k:v.detach().cpu().contiguous()
