@@ -4,6 +4,7 @@ name: Forge Mini v10 — Continued Physical Geometry Learning
 # + frozen source-hashed v9 form identifier. Fresh 1808 original Kotlin GLBs,
 # 288 untouched blind native deformations. 6x300s CPU optimizer sessions.
 # Development selects methods; independent Kotlin GLBs validate 3D surface.
+# This run includes corrected source-replay cardinality and selected-seed gate tests.
 on:
   push:
     branches: [main]
