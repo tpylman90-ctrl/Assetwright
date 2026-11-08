@@ -1,0 +1,31 @@
+{
+  "schema": "assetwright-original-residual-native-geometry-student-v8",
+  "source_v6_weight_sha256": "b4b43fe30b4865fc598d8673390ce0383ecfee614878a46cfb8f68f3952288db",
+  "source_v7_form_weight_sha256": "540bc98c9d126321b784b4f13db17cf9e1194f9815ab98ce401f29e1be5ee52b",
+  "input_original_action_dim": 1536,
+  "input_original_form_dim": 3072,
+  "form_classes": [
+    "LEGACY_SHELL",
+    "SPINDLE",
+    "WEDGE",
+    "BOX_MODULE",
+    "BARREL",
+    "ARCH",
+    "BLADE",
+    "CANOPY_POD",
+    "TRUSS_BEAM"
+  ],
+  "ops": [
+    "SECTION_LOFT",
+    "TANGENT_SWEEP",
+    "SECTION_TWIST",
+    "SUPERELLIPSE_PROFILE",
+    "LOWER_RECESS",
+    "RIBBED_FAIRING"
+  ],
+  "legacy_action_weights_frozen": true,
+  "legacy_shape_identity_weights_frozen": true,
+  "final_method_selected_by_new_development": "hard_physical",
+  "blind_source_sha256": "d6f7d370d8a42f681178dfe319d02ea546748f771b2debd2e6d7760ec90de346",
+  "not_approved_for_android": true
+}

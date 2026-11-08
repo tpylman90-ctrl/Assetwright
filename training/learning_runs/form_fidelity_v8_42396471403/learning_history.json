@@ -1,0 +1,31 @@
+{
+  "schema": "assetwright-durable-original-form-fidelity-research-v8",
+  "run_id": 42396471403,
+  "parent_v6_action_strength_sha256": "b4b43fe30b4865fc598d8673390ce0383ecfee614878a46cfb8f68f3952288db",
+  "parent_v7_shape_identity_sha256": "540bc98c9d126321b784b4f13db17cf9e1194f9815ab98ce401f29e1be5ee52b",
+  "frozen_original_models_preserved": true,
+  "source_original_Kotlin_GLBS_verified": 1808,
+  "generated_original_Kotlin_GLBS_verified": 1152,
+  "old_correct_original_geometry_replay_examples": 1200,
+  "new_original_geometry_training_examples": 1152,
+  "new_distinct_blind_source_families": 16,
+  "blind_original_source_sha256": "d6f7d370d8a42f681178dfe319d02ea546748f771b2debd2e6d7760ec90de346",
+  "actual_optimizer_seconds": 1800.007,
+  "trained_adapters": {
+    "supervised_replay": {
+      "sha256": "365d7c872e45c2d7120d5ec13ec8839fe9425945ffdbef3615bdcfb8173183dc",
+      "parameters": 26668
+    },
+    "physical_replay": {
+      "sha256": "7a8d0b9365e9b8da6839b2a794f3efcc1ba089d95000dcb4c0f07f352e31a05e",
+      "parameters": 26668
+    },
+    "hard_physical": {
+      "sha256": "fbaea8ee0ec8b061232036e1d6addd80f4ab6f67d32979917c8d92333af5320a",
+      "parameters": 26668
+    }
+  },
+  "research_gate": "experimental_checkpoint_not_promoted_parent_protected",
+  "production_checkpoint_modified": false,
+  "Android_neural_deployed": false
+}
