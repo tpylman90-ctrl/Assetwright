@@ -123,6 +123,17 @@ elif STUDY=="form_fidelity_v8":
         "development":(.18,.52,.83),
         "validation":(.12,.44,.96)
     }
+elif STUDY=="identity_continuation_v9":
+    FAMILIES={
+        "train":tuple("if_train%02d"%i for i in range(1,65)),
+        "development":tuple("if_dev%02d"%i for i in range(1,17)),
+        "validation":tuple("if_blind%02d"%i for i in range(1,17))
+    }
+    LEVELS={
+        "train":(.08,.45,.92),
+        "development":(.18,.54,.84),
+        "validation":(.11,.41,.96)
+    }
 elif STUDY!="delta_v1":
     raise ValueError("Unapproved native source curriculum")
 EXPECTED=sum(len(FAMILIES[phase])*6*len(LEVELS[phase])
@@ -163,12 +174,12 @@ def read_case(root:Path,stem:str,expected:tuple,*,baseline:bool=False)->dict:
            or not math.isfinite(meta[name])
            or not .5<=meta[name]<=12 for name in ("length","width","height")):
         raise ValueError("Invalid physical original dimensions")
-    if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8"):
+    if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9"):
         forms=("SPINDLE","WEDGE","BOX_MODULE","BARREL","ARCH",
                "BLADE","CANOPY_POD","TRUSS_BEAM")
         i=int(family[-2:])
         expected_form=forms[(i-1)%len(forms)]
-        if STUDY in ("shape_identity_v7","form_fidelity_v8"):
+        if STUDY in ("shape_identity_v7","form_fidelity_v8","identity_continuation_v9"):
             variant=(i-1)//8
             expected_segments=(24 if variant%2==0 else 32) if split=="train" else (
                 32 if split=="development" else 40)
@@ -243,7 +254,7 @@ def multiform_section_features(path:Path)->list[float]:
 
 
 def native_delta(before:Path,after:Path)->tuple[list[float],float]:
-    if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8"):
+    if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9"):
         a=multiform_section_features(before)
         b=multiform_section_features(after)
     else:
@@ -257,8 +268,8 @@ def native_delta(before:Path,after:Path)->tuple[list[float],float]:
     va=_accessor(adoc,abuf,pa["attributes"]["POSITION"],"positions")
     vb=_accessor(bdoc,bbuf,pb["attributes"]["POSITION"],"positions")
     if len(va)!=len(vb) or (
-        (STUDY not in ("multiform_v6","shape_identity_v7","form_fidelity_v8") and len(va)!=602) or
-        (STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8") and len(va) not in (602,802,1058,1322))
+        (STUDY not in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9") and len(va)!=602) or
+        (STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9") and len(va) not in (602,802,1058,1322))
     ):
         raise ValueError("Native geometry lost true corresponding source vertices")
     displacement=math.sqrt(sum(
@@ -295,7 +306,7 @@ def render_school(source:Path,images:Path,manifest_path:Path)->dict:
         baseline=audited[base]["meta"]
         if any(abs(dims[k]-baseline[k])>1.e-6 for k in ("length","width","height")):
             raise ValueError("Changed dimensions, not a controlled operation delta")
-        if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8") and any(
+        if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9") and any(
             dims[k]!=baseline[k] for k in ("archetype","segments","stations")):
             raise ValueError("Original source archetype/topology changed within family")
     frame={}
@@ -344,7 +355,7 @@ def render_school(source:Path,images:Path,manifest_path:Path)->dict:
             "height":source_data["meta"]["height"],
             **({key:source_data["meta"][key]
                for key in ("archetype","segments","stations")}
-               if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8") else {}),
+               if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9") else {}),
             "before_view_files":before_names,"before_view_sha256":before_hashes,
             "after_view_files":after_names,"after_view_sha256":after_hashes,
             "measured_morphology_delta":delta,
@@ -413,11 +424,11 @@ def checked_manifest(manifest:dict,images:Path)->list[dict]:
                 path=images/(stem+"__"+view+".png")
                 if names[view]!=path.name or not path.is_file() or hash_file(path)!=hashes[view]:
                     raise ValueError("Tampered before/after original image")
-        if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8"):
+        if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9"):
             i=int(family[-2:])
             forms=("SPINDLE","WEDGE","BOX_MODULE","BARREL","ARCH",
                    "BLADE","CANOPY_POD","TRUSS_BEAM")
-            if STUDY in ("shape_identity_v7","form_fidelity_v8"):
+            if STUDY in ("shape_identity_v7","form_fidelity_v8","identity_continuation_v9"):
                 variant=(i-1)//8
                 expected_segments=(24 if variant%2==0 else 32) if split=="train" else (
                     32 if split=="development" else 40)
