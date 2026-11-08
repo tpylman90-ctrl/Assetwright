@@ -1,0 +1,26 @@
+{
+  "schema": "assetwright-original-independent-shape-identity-knowledge-v9",
+  "github_run_id": 42445878521,
+  "source_parent_v6_experimental_weight_SHA256": "b4b43fe30b4865fc598d8673390ce0383ecfee614878a46cfb8f68f3952288db",
+  "source_teacher_v7_hard_form_SHA256": "540bc98c9d126321b784b4f13db17cf9e1194f9815ab98ce401f29e1be5ee52b",
+  "genuine_v7_warm_start": true,
+  "old_train_baselines_replayed": 104,
+  "new_neural_identity_weights_SHA256": {
+    "replay_continuation": "7bc18a1ceb7a9ebff28c384ea22134dc6eb7968f274986b63caa398c97725291",
+    "contrastive_continuation": "f9d2dff05e0c754945ed21b5f3728e15b9d6299603a374be56e9abe6f926a0f5",
+    "spindle_truss_focus": "a3b72478b9577f09b6d2e14be6d18c30db976e03a8148ac14d861c8eb8b40acc"
+  },
+  "old_native_operation_strength_network_unchanged": true,
+  "distinct_source_baselines_trained": 168,
+  "new_source_baseline_train_cases": 64,
+  "new_source_development_form_families": 16,
+  "untouched_new_source_blind_families": 16,
+  "new_original_Kotlin_GLBS_verified": 1824,
+  "real_original_Kotlin_reconstructions_verified": 1152,
+  "training_time_seconds": 1800.01,
+  "research_disposition": "research_candidate_not_promoted",
+  "original_v6_previous_candidate_not_approved_for_mobile": true,
+  "production_research_checkpoint_untouched": true,
+  "human_visual_review_required": true,
+  "android_neural_installed": false
+}
