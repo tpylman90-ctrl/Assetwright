@@ -151,7 +151,7 @@ def retain(run_id,work,old,teacher_dir,destination):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for x in ("work","old","teacher_dir","out"):
-        p.add_argument("--"+x,type=Path,required=True)
+        p.add_argument("--"+x,"--"+x.replace("_","-"),type=Path,required=True)
     p.add_argument("--run-id",required=True)
     a=p.parse_args()
     print(json.dumps(retain(a.run_id,a.work,a.old,a.teacher_dir,a.out),indent=2))
