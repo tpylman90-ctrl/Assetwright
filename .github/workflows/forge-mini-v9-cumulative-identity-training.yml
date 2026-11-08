@@ -1,0 +1,188 @@
+name: Forge Mini v9 — Original Cumulative Shape-Identity Training
+
+# 104 prior TRAIN-only genuine native source forms + 64 new TRAIN forms
+# Every method truly reloads source-hashed v7 learned identity weights.
+# Six independently measured 300-second CPU sessions, then original
+# Kotlin 3D GLB forward audit on 16 new untouched blind shape families.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/forge-mini-v9-cumulative-identity-training.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: assetwright-genuine-identity-continuation-v9
+  cancel-in-progress: false
+
+jobs:
+  train-and-audit-real-shapes:
+    name: Reload existing student and train 168 real form baselines, then audit 1152 GLBs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 110
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ASSETWRIGHT_DINO_STUDY: identity_continuation_v9
+      ASSETWRIGHT_IDENTITY_CONTINUATION_PREDICTIONS: ${{ github.workspace }}/local-data/identity_continuation_v9/student/native_proposals.properties
+      ASSETWRIGHT_IDENTITY_CONTINUATION_RECON: ${{ github.workspace }}/local-data/identity_continuation_v9/reconstructed
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Require finished 1824-source ORIGINAL native Kotlin cohort
+        run: |
+          gh run watch 42445286271 --repo "$GITHUB_REPOSITORY" --exit-status
+      - name: Download 1824 source-hashed original v9 training/development/blind GLBs
+        uses: actions/download-artifact@v4
+        with:
+          name: forge-mini-v9-1824-original-eight-form-sources
+          repository: tpylman90-ctrl/Assetwright
+          run-id: 42445286271
+          github-token: ${{ github.token }}
+          path: local-data/identity_continuation_v9/new/
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Download previous original v6/v7/v8 TRAIN-only source GLBs and views
+        run: |
+          test -s training/learning_runs/multiform_v6_42151392636/balanced_forms.safetensors
+          test -s training/learning_runs/shape_identity_v7_42233349361/hard_form_distinctions.safetensors
+          mkdir -p local-data/identity_continuation_v9/v6
+          mkdir -p local-data/identity_continuation_v9/v7
+          mkdir -p local-data/identity_continuation_v9/v8
+          gh run download 42151392636 --repo "$GITHUB_REPOSITORY" \
+            --name forge-mini-v6-1088-real-diverse-native-GLBs \
+            --dir local-data/identity_continuation_v9/v6
+          gh run download 42233349361 --repo "$GITHUB_REPOSITORY" \
+            --name forge-mini-v7-2040-forms-and-three-view-identity \
+            --dir local-data/identity_continuation_v9/v7
+          gh run download 42267694590 --repo "$GITHUB_REPOSITORY" \
+            --name forge-mini-v8-1808-original-eight-form-sources \
+            --dir local-data/identity_continuation_v9/v8
+          for study in v6 v7 v8; do
+            test -s "local-data/identity_continuation_v9/$study/manifest.json"
+          done
+          test -s local-data/identity_continuation_v9/new/identity/index.json
+      - name: Install only free native geometry and CPU PyTorch requirements
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+          python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'safetensors>=0.4,<1'
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Create honest old v6 TRAIN-only original baseline 3-view reference images
+        run: |
+          python tools/mini_ai/native_shape_identity_views.py \
+            --manifest local-data/identity_continuation_v9/v6/manifest.json \
+            --source local-data/identity_continuation_v9/v6/source \
+            --images local-data/identity_continuation_v9/v6/images \
+            --out local-data/identity_continuation_v9/v6/identity \
+            --train-only
+      - name: Validate new original v9 source identities and predeclared 3D research gate
+        run: |
+          python -m compileall -q \
+            tools/mini_ai/dino_delta_school.py \
+            tools/mini_ai/native_identity_continuation_v9.py \
+            tools/mini_ai/native_identity_continuation_forward_audit.py \
+            tools/mini_ai/native_identity_continuation_acceptance.py \
+            tools/mini_ai/retain_identity_continuation_v9.py
+          python -m unittest discover -s tools/mini_ai \
+            -p 'test_native_identity_continuation_v9.py' -v
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("local-data/identity_continuation_v9/new")
+          j=json.loads((root/"manifest.json").read_text())
+          view=json.loads((root/"identity/index.json").read_text())
+          assert j["study_id"]=="identity_continuation_v9"
+          assert j["source_count"]==1824 and j["paired_examples"]==1728
+          assert view["source_count"]==96
+          assert j["external_geometry_used"] is False
+          assert {part:sum(row["split"]==part for row in j["records"])
+                  for part in ("train","development","validation")}=={
+                  "train":1152,"development":288,"validation":288}
+          print("Original v9 source hashes, 8 classes, 16 new blind forms verified",flush=True)
+          PY
+      - name: REAL 1800 seconds neural gradient continuation from verified v7 learned identity
+        run: |
+          python -u tools/mini_ai/native_identity_continuation_v9.py \
+            --new-manifest local-data/identity_continuation_v9/new/manifest.json \
+            --new-images local-data/identity_continuation_v9/new/images \
+            --new-views local-data/identity_continuation_v9/new/identity \
+            --v6-manifest local-data/identity_continuation_v9/v6/manifest.json \
+            --v6-images local-data/identity_continuation_v9/v6/images \
+            --v6-views local-data/identity_continuation_v9/v6/identity \
+            --v7-manifest local-data/identity_continuation_v9/v7/manifest.json \
+            --v7-images local-data/identity_continuation_v9/v7/images \
+            --v7-views local-data/identity_continuation_v9/v7/identity \
+            --v8-manifest local-data/identity_continuation_v9/v8/manifest.json \
+            --v8-images local-data/identity_continuation_v9/v8/images \
+            --v8-views local-data/identity_continuation_v9/v8/identity \
+            --v6-knowledge training/learning_runs/multiform_v6_42151392636 \
+            --v7-knowledge training/learning_runs/shape_identity_v7_42233349361 \
+            --out local-data/identity_continuation_v9/student \
+            --training-seconds 1800
+      - name: Independently reconstruct 1152 ACTUAL Kotlin source-sculpted shape GLBs
+        run: |
+          test -s "$ASSETWRIGHT_IDENTITY_CONTINUATION_PREDICTIONS"
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoIdentityContinuationReconstructionTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/identity_continuation_v9/reconstructed -maxdepth 1 -name '*.glb' | wc -l)" -eq 1152
+      - name: Real original GLB surface distance on each newly unseen shape and output form
+        run: |
+          python tools/mini_ai/native_identity_continuation_forward_audit.py \
+            --source local-data/identity_continuation_v9/new/source \
+            --reconstructed local-data/identity_continuation_v9/reconstructed \
+            --out local-data/identity_continuation_v9/forward_audit.json
+      - name: Predeclared gate — do not cherry-pick a v9 method from blind scores
+        run: |
+          python tools/mini_ai/native_identity_continuation_acceptance.py \
+            --evaluation local-data/identity_continuation_v9/student/evaluation.json \
+            --forward local-data/identity_continuation_v9/forward_audit.json \
+            --lineage local-data/identity_continuation_v9/student/lineage.json \
+            --out local-data/identity_continuation_v9/student/research_disposition.json
+      - name: Commit all 3 REAL trained new models without overwriting existing learned knowledge
+        run: |
+          python tools/mini_ai/retain_identity_continuation_v9.py \
+            --work local-data/identity_continuation_v9 \
+            --old training/learning_runs/multiform_v6_42151392636 \
+            --teacher-dir training/learning_runs/shape_identity_v7_42233349361 \
+            --out "training/learning_runs/identity_continuation_v9_$GITHUB_RUN_ID" \
+            --run-id "$GITHUB_RUN_ID"
+          git config user.name "AssetWright original form learning bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "training/learning_runs/identity_continuation_v9_$GITHUB_RUN_ID"
+          git commit -m "research: retain cumulative v9 real neural shape training and 1152 GLB evidence [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:refs/heads/main
+      - name: Preserve actual learned neural weights and GLBs even if final gate rejects
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-mini-v9-cumulative-original-identity-training-and-1152-GLBs
+          path: |
+            local-data/identity_continuation_v9/student/*.json
+            local-data/identity_continuation_v9/student/*.properties
+            local-data/identity_continuation_v9/student/winners/*.safetensors
+            local-data/identity_continuation_v9/student/sessions/*.safetensors
+            local-data/identity_continuation_v9/forward_audit.json
+            local-data/identity_continuation_v9/reconstructed/*.glb
+            local-data/identity_continuation_v9/reconstructed/*.json
+            training/learning_runs/identity_continuation_v9_*/**
+          if-no-files-found: warn
+          retention-days: 45
