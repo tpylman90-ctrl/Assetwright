@@ -1,6 +1,6 @@
 """Independent 3D surface audit of 8 truly different ORIGINAL native forms.
 
-Compares all original Kotlin source GLBs against 768 Kotlin student GLBs
+Compares all original Kotlin source GLBs against 1152 Kotlin student GLBs
 with potentially DIFFERENT tessellation. Index-aligned RMSE would be
 invalid here. Deterministic bidirectional, normalized surface Chamfer
 works across unequal vertex and triangle counts. Also checks shape
@@ -17,6 +17,7 @@ from pathlib import Path
 from dino_delta_school import STUDY,FAMILIES,expected_changes,read_case
 from dino_native_forward_audit import audited,positions
 from native_form_fidelity_v8 import VARIANTS
+from native_multiform_student import FORMS
 
 SCHEMA="assetwright-original-native-form-fidelity-forward-v8"
 META="assetwright-neural-multiform-source-reconstruction-v8"
@@ -66,7 +67,7 @@ def compare(source:Path,reconstruction:Path):
     glbs={p.stem for p in reconstruction.glob("*.glb")}
     files={p.stem for p in reconstruction.glob("*.json")}
     if (len(cases)!=288 or wanted!=glbs or files!=glbs):
-        raise ValueError("Missing/foreign 768 original Kotlin student GLBs")
+        raise ValueError("Missing/foreign 1152 original Kotlin student GLBs")
     individual=[]
     digests=[]
     archetype_groups=defaultdict(list)
