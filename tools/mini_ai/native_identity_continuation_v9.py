@@ -388,14 +388,14 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
     if len(frozen_rows)!=16:
         raise ValueError("Independent blind source shapes missing")
     valid_source=[r for r in source["records"] if r["split"]=="validation"]
-    if len(valid_source)!=384:
+    if len(valid_source)!=288:
         raise ValueError("Full blind native operation/strength tasks missing")
     keyed={r["family"]:r for r in frozen_rows}
     # Form probability is inferred from the originally unmodified shape.
     blind_data=tensors(frozen_rows)
     all_models={"prior":None,**winners}
     proposal={
-        "schema":PROPOSAL_SCHEMA,"study":"shape_identity_v7",
+        "schema":PROPOSAL_SCHEMA,"study":"identity_continuation_v9",
         "external_mesh_used":False,"count":len(valid_source),
         **{name:[] for name in VARIANTS}
     }
@@ -407,7 +407,9 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
             index=frozen_rows.index(row)
             if network is None:
                 with torch.no_grad():
-                    pred=parent(blind_data[1][index:index+1])[2].argmax(1).item()
+                    form_prior=parent(blind_data[1][index:index+1])[2]
+                    original,_=teacher(blind_data[0][index:index+1])
+                    pred=(original+.18*form_prior).argmax(1).item()
             else:
                 with torch.no_grad():
                     raw,_=network(blind_data[0][index:index+1])
@@ -448,15 +450,18 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
     report={
         "schema":SCHEMA,"study":"shape_identity_v7",
         "original_v6_experimental_parent_sha256":digest(path),
+        "source_v7_hard_form_sha256":digest(teacher_path),
+        "warm_started_from_existing_neural_weights":True,
+        "original_v7_teacher_old_training_form_accuracy":initial_teacher_accuracy,
         "old_model_research_gate":history["research_gate"],
         "original_operation_and_strength_weights_frozen":True,
-        "training_unique_native_form_baselines":56,
-        "new_training_unique_form_baselines":40,
-        "previous_training_only_unique_form_baselines":16,
+        "training_unique_native_form_baselines":168,
+        "new_training_unique_form_baselines":64,
+        "previous_training_only_unique_form_baselines":104,
         "previous_v6_blind_used_in_training":False,
         "fresh_dev_unique_native_forms":16,
         "fresh_blind_unique_native_forms":16,
-        "fresh_blind_new_native_transformations":384,
+        "fresh_blind_new_native_transformations":288,
         "balanced_dimensions_across_all_eight_forms":True,
         "separate_32x32_baseline_three_view_encoder":True,
         "same_start_data_budget_all_conditions":True,
@@ -469,13 +474,14 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
         "development_checkpoint_choices":selection,
         "new_blind_source_sha256":heldout_sha,
         "new_blind_form_results":blind_metrics,
-        "native_real_GLBS_to_verify":384*len(VARIANTS),
+        "native_real_GLBS_to_verify":288*len(VARIANTS),
         "no_pretrained_outside_AI":True,
         "android_neural_deployed":False
     }
     meta={
         "schema":MODEL_SCHEMA,
         "parent_source_weights_sha256":digest(path),
+        "source_v7_hard_form_weights_sha256":digest(teacher_path),
         "parent_form_class_names":list(FORMS),
         "old_operation_network_frozen":True,
         "parent_input_mean":old_mean.tolist(),
@@ -493,7 +499,7 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
     output.joinpath("lineage.json").write_text(json.dumps(meta,separators=(",",":"))+"\n")
     output.joinpath("proposals.json").write_text(json.dumps(proposal,indent=2)+"\n")
     lines=["schema="+PROPOSAL_SCHEMA,"external_mesh_used=false",
-           "study_id=shape_identity_v7","count=384"]
+           "study_id=identity_continuation_v9","count=288"]
     for variant in VARIANTS:
         for i,row in enumerate(proposal[variant]):
             for key,value in row.items():
@@ -504,7 +510,7 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
         "old_operation_and_strength_preserved":True,
         "development_selected_method":selected_method,
         "new_blind_16_source_families":blind_metrics,
-        "forward_GLBS_pending":384*len(VARIANTS),
+        "forward_GLBS_pending":288*len(VARIANTS),
         "approved_for_android":False
     }),flush=True)
     return report
