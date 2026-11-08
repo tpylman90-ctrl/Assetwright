@@ -180,9 +180,14 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
     parent.eval()
     for p in parent.parameters():p.requires_grad_(False)
     all_train=old_rows+new_train
-    originals=np.asarray([r["identity"] for r in all_train],dtype=np.float32)
-    identity_mean=originals.mean(0)
-    identity_std=np.maximum(originals.std(0),.08)
+    # A genuine warm start requires the ORIGINAL v7 normalization: changing
+    # these coordinates without rebasing weights would discard prior learning.
+    identity_mean=np.asarray(norm7["identity_input_mean"],dtype=np.float32)
+    identity_std=np.asarray(norm7["identity_input_std"],dtype=np.float32)
+    teacher=Identity()
+    teacher.load_state_dict(load_file(str(teacher_path),device="cpu"),strict=True)
+    teacher.eval()
+    for p in teacher.parameters(): p.requires_grad_(False)
     def tensors(rows):
         identity=np.asarray([r["identity"] for r in rows],dtype=np.float32)
         prior_x=np.asarray([r["old_image"] for r in rows],dtype=np.float32)
@@ -194,19 +199,24 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
     training=tensors(all_train)
     developing=tensors(dev)
     old_training=tensors(old_rows)
-    assert len(all_train)==56
+    assert len(all_train)==168
     with torch.no_grad():
         parent_train=parent(training[1])[2]
         parent_dev=parent(developing[1])[2]
         old_logits=parent(old_training[1])[2]
+        prev_teacher,_=teacher(old_training[0])
+        initial_teacher_accuracy=float(
+            (prev_teacher+.18*old_logits).argmax(1)
+            .eq(old_training[2]).float().mean())
+        distill_teacher=F.softmax((prev_teacher+.18*old_logits)/2.,dim=1)
     # All form classes equally represented among unique SOURCE shapes.
     indices_by_form=[
         torch.tensor([i for i,r in enumerate(all_train)
                       if r["form_id"]==k],dtype=torch.long)
         for k in range(1,9)
     ]
-    if any(len(q)!=7 for q in indices_by_form):
-        raise ValueError("All eight original form types must have seven TRAIN examples")
+    if any(len(q)!=21 for q in indices_by_form):
+        raise ValueError("Exactly 21 real independent source baselines per form required")
     def metrics(model,data,parent_scores):
         model.eval()
         with torch.no_grad():
