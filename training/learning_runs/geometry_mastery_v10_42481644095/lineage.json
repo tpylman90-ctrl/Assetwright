@@ -1,0 +1,35 @@
+{
+  "schema": "assetwright-source-verified-continued-native-geometry-v10",
+  "source_v6_weight_sha256": "b4b43fe30b4865fc598d8673390ce0383ecfee614878a46cfb8f68f3952288db",
+  "source_v7_form_weight_sha256": "540bc98c9d126321b784b4f13db17cf9e1194f9815ab98ce401f29e1be5ee52b",
+  "source_v8_adapter_sha256": "fbaea8ee0ec8b061232036e1d6addd80f4ab6f67d32979917c8d92333af5320a",
+  "source_v9_identity_sha256": "7bc18a1ceb7a9ebff28c384ea22134dc6eb7968f274986b63caa398c97725291",
+  "v8_adapter_weights_warm_started": true,
+  "v9_form_head_weights_frozen": true,
+  "input_original_action_dim": 1536,
+  "input_original_form_dim": 3072,
+  "form_classes": [
+    "LEGACY_SHELL",
+    "SPINDLE",
+    "WEDGE",
+    "BOX_MODULE",
+    "BARREL",
+    "ARCH",
+    "BLADE",
+    "CANOPY_POD",
+    "TRUSS_BEAM"
+  ],
+  "ops": [
+    "SECTION_LOFT",
+    "TANGENT_SWEEP",
+    "SECTION_TWIST",
+    "SUPERELLIPSE_PROFILE",
+    "LOWER_RECESS",
+    "RIBBED_FAIRING"
+  ],
+  "legacy_action_weights_frozen": true,
+  "legacy_shape_identity_weights_frozen": true,
+  "final_method_selected_by_new_development": "warm_replay",
+  "blind_source_sha256": "4ac2832b8ef4ffb1943c3178a416a228593157d960244c9c371deb78a7f7fe64",
+  "not_approved_for_android": true
+}

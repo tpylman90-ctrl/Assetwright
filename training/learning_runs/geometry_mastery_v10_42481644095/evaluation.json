@@ -1,0 +1,265 @@
+{
+  "schema": "assetwright-original-continued-physical-geometry-v10",
+  "study": "geometry_mastery_v10",
+  "old_v6_experimental_parent_sha256": "b4b43fe30b4865fc598d8673390ce0383ecfee614878a46cfb8f68f3952288db",
+  "old_v7_experimental_identity_sha256": "540bc98c9d126321b784b4f13db17cf9e1194f9815ab98ce401f29e1be5ee52b",
+  "old_v8_trained_adapter_sha256": "fbaea8ee0ec8b061232036e1d6addd80f4ab6f67d32979917c8d92333af5320a",
+  "old_v9_form_checkpoint_sha256": "7bc18a1ceb7a9ebff28c384ea22134dc6eb7968f274986b63caa398c97725291",
+  "actual_original_v8_adapter_warm_started": true,
+  "actual_original_v9_form_head_loaded": true,
+  "both_existing_neural_networks_frozen": true,
+  "older_correct_original_train_sources": 1152,
+  "new_original_shape_train_examples": 1152,
+  "new_development_examples": 288,
+  "new_fresh_unseen_blind_examples": 288,
+  "new_shape_train_families": 48,
+  "fresh_blind_form_families": 16,
+  "three_methods_equal_start_and_cpu_time": true,
+  "measured_optimizer_seconds": 1800.008,
+  "configured_optimizer_seconds": 1800,
+  "completed_sessions": 6,
+  "sessions": [
+    {
+      "condition": "warm_replay",
+      "seed": 413,
+      "actual_optimizer_seconds": 300.001,
+      "optimizer_updates": 226251,
+      "selected_development_step": 2100,
+      "new_development": {
+        "operation_accuracy": 0.9583333134651184,
+        "strength_mae": 0.11460748314857483,
+        "strength_median_abs_error": 0.07813519239425659,
+        "form_accuracy": 0.9583333134651184,
+        "native_3D_displacement_proxy_rmse": 0.014680550433695316,
+        "classification_loss": 0.16804227232933044,
+        "development_priority": 0.9341351481154561
+      },
+      "old_training_retention": {
+        "operation_accuracy": 1.0,
+        "strength_mae": 0.02279866859316826,
+        "strength_median_abs_error": 0.01909869909286499,
+        "form_accuracy": 0.9869791865348816,
+        "native_3D_displacement_proxy_rmse": 0.0031858026050031185,
+        "classification_loss": 0.006876947358250618,
+        "development_priority": 0.18714949963614344
+      }
+    },
+    {
+      "condition": "warm_replay",
+      "seed": 2027,
+      "actual_optimizer_seconds": 300.001,
+      "optimizer_updates": 225330,
+      "selected_development_step": 2400,
+      "new_development": {
+        "operation_accuracy": 0.9583333134651184,
+        "strength_mae": 0.11319209635257721,
+        "strength_median_abs_error": 0.07560302317142487,
+        "form_accuracy": 0.9583333134651184,
+        "native_3D_displacement_proxy_rmse": 0.014784228056669235,
+        "classification_loss": 0.165659099817276,
+        "development_priority": 0.935299675911665
+      },
+      "old_training_retention": {
+        "operation_accuracy": 1.0,
+        "strength_mae": 0.022617461159825325,
+        "strength_median_abs_error": 0.019103288650512695,
+        "form_accuracy": 0.9869791865348816,
+        "native_3D_displacement_proxy_rmse": 0.003158833831548691,
+        "classification_loss": 0.006715891417115927,
+        "development_priority": 0.18554530907422304
+      }
+    },
+    {
+      "condition": "vertex_geometry",
+      "seed": 413,
+      "actual_optimizer_seconds": 300.001,
+      "optimizer_updates": 182507,
+      "selected_development_step": 2000,
+      "new_development": {
+        "operation_accuracy": 0.9583333134651184,
+        "strength_mae": 0.11504854261875153,
+        "strength_median_abs_error": 0.07735724002122879,
+        "form_accuracy": 0.9583333134651184,
+        "native_3D_displacement_proxy_rmse": 0.014716770499944687,
+        "classification_loss": 0.169123113155365,
+        "development_priority": 0.9369912944734097
+      },
+      "old_training_retention": {
+        "operation_accuracy": 1.0,
+        "strength_mae": 0.023432889953255653,
+        "strength_median_abs_error": 0.019322991371154785,
+        "form_accuracy": 0.9869791865348816,
+        "native_3D_displacement_proxy_rmse": 0.0031332047656178474,
+        "classification_loss": 0.006970396265387535,
+        "development_priority": 0.18596157487481832
+      }
+    },
+    {
+      "condition": "vertex_geometry",
+      "seed": 2027,
+      "actual_optimizer_seconds": 300.002,
+      "optimizer_updates": 181655,
+      "selected_development_step": 2100,
+      "new_development": {
+        "operation_accuracy": 0.9618055820465088,
+        "strength_mae": 0.11488255858421326,
+        "strength_median_abs_error": 0.08106224238872528,
+        "form_accuracy": 0.9583333134651184,
+        "native_3D_displacement_proxy_rmse": 0.014872788451611996,
+        "classification_loss": 0.16165323555469513,
+        "development_priority": 0.9407253799960017
+      },
+      "old_training_retention": {
+        "operation_accuracy": 1.0,
+        "strength_mae": 0.023343903943896294,
+        "strength_median_abs_error": 0.018500447273254395,
+        "form_accuracy": 0.9869791865348816,
+        "native_3D_displacement_proxy_rmse": 0.003139898646622896,
+        "classification_loss": 0.0071010347455739975,
+        "development_priority": 0.18615488009527326
+      }
+    },
+    {
+      "condition": "geometry_rank",
+      "seed": 413,
+      "actual_optimizer_seconds": 300.002,
+      "optimizer_updates": 126451,
+      "selected_development_step": 3800,
+      "new_development": {
+        "operation_accuracy": 0.9513888955116272,
+        "strength_mae": 0.12281545251607895,
+        "strength_median_abs_error": 0.07440902292728424,
+        "form_accuracy": 0.9583333134651184,
+        "native_3D_displacement_proxy_rmse": 0.015855014324188232,
+        "classification_loss": 0.19107407331466675,
+        "development_priority": 1.0109730884432793
+      },
+      "old_training_retention": {
+        "operation_accuracy": 1.0,
+        "strength_mae": 0.021939590573310852,
+        "strength_median_abs_error": 0.017654001712799072,
+        "form_accuracy": 0.9869791865348816,
+        "native_3D_displacement_proxy_rmse": 0.003079583402723074,
+        "classification_loss": 0.006758164614439011,
+        "development_priority": 0.18077578200027347
+      }
+    },
+    {
+      "condition": "geometry_rank",
+      "seed": 2027,
+      "actual_optimizer_seconds": 300.002,
+      "optimizer_updates": 126229,
+      "selected_development_step": 100,
+      "new_development": {
+        "operation_accuracy": 0.9513888955116272,
+        "strength_mae": 0.12427093088626862,
+        "strength_median_abs_error": 0.0823066234588623,
+        "form_accuracy": 0.9583333134651184,
+        "native_3D_displacement_proxy_rmse": 0.01487737987190485,
+        "classification_loss": 0.21297875046730042,
+        "development_priority": 0.978361270017922
+      },
+      "old_training_retention": {
+        "operation_accuracy": 1.0,
+        "strength_mae": 0.022698979824781418,
+        "strength_median_abs_error": 0.016306668519973755,
+        "form_accuracy": 0.9869791865348816,
+        "native_3D_displacement_proxy_rmse": 0.0032880944199860096,
+        "classification_loss": 0.006633693352341652,
+        "development_priority": 0.19147588992491366
+      }
+    }
+  ],
+  "previous_training_retention_before": {
+    "operation_accuracy": 1.0,
+    "strength_mae": 0.008462387137115002,
+    "strength_median_abs_error": 0.00652197003364563,
+    "form_accuracy": 0.9869791865348816,
+    "native_3D_displacement_proxy_rmse": 0.0029338959138840437,
+    "classification_loss": 0.005750895477831364,
+    "development_priority": 0.14955797116272151
+  },
+  "previous_development_before": {
+    "operation_accuracy": 0.9479166865348816,
+    "strength_mae": 0.131397545337677,
+    "strength_median_abs_error": 0.08149152994155884,
+    "form_accuracy": 0.9583333134651184,
+    "native_3D_displacement_proxy_rmse": 0.015634769573807716,
+    "classification_loss": 0.24524754285812378,
+    "development_priority": 1.0381792295724153
+  },
+  "development_results": {
+    "warm_replay": {
+      "operation_accuracy": 0.9583333134651184,
+      "strength_mae": 0.11460748314857483,
+      "strength_median_abs_error": 0.07813519239425659,
+      "form_accuracy": 0.9583333134651184,
+      "native_3D_displacement_proxy_rmse": 0.014680550433695316,
+      "classification_loss": 0.16804227232933044,
+      "development_priority": 0.9341351481154561
+    },
+    "vertex_geometry": {
+      "operation_accuracy": 0.9583333134651184,
+      "strength_mae": 0.11504854261875153,
+      "strength_median_abs_error": 0.07735724002122879,
+      "form_accuracy": 0.9583333134651184,
+      "native_3D_displacement_proxy_rmse": 0.014716770499944687,
+      "classification_loss": 0.169123113155365,
+      "development_priority": 0.9369912944734097
+    },
+    "geometry_rank": {
+      "operation_accuracy": 0.9513888955116272,
+      "strength_mae": 0.12427093088626862,
+      "strength_median_abs_error": 0.0823066234588623,
+      "form_accuracy": 0.9583333134651184,
+      "native_3D_displacement_proxy_rmse": 0.01487737987190485,
+      "classification_loss": 0.21297875046730042,
+      "development_priority": 0.978361270017922
+    }
+  },
+  "development_checkpoint_seeds": {
+    "warm_replay": {
+      "seed": 413,
+      "selected_step": 2100
+    },
+    "vertex_geometry": {
+      "seed": 413,
+      "selected_step": 2000
+    },
+    "geometry_rank": {
+      "seed": 2027,
+      "selected_step": 100
+    }
+  },
+  "development_selected": "warm_replay",
+  "blind_source_sha256": "4ac2832b8ef4ffb1943c3178a416a228593157d960244c9c371deb78a7f7fe64",
+  "blind_per_method_predictions": {
+    "parent_v8_with_v9_forms": {
+      "form_accuracy": 1.0,
+      "operation_accuracy": 0.8958333333333334,
+      "strength_mae": 0.12911468529142459,
+      "predicted_distinct_forms": 8
+    },
+    "warm_replay": {
+      "form_accuracy": 1.0,
+      "operation_accuracy": 0.9270833333333334,
+      "strength_mae": 0.10866969643277118,
+      "predicted_distinct_forms": 8
+    },
+    "vertex_geometry": {
+      "form_accuracy": 1.0,
+      "operation_accuracy": 0.9270833333333334,
+      "strength_mae": 0.10853701604400864,
+      "predicted_distinct_forms": 8
+    },
+    "geometry_rank": {
+      "form_accuracy": 1.0,
+      "operation_accuracy": 0.9097222222222222,
+      "strength_mae": 0.11813536297672228,
+      "predicted_distinct_forms": 8
+    }
+  },
+  "geometry_supervision_only_original_kotlin_GLBS": true,
+  "external_teacher_used": false,
+  "android_neural_deployed": false
+}

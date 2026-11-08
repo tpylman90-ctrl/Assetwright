@@ -1,0 +1,33 @@
+{
+  "schema": "assetwright-durable-original-form-fidelity-research-v10",
+  "run_id": 42481644095,
+  "parent_v6_action_strength_sha256": "b4b43fe30b4865fc598d8673390ce0383ecfee614878a46cfb8f68f3952288db",
+  "parent_v7_shape_identity_sha256": "540bc98c9d126321b784b4f13db17cf9e1194f9815ab98ce401f29e1be5ee52b",
+  "continued_original_v8_adapter_sha256": "fbaea8ee0ec8b061232036e1d6addd80f4ab6f67d32979917c8d92333af5320a",
+  "frozen_original_v9_form_head_sha256": "7bc18a1ceb7a9ebff28c384ea22134dc6eb7968f274986b63caa398c97725291",
+  "frozen_original_models_preserved": true,
+  "source_original_Kotlin_GLBS_verified": 1808,
+  "generated_original_Kotlin_GLBS_verified": 1152,
+  "old_correct_original_geometry_replay_examples": 1152,
+  "new_original_geometry_training_examples": 1152,
+  "new_distinct_blind_source_families": 16,
+  "blind_original_source_sha256": "4ac2832b8ef4ffb1943c3178a416a228593157d960244c9c371deb78a7f7fe64",
+  "actual_optimizer_seconds": 1800.008,
+  "trained_adapters": {
+    "warm_replay": {
+      "sha256": "562803bb19e1ef41ff55ab4ed2b5de6f53f29851caee8ac316bfab2e165d5ebc",
+      "parameters": 26668
+    },
+    "vertex_geometry": {
+      "sha256": "1a13719d843655d48a4bc711fd24041df4be3c7c178d0bdf41065d95313f41f5",
+      "parameters": 26668
+    },
+    "geometry_rank": {
+      "sha256": "bceaee159a3f5ab521548770a2c4bafb4267028ed37ac652bdfe77c85b0dfb3d",
+      "parameters": 26668
+    }
+  },
+  "research_gate": "experimental_checkpoint_not_promoted_parent_protected",
+  "production_checkpoint_modified": false,
+  "Android_neural_deployed": false
+}
