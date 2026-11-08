@@ -2,6 +2,8 @@ name: Forge Mini v9 — Original Cumulative Shape-Identity Training
 
 # 104 prior TRAIN-only genuine native source forms + 64 new TRAIN forms
 # Every method truly reloads source-hashed v7 learned identity weights.
+# The warm-start source must retain its v7 name hard_form_distinctions;
+# v9 spindle_truss_focus is a NEW training condition, not that saved file.
 # Six independently measured 300-second CPU sessions, then original
 # Kotlin 3D GLB forward audit on 16 new untouched blind shape families.
 on:
