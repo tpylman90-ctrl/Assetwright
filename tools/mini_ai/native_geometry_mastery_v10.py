@@ -123,11 +123,11 @@ def train(new_manifest,new_images,new_views,new_source,
         validate_all=True)
     current_by_split={p:[r for r in current if r["split"]==p]
                       for p in ("train","development","validation")}
-    if (len(old)!=1200 or
+    if (len(old)!=1152 or
         {p:len(v) for p,v in current_by_split.items()}!={
             "train":1152,"development":288,"validation":288} or
         len(old_sources)!=48 or len(shapes)!=80):
-        raise ValueError("Original v7 replay and new v8 source families incomplete")
+        raise ValueError("Original v8 train-only replay and new v10 source families incomplete")
     new=current_by_split["train"]
     dev=current_by_split["development"]
     blind=current_by_split["validation"]
@@ -139,7 +139,7 @@ def train(new_manifest,new_images,new_views,new_source,
                for form in FORMS[1:]}
         if set(total.values())!={expected}:
             raise ValueError("Training or blind dataset missing a shape archetype")
-    # 1,200 older and 1,152 new ORIGINAL Kotlin train transformations.
+    # 1,152 older and 1,152 new ORIGINAL Kotlin train transformations.
     # 64 common normalized 3D vertices, across genuinely different topology.
     source_old=prepare(old,old_source)
     source_new=prepare(new,new_source)
