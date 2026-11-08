@@ -318,6 +318,19 @@ def train(new_manifest,new_images,new_views,new_source,
     dev_results={}
     selected_seeds={}
     spent=0.
+    # Build exact original source-family + native operator strength controls;
+    # never assume the manifest happens to order their four levels together.
+    source_groups={}
+    for row_index,row in enumerate(new):
+        source_groups.setdefault((row["family"],row["op"]),[]).append(row_index)
+    rank_groups=[]
+    for label,idx in source_groups.items():
+        idx=sorted(idx,key=lambda i:new[i]["strength"])
+        if len(idx)!=4 or len({new[i]["strength"] for i in idx})!=4:
+            raise ValueError("Missing true original 4-level geometry control group")
+        rank_groups.append(idx)
+    if len(rank_groups)!=48*len(OPERATIONS):
+        raise ValueError("Incomplete eight-form original strength progression")
     for condition in CONDITIONS:
         best_cond=float("inf");selected_state=None;selected_meta=None
         for seed in SEEDS:
@@ -359,10 +372,15 @@ def train(new_manifest,new_images,new_views,new_source,
                     # Controls are three or four ordered strengths for the
                     # SAME true source form and operator. Retain monotonic
                     # physical response instead of an unstable average.
-                    pairs=torch.randint(len(new)//4,(24,))
-                    base=pairs*4
-                    low=base+torch.randint(0,2,(24,))
-                    high=base+torch.randint(2,4,(24,))
+                    pairs=torch.randint(len(rank_groups),(24,))
+                    low=torch.tensor([
+                        rank_groups[int(p)][int(j)]
+                        for p,j in zip(pairs,torch.randint(0,2,(24,)))],
+                        dtype=torch.long)
+                    high=torch.tensor([
+                        rank_groups[int(p)][int(j)]
+                        for p,j in zip(pairs,torch.randint(2,4,(24,)))],
+                        dtype=torch.long)
                     low_logits,low_heads=model(*[x[low] for x in new_cache[:4]])
                     high_logits,high_heads=model(*[x[high] for x in new_cache[:4]])
                     low_label=fresh_t[2][low]
