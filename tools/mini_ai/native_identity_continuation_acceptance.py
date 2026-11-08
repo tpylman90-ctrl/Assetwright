@@ -87,7 +87,7 @@ def assess(report,audit,lineage):
     if not isinstance(records,list) or len(records)!=288:
         raise ValueError("Incomplete actual original 3D validation source records")
     hashes=[item.get("original_glb_sha256") for item in records]
-    if (len(set(hashes))!=384 or any(
+    if (len(set(hashes))!=288 or any(
         not isinstance(x,str) or len(x)!=64 or
         any(c not in "0123456789abcdef" for c in x) for x in hashes)):
         raise ValueError("Invalid original GLB source hashes")
