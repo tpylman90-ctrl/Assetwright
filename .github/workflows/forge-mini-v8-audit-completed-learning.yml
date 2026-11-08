@@ -1,0 +1,128 @@
+name: Forge Mini v8 — Audit & Preserve Completed 30-Minute Learning
+
+# Run 42396471403 did six 300s sessions and generated 1152 Kotlin GLBs.
+# Audit failed due to missing FORMS import. No neural retraining here.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/forge-mini-v8-audit-completed-learning.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: assetwright-v8-single-audit-recovery
+  cancel-in-progress: false
+
+jobs:
+  verify-actual-native-geometry-and-retain-weights:
+    name: Score 1152 generated GLBs and commit already-trained weights
+    runs-on: ubuntu-24.04
+    timeout-minutes: 39
+    env:
+      ASSETWRIGHT_DINO_STUDY: form_fidelity_v8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install free original 3D audit requirements only
+        run: python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3' 'scipy>=1.12,<2'
+      - name: Download 1808 original Kotlin GLBs from unchanged source-success run
+        uses: actions/download-artifact@v4
+        with:
+          name: forge-mini-v8-1808-original-eight-form-sources
+          repository: tpylman90-ctrl/Assetwright
+          run-id: 42267694590
+          github-token: ${{ github.token }}
+          path: local-data/form_fidelity_v8/new/
+      - name: Recover six trained sessions and 1152 student-generated native GLBs
+        uses: actions/download-artifact@v4
+        with:
+          name: forge-mini-v8-real-3d-form-fidelity-and-1152-GLBs
+          repository: tpylman90-ctrl/Assetwright
+          run-id: 42396471403
+          github-token: ${{ github.token }}
+          path: recovered-trained-artifact/
+      - name: Prove all source and trained files are from exact historical runs
+        run: |
+          test "$(find local-data/form_fidelity_v8/new/source -name '*.glb' | wc -l)" -eq 1808
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          j=json.loads(Path('local-data/form_fidelity_v8/new/manifest.json').read_text())
+          assert j['study_id']=='form_fidelity_v8'
+          assert j['source_count']==1808 and j['paired_examples']==1728
+          assert j['external_geometry_used'] is False
+          roots=list(Path('recovered-trained-artifact').rglob('evaluation.json'))
+          assert len(roots)==1, f'Expected one prior trained evaluation: {roots}'
+          root=roots[0].parent
+          history=json.loads(roots[0].read_text())
+          assert history['schema']=='assetwright-original-form-conditioned-geometry-fidelity-v8'
+          assert history['configured_optimizer_seconds']==1800
+          assert history['measured_optimizer_seconds']>=1800
+          assert history['completed_sessions']==6
+          source=root.parent
+          if not (source/'reconstructed').exists():
+              matches=list(Path('recovered-trained-artifact').rglob('reconstructed'))
+              assert len(matches)==1, f'Cannot locate Kotlin GLBs: {matches}'
+              reconstructed=matches[0]
+          else:
+              reconstructed=source/'reconstructed'
+          glbs=list(reconstructed.glob('*.glb'))
+          assert len(glbs)==1152, f'Incomplete Kotlin GLBs: {len(glbs)}'
+          import shutil
+          target=Path('local-data/form_fidelity_v8')
+          shutil.copytree(root,target/'student',dirs_exist_ok=True)
+          shutil.copytree(reconstructed,target/'reconstructed',dirs_exist_ok=True)
+          for name in ('lineage.json','proposals.json','native_proposals.properties'):
+              assert (target/'student'/name).is_file()
+          for kind in ('supervised_replay','physical_replay','hard_physical'):
+              assert (target/'student'/'winners'/f'{kind}.safetensors').is_file()
+          print('Recovered actual six training sessions and 1152 Kotlin GLBs',flush=True)
+          PY
+      - name: Independently audit all source SHA256 and 1152 original 3D surfaces
+        run: |
+          python tools/mini_ai/native_form_fidelity_forward_audit.py \
+            --source local-data/form_fidelity_v8/new/source \
+            --reconstructed local-data/form_fidelity_v8/reconstructed \
+            --out local-data/form_fidelity_v8/forward_audit.json
+      - name: Verify predeclared research gate without blind cherry-picking
+        run: |
+          python -m unittest discover -s tools/mini_ai -p 'test_native_form_fidelity_v8.py' -v
+          python tools/mini_ai/native_form_fidelity_acceptance.py \
+            --evaluation local-data/form_fidelity_v8/student/evaluation.json \
+            --geometry local-data/form_fidelity_v8/forward_audit.json \
+            --lineage local-data/form_fidelity_v8/student/lineage.json \
+            --out local-data/form_fidelity_v8/student/research_disposition.json
+      - name: Permanently commit exact old-model lineage and three real trained adapters
+        run: |
+          python tools/mini_ai/retain_form_fidelity_v8.py \
+            --workspace local-data/form_fidelity_v8 \
+            --v6 training/learning_runs/multiform_v6_42151392636 \
+            --v7 training/learning_runs/shape_identity_v7_42233349361 \
+            --out training/learning_runs/form_fidelity_v8_42396471403 \
+            --run-id 42396471403
+          git config user.name "AssetWright original neural training archive"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add training/learning_runs/form_fidelity_v8_42396471403
+          git commit -m "research: retain real 1800s v8 trained weights and 1152 Kotlin GLB proof [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:refs/heads/main
+      - name: Retain research evidence even if geometry gate rejects candidate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-mini-v8-recovered-1152-native-GLB-physical-verdict
+          path: |
+            local-data/form_fidelity_v8/forward_audit.json
+            local-data/form_fidelity_v8/student/*.json
+            local-data/form_fidelity_v8/student/winners/*.safetensors
+            training/learning_runs/form_fidelity_v8_42396471403/**
+          if-no-files-found: warn
+          retention-days: 45
