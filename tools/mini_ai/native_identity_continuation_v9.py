@@ -133,11 +133,11 @@ def train(new_manifest:Path,new_images:Path,new_views:Path,
     path=v6_knowledge/"balanced_forms.safetensors"
     h7=json.loads((v7_knowledge/"learning_history.json").read_text())
     norm7=json.loads((v7_knowledge/"lineage.json").read_text())
-    teacher_path=v7_knowledge/"spindle_truss_focus.safetensors"
+    teacher_path=v7_knowledge/"hard_form_distinctions.safetensors"
     if (history.get("research_gate")!="research_not_promoted_legacy_checkpoint_retained"
         or history["candidate_weight_sha256"]["balanced_forms"]!=digest(path)
         or h7.get("research_disposition")!="research_candidate_not_promoted"
-        or h7["new_neural_identity_weights_SHA256"]["spindle_truss_focus"]
+        or h7["new_neural_identity_weights_SHA256"]["hard_form_distinctions"]
             !=digest(teacher_path)
         or norm7["parent_source_weights_sha256"]!=digest(path)
         or lineage["schema"]!="assetwright-original-8-archetype-neural-weights-v6"
