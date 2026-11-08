@@ -111,7 +111,7 @@ def fake(geometry_is_better=True):
         "completed_sessions":6,"sessions":sessions,
         "development_selected":"vertex_geometry",
         "development_checkpoint_seeds":{
-            name:{"seed":317,"selected_step":600}
+            name:{"seed":413,"selected_step":600}
             for name in CONDITIONS
         },
         "development_results":{
