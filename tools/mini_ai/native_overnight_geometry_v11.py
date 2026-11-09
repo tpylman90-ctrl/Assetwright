@@ -346,6 +346,7 @@ def train(new_manifest,new_images,new_views,new_source,
         # Each successive stage starts with the EXACT selected checkpoint of
         # the previous stage. Six genuine 900-second sessions; not six resets.
         stage_parent_state=copy.deepcopy(frozen_adapter.state_dict())
+        previous_stage_sha256=digest(weight10)
         for seed in STAGES:
             torch.manual_seed(1100+seed)
             model=Refinement()
@@ -463,7 +464,8 @@ def train(new_manifest,new_images,new_views,new_source,
                 "optimizer_updates":step,
                 "selected_development_step":chosen_step,
                 "new_development":performance,
-                "old_training_retention":retention
+                "old_training_retention":retention,
+                "initialized_from_checkpoint_sha256":previous_stage_sha256
             })
             variant=f"{condition}_stage{seed}"
             # Choose session checkpoints using development only, then
@@ -478,12 +480,15 @@ def train(new_manifest,new_images,new_views,new_source,
             save_file({k:v.detach().cpu().contiguous()
                        for k,v in stage_model.state_dict().items()},
                       output/"winners"/(variant+".safetensors"))
+            trained_stage_sha256=digest(output/"winners"/(variant+".safetensors"))
+            sessions[-1]["trained_stage_sha256"]=trained_stage_sha256
+            previous_stage_sha256=trained_stage_sha256
             print("OVERNIGHT_STAGE_COMPLETED "+json.dumps({
                 "variant":variant,"duration_seconds":round(elapsed,3),
                 "dev_priority":performance["development_priority"],
                 "old_accuracy":retention["operation_accuracy"],
                 "old_strength_mae":retention["strength_mae"],
-                "checkpoint_sha256":digest(output/"winners"/(variant+".safetensors"))
+                "checkpoint_sha256":trained_stage_sha256
             }),flush=True)
     if spent<seconds:raise ValueError("CPU-gradient training duration not actually met")
     method=min(VARIANTS[1:],key=lambda name:dev_results[name]["development_priority"])
