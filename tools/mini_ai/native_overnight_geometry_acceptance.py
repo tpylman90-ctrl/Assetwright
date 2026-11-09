@@ -152,7 +152,7 @@ def assess(report,geometry,lineage):
     forms_inconsistent=0
     for case in cases:
         baseline=case["parent_v10"]["form"]
-        if any(case[condition]["form"]!=baseline for condition in CONDITIONS):
+        if any(case[condition]["form"]!=baseline for condition in VARIANTS[1:]):
             forms_inconsistent+=1
     old=report.get("previous_training_retention_before",{})
     recalled=report.get("sessions",[])
