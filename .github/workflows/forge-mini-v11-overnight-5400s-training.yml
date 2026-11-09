@@ -2,6 +2,7 @@ name: Forge Mini v11 — Overnight Six-Stage Neural Geometry Training
 
 # Preflight fixed: all seven stage-keyed model variants, not two pathway labels.
 # Correctly validate all six named stages in old-checkpoint selection preflight.
+# Synthetic acceptance fixtures now match the strict 90%-form threshold.
 # No random reset: source-SHA confirmed previous v8 adapter learned weights
 # + frozen source-hashed v9 form identifier. Fresh 1808 original Kotlin GLBs,
 # 288 untouched blind native deformations. 6x300s CPU optimizer sessions.
