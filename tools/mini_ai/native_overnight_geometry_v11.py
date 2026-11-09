@@ -343,13 +343,13 @@ def train(new_manifest,new_images,new_views,new_source,
     if len(rank_groups)!=48*len(OPERATIONS):
         raise ValueError("Incomplete eight-form original strength progression")
     for condition in CONDITIONS:
-        best_cond=float("inf");selected_state=None;selected_meta=None
-        for seed in SEEDS:
-            torch.manual_seed(seed)
+        # Each successive stage starts with the EXACT selected checkpoint of
+        # the previous stage. Six genuine 900-second sessions; not six resets.
+        stage_parent_state=copy.deepcopy(frozen_adapter.state_dict())
+        for seed in STAGES:
+            torch.manual_seed(1100+seed)
             model=Refinement()
-            # Actual warm start: update ALL existing v8 learned tensors, not
-            # only a newly initialized classification head.
-            model.load_state_dict(frozen_adapter.state_dict(),strict=True)
+            model.load_state_dict(stage_parent_state,strict=True)
             optimizer=torch.optim.AdamW(model.parameters(),lr=.00010,
                                         weight_decay=.00025)
             best=float("inf");chosen=None;chosen_step=0
@@ -358,7 +358,7 @@ def train(new_manifest,new_images,new_views,new_source,
             difficulty=torch.full((len(new),),1./len(new))
             while time.perf_counter()-start<training_time or step<100:
                 old_idx=torch.randint(len(old),(64,))
-                if condition=="geometry_rank":
+                if condition=="surface_curriculum":
                     new_idx=torch.multinomial(difficulty,96,replacement=True)
                 else:
                     new_idx=torch.randint(len(new),(96,))
@@ -374,12 +374,12 @@ def train(new_manifest,new_images,new_views,new_source,
                 guessed=heads.gather(1,op[:,None]).flatten()
                 loss=.90*F.cross_entropy(scores,op)
                 loss+=5.0*F.smooth_l1_loss(guessed,power,beta=.08)
-                if condition!="warm_replay":
-                    loss+=proxy_loss(scores,heads,basis,targets,op)
+                if condition!="replay_curriculum":
+                    loss+=proxy_loss(scores,heads,basis,targets,op,geometry_weight=.65)
                 # Explicitly retain old learned responses on replay.
                 loss+=.24*F.mse_loss(scores[96:],old_original_logits[old_idx])
                 loss+=.38*F.mse_loss(heads[96:],old_original_heads[old_idx])
-                if condition=="geometry_rank":
+                if condition=="surface_curriculum":
                     # Controls are three or four ordered strengths for the
                     # SAME true source form and operator. Retain monotonic
                     # physical response instead of an unstable average.
@@ -401,13 +401,13 @@ def train(new_manifest,new_images,new_views,new_source,
                     low_prediction=low_heads.gather(1,low_label[:,None]).flatten()
                     high_prediction=high_heads.gather(1,high_label[:,None]).flatten()
                     true_gap=fresh_t[3][high]-fresh_t[3][low]
-                    loss+=.65*F.relu(.50*true_gap-(high_prediction-low_prediction)).mean()
+                    loss+=.18*F.relu(.30*true_gap-(high_prediction-low_prediction)).mean()
                 optimizer.zero_grad()
                 loss.backward()
                 nn.utils.clip_grad_norm_(model.parameters(),2.)
                 optimizer.step()
                 step+=1
-                if condition=="geometry_rank" and step%240==0:
+                if condition=="surface_curriculum" and step%240==0:
                     with torch.inference_mode():
                         p,h=model(*new_cache[:4])
                         mistakes=difficulty_scores(p,h,fresh_t[2],fresh_t[3])
@@ -465,25 +465,28 @@ def train(new_manifest,new_images,new_views,new_source,
                 "new_development":performance,
                 "old_training_retention":retention
             })
-            if performance["development_priority"]<best_cond:
-                best_cond=performance["development_priority"]
-                selected_state=copy.deepcopy(chosen)
-                selected_meta={"seed":seed,"selected_step":chosen_step}
-            print("FIDELITY_SESSION_DONE "+json.dumps({
-                "condition":condition,"seed":seed,
-                "training_seconds":round(elapsed,3),
-                "development_priority":performance["development_priority"]
+            variant=f"{condition}_stage{seed}"
+            # Choose session checkpoints using development only, then
+            # carry this actual learned state into the NEXT 900s session.
+            stage_parent_state=copy.deepcopy(chosen)
+            stage_model=Refinement()
+            stage_model.load_state_dict(stage_parent_state,strict=True)
+            stage_model.eval()
+            champions[variant]=stage_model
+            dev_results[variant]=performance
+            selected_seeds[variant]={"seed":seed,"selected_step":chosen_step}
+            save_file({k:v.detach().cpu().contiguous()
+                       for k,v in stage_model.state_dict().items()},
+                      output/"winners"/(variant+".safetensors"))
+            print("OVERNIGHT_STAGE_COMPLETED "+json.dumps({
+                "variant":variant,"duration_seconds":round(elapsed,3),
+                "dev_priority":performance["development_priority"],
+                "old_accuracy":retention["operation_accuracy"],
+                "old_strength_mae":retention["strength_mae"],
+                "checkpoint_sha256":digest(output/"winners"/(variant+".safetensors"))
             }),flush=True)
-        winner=Refinement()
-        winner.load_state_dict(selected_state,strict=True)
-        champions[condition]=winner
-        selected_seeds[condition]=selected_meta
-        dev_results[condition]=metrics(winner,dev_t,dev_cache)
-        save_file({k:v.detach().cpu().contiguous()
-                   for k,v in winner.state_dict().items()},
-                  output/"winners"/(condition+".safetensors"))
     if spent<seconds:raise ValueError("CPU-gradient training duration not actually met")
-    method=min(CONDITIONS,key=lambda name:dev_results[name]["development_priority"])
+    method=min(VARIANTS[1:],key=lambda name:dev_results[name]["development_priority"])
 
     # No blind images or oracle native geometry was opened for any
     # optimizer, checkpoint/seed selection or method selection.
@@ -501,7 +504,7 @@ def train(new_manifest,new_images,new_views,new_source,
             power=powers.gather(1,op[:,None]).flatten()
             guessed_forms=blind_cache[4]
         return op.tolist(),power.tolist(),guessed_forms.tolist()
-    for name,model in [("parent_v8_with_v9_forms",frozen_adapter)]+list(champions.items()):
+    for name,model in [("parent_v10",frozen_adapter)]+list(champions.items()):
         indices,powers,form_indices=infer(model)
         proposals=[]
         for i,row in enumerate(blind):
@@ -546,7 +549,10 @@ def train(new_manifest,new_images,new_views,new_source,
         "new_fresh_unseen_blind_examples":len(blind),
         "new_shape_train_families":len({r["family"] for r in new}),
         "fresh_blind_form_families":len({r["family"] for r in blind}),
-        "three_methods_equal_start_and_cpu_time":True,
+        "two_continual_arms_equal_cpu_time":True,
+        "actual_three_stage_checkpoint_continuation":True,
+        "stage_active_seconds":training_time,
+        "sequential_stages_per_arm":len(STAGES),
         "measured_optimizer_seconds":round(spent,3),
         "configured_optimizer_seconds":seconds,
         "completed_sessions":len(sessions),
@@ -591,7 +597,7 @@ def train(new_manifest,new_images,new_views,new_source,
             for key,value in row.items():
                 props.append(f"{name}.{i}.{key}={value}")
     (output/"native_proposals.properties").write_text("\n".join(props)+"\n")
-    print("GEOMETRY_MASTERY_V10_TRAINING_COMPLETE "+json.dumps({
+    print("OVERNIGHT_V11_TRAINING_COMPLETE "+json.dumps({
         "trained_gradient_seconds":round(spent,3),
         "original_previous_models_frozen":True,
         "development_selected":method,
