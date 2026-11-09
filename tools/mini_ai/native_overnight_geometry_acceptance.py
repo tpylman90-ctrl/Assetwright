@@ -160,7 +160,7 @@ def assess(report,geometry,lineage):
     if (set(chosen_seeds)!=set(VARIANTS[1:])
         or any(chosen_seeds[k].get("seed") not in SEEDS
                or chosen_seeds[k].get("selected_step",0)<100
-               for k in CONDITIONS)):
+               for k in VARIANTS[1:])):
         raise ValueError("Development-selected seed and checkpoint provenance missing")
     selected_condition=selected.rsplit("_stage",1)[0]
     matched=[x["old_training_retention"] for x in recalled
