@@ -81,6 +81,25 @@ def assess(report,geometry,lineage):
                or x.get("selected_development_step",0)<100
                for x in sessions)):
         raise ValueError("Original six-session experimental learning evidence missing")
+    # Demonstrate weights actually accumulate rather than restarting:
+    # each next 900s stage must be initialized from previous saved SHA.
+    prior_sha=report.get("old_v10_trained_adapter_sha256")
+    if not isinstance(prior_sha,str) or len(prior_sha)!=64:
+        raise ValueError("Exact original v10 model parent SHA missing")
+    for arm in CONDITIONS:
+        expected=prior_sha
+        for stage in SEEDS:
+            matching=[q for q in sessions
+                      if q.get("condition")==arm and q.get("seed")==stage]
+            if len(matching)!=1:
+                raise ValueError("Overnight trained stage sequence incomplete")
+            record=matching[0]
+            sha=record.get("trained_stage_sha256")
+            if (record.get("initialized_from_checkpoint_sha256")!=expected
+                or not isinstance(sha,str) or len(sha)!=64
+                or any(c not in "0123456789abcdef" for c in sha)):
+                raise ValueError("Neural weight progression was reset or stage SHA invalid")
+            expected=sha
     development=report.get("development_results",{})
     selected=report.get("development_selected")
     if (set(development)!=set(VARIANTS[1:])
@@ -128,7 +147,7 @@ def assess(report,geometry,lineage):
         form_data=real.get("per_form",{})
         if (len(form_data)!=8 or any(x.get("count")!=36 for x in form_data.values())):
             raise ValueError("One or more original form classes absent from 3D audit")
-    # All variants use exactly the same frozen shape identity. No oracle
+    # All seven variants use exactly the same frozen shape identity. No oracle
     # ground-truth form can slip into a reconstruction arm.
     forms_inconsistent=0
     for case in cases:
@@ -187,8 +206,8 @@ def assess(report,geometry,lineage):
             retained["operation_accuracy"]>=old["operation_accuracy"]-.02,
         "old_continuous_strength_knowledge_retained":
             retained["strength_mae"]<=old["strength_mae"]+.015,
-        "blind_form_accuracy_at_least_75pct":
-            chosen["form_accuracy"]>=.75,
+        "blind_form_accuracy_at_least_90pct":
+            chosen["form_accuracy"]>=.90,
         "all_eight_original_form_archetypes_predicted":
             chosen["predicted_distinct_archetypes"]==8,
         "four_or_more_distinct_actual_native_topologies":
@@ -207,8 +226,8 @@ def assess(report,geometry,lineage):
             new_physical<=unchanged,
         "native_geometry_objective_beats_equal_budget_replay":
             selected.startswith("replay_curriculum_") or vs_replay>=.02,
-        "ordered_strength_inversions_at_most_eight":
-            inversions<=8,
+        "ordered_strength_inversions_at_most_six":
+            inversions<=6,
         "all_real_2016_GLBS_and_new_source_hashes_passed":True,
         "no_Android_auto_promotion":True
     }
@@ -240,6 +259,7 @@ def assess(report,geometry,lineage):
         "physical_mesh_gain_vs_replay_fraction":vs_replay,
         "strength_order_reversals":inversions,
         "older_neural_weights_untouched":True,
+        "six_real_stage_weight_chains_verified":True,
         "human_review_required":True,
         "android_deployed":False
     }
