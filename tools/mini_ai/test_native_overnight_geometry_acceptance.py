@@ -45,7 +45,7 @@ def fake(geometry_is_better=True):
     }
     physical={
         name:{
-            "form_accuracy":.875,
+            "form_accuracy":1.0,
             "operation_accuracy":.83 if name=="parent_v10" else .90,
             "strength_mae":.21 if name=="parent_v10" else .16,
             "mean_3d_surface_chamfer":rmse[name],
