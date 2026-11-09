@@ -84,7 +84,7 @@ def retain(run_id,workspace:Path,v6:Path,v7:Path,v8:Path,v9:Path,v10:Path,dest:P
     continued10=v10/"warm_replay.safetensors"
     history10=json.loads((v10/"learning_history.json").read_text())
     if history10["trained_adapters"]["warm_replay"]["sha256"]!=sha(continued10):
-        raise ValueError("Original approved research v10 checkpoint changed")
+        raise ValueError("Original research-only v10 checkpoint changed")
     for actual,expected in (
         (initial6,lineage["source_v6_weight_sha256"]),
         (initial7,lineage["source_v7_form_weight_sha256"]),
@@ -120,7 +120,7 @@ def retain(run_id,workspace:Path,v6:Path,v7:Path,v8:Path,v9:Path,v10:Path,dest:P
         (dest/filename).write_bytes((research/filename).read_bytes())
     (dest/"independent_2016_Kotlin_GLBS.json").write_bytes(
         (workspace/"forward_audit.json").read_bytes())
-    for condition in CONDITIONS:
+    for condition in VARIANTS[1:]:
         (dest/(condition+".safetensors")).write_bytes(
             (research/"winners"/(condition+".safetensors")).read_bytes())
     report={
@@ -133,8 +133,8 @@ def retain(run_id,workspace:Path,v6:Path,v7:Path,v8:Path,v9:Path,v10:Path,dest:P
         "frozen_original_models_preserved":True,
         "source_original_Kotlin_GLBS_verified":len(glbs),
         "generated_original_Kotlin_GLBS_verified":len(generated),
-        "old_correct_original_geometry_replay_examples":2016,
-        "new_original_geometry_training_examples":2016,
+        "old_correct_original_geometry_replay_examples":1152,
+        "new_original_geometry_training_examples":1152,
         "new_distinct_blind_source_families":16,
         "blind_original_source_sha256":geometry["source_hashes_sha256"],
         "actual_optimizer_seconds":evaluation["measured_optimizer_seconds"],
@@ -148,9 +148,9 @@ def retain(run_id,workspace:Path,v6:Path,v7:Path,v8:Path,v9:Path,v10:Path,dest:P
     (dest/"learning_history.json").write_text(json.dumps(report,indent=2)+"\n")
     (dest/"RESEARCH_ONLY.md").write_text(
         "# Original Forge Mini v11 form-conditioned geometry fidelity\n\n"
-        "Preserves real neural adapter weights from three equal-budget "
-        "training conditions, frozen previous native op/strength and identity "
-        "student hashes, 1,200 old-replay + 1,152 newly learned original "
+        "Preserves six consecutive 900-second original neural stage checkpoints "
+        "across two equal-budget paths, frozen earlier action/shape model "
+        "hashes, 1,152 old TRAIN-only replay + 1,152 new original "
         "geometry examples, and an independent 2,016-GLB blind 3D surface "
         "audit across eight real source form archetypes.\n\n"
         "**Research verdict:** "+verdict["status"]+". "
