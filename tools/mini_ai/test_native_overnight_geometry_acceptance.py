@@ -181,7 +181,7 @@ class NativeFormFidelityGate(unittest.TestCase):
             "train":48,"development":16,"validation":16})
         self.assertEqual({s:sum(x[0]==s for x in expected_changes().values())
                           for s in FAMILIES},{
-            "train":2016,"development":288,"validation":288})
+            "train":1152,"development":288,"validation":288})
         self.assertTrue(all(s.startswith("ng_blind")
                             for s in FAMILIES["validation"]))
         for a,b in (("train","development"),("train","validation"),
