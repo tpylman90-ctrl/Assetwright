@@ -1,0 +1,47 @@
+{
+  "schema": "assetwright-durable-original-form-fidelity-research-v11",
+  "run_id": 42553924118,
+  "parent_v6_action_strength_sha256": "b4b43fe30b4865fc598d8673390ce0383ecfee614878a46cfb8f68f3952288db",
+  "parent_v7_shape_identity_sha256": "540bc98c9d126321b784b4f13db17cf9e1194f9815ab98ce401f29e1be5ee52b",
+  "continued_original_v8_adapter_sha256": "fbaea8ee0ec8b061232036e1d6addd80f4ab6f67d32979917c8d92333af5320a",
+  "frozen_original_v9_form_head_sha256": "7bc18a1ceb7a9ebff28c384ea22134dc6eb7968f274986b63caa398c97725291",
+  "frozen_original_models_preserved": true,
+  "source_original_Kotlin_GLBS_verified": 1808,
+  "generated_original_Kotlin_GLBS_verified": 2016,
+  "old_correct_original_geometry_replay_examples": 1152,
+  "new_original_geometry_training_examples": 1152,
+  "new_distinct_blind_source_families": 16,
+  "blind_original_source_sha256": "b6a5aaf13dba55f6652f7108874f57e47fff5f28cd80d83683c270c150a63744",
+  "actual_optimizer_seconds": 5400.006,
+  "trained_adapters": {
+    "replay_curriculum_stage1": {
+      "sha256": "9f581aa627cb1b7212a24b82a3a1e6deb6f6e7a691bd71cae98ddf0fe478d68c",
+      "parameters": 26668
+    },
+    "replay_curriculum_stage2": {
+      "sha256": "1a2b7e1b9e9654e4cc5d64599d53ae766b5f02daab2c65b41dd63eaa5135cf1b",
+      "parameters": 26668
+    },
+    "replay_curriculum_stage3": {
+      "sha256": "0db2972d12ce302cd60bb69b9018d295af7d9f6d03933a37018b4c2c0ba94c54",
+      "parameters": 26668
+    },
+    "surface_curriculum_stage1": {
+      "sha256": "1b0c6071e35a823793c91101ddf290a47c80071757f106c594f05a6e14fc7156",
+      "parameters": 26668
+    },
+    "surface_curriculum_stage2": {
+      "sha256": "3af3a2a71b39b4ced2087f58a73e4183f4e707e4f7574ad1ff4e808d67753760",
+      "parameters": 26668
+    },
+    "surface_curriculum_stage3": {
+      "sha256": "5e56491496315035c250072e407b790d5f3ee79b5cf35f38d0fe77d01853cf7c",
+      "parameters": 26668
+    }
+  },
+  "continued_original_v10_adapter_sha256": "562803bb19e1ef41ff55ab4ed2b5de6f53f29851caee8ac316bfab2e165d5ebc",
+  "sequential_900_second_stages": 6,
+  "research_gate": "experimental_checkpoint_not_promoted_parent_protected",
+  "production_checkpoint_modified": false,
+  "Android_neural_deployed": false
+}
