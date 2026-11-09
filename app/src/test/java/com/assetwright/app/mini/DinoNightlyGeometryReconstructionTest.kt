@@ -76,19 +76,19 @@ class DinoNightlyGeometryReconstructionTest {
         for(i in 0 until 288) {
             fun field(mode:String,name:String)=
                 props.getProperty(mode+"."+i+"."+name)
-            val case=field("parent_v8_with_v9_forms","case")
+            val case=field("parent_v10","case")
             require(Regex("validation__ng_blind(0[1-9]|1[0-6])__[a-z_]+__s[0-9]{3}")
                 .matches(case))
             require(cases.add(case))
             val dims=listOf("length","width","height").map{
-                field("parent_v8_with_v9_forms",it).toFloat()
+                field("parent_v10",it).toFloat()
             }
             require(dims.all { it.isFinite()&&it in .5f..12f })
             for(name in variants) {
                 for(key in listOf(
                     "case","source_glb_sha256","baseline_glb_sha256",
                     "length","width","height")) {
-                    require(field(name,key)==field("parent_v8_with_v9_forms",key)) {
+                    require(field(name,key)==field("parent_v10",key)) {
                         "Original source cases unfairly changed between models"
                     }
                 }
