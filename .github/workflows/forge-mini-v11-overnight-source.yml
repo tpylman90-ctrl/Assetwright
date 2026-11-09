@@ -1,0 +1,118 @@
+name: Forge Mini v11 — Overnight Original Shape Source School
+
+# Real original multi-form geometry fidelity, not a generic shell.
+# Source SHA, development-only method selection, 288 fresh blind source
+# GLBs, 1152 independently generated Kotlin student GLBs, true physical
+# surface Chamfer. All old neural weights frozen and research only.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/forge-mini-v11-overnight-source.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: assetwright-original-overnight-geometry-v11
+  cancel-in-progress: true
+
+jobs:
+  original-multiform-source:
+    name: 1808 ORIGINAL Kotlin GLBs, eight balanced forms and 16 new blind families
+    runs-on: ubuntu-24.04
+    timeout-minutes: 56
+    env:
+      ASSETWRIGHT_DINO_STUDY: overnight_geometry_v11
+      ASSETWRIGHT_NIGHTLY_GEOMETRY_SOURCE: ${{ github.workspace }}/local-data/overnight_geometry_v11/new/source
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Install free image tools for strict original source/identity tests
+        run: python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3'
+      - name: Validate source-disjoint geometry curriculum and predeclared gate
+        run: |
+          python -m compileall -q \
+            tools/mini_ai/dino_delta_school.py \
+            tools/mini_ai/native_shape_identity_views.py \
+            tools/mini_ai/test_native_overnight_geometry_v11.py
+          python -m unittest discover -s tools/mini_ai -p 'test_native_overnight_geometry_v11.py' -v
+      - name: Free SDK to run ONLY our Kotlin original 3D geometry source
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Generate 1808 NEW native closed source GLBs and different archetypes
+        run: |
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoNightlyGeometryBatchTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/overnight_geometry_v11/new/source -maxdepth 1 -name '*.glb' | wc -l)" -eq 1808
+      - name: Install free CPU neutral image and morphology dependencies
+        run: python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3'
+      - name: Verify all original source topology and render 3616 action/strength input views
+        run: |
+          python tools/mini_ai/dino_delta_school.py render \
+            --source local-data/overnight_geometry_v11/new/source \
+            --images local-data/overnight_geometry_v11/new/images \
+            --out local-data/overnight_geometry_v11/new/manifest.json
+      - name: Render separate 160 original base-form front/top identity views
+        run: |
+          python tools/mini_ai/native_shape_identity_views.py \
+            --manifest local-data/overnight_geometry_v11/new/manifest.json \
+            --source local-data/overnight_geometry_v11/new/source \
+            --images local-data/overnight_geometry_v11/new/images \
+            --out local-data/overnight_geometry_v11/new/identity
+      - name: Require eight actual forms and blind class-balanced source dimensions
+        run: |
+          python - <<'PY'
+          import json
+          from collections import defaultdict
+          from pathlib import Path
+          m=json.loads(Path('local-data/overnight_geometry_v11/new/manifest.json').read_text())
+          assert m['study_id']=='overnight_geometry_v11'
+          assert m['source_count']==1808 and m['paired_examples']==1728
+          assert m['external_geometry_used'] is False
+          expected={'train':1152,'development':288,'validation':288}
+          assert {s:sum(r['split']==s for r in m['records'])
+                  for s in expected}==expected
+          j=json.loads(Path('local-data/overnight_geometry_v11/new/identity/index.json').read_text())
+          assert j['source_count']==80
+          for split,number in [('train',48),('development',16),('validation',16)]:
+              by_family={}
+              for row in m['records']:
+                  if row['split']==split:by_family[row['family']]=row
+              assert len(by_family)==number
+              groups=defaultdict(list)
+              for f,r in sorted(by_family.items()):
+                  i=int(f[-2:]);template=(i-1)//8
+                  groups[template].append((r['archetype'],r['length'],r['width'],
+                                           r['height'],r['segments'],r['stations']))
+              for items in groups.values():
+                  assert len(items)==8 and len({x[0] for x in items})==8
+                  assert len({x[1:] for x in items})==1, 'shape classes cannot encode dimensions'
+              if split=='validation':
+                  assert all(f.startswith('ng_blind') for f in by_family)
+          print('Eight distinct forms and NEW source-disjoint blind geometry verified',flush=True)
+          PY
+      - name: Preserve the 1808 original native GLBs and all 3D source-matched views
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-mini-v11-1808-new-original-native-shapes
+          path: local-data/overnight_geometry_v11/new/
+          if-no-files-found: warn
+          retention-days: 45
+
