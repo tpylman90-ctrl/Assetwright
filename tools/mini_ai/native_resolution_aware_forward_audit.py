@@ -58,11 +58,13 @@ def chamfer(reference:Path,proposal:Path)->float:
     return error
 
 
-def compare(source:Path,reconstruction:Path):
+def compare(source:Path,reconstruction:Path,*,split:str="validation"):
     if STUDY!="resolution_aware_v12":
         raise ValueError("Fresh multi-shape source audit not selected")
+    if split not in ("development","validation"):
+        raise ValueError("Native topology audit must be development or new blind")
     cases={stem:identity for stem,identity in expected_changes().items()
-           if identity[0]=="validation"}
+           if identity[0]==split}
     wanted={stem+"__"+variant for stem in cases for variant in VARIANTS}
     glbs={p.stem for p in reconstruction.glob("*.glb")}
     files={p.stem for p in reconstruction.glob("*.json")}
@@ -166,9 +168,10 @@ def compare(source:Path,reconstruction:Path):
         "original_source_chosen_by":"original Kotlin NativeDiverseFormLab",
         "reconstruction_form_chosen_by":"actual student neural form head, never target form",
         "input_resolution_verified_from_unmodified_GLBS":True,
+        "evaluated_split":split,
         "source_blind_native_shapes":len(individual),
         "real_student_generated_GLBS":len(individual)*len(VARIANTS),
-        "original_validation_families":len(FAMILIES["validation"]),
+        "original_validation_families":len(FAMILIES[split]),
         "original_validation_archetypes":len(archetype_groups),
         "original_validation_topologies":len({
             x["original_mesh_triangles"] for x in individual}),
@@ -191,8 +194,9 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for key in ("source","reconstructed","out"):
         p.add_argument("--"+key,type=Path,required=True)
+    p.add_argument("--split",choices=("development","validation"),default="validation")
     a=p.parse_args()
-    result=compare(a.source,a.reconstructed)
+    result=compare(a.source,a.reconstructed,split=a.split)
     a.out.parent.mkdir(parents=True,exist_ok=True)
     a.out.write_text(json.dumps(result,indent=2)+"\n")
     print(json.dumps({k:v for k,v in result.items() if k!="individual_GLBS"},
