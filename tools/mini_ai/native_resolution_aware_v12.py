@@ -92,6 +92,19 @@ def rows_from(manifest_path:Path,images:Path,views:Path,source:Path,
                     filename=prefix+"__"+view+".png"
                     if files[view]!=filename or hash_file(images/filename)!=sha[view]:
                         raise ValueError("Replayed source image SHA changed")
+        # These two mesh-resolution controls are observable on the
+        # UNDEFORMED source GLB; never infer them from target labels.
+        baseline_file=source/(row["baseline_case"]+".json")
+        baseline_meta=json.loads(baseline_file.read_text())
+        if (baseline_meta.get("baseline") is not True
+            or baseline_meta.get("source_glb_sha256")!=row["baseline_glb_sha256"]
+            or baseline_meta.get("segments")!=row["segments"]
+            or baseline_meta.get("stations")!=row["stations"]
+            or baseline_meta.get("family")!=row["family"]
+            or baseline_meta.get("archetype")!=form):
+            raise ValueError("Mesh resolution is not independently confirmed by undeformed input")
+        if row["segments"] not in (24,32,40) or row["stations"] not in (24,32):
+            raise ValueError("Unsafe original baseline topology controls")
         if key not in shapes:
             shapes[key]=features(row,images,views,index)
         identity=shapes[key]
