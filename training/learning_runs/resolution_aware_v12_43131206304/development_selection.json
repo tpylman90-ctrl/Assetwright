@@ -1,0 +1,35 @@
+{
+  "schema": "assetwright-v12-development-only-physical-GLB-selection",
+  "selected": "vertex_loss_stage1",
+  "source_split": "development",
+  "development_original_source_sha256": "dca408773b60b113bbf4f898bf15cf9fdd7029e753bd53ab86e5b7d72b473401",
+  "real_dev_GLBS": 1152,
+  "source_topology_matched": true,
+  "candidate_metrics": {
+    "replay_control_stage1": {
+      "allowed_by_old_skill_guard": false,
+      "physical_3D_chamfer": 0.005256300490724935,
+      "operation_accuracy": 0.8854166666666666,
+      "strength_mae": 0.12933950937499997,
+      "form_accuracy": 1.0
+    },
+    "vertex_loss_stage1": {
+      "allowed_by_old_skill_guard": false,
+      "physical_3D_chamfer": 0.005247175334016882,
+      "operation_accuracy": 0.8854166666666666,
+      "strength_mae": 0.12846711388888868,
+      "form_accuracy": 1.0
+    },
+    "ranking_loss_stage1": {
+      "allowed_by_old_skill_guard": false,
+      "physical_3D_chamfer": 0.005406012513920821,
+      "operation_accuracy": 0.8888888888888888,
+      "strength_mae": 0.12674933611111106,
+      "form_accuracy": 1.0
+    }
+  },
+  "parent_physical_3D_chamfer": 0.005518792156825207,
+  "physical_development_gain_vs_parent_fraction": 0.04921671537718833,
+  "selected_without_blind_3D_audit": true,
+  "no_Android_deployment": true
+}

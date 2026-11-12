@@ -1,0 +1,37 @@
+{
+  "schema": "assetwright-durable-original-resolution-aware-geometry-v12",
+  "run_id": 43131206304,
+  "parent_v6_action_strength_sha256": "b4b43fe30b4865fc598d8673390ce0383ecfee614878a46cfb8f68f3952288db",
+  "parent_v7_shape_identity_sha256": "540bc98c9d126321b784b4f13db17cf9e1194f9815ab98ce401f29e1be5ee52b",
+  "continued_original_v8_adapter_sha256": "fbaea8ee0ec8b061232036e1d6addd80f4ab6f67d32979917c8d92333af5320a",
+  "frozen_original_v9_form_head_sha256": "7bc18a1ceb7a9ebff28c384ea22134dc6eb7968f274986b63caa398c97725291",
+  "frozen_original_models_preserved": true,
+  "source_original_Kotlin_GLBS_verified": 1808,
+  "generated_original_Kotlin_GLBS_verified": 1152,
+  "old_correct_original_geometry_replay_examples": 1152,
+  "new_original_geometry_training_examples": 1152,
+  "physical_topology_source_verified": true,
+  "real_development_GLBS_verified": 1152,
+  "development_selected_method": "vertex_loss_stage1",
+  "frozen_v10_checkpoint_source_hash": "562803bb19e1ef41ff55ab4ed2b5de6f53f29851caee8ac316bfab2e165d5ebc",
+  "new_distinct_blind_source_families": 16,
+  "blind_original_source_sha256": "4914b3b234ce8fbfff3326f78f57dda2261aa5817dcf66f1cea5d243fc111f9b",
+  "actual_optimizer_seconds": 900.003,
+  "trained_adapters": {
+    "replay_control_stage1": {
+      "sha256": "4a91d03ce522fb32b705a68c473208d9b37f5bce948a62ba37017e867bf6e0b8",
+      "parameters": 26668
+    },
+    "vertex_loss_stage1": {
+      "sha256": "4834bc4e13441fb95bea50d6c37790fa8a89313935a38e2a810396c373987104",
+      "parameters": 26668
+    },
+    "ranking_loss_stage1": {
+      "sha256": "244dc270809e12f6fd348d758805f57eb84bc1e6f614c600c701fc37a42eacae",
+      "parameters": 26668
+    }
+  },
+  "research_gate": "research_only_rejected_parent_protected",
+  "production_checkpoint_modified": false,
+  "Android_neural_deployed": false
+}
