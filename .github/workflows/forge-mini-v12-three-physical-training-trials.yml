@@ -1,0 +1,196 @@
+name: Forge Mini v12 — Three Physical Neural Training Trials
+
+# Three independent 300-second CPU gradient sessions, same source-hashed
+# retained v10 weights. All eight forms, exact undeformed input topology.
+# DEV-only real Kotlin GLB Chamfer selects model BEFORE final BLIND audit.
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/forge-mini-v12-three-physical-training-trials.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: assetwright-original-geometry-three-trials-v12
+  cancel-in-progress: true
+
+jobs:
+  train-select-and-audit:
+    name: Three 300s neural learning runs, 1152 original dev GLBs, 1152 independent blind GLBs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 105
+    env:
+      ASSETWRIGHT_DINO_STUDY: resolution_aware_v12
+      ASSETWRIGHT_RESOLUTION_AWARE_PREDICTIONS: ${{ github.workspace }}/local-data/resolution_aware_v12/student/native_proposals.properties
+      ASSETWRIGHT_RESOLUTION_AWARE_RECON: ${{ github.workspace }}/local-data/resolution_aware_v12/reconstructed
+      ASSETWRIGHT_RESOLUTION_AWARE_DEV_PREDICTIONS: ${{ github.workspace }}/local-data/resolution_aware_v12/student/development_proposals.properties
+      ASSETWRIGHT_RESOLUTION_AWARE_DEV_RECON: ${{ github.workspace }}/local-data/resolution_aware_v12/development_reconstructed
+      GH_TOKEN: ${{ github.token }}
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.0'
+      - name: Require entirely fresh original v12 Kotlin source school completed
+        run: gh run watch 43130029505 --repo "$GITHUB_REPOSITORY" --exit-status
+      - name: Download v12 1808 original GLBs, baseline topology and source images
+        uses: actions/download-artifact@v4
+        with:
+          name: forge-mini-v12-1808-original-native-topology-sources
+          repository: tpylman90-ctrl/Assetwright
+          run-id: 43130029505
+          github-token: ${{ github.token }}
+          path: local-data/resolution_aware_v12/new/
+      - name: Download old v10 TRAIN-only original GLBs, no old dev or blind gradient lessons
+        run: |
+          mkdir -p local-data/resolution_aware_v12/old
+          gh run download 42481115566 --repo "$GITHUB_REPOSITORY" \
+            --name forge-mini-v10-1808-fresh-original-eight-form-sources \
+            --dir local-data/resolution_aware_v12/old
+          test -s local-data/resolution_aware_v12/old/manifest.json
+          test -s local-data/resolution_aware_v12/old/identity/index.json
+          test -s training/learning_runs/geometry_mastery_v10_42481644095/warm_replay.safetensors
+          test -s training/learning_runs/identity_continuation_v9_42445878521/replay_continuation.safetensors
+      - name: Install free CPU PyTorch and original native GLB audit dependencies
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+          python -m pip install 'Pillow==11.3.0' 'numpy>=1.26,<3' 'scipy>=1.12,<2' 'safetensors>=0.4,<1'
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Compile full learner, original source audit, development selection, and acceptance gates
+        run: |
+          python -m compileall -q \
+            tools/mini_ai/native_resolution_aware_v12.py \
+            tools/mini_ai/native_resolution_aware_forward_audit.py \
+            tools/mini_ai/select_native_resolution_aware_v12.py \
+            tools/mini_ai/native_resolution_aware_acceptance.py \
+            tools/mini_ai/retain_resolution_aware_v12.py
+          python -m unittest discover -s tools/mini_ai -p 'test_native_resolution_aware_v12.py' -v
+          python -m unittest discover -s tools/mini_ai -p 'test_native_resolution_aware_selection.py' -v
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path("local-data/resolution_aware_v12/new")
+          m=json.loads((root/"manifest.json").read_text())
+          i=json.loads((root/"identity/index.json").read_text())
+          assert m["study_id"]=="resolution_aware_v12"
+          assert m["source_count"]==1808 and m["paired_examples"]==1728
+          assert m["external_geometry_used"] is False
+          assert i["source_count"]==80 and i["study_id"]=="resolution_aware_v12"
+          assert {s:sum(r["split"]==s for r in m["records"])
+                  for s in ("train","development","validation")}=={
+                    "train":1152,"development":288,"validation":288}
+          print("Fresh original Kotlin resolution source validated",flush=True)
+          PY
+      - name: Three TRUE independent 300-second neural optimizations, same retained v10 weights
+        run: |
+          python -u tools/mini_ai/native_resolution_aware_v12.py \
+            --new-manifest local-data/resolution_aware_v12/new/manifest.json \
+            --new-images local-data/resolution_aware_v12/new/images \
+            --new-views local-data/resolution_aware_v12/new/identity \
+            --new-source local-data/resolution_aware_v12/new/source \
+            --old-manifest local-data/resolution_aware_v12/old/manifest.json \
+            --old-images local-data/resolution_aware_v12/old/images \
+            --old-views local-data/resolution_aware_v12/old/identity \
+            --old-source local-data/resolution_aware_v12/old/source \
+            --v6-knowledge training/learning_runs/multiform_v6_42151392636 \
+            --v7-knowledge training/learning_runs/shape_identity_v7_42233349361 \
+            --v8-knowledge training/learning_runs/form_fidelity_v8_42396471403 \
+            --v9-knowledge training/learning_runs/identity_continuation_v9_42445878521 \
+            --v10-knowledge training/learning_runs/geometry_mastery_v10_42481644095 \
+            --out local-data/resolution_aware_v12/student \
+            --training-seconds 900
+      - name: Reconstruct 1152 real DEVELOPMENT Kotlin GLBs at ORIGINAL INPUT resolution
+        run: |
+          test -s "$ASSETWRIGHT_RESOLUTION_AWARE_DEV_PREDICTIONS"
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoResolutionAwareDevelopmentTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/resolution_aware_v12/development_reconstructed -maxdepth 1 -name '*.glb' | wc -l)" -eq 1152
+      - name: PHYSICAL developmental selection using 1152 real native meshes — no blind influence
+        run: |
+          python tools/mini_ai/native_resolution_aware_forward_audit.py \
+            --source local-data/resolution_aware_v12/new/source \
+            --reconstructed local-data/resolution_aware_v12/development_reconstructed \
+            --split development \
+            --out local-data/resolution_aware_v12/development_geometry.json
+          python tools/mini_ai/select_native_resolution_aware_v12.py \
+            --evaluation local-data/resolution_aware_v12/student/evaluation.json \
+            --development-geometry local-data/resolution_aware_v12/development_geometry.json \
+            --lineage local-data/resolution_aware_v12/student/lineage.json \
+            --out local-data/resolution_aware_v12/student/development_selection.json
+      - name: Reconstruct 1152 final BLIND original Kotlin GLBs at SHA-verified baseline resolution
+        run: |
+          test -s "$ASSETWRIGHT_RESOLUTION_AWARE_PREDICTIONS"
+          test -s local-data/resolution_aware_v12/student/development_selection.json
+          gradle :app:testDebugUnitTest \
+            --tests com.assetwright.app.mini.DinoResolutionAwareReconstructionTest \
+            --rerun-tasks --stacktrace
+          test "$(find local-data/resolution_aware_v12/reconstructed -maxdepth 1 -name '*.glb' | wc -l)" -eq 1152
+      - name: INDEPENDENT unseen blind 3D GLB audit of selected and two comparison trials
+        run: |
+          python tools/mini_ai/native_resolution_aware_forward_audit.py \
+            --source local-data/resolution_aware_v12/new/source \
+            --reconstructed local-data/resolution_aware_v12/reconstructed \
+            --split validation \
+            --out local-data/resolution_aware_v12/forward_audit.json
+      - name: Gate genuine native geometry gain and all earlier learned skills
+        run: |
+          python tools/mini_ai/native_resolution_aware_acceptance.py \
+            --evaluation local-data/resolution_aware_v12/student/evaluation.json \
+            --development-geometry local-data/resolution_aware_v12/development_geometry.json \
+            --selection local-data/resolution_aware_v12/student/development_selection.json \
+            --blind-geometry local-data/resolution_aware_v12/forward_audit.json \
+            --lineage local-data/resolution_aware_v12/student/lineage.json \
+            --out local-data/resolution_aware_v12/student/research_disposition.json
+      - name: Archive all three genuine trained safetensors and both source-hashed GLB audits
+        run: |
+          python tools/mini_ai/retain_resolution_aware_v12.py \
+            --workspace local-data/resolution_aware_v12 \
+            --v6 training/learning_runs/multiform_v6_42151392636 \
+            --v7 training/learning_runs/shape_identity_v7_42233349361 \
+            --v8 training/learning_runs/form_fidelity_v8_42396471403 \
+            --v9 training/learning_runs/identity_continuation_v9_42445878521 \
+            --v10 training/learning_runs/geometry_mastery_v10_42481644095 \
+            --out "training/learning_runs/resolution_aware_v12_$GITHUB_RUN_ID" \
+            --run-id "$GITHUB_RUN_ID"
+          git config user.name "AssetWright original neural resolution audit"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "training/learning_runs/resolution_aware_v12_$GITHUB_RUN_ID"
+          git commit -m "research: preserve 3x300s neural weights and 2304 original Kotlin DEV/BLIND GLB audits [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:refs/heads/main
+      - name: Preserve any actual neural training checkpoints even if native geometry gate fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forge-mini-v12-three-300s-neural-trials-and-original-GLB-audits
+          path: |
+            local-data/resolution_aware_v12/student/*.json
+            local-data/resolution_aware_v12/student/*.properties
+            local-data/resolution_aware_v12/student/winners/*.safetensors
+            local-data/resolution_aware_v12/student/sessions/*.safetensors
+            local-data/resolution_aware_v12/development_geometry.json
+            local-data/resolution_aware_v12/forward_audit.json
+            local-data/resolution_aware_v12/reconstructed/*.glb
+            local-data/resolution_aware_v12/reconstructed/*.json
+            training/learning_runs/resolution_aware_v12_*/**
+          if-no-files-found: warn
+          retention-days: 45
