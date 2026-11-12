@@ -1,0 +1,37 @@
+name: Forge Mini v13 — Research Safety Checks
+on:
+  push:
+    branches: [research/v13-strength-retention]
+    paths:
+      - 'tools/mini_ai/v13_lineage_preflight.py'
+      - 'tools/mini_ai/test_v13_lineage_preflight.py'
+      - 'tools/mini_ai/native_resolution_aware_v13.py'
+      - '.github/workflows/forge-mini-v13-safety.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fail-closed-preflight-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile v13 research modules
+        run: python -m compileall -q tools/mini_ai/native_resolution_aware_v13.py tools/mini_ai/v13_lineage_preflight.py tools/mini_ai/test_v13_lineage_preflight.py
+      - name: Execute fail-closed lineage tests
+        run: PYTHONPATH=tools/mini_ai python -m unittest discover -s tools/mini_ai -p 'test_v13_lineage_preflight.py' -v
+      - name: Verify v13 has no Android deployment or blind-driven selection
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          source=Path('tools/mini_ai/native_resolution_aware_v13.py').read_text()
+          assert 'CONDITIONS=("replay_control","strength_aware","retention_regularized")' in source
+          assert 'TRAINING_SECONDS=900' in source
+          assert 'android_neural_deployed":False' in source
+          print("Static research-only checks passed")
+          PY
