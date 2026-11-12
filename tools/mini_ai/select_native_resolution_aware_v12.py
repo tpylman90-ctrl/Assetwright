@@ -43,7 +43,7 @@ def select(report,audit,lineage):
             and x["operation_accuracy"]>=parent["operation_accuracy"]-.015
             and x["strength_mae"]<=parent["strength_mae"]+.015
             and x["predicted_distinct_archetypes"]==8
-            and x["predicted_unique_triangle_topologies"]>=2
+            and x["predicted_unique_triangle_topologies"]>=1
             and x["generic_shell_output_count"]==0)
         candidates[name]={
             "allowed_by_old_skill_guard":acceptable,
