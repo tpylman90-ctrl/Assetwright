@@ -65,7 +65,7 @@ def check_adapter(file:Path):
     }
 
 
-def retain(run_id,workspace:Path,v6:Path,v7:Path,v8:Path,v9:Path,dest:Path):
+def retain(run_id,workspace:Path,v6:Path,v7:Path,v8:Path,v9:Path,v10:Path,dest:Path):
     if (not re.fullmatch(r"[1-9][0-9]{7,15}",run_id)
         or dest.exists()):
         raise ValueError("Immutable genuine learning attempt cannot be overwritten")
@@ -83,11 +83,13 @@ def retain(run_id,workspace:Path,v6:Path,v7:Path,v8:Path,v9:Path,dest:Path):
     initial7=v7/"hard_form_distinctions.safetensors"
     continued8=v8/"hard_physical.safetensors"
     frozen9=v9/"replay_continuation.safetensors"
+    continued10=v10/"warm_replay.safetensors"
     for actual,expected in (
         (initial6,lineage["source_v6_weight_sha256"]),
         (initial7,lineage["source_v7_form_weight_sha256"]),
         (continued8,lineage["source_v8_adapter_sha256"]),
-        (frozen9,lineage["source_v9_identity_sha256"])):
+        (frozen9,lineage["source_v9_identity_sha256"]),
+        (continued10,lineage["source_v10_adapter_sha256"])):
         if sha(actual)!=expected:
             raise ValueError("Prior saved source-hashed native learned weights changed")
     glbs=list((workspace/"new"/"source").glob("*.glb"))
@@ -108,7 +110,7 @@ def retain(run_id,workspace:Path,v6:Path,v7:Path,v8:Path,v9:Path,dest:Path):
             raise ValueError("Reconstructed original native GLB changed")
     candidates={
         condition:check_adapter(research/"winners"/(condition+".safetensors"))
-        for condition in CONDITIONS
+        for condition in VARIANTS[1:]
     }
     if len({c["sha256"] for c in candidates.values()})!=3:
         raise ValueError("Three independently trained adapters are identical")
@@ -121,7 +123,7 @@ def retain(run_id,workspace:Path,v6:Path,v7:Path,v8:Path,v9:Path,dest:Path):
         (workspace/"development_geometry.json").read_bytes())
     (dest/"development_selection.json").write_bytes(
         (research/"development_selection.json").read_bytes())
-    for condition in CONDITIONS:
+    for condition in VARIANTS[1:]:
         (dest/(condition+".safetensors")).write_bytes(
             (research/"winners"/(condition+".safetensors")).read_bytes())
     report={
@@ -153,7 +155,7 @@ def retain(run_id,workspace:Path,v6:Path,v7:Path,v8:Path,v9:Path,dest:Path):
         "# Original Forge Mini v12 input-topology-matched geometry fidelity\n\n"
         "Preserves real neural adapter weights from three source-matched "
         "training conditions, frozen previous native op/strength and identity "
-        "student hashes, 1,200 old-replay + 1,152 newly learned original "
+        "student hashes, 1,152 old TRAIN-only replay + 1,152 newly learned original "
         "geometry examples, and an independent 1,152-GLB blind 3D surface "
         "audit across eight real source form archetypes.\n\n"
         "**Research verdict:** "+verdict["status"]+". "
@@ -165,10 +167,10 @@ def retain(run_id,workspace:Path,v6:Path,v7:Path,v8:Path,v9:Path,dest:Path):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--run-id",required=True)
-    for name in ("workspace","v6","v7","v8","v9","out"):
+    for name in ("workspace","v6","v7","v8","v9","v10","out"):
         p.add_argument("--"+name,required=True,type=Path)
     a=p.parse_args()
-    print(json.dumps(retain(a.run_id,a.workspace,a.v6,a.v7,a.v8,a.v9,a.out),indent=2))
+    print(json.dumps(retain(a.run_id,a.workspace,a.v6,a.v7,a.v8,a.v9,a.v10,a.out),indent=2))
 
 
 if __name__=="__main__":
