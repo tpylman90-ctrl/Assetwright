@@ -159,6 +159,18 @@ elif STUDY=="overnight_geometry_v11":
         "development":(.175,.465,.875),
         "validation":(.115,.395,.945)
     }
+elif STUDY=="resolution_aware_v12":
+    # New dimensional source families and fresh blind strength levels.
+    FAMILIES={
+        "train":tuple("ra_train%02d"%i for i in range(1,49)),
+        "development":tuple("ra_dev%02d"%i for i in range(1,17)),
+        "validation":tuple("ra_blind%02d"%i for i in range(1,17))
+    }
+    LEVELS={
+        "train":(.075,.295,.555,.915),
+        "development":(.145,.505,.865),
+        "validation":(.125,.425,.935)
+    }
 elif STUDY!="delta_v1":
     raise ValueError("Unapproved native source curriculum")
 EXPECTED=sum(len(FAMILIES[phase])*6*len(LEVELS[phase])
@@ -199,12 +211,12 @@ def read_case(root:Path,stem:str,expected:tuple,*,baseline:bool=False)->dict:
            or not math.isfinite(meta[name])
            or not .5<=meta[name]<=12 for name in ("length","width","height")):
         raise ValueError("Invalid physical original dimensions")
-    if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11"):
+    if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11","resolution_aware_v12"):
         forms=("SPINDLE","WEDGE","BOX_MODULE","BARREL","ARCH",
                "BLADE","CANOPY_POD","TRUSS_BEAM")
         i=int(family[-2:])
         expected_form=forms[(i-1)%len(forms)]
-        if STUDY in ("shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11"):
+        if STUDY in ("shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11","resolution_aware_v12"):
             variant=(i-1)//8
             expected_segments=(24 if variant%2==0 else 32) if split=="train" else (
                 32 if split=="development" else 40)
@@ -279,7 +291,7 @@ def multiform_section_features(path:Path)->list[float]:
 
 
 def native_delta(before:Path,after:Path)->tuple[list[float],float]:
-    if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11"):
+    if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11","resolution_aware_v12"):
         a=multiform_section_features(before)
         b=multiform_section_features(after)
     else:
@@ -293,8 +305,8 @@ def native_delta(before:Path,after:Path)->tuple[list[float],float]:
     va=_accessor(adoc,abuf,pa["attributes"]["POSITION"],"positions")
     vb=_accessor(bdoc,bbuf,pb["attributes"]["POSITION"],"positions")
     if len(va)!=len(vb) or (
-        (STUDY not in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11") and len(va)!=602) or
-        (STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11") and len(va) not in (602,802,1058,1322))
+        (STUDY not in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11","resolution_aware_v12") and len(va)!=602) or
+        (STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11","resolution_aware_v12") and len(va) not in (602,802,1058,1322))
     ):
         raise ValueError("Native geometry lost true corresponding source vertices")
     displacement=math.sqrt(sum(
@@ -331,7 +343,7 @@ def render_school(source:Path,images:Path,manifest_path:Path)->dict:
         baseline=audited[base]["meta"]
         if any(abs(dims[k]-baseline[k])>1.e-6 for k in ("length","width","height")):
             raise ValueError("Changed dimensions, not a controlled operation delta")
-        if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11") and any(
+        if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11","resolution_aware_v12") and any(
             dims[k]!=baseline[k] for k in ("archetype","segments","stations")):
             raise ValueError("Original source archetype/topology changed within family")
     frame={}
@@ -380,7 +392,7 @@ def render_school(source:Path,images:Path,manifest_path:Path)->dict:
             "height":source_data["meta"]["height"],
             **({key:source_data["meta"][key]
                for key in ("archetype","segments","stations")}
-               if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11") else {}),
+               if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11","resolution_aware_v12") else {}),
             "before_view_files":before_names,"before_view_sha256":before_hashes,
             "after_view_files":after_names,"after_view_sha256":after_hashes,
             "measured_morphology_delta":delta,
@@ -449,11 +461,11 @@ def checked_manifest(manifest:dict,images:Path)->list[dict]:
                 path=images/(stem+"__"+view+".png")
                 if names[view]!=path.name or not path.is_file() or hash_file(path)!=hashes[view]:
                     raise ValueError("Tampered before/after original image")
-        if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11"):
+        if STUDY in ("multiform_v6","shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11","resolution_aware_v12"):
             i=int(family[-2:])
             forms=("SPINDLE","WEDGE","BOX_MODULE","BARREL","ARCH",
                    "BLADE","CANOPY_POD","TRUSS_BEAM")
-            if STUDY in ("shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11"):
+            if STUDY in ("shape_identity_v7","form_fidelity_v8","identity_continuation_v9","geometry_mastery_v10","overnight_geometry_v11","resolution_aware_v12"):
                 variant=(i-1)//8
                 expected_segments=(24 if variant%2==0 else 32) if split=="train" else (
                     32 if split=="development" else 40)
