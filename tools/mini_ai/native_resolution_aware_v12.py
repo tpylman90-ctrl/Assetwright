@@ -504,6 +504,40 @@ def train(new_manifest,new_images,new_views,new_source,
                 "checkpoint_sha256":trained_stage_sha256
             }),flush=True)
     if spent<seconds:raise ValueError("CPU-gradient training duration not actually met")
+    # Crucial v12 change: save REAL development reconstruction proposals.
+    # Method selection happens in a subsequent independent Kotlin 3D
+    # surface audit of DEVELOPMENT forms, never using blind cases.
+    dev_lines=[
+        "schema="+PROPOSAL_SCHEMA,
+        "study_id="+STUDY_NAME,
+        "external_mesh_used=false",
+        "count="+str(len(dev))
+    ]
+    for variant,network in [("parent_v10",frozen_adapter)]+list(champions.items()):
+        with torch.inference_mode():
+            dl,dh=network(*dev_cache[:4])
+            opids=dl.argmax(1)
+            strengths=dh.gather(1,opids[:,None]).flatten()
+            forms=dev_cache[4]
+        for index,row in enumerate(dev):
+            payload={
+                "case":row["case"],
+                "source_glb_sha256":row["source_hash"],
+                "baseline_glb_sha256":row["baseline_hash"],
+                "predicted_operation":OPERATIONS[int(opids[index])],
+                "predicted_strength":round(float(strengths[index]),7),
+                "predicted_archetype":FORMS[int(forms[index])],
+                **row["dims"],
+                "segments":int(row["segments"]),
+                "stations":int(row["stations"])
+            }
+            for key,value in payload.items():
+                dev_lines.append(f"{variant}.{index}.{key}={value}")
+    (output/"development_proposals.properties").write_text(
+        "\n".join(dev_lines)+"\n")
+    # Blind results below are diagnostics only: they MUST NEVER be used
+    # to choose a new checkpoint or its hyperparameters.
+
     method=min(VARIANTS[1:],key=lambda name:dev_results[name]["development_priority"])
 
     # No blind images or oracle native geometry was opened for any
