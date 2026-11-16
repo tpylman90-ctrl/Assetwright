@@ -1,0 +1,127 @@
+name: Gemini Catamaran V3 | Trimesh to Blender 4.5.3
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/blender/inbox/gemini_catamaran_v3.py'
+      - 'tools/blender/render_gemini_v3.py'
+      - '.github/workflows/gemini-catamaran-v3.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: assetwright-gemini-catamaran-v3
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Python geometry dependencies
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install source geometry and contact sheet dependencies
+        run: |
+          python -m pip install --disable-pip-version-check 'numpy>=1.26,<3' 'trimesh==4.11.1' 'scipy>=1.13,<2' 'Pillow>=11,<13'
+
+      - name: Generate exact supplied Gemini catamaran geometry with Trimesh
+        run: |
+          set -euo pipefail
+          mkdir -p generated/gemini_v3
+          cd generated/gemini_v3
+          python ../../tools/blender/inbox/gemini_catamaran_v3.py 2>&1 | tee trimesh.log
+          test -s gemini_catamaran_trimesh.glb
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import trimesh
+          s=trimesh.load('gemini_catamaran_trimesh.glb',force='scene',process=False)
+          assert len(s.geometry)==8,list(s.geometry)
+          n=sum(len(g.faces) for g in s.geometry.values())
+          assert n>5000,n
+          b=s.bounds.tolist()
+          Path('gemini_trimesh_audit.json').write_text(json.dumps({
+            'groups':len(s.geometry),'group_names':list(s.geometry),
+            'triangles':n,'bounds_trimesh_xyz':b,
+            'user_source_truncated':True,
+            'assistant_added':'final emissive meshes, materials, export'
+          },indent=2))
+          print('GEMINI_TRIMESH_AUDIT_OK',n)
+          PY
+
+      - name: Install actual Blender 4.5.3
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb libgl1-mesa-dri
+          curl -fL --retry 3 https://download.blender.org/release/Blender4.5/blender-4.5.3-linux-x64.tar.xz -o /tmp/blender.tar.xz
+          tar -xf /tmp/blender.tar.xz -C /tmp
+          /tmp/blender-4.5.3-linux-x64/blender --version | head -n 2
+
+      - name: Import original geometry into Blender and render six Cycles PBR views
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+        run: |
+          set -euo pipefail
+          xvfb-run -a /tmp/blender-4.5.3-linux-x64/blender \
+            --background --factory-startup --threads 4 --python-exit-code 1 \
+            --python tools/blender/render_gemini_v3.py \
+            2>&1 | tee generated/gemini_v3/blender.log
+          grep -q 'GEMINI_BLENDER_ALL_OK' generated/gemini_v3/blender.log
+
+      - name: Assemble six-angle sheet and verify exported files
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image,ImageDraw
+          out=Path('generated/gemini_v3')
+          names=[('front_3q','FRONT 3/4'),('rear_3q','REAR 3/4'),
+                 ('side','LEFT SIDE'),('top','TOP'),('front','FRONT'),('rear','REAR')]
+          sheet=Image.new('RGB',(2880,1536),(28,32,40))
+          draw=ImageDraw.Draw(sheet)
+          for i,(name,label) in enumerate(names):
+              p=out/('gemini_'+name+'.png')
+              img=Image.open(p).convert('RGB')
+              assert img.size==(960,720),(p,img.size)
+              x=(i%3)*960;y=(i//3)*768
+              sheet.paste(img,(x,y))
+              draw.text((x+18,y+730),label,fill=(235,238,243))
+          sheet.save(out/'gemini_six_view_sheet.png')
+          for p in ('gemini_catamaran_trimesh.glb','gemini_catamaran_blender.glb',
+                    'gemini_catamaran_master.blend','gemini_geometry_audit.json'):
+              assert (out/p).stat().st_size>100,p
+          print('GEMINI_SIX_VIEW_SHEET_OK')
+          PY
+
+      - name: Upload native GLBs and Blender project
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Gemini-V3-Native-Blender-Six-Views
+          path: generated/gemini_v3/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Publish direct downloadable GLB, blend and PNG files
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="gemini-v3-$(echo "$GITHUB_SHA" | cut -c1-10)"
+          gh release create "$tag" \
+            generated/gemini_v3/*.glb \
+            generated/gemini_v3/*.blend \
+            generated/gemini_v3/*.png \
+            generated/gemini_v3/*audit.json \
+            --title "Gemini Catamaran V3 — Blender 4.5.3" \
+            --notes "User Trimesh twin-catamaran geometry, completed truncated emission/export section, PBR materials, six Blender Cycles studio views, editable .blend and geometry audits." \
+            --target "$GITHUB_SHA"
+          echo "GEMINI_RELEASE=https://github.com/$GITHUB_REPOSITORY/releases/tag/$tag"
