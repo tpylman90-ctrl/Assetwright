@@ -1,0 +1,125 @@
+name: Trimesh-to-Blender | Recessed-Bay Hovercraft V2
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/blender/inbox/hovercraft_trimesh_v2.py'
+      - 'tools/blender/render_trimesh_inbox.py'
+      - '.github/workflows/trimesh-to-blender.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: assetwright-trimesh-to-blender-v2
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Python geometry dependencies
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install open source Trimesh and rendering utilities
+        run: |
+          python -m pip install --disable-pip-version-check 'numpy>=1.26,<3' 'trimesh==4.11.1' 'Pillow>=11,<13'
+      - name: Construct user model using actual Trimesh
+        run: |
+          set -euo pipefail
+          mkdir -p generated/trimesh_v2
+          cd generated/trimesh_v2
+          python ../../tools/blender/inbox/hovercraft_trimesh_v2.py 2>&1 | tee trimesh.log
+          test -s scifi_hovercraft_clay.glb
+          python - <<'PY'
+          import json, trimesh
+          from pathlib import Path
+          p=Path('scifi_hovercraft_clay.glb')
+          s=trimesh.load(p,force='scene',process=False)
+          assert len(s.geometry)==8,list(s.geometry)
+          total=sum(len(g.faces) for g in s.geometry.values())
+          assert total>1000,total
+          Path('trimesh_audit.json').write_text(json.dumps({
+             'mesh_groups':len(s.geometry),'triangles':total,
+             'geometry_names':list(s.geometry),
+             'bounds_original_xyz':s.bounds.tolist(),
+             'up_axis':'+Y','forward_axis':'+Z'
+          },indent=2))
+          print('TRIMESH_V2_GENERATION_OK',total)
+          PY
+
+      - name: Install Blender 4.5.3 LTS
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb libgl1-mesa-dri
+          curl -fL --retry 3 https://download.blender.org/release/Blender4.5/blender-4.5.3-linux-x64.tar.xz -o /tmp/blender.tar.xz
+          tar -xf /tmp/blender.tar.xz -C /tmp
+          /tmp/blender-4.5.3-linux-x64/blender --version | head -n 2
+
+      - name: Open original model in Blender and render six Cycles views
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
+        run: |
+          set -euo pipefail
+          xvfb-run -a /tmp/blender-4.5.3-linux-x64/blender \
+            --background --factory-startup --threads 4 --python-exit-code 1 \
+            --python tools/blender/render_trimesh_inbox.py \
+            2>&1 | tee generated/trimesh_v2/blender.log
+          grep -q 'TRIMESH_TO_BLENDER_ALL_OK' generated/trimesh_v2/blender.log
+
+      - name: Assemble six-view PNG and verify exports
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageDraw
+          root=Path('generated/trimesh_v2')
+          labels=[('front_3q','FRONT THREE QUARTER'),('rear_3q','REAR THREE QUARTER'),
+                  ('side','LEFT PROFILE'),('top','TOP'),
+                  ('front','FRONT'),('rear','REAR')]
+          canvas=Image.new('RGB',(2880,1536),(30,33,39))
+          draw=ImageDraw.Draw(canvas)
+          for i,(key,label) in enumerate(labels):
+              p=root/('scifi_hovercraft_'+key+'.png')
+              img=Image.open(p).convert('RGB')
+              assert img.size==(960,720), (p,img.size)
+              x=(i%3)*960; y=(i//3)*768
+              canvas.paste(img,(x,y))
+              draw.text((x+20,y+732),label,fill=(238,240,244))
+          canvas.save(root/'scifi_hovercraft_six_view_sheet.png')
+          for name in ('scifi_hovercraft_clay.glb','scifi_hovercraft_blender_v2.glb','scifi_hovercraft_trimesh_v2_master.blend','geometry_audit.json','trimesh_audit.json'):
+              assert (root/name).stat().st_size>10,name
+          print('TRIMESH_V2_SIX_VIEW_OK')
+          PY
+
+      - name: Upload native and source model assets
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: SciFi-Hovercraft-V2-Trimesh-Blender
+          path: generated/trimesh_v2/
+          retention-days: 14
+          if-no-files-found: warn
+
+      - name: Publish direct downloadable models and views
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="trimesh-blender-v2-$(echo "$GITHUB_SHA" | cut -c1-10)"
+          gh release create "$tag" \
+            generated/trimesh_v2/*.glb \
+            generated/trimesh_v2/*.blend \
+            generated/trimesh_v2/*.png \
+            generated/trimesh_v2/*audit.json \
+            --title "Hovercraft V2 — recessed bays — Blender inspected" \
+            --notes "Exact user-supplied Trimesh geometry with fully recessed side manifolds; Blender 4.5.3 import, editable master, Blender GLB re-export and six camera views." \
+            --target "$GITHUB_SHA"
+          echo "DIRECT_DOWNLOAD_RELEASE=https://github.com/$GITHUB_REPOSITORY/releases/tag/$tag"
