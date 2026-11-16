@@ -29,7 +29,7 @@ jobs:
           python-version: '3.11'
       - name: Install open source Trimesh and rendering utilities
         run: |
-          python -m pip install --disable-pip-version-check 'numpy>=1.26,<3' 'trimesh==4.11.1' 'Pillow>=11,<13'
+          python -m pip install --disable-pip-version-check 'numpy>=1.26,<3' 'trimesh==4.11.1' 'scipy>=1.13,<2' 'Pillow>=11,<13'
       - name: Construct user model using actual Trimesh
         run: |
           set -euo pipefail
