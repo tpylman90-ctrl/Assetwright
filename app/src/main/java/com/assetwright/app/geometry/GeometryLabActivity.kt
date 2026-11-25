@@ -277,7 +277,7 @@ class GeometryLabActivity : ComponentActivity() {
                     val cy=(b[v]+b[v+3])/2f
                     paint.color=when(k){0->cyan;1->Color.rgb(248,174,72);else->Color.rgb(226,108,161)}
                     paint.strokeWidth=2f
-                    val local=min(width/3f,height)*0.75f/span
+                    val local=min(width / 3f, height.toFloat()) * 0.75f / span
                     for(pair in sorted) if(pair.size==2) {
                         val lo=pair[0];val hi=pair[1]
                         canvas.drawLine(x0+(lo[0]-cx)*local,y0-(lo[1]-cy)*local,
