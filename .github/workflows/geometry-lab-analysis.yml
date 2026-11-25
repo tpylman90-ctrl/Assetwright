@@ -1,0 +1,84 @@
+name: Assetwright Geometry Lab - full geometry scan
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tools/geometry_lab/**"
+      - ".github/workflows/geometry-lab-analysis.yml"
+  workflow_dispatch:
+    inputs:
+      source_glb:
+        description: "GLB file path committed to repository; leave empty for a synthetic smoke-test"
+        required: false
+        type: string
+      compare_glb:
+        description: "Optional second model path for difference scanning"
+        required: false
+        type: string
+      length_axis:
+        description: "Vehicle forward axis"
+        default: "x"
+        type: choice
+        options: [x, y, z]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    env:
+      SOURCE_GLB: ${{ inputs.source_glb }}
+      COMPARE_GLB: ${{ inputs.compare_glb }}
+      LENGTH_AXIS: ${{ inputs.length_axis }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install free geometry libraries
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy scipy trimesh matplotlib rtree
+          npm install --no-save meshoptimizer@0.26.0
+      - name: Analyze original and preserve it
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p geometry-lab-results
+          if [ -z "$SOURCE_GLB" ]; then
+            python tools/geometry_lab/geometry_lab_desktop.py --demo --out geometry-lab-results
+          else
+            test -f "$SOURCE_GLB"
+            sha256sum "$SOURCE_GLB" > geometry-lab-results/original.sha256
+            IN="$SOURCE_GLB"
+            if python - "$IN" <<'PY'
+          import json,struct,sys
+          data=open(sys.argv[1],"rb").read()
+          n=struct.unpack_from("<I",data,12)[0]
+          obj=json.loads(data[20:20+n])
+          print("Meshopt:", "EXT_meshopt_compression" in obj.get("extensionsRequired",[]))
+          sys.exit(0 if "EXT_meshopt_compression" in obj.get("extensionsRequired",[]) else 1)
+          PY
+            then
+              node tools/geometry_lab/unpack_meshopt.mjs "$IN" geometry-lab-results/uncompressed_diagnostic.glb
+              IN=geometry-lab-results/uncompressed_diagnostic.glb
+            fi
+            args=(--input "$IN" --out geometry-lab-results --length-axis "${LENGTH_AXIS:-x}")
+            if [ -n "$COMPARE_GLB" ]; then
+              test -f "$COMPARE_GLB"
+              args+=(--compare "$COMPARE_GLB")
+            fi
+            python tools/geometry_lab/geometry_lab_desktop.py "${args[@]}"
+            sha256sum -c geometry-lab-results/original.sha256
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-geometry-scan
+          path: geometry-lab-results/
+          retention-days: 21
+          if-no-files-found: error
