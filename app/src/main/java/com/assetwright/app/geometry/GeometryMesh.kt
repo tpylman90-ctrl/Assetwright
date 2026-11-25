@@ -195,74 +195,233 @@ class GeometryMesh(val name: String, val xyz: FloatArray, val triangles: IntArra
         append("\nNo input meshes were edited.")
     }
     companion object {
-        fun parse(bytes:ByteArray,name:String):GeometryMesh {
-            require(bytes.size>=20){"GLB is too small"}
-            val bb=ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
-            require(bb.int==0x46546c67 && bb.int==2){"Binary glTF 2.0 (.glb) required"}
-            val size=bb.int;require(size in 20..bytes.size){"Invalid GLB size"}
-            var json:JSONObject?=null;var base=-1
-            while(bb.position()+8<=size){
-                val n=bb.int;val type=bb.int
-                require(n>=0&&bb.position()+n<=size){"Invalid GLB chunk"}
-                val at=bb.position()
-                if(type==0x4e4f534a)json=JSONObject(String(bytes,at,n,Charsets.UTF_8).trimEnd('\u0000',' '))
-                if(type==0x004e4942)base=at
-                bb.position(at+n)
+        private data class AccessorView(val meta: JSONObject, val bytes: ByteBuffer, val stride: Int)
+
+        fun parse(bytes: ByteArray, name: String): GeometryMesh {
+            require(bytes.size >= 20) { "GLB is too small" }
+            val bb = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
+            require(bb.int == 0x46546c67 && bb.int == 2) { "Binary glTF 2.0 (.glb) required" }
+            val size = bb.int
+            require(size in 20..bytes.size) { "Invalid GLB header length" }
+            var json: JSONObject? = null
+            var base = -1
+            var binarySize = 0
+            while (bb.position() + 8 <= size) {
+                val len = bb.int
+                val type = bb.int
+                require(len >= 0 && bb.position() + len <= size) { "Invalid GLB chunk length" }
+                val pos = bb.position()
+                if (type == 0x4e4f534a) {
+                    json = JSONObject(String(bytes, pos, len, Charsets.UTF_8).trimEnd('\u0000', ' '))
+                }
+                if (type == 0x004e4942) {
+                    base = pos
+                    binarySize = len
+                }
+                bb.position(pos + len)
             }
-            val root=json?:error("Missing GLB JSON");require(base>=0){"Missing GLB binary"}
-            val views=root.getJSONArray("bufferViews");val access=root.getJSONArray("accessors")
-            val meshes=root.getJSONArray("meshes")
-            val required=root.optJSONArray("extensionsRequired")
-            if(required!=null)for(i in 0 until required.length()) {
-                val ext=required.getString(i)
-                require(ext!="EXT_meshopt_compression"&&ext!="KHR_draco_mesh_compression") {
-                    "Compressed geometry ("+ext+"). Convert to uncompressed GLB using the desktop Geometry Lab."
+            val root = json ?: error("Missing GLB JSON")
+            require(base >= 0) { "Missing embedded GLB binary chunk" }
+            val required = root.optJSONArray("extensionsRequired")
+            if (required != null) for (i in 0 until required.length()) {
+                require(required.getString(i) != "KHR_draco_mesh_compression") {
+                    "Draco compression is not yet supported. Meshopt models are supported."
                 }
             }
-            fun accessor(id:Int):Triple<JSONObject,Int,Int> {
-                val a=access.getJSONObject(id);val v=views.getJSONObject(a.getInt("bufferView"))
-                require(!v.has("extensions") || !v.getJSONObject("extensions").has("EXT_meshopt_compression")){
-                    "Meshopt compressed buffer: use desktop Geometry Lab decoder"
-                }
-                require(v.optInt("buffer",0)==0){"Only embedded GLB binary buffers supported"}
-                return Triple(a,base+v.optInt("byteOffset")+a.optInt("byteOffset"),v.optInt("byteStride",0))
-            }
-            val verts=ArrayList<Float>();val faces=ArrayList<Int>()
-            fun add(meshId:Int) {
-                val ps=meshes.getJSONObject(meshId).getJSONArray("primitives")
-                for(p in 0 until ps.length()){
-                    val prim=ps.getJSONObject(p)
-                    if(prim.optInt("mode",4)!=4)continue
-                    val attr=prim.getJSONObject("attributes")
-                    if(!attr.has("POSITION"))continue
-                    val (pa,off,stride)=accessor(attr.getInt("POSITION"))
-                    require(pa.getInt("componentType")==5126 && pa.getString("type")=="VEC3"){"Unsupported position format"}
-                    val n=pa.getInt("count");require(n in 1..650_000){"Model exceeds native analysis limit"}
-                    val start=verts.size/3;require(start+n<=650_000){"Combined model too large"}
-                    for(i in 0 until n)for(d in 0..2){
-                        val at=off+i*(if(stride>0)stride else 12)+d*4
-                        require(at>=base&&at+4<=size){"Position outside GLB binary"}
-                        verts.add(bb.getFloat(at))
+
+            val views = root.getJSONArray("bufferViews")
+            val access = root.getJSONArray("accessors")
+            val meshes = root.getJSONArray("meshes")
+            val decompressed = HashMap<Int, ByteBuffer>()
+
+            fun viewData(id: Int): Pair<ByteBuffer, Int> {
+                val view = views.getJSONObject(id)
+                val ext = view.optJSONObject("extensions")?.optJSONObject("EXT_meshopt_compression")
+                if (ext != null) {
+                    val stride = ext.getInt("byteStride")
+                    val count = ext.getInt("count")
+                    require(count > 0 && stride > 0 && count.toLong() * stride <= 128L * 1024 * 1024) {
+                        "Meshopt buffer is too large for mobile analysis"
                     }
-                    if(prim.has("indices")){
-                        val (ia,io,step)=accessor(prim.getInt("indices"))
-                        val type=ia.getInt("componentType")
-                        val unit=when(type){5121->1;5123->2;5125->4;else->error("Unsupported index type")}
-                        val strideI=if(step>0)step else unit
-                        val k=ia.getInt("count")
-                        require(k%3==0 && k<=3_000_000){"Invalid index count"}
-                        for(i in 0 until k) {
-                            val at=io+i*strideI;require(at>=base&&at+unit<=size){"Index outside binary"}
-                            val x=when(unit){1->bytes[at].toInt() and 255;2->bb.getShort(at).toInt() and 65535;else->bb.getInt(at)}
-                            require(x in 0 until n){"Triangle index outside vertex buffer"}
-                            faces.add(start+x)
+                    val cached = decompressed[id]
+                    if (cached != null) return cached.duplicate().order(ByteOrder.LITTLE_ENDIAN) to stride
+                    require(ext.optInt("buffer", 0) == 0) { "External compressed buffers are unsupported" }
+                    val off = ext.optInt("byteOffset", 0)
+                    val len = ext.getInt("byteLength")
+                    require(off >= 0 && len > 0 && off.toLong() + len <= binarySize) {
+                        "Compressed GLB buffer extends beyond file"
+                    }
+                    val packed = bytes.copyOfRange(base + off, base + off + len)
+                    val decoded = MeshoptBridge.decode(
+                        packed, count, stride,
+                        ext.getString("mode"), ext.optString("filter", "NONE")
+                    )
+                    require(decoded.size == count * stride) { "Meshopt decoder returned wrong buffer size" }
+                    val result = ByteBuffer.wrap(decoded).order(ByteOrder.LITTLE_ENDIAN)
+                    decompressed[id] = result
+                    return result.duplicate().order(ByteOrder.LITTLE_ENDIAN) to stride
+                }
+                require(view.optInt("buffer", 0) == 0) { "External geometry buffers are unsupported" }
+                val off = view.optInt("byteOffset", 0)
+                val len = view.getInt("byteLength")
+                require(off >= 0 && len > 0 && off.toLong() + len <= binarySize) {
+                    "Geometry buffer extends beyond file"
+                }
+                val result = ByteBuffer.wrap(bytes, base + off, len).slice().order(ByteOrder.LITTLE_ENDIAN)
+                return result to view.optInt("byteStride", 0)
+            }
+
+            fun accessor(id: Int): AccessorView {
+                val a = access.getJSONObject(id)
+                require(a.has("bufferView") && !a.has("sparse")) {
+                    "Sparse accessors are not yet supported in Geometry Lab"
+                }
+                val (data, stride) = viewData(a.getInt("bufferView"))
+                val offset = a.optInt("byteOffset", 0)
+                require(offset >= 0 && offset <= data.limit()) { "Invalid accessor byte offset" }
+                data.position(offset)
+                return AccessorView(a, data.slice().order(ByteOrder.LITTLE_ENDIAN), stride)
+            }
+            fun identity(): FloatArray = FloatArray(16) { if (it % 5 == 0) 1f else 0f }
+            fun multiply(a: FloatArray, b: FloatArray): FloatArray {
+                val result = FloatArray(16)
+                for (col in 0..3) for (row in 0..3) for (k in 0..3) {
+                    result[col * 4 + row] += a[k * 4 + row] * b[col * 4 + k]
+                }
+                return result
+            }
+            fun local(node: JSONObject): FloatArray {
+                if (node.has("matrix")) {
+                    val matrix = node.getJSONArray("matrix")
+                    return FloatArray(16) { matrix.getDouble(it).toFloat() }
+                }
+                val t = node.optJSONArray("translation")
+                val scl = node.optJSONArray("scale")
+                val rot = node.optJSONArray("rotation")
+                val x = rot?.optDouble(0, 0.0)?.toFloat() ?: 0f
+                val y = rot?.optDouble(1, 0.0)?.toFloat() ?: 0f
+                val z = rot?.optDouble(2, 0.0)?.toFloat() ?: 0f
+                val w = rot?.optDouble(3, 1.0)?.toFloat() ?: 1f
+                val m = identity()
+                m[0] = 1f - 2f * (y * y + z * z)
+                m[1] = 2f * (x * y + z * w)
+                m[2] = 2f * (x * z - y * w)
+                m[4] = 2f * (x * y - z * w)
+                m[5] = 1f - 2f * (x * x + z * z)
+                m[6] = 2f * (y * z + x * w)
+                m[8] = 2f * (x * z + y * w)
+                m[9] = 2f * (y * z - x * w)
+                m[10] = 1f - 2f * (x * x + y * y)
+                for (col in 0..2) {
+                    val scale = scl?.optDouble(col, 1.0)?.toFloat() ?: 1f
+                    for (row in 0..2) m[col * 4 + row] *= scale
+                }
+                for (col in 0..2) m[12 + col] = t?.optDouble(col, 0.0)?.toFloat() ?: 0f
+                return m
+            }
+
+            val verts = ArrayList<Float>()
+            val faces = ArrayList<Int>()
+            fun add(meshId: Int, transform: FloatArray) {
+                val primitives = meshes.getJSONObject(meshId).getJSONArray("primitives")
+                for (p in 0 until primitives.length()) {
+                    val primitive = primitives.getJSONObject(p)
+                    if (primitive.optInt("mode", 4) != 4) continue
+                    if (primitive.optJSONObject("extensions")?.has("KHR_draco_mesh_compression") == true) {
+                        error("KHR_draco_mesh_compression is unsupported")
+                    }
+                    val attributes = primitive.getJSONObject("attributes")
+                    if (!attributes.has("POSITION")) continue
+                    val pos = accessor(attributes.getInt("POSITION"))
+                    val pa = pos.meta
+                    require(pa.getInt("componentType") == 5126 && pa.getString("type") == "VEC3") {
+                        "Only FLOAT VEC3 geometry positions supported"
+                    }
+                    val count = pa.getInt("count")
+                    require(count in 1..650_000) { "Mesh exceeds native 650k vertex limit" }
+                    val start = verts.size / 3
+                    require(start + count <= 650_000) { "Combined model exceeds 650k vertices" }
+                    val stride = if (pos.stride > 0) pos.stride else 12
+                    require(stride >= 12) { "Invalid position vertex stride" }
+                    val vertexBuffer = pos.bytes
+                    for (i in 0 until count) {
+                        val at = i * stride
+                        require(at >= 0 && at + 12 <= vertexBuffer.limit()) { "Position outside GLB buffer" }
+                        val x = vertexBuffer.getFloat(at)
+                        val y = vertexBuffer.getFloat(at + 4)
+                        val z = vertexBuffer.getFloat(at + 8)
+                        verts.add(transform[0] * x + transform[4] * y + transform[8] * z + transform[12])
+                        verts.add(transform[1] * x + transform[5] * y + transform[9] * z + transform[13])
+                        verts.add(transform[2] * x + transform[6] * y + transform[10] * z + transform[14])
+                    }
+                    if (primitive.has("indices")) {
+                        val indices = accessor(primitive.getInt("indices"))
+                        val ia = indices.meta
+                        require(ia.getString("type") == "SCALAR") { "Invalid index accessor" }
+                        val unit = when (ia.getInt("componentType")) {
+                            5121 -> 1
+                            5123 -> 2
+                            5125 -> 4
+                            else -> error("Unsupported triangle index format")
                         }
-                    } else for(i in 0 until n)faces.add(start+i)
+                        val indexStride = if (indices.stride > 0) indices.stride else unit
+                        require(indexStride >= unit) { "Invalid triangle index stride" }
+                        val n = ia.getInt("count")
+                        require(n % 3 == 0 && n <= 3_000_000) { "Invalid triangle indices" }
+                        val indexBuffer = indices.bytes
+                        for (i in 0 until n) {
+                            val at = i * indexStride
+                            require(at >= 0 && at + unit <= indexBuffer.limit()) { "Index outside GLB buffer" }
+                            val ix = when (unit) {
+                                1 -> indexBuffer.get(at).toInt() and 255
+                                2 -> indexBuffer.getShort(at).toInt() and 65535
+                                else -> indexBuffer.getInt(at)
+                            }
+                            require(ix in 0 until count) { "Triangle references missing vertex" }
+                            faces.add(start + ix)
+                        }
+                    } else {
+                        require(count % 3 == 0) { "Unindexed triangles have invalid vertex count" }
+                        for (i in 0 until count) faces.add(start + i)
+                    }
                 }
             }
-            for(i in 0 until meshes.length())add(i)
-            require(verts.size>=9 && faces.size>=3){"No triangle mesh"}
-            return GeometryMesh(name,verts.toFloatArray(),faces.toIntArray())
+
+            val nodes = root.optJSONArray("nodes")
+            val scenes = root.optJSONArray("scenes")
+            var visited = 0
+            if (nodes != null && nodes.length() > 0) {
+                fun walk(nodeId: Int, parent: FloatArray, depth: Int) {
+                    require(depth < 64) { "Scene node hierarchy too deep" }
+                    val node = nodes.getJSONObject(nodeId)
+                    val transform = multiply(parent, local(node))
+                    if (node.has("mesh")) {
+                        add(node.getInt("mesh"), transform)
+                        visited++
+                    }
+                    val children = node.optJSONArray("children")
+                    if (children != null) for (j in 0 until children.length()) {
+                        walk(children.getInt(j), transform, depth + 1)
+                    }
+                }
+                if (scenes != null && scenes.length() > 0) {
+                    val scene = scenes.getJSONObject(root.optInt("scene", 0))
+                    val roots = scene.optJSONArray("nodes")
+                    if (roots != null) for (i in 0 until roots.length()) {
+                        walk(roots.getInt(i), identity(), 0)
+                    }
+                } else {
+                    val childIds = HashSet<Int>()
+                    for (i in 0 until nodes.length()) {
+                        val children = nodes.getJSONObject(i).optJSONArray("children")
+                        if (children != null) for (j in 0 until children.length()) childIds.add(children.getInt(j))
+                    }
+                    for (i in 0 until nodes.length()) if (i !in childIds) walk(i, identity(), 0)
+                }
+            }
+            if (visited == 0) for (i in 0 until meshes.length()) add(i, identity())
+            require(verts.size >= 9 && faces.size >= 3) { "No triangle mesh found in GLB" }
+            return GeometryMesh(name, verts.toFloatArray(), faces.toIntArray())
         }
     }
 }
