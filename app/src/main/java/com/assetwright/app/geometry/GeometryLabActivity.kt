@@ -241,7 +241,7 @@ class GeometryLabActivity : ComponentActivity() {
                 val side=x*c+z*s
                 return Pair(width/2f+side*scale,height*0.52f-(y*0.86f-(x*s-z*c)*0.18f)*scale)
             }
-            fun project(a:FloatArray):Pair<Float,Float>=position(a[0]-center[0],a[1]-center[1],a[2]-center[2])
+            fun project(a:FloatArray): Pair<Float, Float> = position(a[0]-center[0],a[1]-center[1],a[2]-center[2])
             if(currentMode==6){
                 // Top-projection per-cell height span: interpretable as an envelope, not ray-cast.
                 val grid=30;val thickness=m.depth(grid)
