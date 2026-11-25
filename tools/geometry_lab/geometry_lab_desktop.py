@@ -278,6 +278,17 @@ def analyze(source,out,reference=None,axis=0,up=1,crease=35):
     report["depth_raycast"]=depth_rays(mesh,out,up)
     if reference:
         ref=load(reference);report["shape_comparison"]=compare_shapes(mesh,ref,out)
+    # Structured cross-sections, surface patch descriptors and measured construction
+    # deltas for a human modeler or assistant to consume directly (not AI training).
+    from modeling_blueprint import build_modeling_packet
+    packet = build_modeling_packet(
+        mesh=mesh, out=out, original_sha256=sha, source_name=source.name,
+        length_axis=axis, up_axis=up, curvature_broad=broad,
+        curvature_fine=fine, sharpness=sharp, patch_labels=patch_labels,
+        crease_threshold=crease,
+        reference_mesh=ref if reference else None,
+    )
+    report["assistant_modeling_data"] = packet
     report["notes"]=["No input model edits","Features are candidates, not semantic labels",
         "Sections and envelope loft are approximate construction guides",
         "Curvature is a k-nearest-neighbor bending indicator, not CAD curvature"]
