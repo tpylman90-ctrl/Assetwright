@@ -20,8 +20,8 @@ android {
         applicationId = "com.assetwright.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 10
-        versionName = "0.7.0"
+        versionCode = 11
+        versionName = "0.7.1"
     }
 
     signingConfigs {
@@ -41,6 +41,12 @@ android {
             if (hasUploadKey) {
                 signingConfig = signingConfigs.getByName("upload")
             }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
         }
     }
 
