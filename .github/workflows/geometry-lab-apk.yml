@@ -1,0 +1,82 @@
+name: Assetwright Geometry Lab APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - ".github/workflows/geometry-lab-apk.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: assetwright-geometry-lab-apk
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  geometry-lab-apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "9.3.0"
+      - name: Install Android platform
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0" "platform-tools"
+      - name: Unit tests and debug APK
+        run: gradle :app:testDebugUnitTest :app:assembleDebug --stacktrace
+      - name: Upload installable debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-geometry-lab-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 30
+      - name: Use existing persistent signing key when configured
+        if: ${{ env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' }}
+        run: |
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/assetwright-upload.jks"
+          chmod 600 "$RUNNER_TEMP/assetwright-upload.jks"
+          echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/assetwright-upload.jks" >> "$GITHUB_ENV"
+      - name: Build signed release when signing secrets are configured
+        if: ${{ env.ANDROID_KEYSTORE_PATH != '' }}
+        run: gradle :app:assembleRelease
+      - name: Upload signed release
+        if: ${{ env.ANDROID_KEYSTORE_PATH != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: assetwright-geometry-lab-signed
+          path: app/build/outputs/apk/release/app-release.apk
+          retention-days: 30
+      - name: Publish direct APK in GitHub release
+        run: |
+          set -euo pipefail
+          mkdir -p publish
+          if [[ -f app/build/outputs/apk/release/app-release.apk ]]; then
+            cp app/build/outputs/apk/release/app-release.apk publish/Assetwright-Geometry-Lab-v0.7.0-signed.apk
+          else
+            cp app/build/outputs/apk/debug/app-debug.apk publish/Assetwright-Geometry-Lab-v0.7.0-debug.apk
+          fi
+          TAG="assetwright-geometry-lab-v0.7.0"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" publish/*.apk --clobber
+          else
+            gh release create "$TAG" publish/*.apk --title "Assetwright Geometry Lab v0.7.0" --notes "Native Android geometry inspection: slices, curvature, crease analysis, mesh islands, shape comparison, section reconstruction guides, depth envelope, silhouettes and feature candidates. Input GLBs remain unchanged. Standard uncompressed glTF 2.0 supported on device."
+          fi
