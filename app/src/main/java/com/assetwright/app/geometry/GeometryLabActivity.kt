@@ -11,6 +11,8 @@ import android.view.View
 import android.widget.*
 import android.graphics.Typeface
 import androidx.activity.ComponentActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.activity.result.contract.ActivityResultContracts
 import java.io.ByteArrayOutputStream
 import java.util.Locale
@@ -72,11 +74,41 @@ class GeometryLabActivity : ComponentActivity() {
         if(bold)typeface=Typeface.DEFAULT_BOLD
         setPadding(4,7,4,7)
     }
+    private fun darkSpinnerAdapter(options: Array<String>): ArrayAdapter<String> {
+        return object : ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, options) {
+            override fun getView(position: Int, convertView: View?, parent: android.view.ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                (view as? TextView)?.apply {
+                    setTextColor(Color.WHITE)
+                    textSize = 15f
+                    setPadding(14, 13, 14, 13)
+                }
+                return view
+            }
+            override fun getDropDownView(position: Int, convertView: View?, parent: android.view.ViewGroup): View {
+                val view = super.getDropDownView(position, convertView, parent)
+                (view as? TextView)?.apply {
+                    setTextColor(Color.WHITE)
+                    setBackgroundColor(Color.rgb(27, 42, 55))
+                    setPadding(16, 16, 16, 16)
+                }
+                return view
+            }
+        }.apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+    }
     override fun onCreate(savedInstanceState:Bundle?) {
         super.onCreate(savedInstanceState)
         window.statusBarColor=Color.rgb(12,20,29)
         window.navigationBarColor=Color.rgb(12,20,29)
         val root=ScrollView(this).apply{setBackgroundColor(Color.rgb(12,20,29))}
+        // Android 15/16 enforces edge-to-edge layouts; avoid placing controls
+        // underneath the phone status icons and navigation bar.
+        ViewCompat.setOnApplyWindowInsetsListener(root) { view, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() or
+                WindowInsetsCompat.Type.displayCutout())
+            view.setPadding(0, bars.top, 0, bars.bottom)
+            insets
+        }
         val content=LinearLayout(this).apply{
             orientation=LinearLayout.VERTICAL
             setPadding(18,12,18,22)
@@ -90,12 +122,12 @@ class GeometryLabActivity : ComponentActivity() {
         row.addView(button("Compare GLB"){selectReference.launch(arrayOf("model/gltf-binary","application/octet-stream","*/*"))},
             LinearLayout.LayoutParams(0,-2,1f))
         content.addView(row)
-        info=label("Select an uncompressed GLB. Model bytes are never modified.")
+        info=label("Open any standard or Meshopt-compressed GLB. Original model is never edited.")
         content.addView(info)
         drawing=ScanView()
         content.addView(drawing,LinearLayout.LayoutParams(-1,(resources.displayMetrics.density*340).toInt()))
         val spinner=Spinner(this)
-        spinner.adapter=ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,modes)
+        spinner.adapter=darkSpinnerAdapter(modes)
         spinner.setBackgroundColor(Color.rgb(29,44,56))
         spinner.onItemSelectedListener=object:android.widget.AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(p:android.widget.AdapterView<*>?) {}
@@ -106,7 +138,7 @@ class GeometryLabActivity : ComponentActivity() {
         content.addView(spinner)
         content.addView(label("Cut orientation"))
         viewAxis=Spinner(this)
-        viewAxis.adapter=ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,
+        viewAxis.adapter=darkSpinnerAdapter(
             arrayOf("X plane: front/rear","Y plane: horizontal","Z plane: left/right"))
         viewAxis.setSelection(2)
         viewAxis.onItemSelectedListener=object:android.widget.AdapterView.OnItemSelectedListener{
@@ -157,7 +189,7 @@ class GeometryLabActivity : ComponentActivity() {
         out.addView(button("Report"){exportReport.launch("assetwright_report.txt")},
             LinearLayout.LayoutParams(0,-2,1f))
         content.addView(out)
-        content.addView(label("Precise slice intersections, graph-based curvature, crease severity, mesh islands, sampled shape differences, envelope reconstruction guides, vertical thickness, silhouettes and feature candidates. Meshopt-compressed/Draco GLBs require desktop pre-processing. Exports are diagnostic, not automatically retopologized surfaces."))
+        content.addView(label("Precise slice intersections, graph-based curvature, crease severity, mesh islands, sampled shape differences, envelope reconstruction guides, vertical thickness, silhouettes and feature candidates. Meshopt-compressed GLBs open directly; Draco-compressed GLBs still need conversion. Exports are diagnostic, not automatically retopologized surfaces."))
         setContentView(root)
     }
     private fun updateSummary(){
