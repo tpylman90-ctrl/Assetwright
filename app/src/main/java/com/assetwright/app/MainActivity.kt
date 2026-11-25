@@ -278,6 +278,21 @@ private fun AssetwrightScreen() {
             }
 
             item {
+                OutlinedButton(
+                    onClick = {
+                        context.startActivity(
+                            android.content.Intent(context, com.assetwright.app.geometry.GeometryLabActivity::class.java)
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(13.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Teal)
+                ) {
+                    Text("OPEN GEOMETRY LAB  •  IMPORT GLB")
+                }
+            }
+
+            item {
                 PreviewCard(generatedAsset)
             }
 
