@@ -1,0 +1,268 @@
+package com.assetwright.app.geometry
+
+import org.json.JSONObject
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import kotlin.math.*
+
+/** Inspection only. The source GLB is never rewritten or altered. */
+class GeometryMesh(val name: String, val xyz: FloatArray, val triangles: IntArray) {
+    val n get() = xyz.size / 3
+    val count get() = triangles.size / 3
+    val limits: FloatArray by lazy {
+        val b=floatArrayOf(Float.POSITIVE_INFINITY,Float.POSITIVE_INFINITY,Float.POSITIVE_INFINITY,
+            Float.NEGATIVE_INFINITY,Float.NEGATIVE_INFINITY,Float.NEGATIVE_INFINITY)
+        for(i in xyz.indices step 3) for(d in 0..2) {
+            b[d]=min(b[d],xyz[i+d]);b[d+3]=max(b[d+3],xyz[i+d])
+        };b
+    }
+    private fun key(a:Int,b:Int):Long {
+        val lo=min(a,b);val hi=max(a,b)
+        return (lo.toLong() shl 32) or (hi.toLong() and 0xffffffffL)
+    }
+    private val normals by lazy {
+        FloatArray(count*3).also { out->
+            for(t in 0 until count){
+                val a=triangles[t*3]*3;val b=triangles[t*3+1]*3;val c=triangles[t*3+2]*3
+                val ux=xyz[b]-xyz[a];val uy=xyz[b+1]-xyz[a+1];val uz=xyz[b+2]-xyz[a+2]
+                val vx=xyz[c]-xyz[a];val vy=xyz[c+1]-xyz[a+1];val vz=xyz[c+2]-xyz[a+2]
+                val x=uy*vz-uz*vy;val y=uz*vx-ux*vz;val z=ux*vy-uy*vx
+                val norm=sqrt(x*x+y*y+z*z).coerceAtLeast(0.0000001f)
+                out[t*3]=x/norm;out[t*3+1]=y/norm;out[t*3+2]=z/norm
+            }
+        }
+    }
+    private val edges by lazy {
+        val r=HashMap<Long,IntArray>(count*2)
+        for(t in 0 until count) for(k in 0..2) {
+            val id=key(triangles[t*3+k],triangles[t*3+(k+1)%3])
+            val v=r[id];if(v==null)r[id]=intArrayOf(t,-1) else if(v[1]==-1)v[1]=t
+        };r
+    }
+    val sharpness:FloatArray by lazy {
+        val result=FloatArray(n)
+        for((k,faces) in edges)if(faces[1]>=0) {
+            val a=faces[0]*3;val b=faces[1]*3
+            val dot=(normals[a]*normals[b]+normals[a+1]*normals[b+1]+normals[a+2]*normals[b+2])
+                .coerceIn(-1f,1f)
+            val angle=(acos(dot)*180f/PI.toFloat())
+            val i=(k ushr 32).toInt();val j=k.toInt()
+            result[i]=max(result[i],angle);result[j]=max(result[j],angle)
+        };result
+    }
+    val curvature:FloatArray by lazy {
+        val sum=FloatArray(n*3);val incident=IntArray(n);val ns=FloatArray(n*3)
+        for((k,_) in edges) {
+            val a=(k ushr 32).toInt();val b=k.toInt()
+            incident[a]++;incident[b]++
+            for(d in 0..2){val dv=xyz[b*3+d]-xyz[a*3+d];sum[a*3+d]+=dv;sum[b*3+d]-=dv}
+        }
+        for(t in 0 until count)for(j in 0..2){
+            val v=triangles[t*3+j];for(d in 0..2)ns[v*3+d]+=normals[t*3+d]
+        }
+        val out=FloatArray(n)
+        val extent=(0..2).maxOf{limits[it+3]-limits[it]}.coerceAtLeast(0.00001f)
+        for(v in 0 until n)if(incident[v]>0) {
+            val mag=sqrt((0..2).sumOf{(ns[v*3+it]*ns[v*3+it]).toDouble()}).toFloat().coerceAtLeast(0.00001f)
+            var dot=0f;for(d in 0..2)dot+=sum[v*3+d]*ns[v*3+d]/mag
+            out[v]=(dot/incident[v]/extent*40f).coerceIn(-1f,1f)
+        };out
+    }
+    val islands:IntArray by lazy {
+        val parent=IntArray(n){it}
+        fun find(start:Int):Int{var i=start;while(i!=parent[i]){parent[i]=parent[parent[i]];i=parent[i]};return i}
+        for(t in 0 until count){val a=find(triangles[t*3]);parent[find(triangles[t*3+1])]=a;parent[find(triangles[t*3+2])]=a}
+        val sizes=HashMap<Int,Int>();for(v in 0 until n){val r=find(v);sizes[r]=(sizes[r]?:0)+1}
+        val ranks=sizes.entries.sortedByDescending{it.value}.mapIndexed{i,e->e.key to i}.toMap()
+        IntArray(n){ranks[find(it)]?:0}
+    }
+    data class Segment(val a:FloatArray,val b:FloatArray)
+    fun slice(axis:Int,frac:Float):List<Segment> {
+        val plane=limits[axis]+frac.coerceIn(0f,1f)*(limits[axis+3]-limits[axis])
+        val lines=ArrayList<Segment>()
+        for(t in 0 until count){
+            val p=ArrayList<FloatArray>(2)
+            for(j in 0..2){
+                val a=triangles[3*t+j]*3;val b=triangles[3*t+(j+1)%3]*3
+                val da=xyz[a+axis]-plane;val db=xyz[b+axis]-plane
+                if((da<0&&db>0)||(da>0&&db<0)) {
+                    val f=da/(da-db);p.add(FloatArray(3){d->xyz[a+d]+f*(xyz[b+d]-xyz[a+d])})
+                }
+            }
+            if(p.size==2)lines.add(Segment(p[0],p[1]))
+        };return lines
+    }
+    fun depth(grid:Int=30):FloatArray {
+        // Vertical outer-envelope proxy, not a true cavity ray-cast.
+        val low=FloatArray(grid*grid){Float.POSITIVE_INFINITY}
+        val high=FloatArray(grid*grid){Float.NEGATIVE_INFINITY}
+        val width=(limits[3]-limits[0]).coerceAtLeast(0.00001f)
+        val length=(limits[5]-limits[2]).coerceAtLeast(0.00001f)
+        for(i in xyz.indices step 3){
+            val x=(((xyz[i]-limits[0])/width)*(grid-1)).toInt().coerceIn(0,grid-1)
+            val z=(((xyz[i+2]-limits[2])/length)*(grid-1)).toInt().coerceIn(0,grid-1)
+            val k=z*grid+x
+            low[k]=min(low[k],xyz[i+1]);high[k]=max(high[k],xyz[i+1])
+        }
+        return FloatArray(grid*grid){if(low[it].isFinite())high[it]-low[it] else Float.NaN}
+    }
+    fun silhouette(axis:Int,bins:Int=100):List<FloatArray>{
+        val horizontal=if(axis==0)2 else 0
+        val vertical=if(axis==1)2 else 1
+        val lo=FloatArray(bins){Float.POSITIVE_INFINITY};val hi=FloatArray(bins){Float.NEGATIVE_INFINITY}
+        val span=(limits[horizontal+3]-limits[horizontal]).coerceAtLeast(0.00001f)
+        for(i in xyz.indices step 3) {
+            val bin=(((xyz[i+horizontal]-limits[horizontal])/span)*(bins-1)).toInt().coerceIn(0,bins-1)
+            lo[bin]=min(lo[bin],xyz[i+vertical]);hi[bin]=max(hi[bin],xyz[i+vertical])
+        }
+        val result=ArrayList<FloatArray>()
+        for(i in 0 until bins)if(lo[i].isFinite()){
+            result.add(floatArrayOf(limits[horizontal]+i*span/(bins-1),lo[i]))
+            result.add(floatArrayOf(limits[horizontal]+i*span/(bins-1),hi[i]))
+        };return result
+    }
+    fun compare(other:GeometryMesh,maxPoints:Int=450):FloatArray {
+        // Approximate normalized two-sided nearest-VERTEX distance, not surface distance.
+        fun samples(g:GeometryMesh):FloatArray {
+            val out=FloatArray(min(g.n,maxPoints)*3)
+            for(i in 0 until out.size/3)for(d in 0..2) {
+                val sample=(i.toLong()*g.n/(out.size/3)).toInt()
+                out[3*i+d]=(g.xyz[3*sample+d]-g.limits[d])/
+                    (g.limits[d+3]-g.limits[d]).coerceAtLeast(0.00001f)
+            };return out
+        }
+        val a=samples(this);val b=samples(other)
+        fun dist(v:FloatArray,w:FloatArray):Float {
+            var total=0.0
+            for(i in v.indices step 3){
+                var best=Float.POSITIVE_INFINITY
+                for(j in w.indices step 3){
+                    val x=v[i]-w[j];val y=v[i+1]-w[j+1];val z=v[i+2]-w[j+2]
+                    best=min(best,x*x+y*y+z*z)
+                };total+=sqrt(best)
+            };return (total/(v.size/3)).toFloat()
+        }
+        return floatArrayOf(dist(a,b),dist(b,a))
+    }
+    fun csv(mode:Int,axis:Int,fraction:Float):String=buildString {
+        when(mode){
+            0,5 -> {
+                append("axis,fraction,ax,ay,az,bx,by,bz\n")
+                for(l in slice(axis,fraction)) {
+                    append(axis).append(',').append(fraction)
+                    for(x in l.a+l.b)append(',').append(x)
+                    append('\n')
+                }
+            }
+            else -> {
+                append("vertex,x,y,z,curvature,crease_angle,island\n")
+                for(i in 0 until n){
+                    append(i)
+                    for(d in 0..2)append(',').append(xyz[i*3+d])
+                    append(',').append(curvature[i]).append(',').append(sharpness[i])
+                        .append(',').append(islands[i]).append('\n')
+                }
+            }
+        }
+    }
+    fun report(other:GeometryMesh?=null):String=buildString {
+        val b=limits
+        append("ASSETWRIGHT GEOMETRY LAB - ORIGINAL MODEL PRESERVED\n")
+        append("Source: ").append(name).append('\n')
+        append("Vertices: ").append(n).append("\nTriangles: ").append(count)
+        append("\nDimensions (source units): ")
+        for(d in 0..2)append("%.4f ".format(b[d+3]-b[d]))
+        append("\nBoundary edges: ").append(edges.values.count{it[1]<0})
+        append("\nCandidate creases >=35 degrees: ").append(edges.values.count{f->
+            if(f[1]<0)false else {
+                val a=f[0]*3;val c=f[1]*3
+                val dot=(0..2).sumOf{normals[a+it].toDouble()*normals[c+it]}
+                dot<cos(35.0*PI/180.0)
+            }
+        })
+        append("\nConnected islands: ").append((islands.maxOrNull()?:-1)+1)
+        append("\nConvex/concave bending indicators: ").append(curvature.count{it>0.08f})
+            .append('/').append(curvature.count{it< -0.08f})
+        append("\nSlices: real triangle-plane intersections")
+        append("\nSurface reconstruction: contour-envelope guide only; not production quad topology")
+        append("\nRecess inspector: vertical depth-envelope proxy, not cavity raycasting")
+        append("\nFeature detector: candidate ridges, valleys and islands; not semantic labels")
+        if(other!=null) {
+            val diff=compare(other)
+            append("\nNormalized sampled-vertex difference A->B / B->A: ")
+                .append("%.4f / %.4f".format(diff[0],diff[1]))
+        } else append("\nShape comparison: load a second reference GLB")
+        append("\nNo input meshes were edited.")
+    }
+    companion object {
+        fun parse(bytes:ByteArray,name:String):GeometryMesh {
+            require(bytes.size>=20){"GLB is too small"}
+            val bb=ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
+            require(bb.int==0x46546c67 && bb.int==2){"Binary glTF 2.0 (.glb) required"}
+            val size=bb.int;require(size in 20..bytes.size){"Invalid GLB size"}
+            var json:JSONObject?=null;var base=-1
+            while(bb.position()+8<=size){
+                val n=bb.int;val type=bb.int
+                require(n>=0&&bb.position()+n<=size){"Invalid GLB chunk"}
+                val at=bb.position()
+                if(type==0x4e4f534a)json=JSONObject(String(bytes,at,n,Charsets.UTF_8).trimEnd('\u0000',' '))
+                if(type==0x004e4942)base=at
+                bb.position(at+n)
+            }
+            val root=json?:error("Missing GLB JSON");require(base>=0){"Missing GLB binary"}
+            val views=root.getJSONArray("bufferViews");val access=root.getJSONArray("accessors")
+            val meshes=root.getJSONArray("meshes")
+            val required=root.optJSONArray("extensionsRequired")
+            if(required!=null)for(i in 0 until required.length()) {
+                val ext=required.getString(i)
+                require(ext!="EXT_meshopt_compression"&&ext!="KHR_draco_mesh_compression") {
+                    "Compressed geometry ("+ext+"). Convert to uncompressed GLB using the desktop Geometry Lab."
+                }
+            }
+            fun accessor(id:Int):Triple<JSONObject,Int,Int> {
+                val a=access.getJSONObject(id);val v=views.getJSONObject(a.getInt("bufferView"))
+                require(!v.has("extensions") || !v.getJSONObject("extensions").has("EXT_meshopt_compression")){
+                    "Meshopt compressed buffer: use desktop Geometry Lab decoder"
+                }
+                require(v.optInt("buffer",0)==0){"Only embedded GLB binary buffers supported"}
+                return Triple(a,base+v.optInt("byteOffset")+a.optInt("byteOffset"),v.optInt("byteStride",0))
+            }
+            val verts=ArrayList<Float>();val faces=ArrayList<Int>()
+            fun add(meshId:Int) {
+                val ps=meshes.getJSONObject(meshId).getJSONArray("primitives")
+                for(p in 0 until ps.length()){
+                    val prim=ps.getJSONObject(p)
+                    if(prim.optInt("mode",4)!=4)continue
+                    val attr=prim.getJSONObject("attributes")
+                    if(!attr.has("POSITION"))continue
+                    val (pa,off,stride)=accessor(attr.getInt("POSITION"))
+                    require(pa.getInt("componentType")==5126 && pa.getString("type")=="VEC3"){"Unsupported position format"}
+                    val n=pa.getInt("count");require(n in 1..650_000){"Model exceeds native analysis limit"}
+                    val start=verts.size/3;require(start+n<=650_000){"Combined model too large"}
+                    for(i in 0 until n)for(d in 0..2){
+                        val at=off+i*(if(stride>0)stride else 12)+d*4
+                        require(at>=base&&at+4<=size){"Position outside GLB binary"}
+                        verts.add(bb.getFloat(at))
+                    }
+                    if(prim.has("indices")){
+                        val (ia,io,step)=accessor(prim.getInt("indices"))
+                        val type=ia.getInt("componentType")
+                        val unit=when(type){5121->1;5123->2;5125->4;else->error("Unsupported index type")}
+                        val strideI=if(step>0)step else unit
+                        val k=ia.getInt("count")
+                        require(k%3==0 && k<=3_000_000){"Invalid index count"}
+                        for(i in 0 until k) {
+                            val at=io+i*strideI;require(at>=base&&at+unit<=size){"Index outside binary"}
+                            val x=when(unit){1->bytes[at].toInt() and 255;2->bb.getShort(at).toInt() and 65535;else->bb.getInt(at)}
+                            require(x in 0 until n){"Triangle index outside vertex buffer"}
+                            faces.add(start+x)
+                        }
+                    } else for(i in 0 until n)faces.add(start+i)
+                }
+            }
+            for(i in 0 until meshes.length())add(i)
+            require(verts.size>=9 && faces.size>=3){"No triangle mesh"}
+            return GeometryMesh(name,verts.toFloatArray(),faces.toIntArray())
+        }
+    }
+}
