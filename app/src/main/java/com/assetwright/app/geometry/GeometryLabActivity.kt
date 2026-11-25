@@ -49,6 +49,9 @@ class GeometryLabActivity : ComponentActivity() {
     private val selectReference=registerForActivityResult(ActivityResultContracts.OpenDocument()){uri->
         if(uri!=null)load(uri,true)
     }
+    private val exportModelingPacket=registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")){uri->
+        if(uri!=null)write(uri,"json")
+    }
     private val exportCsv=registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")){uri->
         if(uri!=null)write(uri,"csv")
     }
@@ -189,6 +192,9 @@ class GeometryLabActivity : ComponentActivity() {
         out.addView(button("Report"){exportReport.launch("assetwright_report.txt")},
             LinearLayout.LayoutParams(0,-2,1f))
         content.addView(out)
+        content.addView(button("EXPORT MODELING DATA  •  JSON FOR CHATGPT"){
+            exportModelingPacket.launch("assetwright_modeling_packet.json")
+        })
         content.addView(label("Precise slice intersections, graph-based curvature, crease severity, mesh islands, sampled shape differences, envelope reconstruction guides, vertical thickness, silhouettes and feature candidates. Meshopt-compressed GLBs open directly; Draco-compressed GLBs still need conversion. Exports are diagnostic, not automatically retopologized surfaces."))
         setContentView(root)
     }
@@ -236,6 +242,7 @@ class GeometryLabActivity : ComponentActivity() {
                     when(kind){
                         "csv"->stream.write(m.csv(currentMode,axis,fraction).toByteArray(Charsets.UTF_8))
                         "txt"->stream.write(m.report(reference).toByteArray(Charsets.UTF_8))
+                        "json"->stream.write(m.modelingPacket(axis, reference).toByteArray(Charsets.UTF_8))
                         else -> {
                             val bmp=Bitmap.createBitmap(drawing.width.coerceAtLeast(1),drawing.height.coerceAtLeast(1),Bitmap.Config.ARGB_8888)
                             val c=Canvas(bmp);drawing.draw(c)
