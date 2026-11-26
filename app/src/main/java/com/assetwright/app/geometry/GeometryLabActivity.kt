@@ -52,6 +52,7 @@ class GeometryLabActivity : ComponentActivity() {
     private var reports:List<PartHealth> = emptyList()
     private val userPartLabels=mutableMapOf<Int,String>()
     private var selectedPart=-1
+    private var expandedPreview=false
 
     private val selectModel=registerForActivityResult(ActivityResultContracts.OpenDocument()){uri->
         if(uri!=null)load(uri,false)
@@ -145,7 +146,25 @@ class GeometryLabActivity : ComponentActivity() {
         content.addView(info)
         content.addView(label("FULL ASSEMBLY  •  select a component",true))
         wholeModel=ComponentModelView(this)
-        content.addView(wholeModel,LinearLayout.LayoutParams(-1,(resources.displayMetrics.density*335).toInt()))
+        content.addView(wholeModel,LinearLayout.LayoutParams(-1,(resources.displayMetrics.density*360).toInt()))
+        val cameraRow=LinearLayout(this).apply{orientation=LinearLayout.HORIZONTAL}
+        val expandButton=button("Expand 3D view") {
+            expandedPreview=!expandedPreview
+            val heightDp=if(expandedPreview)min(690f,resources.displayMetrics.heightPixels/resources.displayMetrics.density*.75f) else 360f
+            wholeModel.layoutParams=wholeModel.layoutParams.apply {
+                height=(heightDp*resources.displayMetrics.density).toInt()
+            }
+            // Don't change selection or orbit when expanding the viewport.
+            wholeModel.requestRender()
+        }
+        cameraRow.addView(expandButton,LinearLayout.LayoutParams(0,-2,1f))
+        cameraRow.addView(button("Reset 3D camera") {
+            wholeModel.yaw=35f
+            wholeModel.pitch=19f
+            wholeModel.zoom=1f
+            wholeModel.requestRender()
+        },LinearLayout.LayoutParams(0,-2,1f))
+        content.addView(cameraRow)
         partPicker=Spinner(this)
         partPicker.adapter=darkSpinnerAdapter(arrayOf("Whole model — no component selected"))
         partPicker.setBackgroundColor(Color.rgb(29,44,56))
@@ -254,6 +273,16 @@ class GeometryLabActivity : ComponentActivity() {
         content.addView(label("Precise slice intersections, graph-based curvature, crease severity, mesh islands, sampled shape differences, envelope reconstruction guides, vertical thickness, silhouettes and feature candidates. Meshopt-compressed GLBs open directly; Draco-compressed GLBs still need conversion. Exports are diagnostic, not automatically retopologized surfaces."))
         setContentView(root)
     }
+    override fun onPause() {
+        if(::wholeModel.isInitialized) wholeModel.onPause()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(::wholeModel.isInitialized) wholeModel.onResume()
+    }
+
     private fun refreshPartDetails() {
         val m=model ?: return
         val report=reports.getOrNull(selectedPart)
