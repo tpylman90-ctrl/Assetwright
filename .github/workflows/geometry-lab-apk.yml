@@ -70,13 +70,13 @@ jobs:
           set -euo pipefail
           mkdir -p publish
           if [[ -f app/build/outputs/apk/release/app-release.apk ]]; then
-            cp app/build/outputs/apk/release/app-release.apk publish/Assetwright-Geometry-Lab-v0.7.5-signed.apk
+            cp app/build/outputs/apk/release/app-release.apk publish/Assetwright-Geometry-Lab-v0.7.6-signed.apk
           else
-            cp app/build/outputs/apk/debug/app-debug.apk publish/Assetwright-Geometry-Lab-v0.7.5-debug.apk
+            cp app/build/outputs/apk/debug/app-debug.apk publish/Assetwright-Geometry-Lab-v0.7.6-debug.apk
           fi
-          TAG="assetwright-geometry-lab-v0.7.5"
+          TAG="assetwright-geometry-lab-v0.7.6"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" publish/*.apk --clobber
           else
-            gh release create "$TAG" publish/*.apk --title "Assetwright Geometry Lab v0.7.5" --notes "Native full-model OpenGL ES 3 depth-tested renderer with translucent safety glazing, touch selection, expanded view and component-level geometry reports. Input GLBs remain unchanged."
+            gh release create "$TAG" publish/*.apk --title "Assetwright Geometry Lab v0.7.6" --notes "Native full-model OpenGL ES 3 depth-tested renderer with translucent safety glazing, touch selection, expanded view and component-level geometry reports. Input GLBs remain unchanged."
           fi
