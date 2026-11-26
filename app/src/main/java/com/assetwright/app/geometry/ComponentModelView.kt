@@ -56,7 +56,7 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
 
     init {
         setEGLContextClientVersion(3)
-        setEGLConfigChooser(8, 8, 8, 8, 24, 8)
+        setEGLConfigChooser(8, 8, 8, 8, 24, 0)
         setRenderer(gpu)
         renderMode = RENDERMODE_WHEN_DIRTY
         preserveEGLContextOnPause = true
@@ -377,7 +377,7 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
             } else {
                 mode(0)
                 if (isolated && selected>=0) {
-                    m.parts.getOrNull(selected)?.let(::drawPart)
+                    m.parts.getOrNull(selected)?.takeUnless(::glass)?.let(::drawPart)
                 } else {
                     drawRange(m.parts,false)
                 }
