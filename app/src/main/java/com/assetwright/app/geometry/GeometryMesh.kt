@@ -6,7 +6,25 @@ import java.nio.ByteOrder
 import kotlin.math.*
 
 /** Inspection only. The source GLB is never rewritten or altered. */
-class GeometryMesh(val name: String, val xyz: FloatArray, val triangles: IntArray, val importedVertexColors: IntArray? = null) {
+data class GeometryPart(
+    val id: Int,
+    val sourceName: String,
+    val sourcePath: String,
+    val firstTriangle: Int,
+    val triangleCount: Int,
+    val firstVertex: Int,
+    val vertexCount: Int
+)
+
+class GeometryMesh(
+    val name: String,
+    val xyz: FloatArray,
+    val triangles: IntArray,
+    val importedVertexColors: IntArray? = null,
+    val parts: List<GeometryPart> = listOf(
+        GeometryPart(0, "Unnamed mesh", "no named GLB nodes", 0, triangles.size / 3, 0, xyz.size / 3)
+    )
+) {
     val n get() = xyz.size / 3
     val count get() = triangles.size / 3
     val limits: FloatArray by lazy {
@@ -324,10 +342,16 @@ class GeometryMesh(val name: String, val xyz: FloatArray, val triangles: IntArra
             val faces = ArrayList<Int>()
             val vertexColors = ArrayList<Int>()
             var hasAnyColors = false
-            fun add(meshId: Int, transform: FloatArray) {
+            val parts = ArrayList<GeometryPart>()
+            fun add(meshId: Int, transform: FloatArray, nodePath: String) {
+                val meshName = meshes.getJSONObject(meshId).optString("name", "Mesh $meshId")
+                val mesh = meshes.getJSONObject(meshId)
+                val primitives = mesh.getJSONArray("primitives")
+                for (p in 0 until primitives.length()) {
                 val primitives = meshes.getJSONObject(meshId).getJSONArray("primitives")
                 for (p in 0 until primitives.length()) {
                     val primitive = primitives.getJSONObject(p)
+                    val firstTriangle = faces.size / 3
                     if (primitive.optInt("mode", 4) != 4) continue
                     if (primitive.optJSONObject("extensions")?.has("KHR_draco_mesh_compression") == true) {
                         error("KHR_draco_mesh_compression is unsupported")
@@ -431,6 +455,19 @@ class GeometryMesh(val name: String, val xyz: FloatArray, val triangles: IntArra
                         require(count % 3 == 0) { "Unindexed triangles have invalid vertex count" }
                         for (i in 0 until count) faces.add(start + i)
                     }
+                    val trianglesAdded = faces.size / 3 - firstTriangle
+                    if (trianglesAdded > 0) {
+                        val primitiveLabel = primitive.optString("name", "").takeIf { it.isNotBlank() }
+                            ?: if (primitives.length() > 1) "Primitive $p" else ""
+                        val displayName = listOf(nodePath, meshName, primitiveLabel)
+                            .filter { it.isNotBlank() }
+                            .distinct()
+                            .joinToString(" / ")
+                        parts.add(GeometryPart(
+                            parts.size, displayName, "$nodePath / $meshName / primitive[$p]",
+                            firstTriangle, trianglesAdded, start, count
+                        ))
+                    }
                 }
             }
 
@@ -438,24 +475,26 @@ class GeometryMesh(val name: String, val xyz: FloatArray, val triangles: IntArra
             val scenes = root.optJSONArray("scenes")
             var visited = 0
             if (nodes != null && nodes.length() > 0) {
-                fun walk(nodeId: Int, parent: FloatArray, depth: Int) {
+                fun walk(nodeId: Int, parent: FloatArray, depth: Int, parentPath: String) {
                     require(depth < 64) { "Scene node hierarchy too deep" }
                     val node = nodes.getJSONObject(nodeId)
+                    val nodeName = node.optString("name", "Node $nodeId")
+                    val path = if (parentPath.isEmpty()) nodeName else "$parentPath / $nodeName"
                     val transform = multiply(parent, local(node))
                     if (node.has("mesh")) {
-                        add(node.getInt("mesh"), transform)
+                        add(node.getInt("mesh"), transform, path)
                         visited++
                     }
                     val children = node.optJSONArray("children")
                     if (children != null) for (j in 0 until children.length()) {
-                        walk(children.getInt(j), transform, depth + 1)
+                        walk(children.getInt(j), transform, depth + 1, path)
                     }
                 }
                 if (scenes != null && scenes.length() > 0) {
                     val scene = scenes.getJSONObject(root.optInt("scene", 0))
                     val roots = scene.optJSONArray("nodes")
                     if (roots != null) for (i in 0 until roots.length()) {
-                        walk(roots.getInt(i), identity(), 0)
+                        walk(roots.getInt(i), identity(), 0, "")
                     }
                 } else {
                     val childIds = HashSet<Int>()
@@ -463,12 +502,12 @@ class GeometryMesh(val name: String, val xyz: FloatArray, val triangles: IntArra
                         val children = nodes.getJSONObject(i).optJSONArray("children")
                         if (children != null) for (j in 0 until children.length()) childIds.add(children.getInt(j))
                     }
-                    for (i in 0 until nodes.length()) if (i !in childIds) walk(i, identity(), 0)
+                    for (i in 0 until nodes.length()) if (i !in childIds) walk(i, identity(), 0, "")
                 }
             }
-            if (visited == 0) for (i in 0 until meshes.length()) add(i, identity())
+            if (visited == 0) for (i in 0 until meshes.length()) add(i, identity(), "Mesh $i")
             require(verts.size >= 9 && faces.size >= 3) { "No triangle mesh found in GLB" }
-            return GeometryMesh(name, verts.toFloatArray(), faces.toIntArray(), if (hasAnyColors) vertexColors.toIntArray() else null)
+            return GeometryMesh(name, verts.toFloatArray(), faces.toIntArray(), if (hasAnyColors) vertexColors.toIntArray() else null, parts)
         }
     }
 }
