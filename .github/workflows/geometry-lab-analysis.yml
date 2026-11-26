@@ -74,8 +74,16 @@ jobs:
               args+=(--compare "$COMPARE_GLB")
             fi
             python tools/geometry_lab/geometry_lab_desktop.py "${args[@]}"
+            # True triangle ray depth + multi-scale surface patch analysis.
+            python tools/geometry_lab/surface_depth_lab.py --input "$IN" \
+              --out geometry-lab-results/surface_depth --ray-axis z \
+              --enter-side positive --grid 48 36
             sha256sum -c geometry-lab-results/original.sha256
           fi
+      - name: Validate known 0.40-unit recessed geometry
+        run: |
+          python tools/geometry_lab/surface_depth_lab.py --self-test \
+            --out geometry-lab-results/synthetic_depth_test
       - uses: actions/upload-artifact@v4
         with:
           name: assetwright-geometry-scan
