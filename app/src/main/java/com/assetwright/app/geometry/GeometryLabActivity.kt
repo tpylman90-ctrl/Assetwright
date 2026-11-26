@@ -47,6 +47,10 @@ class GeometryLabActivity : ComponentActivity() {
     private lateinit var drawing:ScanView
     private lateinit var viewAxis:Spinner
     private lateinit var wholeModel:ComponentModelView
+    private lateinit var inspectionButton:Button
+    private lateinit var materialButton:Button
+    private lateinit var materialInfo:TextView
+    private var materialMode=false
     private lateinit var partPicker:Spinner
     private lateinit var partDetails:TextView
     private var reports:List<PartHealth> = emptyList()
@@ -147,6 +151,15 @@ class GeometryLabActivity : ComponentActivity() {
         content.addView(label("FULL ASSEMBLY  •  select a component",true))
         wholeModel=ComponentModelView(this)
         content.addView(wholeModel,LinearLayout.LayoutParams(-1,(resources.displayMetrics.density*360).toInt()))
+        val displayRow=LinearLayout(this).apply{orientation=LinearLayout.HORIZONTAL}
+        inspectionButton=button("Geometry Inspection"){setDisplayMode(false)}
+        materialButton=button("Material Preview"){setDisplayMode(true)}
+        displayRow.addView(inspectionButton,LinearLayout.LayoutParams(0,-2,1f))
+        displayRow.addView(materialButton,LinearLayout.LayoutParams(0,-2,1f))
+        content.addView(displayRow)
+        materialInfo=label("Geometry Inspection • neutral clay shading for surface and topology analysis")
+        content.addView(materialInfo)
+        setDisplayMode(false)
         val cameraRow=LinearLayout(this).apply{orientation=LinearLayout.HORIZONTAL}
         val expandButton=button("Expand 3D view") {
             expandedPreview=!expandedPreview
@@ -283,14 +296,58 @@ class GeometryLabActivity : ComponentActivity() {
         if(::wholeModel.isInitialized) wholeModel.onResume()
     }
 
+    private fun setDisplayMode(materials:Boolean) {
+        materialMode=materials
+        if(::wholeModel.isInitialized)wholeModel.materialPreview=materials
+        fun color(active:Boolean)=android.content.res.ColorStateList.valueOf(
+            if(active) Color.rgb(17,119,126) else Color.rgb(29,52,64))
+        if(::inspectionButton.isInitialized)inspectionButton.backgroundTintList=color(!materials)
+        if(::materialButton.isInitialized)materialButton.backgroundTintList=color(materials)
+        refreshMaterialInfo()
+        if(::partDetails.isInitialized)refreshPartDetails()
+    }
+
+    private fun refreshMaterialInfo() {
+        if(!::materialInfo.isInitialized)return
+        val m=model
+        materialInfo.text=if(!materialMode) {
+            "Geometry Inspection • gray-blue clay, solid surfaces, selected part highlight"
+        }else if(m==null){
+            "Material Preview • load a GLB with embedded PBR material textures"
+        }else {
+            val data=m.surfaceAssets
+            val readable=data.textures.count{it.imageBytes!=null}
+            val missing=data.textures.size-readable
+            val status=if(missing>0)" • "+missing+" textures unsupported/unavailable" else ""
+            "Material Preview • "+data.materials.size+" materials • "+readable+"/"+
+                data.textures.size+" embedded textures"+status+"\n"+
+                "GLB base-color, metallic/roughness and emissive factors; studio light approximation."+
+                (if(data.warnings.isNotEmpty())"\n"+data.warnings.take(2).joinToString(" • ") else "")
+        }
+    }
+
     private fun refreshPartDetails() {
         val m=model ?: return
         val report=reports.getOrNull(selectedPart)
         partDetails.text=if(report==null) {
             "Full assembly • "+reports.size+" source components • "+m.count+
                 " triangles. Select or tap a part for independent diagnostics."
-        } else report.humanSummary(userPartLabels[selectedPart])+
-            "\nPreview: "+if(wholeModel.isolate)"isolated component" else "full assembly, selected part highlighted"
+        } else {
+            val p=report.source
+            val mat=m.surfaceAssets.materials.getOrNull(p.materialIndex)
+            val materialText=if(materialMode){
+                if(mat==null)"\nMaterial: glTF defaults (white, metallic 1, roughness 1)"
+                else "\nMaterial: "+mat.name+" • metallic="+
+                    "%.2f".format(mat.metallic)+" • roughness="+
+                    "%.2f".format(mat.roughness)+
+                    " • alpha="+mat.alphaMode+
+                    " • textures="+listOf(mat.baseColorTexture,mat.metallicRoughnessTexture,
+                        mat.emissiveTexture).count{it>=0}
+            }else ""
+            report.humanSummary(userPartLabels[selectedPart])+
+                "\nPreview: "+(if(wholeModel.isolate)"isolated component"
+                    else "full assembly, selected part highlighted")+materialText
+        }
     }
     private fun labelSelectedPart() {
         if(selectedPart<0 || reports.getOrNull(selectedPart)==null) {
@@ -374,6 +431,7 @@ class GeometryLabActivity : ComponentActivity() {
                         selectedPart=-1
                         wholeModel.mesh=parsed
                         wholeModel.isolate=false
+                        refreshMaterialInfo()
                         refreshPartPicker()
                     }
                     updateSummary();drawing.invalidate()
