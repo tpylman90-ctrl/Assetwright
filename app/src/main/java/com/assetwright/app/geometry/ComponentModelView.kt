@@ -1,6 +1,8 @@
 package com.assetwright.app.geometry
 
 import android.content.Context
+import android.graphics.BitmapFactory
+import android.opengl.GLUtils
 import android.opengl.GLES30
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
@@ -29,6 +31,12 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
     @Volatile private var pendingPick: Pair<Int, Int>? = null
     private val gpu = FullModelRenderer()
     var onSelected: ((Int) -> Unit)? = null
+    /** False = topology-friendly gray-blue clay. True = actual GLB PBR material factors/textures. */
+    @Volatile private var pbrEnabled=false
+    var materialPreview:Boolean
+        get()=pbrEnabled
+        set(value){pbrEnabled=value;requestRender()}
+
 
     var mesh: GeometryMesh?
         get() = wantedMesh
@@ -134,6 +142,19 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
         private var locMv = -1
         private var locMode = -1
         private var locPick = -1
+        private var locPreview = -1
+        private var locBaseFactor = -1
+        private var locMetallic = -1
+        private var locRoughness = -1
+        private var locEmissive = -1
+        private var locEmissiveStrength = -1
+        private var locAlphaMode = -1
+        private var locAlphaCutoff = -1
+        private val textureHandles=HashMap<Pair<Int,Boolean>,Int>()
+        private var gpuImageBytes=0L
+        private val maxImageBytes=96L*1024*1024
+        private var maxTextureDimension=2048
+
         private var viewportW = 1
         private var viewportH = 1
         private val mv = FloatArray(16)
@@ -147,14 +168,22 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
             layout(location=0) in vec3 aPosition;
             layout(location=1) in vec3 aNormal;
             layout(location=2) in vec4 aColor;
+            layout(location=3) in vec2 aUV0;
+            layout(location=4) in vec2 aUV1;
             uniform mat4 uMVP;
             uniform mat4 uMV;
             out vec3 vNormal;
+            out vec3 vViewPosition;
             out vec4 vColor;
+            out vec2 vUV0;
+            out vec2 vUV1;
             void main() {
                 gl_Position=uMVP*vec4(aPosition,1.0);
+                vViewPosition=(uMV*vec4(aPosition,1.0)).xyz;
                 vNormal=mat3(uMV)*aNormal;
                 vColor=aColor;
+                vUV0=aUV0;
+                vUV1=aUV1;
             }
         """.trimIndent()
 
@@ -162,28 +191,119 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
             #version 300 es
             precision highp float;
             in vec3 vNormal;
+            in vec3 vViewPosition;
             in vec4 vColor;
+            in vec2 vUV0;
+            in vec2 vUV1;
             uniform int uMode;
+            uniform int uMaterialPreview;
             uniform vec3 uPick;
+            uniform vec4 uBaseFactor;
+            uniform float uMetallic;
+            uniform float uRoughness;
+            uniform vec3 uEmissive;
+            uniform float uEmissiveStrength;
+            uniform int uAlphaMode;   // 0=opaque, 1=mask, 2=blend
+            uniform float uAlphaCutoff;
+            uniform int uHasBase;
+            uniform int uHasMetallicRoughness;
+            uniform int uHasEmissive;
+            uniform int uBaseUVSet;
+            uniform int uMetallicUVSet;
+            uniform int uEmissiveUVSet;
+            uniform mat3 uBaseTransform;
+            uniform mat3 uMetallicTransform;
+            uniform mat3 uEmissiveTransform;
+            uniform sampler2D uBaseMap;
+            uniform sampler2D uMetallicMap;
+            uniform sampler2D uEmissiveMap;
             out vec4 outColor;
+            const float PI=3.14159265;
+            vec2 transformedUV(int setIndex, mat3 transform) {
+                vec2 uv=setIndex==1?vUV1:vUV0;
+                return (transform*vec3(uv,1.0)).xy;
+            }
+            vec3 fresnelSchlick(float theta,vec3 f0){
+                return f0+(1.0-f0)*pow(clamp(1.0-theta,0.0,1.0),5.0);
+            }
+            float distributionGGX(vec3 n,vec3 h,float rough){
+                float a=rough*rough;
+                float a2=a*a;
+                float ndh=max(dot(n,h),0.0);
+                float d=(ndh*ndh*(a2-1.0)+1.0);
+                return a2/max(PI*d*d,0.0001);
+            }
+            float geometrySchlick(float nDotV,float rough){
+                float k=pow(rough+1.0,2.0)/8.0;
+                return nDotV/(nDotV*(1.0-k)+k);
+            }
             void main() {
-                if (uMode==1) {
+                if(uMode==1){
                     outColor=vec4(uPick,1.0);
-                } else {
-                    vec3 n=normalize(vNormal);
-                    float diffuse=abs(dot(n,normalize(vec3(0.45,0.80,0.72))));
-                    float illumination=0.46+diffuse*0.54;
-                    vec3 base=vColor.rgb*illumination;
-                    if (uMode==2) {
-                        outColor=vec4(mix(base,vec3(0.03,0.95,0.96),0.78),1.0);
-                    } else if (uMode==3) {
-                        outColor=vec4(mix(base,vec3(0.30,0.65,0.76),0.44),0.22);
-                    } else if (uMode==4) {
-                        outColor=vec4(vec3(0.06,0.94,0.97),0.46);
-                    } else {
-                        outColor=vec4(base,1.0);
-                    }
+                    return;
                 }
+                vec3 n=normalize(vNormal);
+                if(!gl_FrontFacing) n=-n;
+                vec3 c;
+                float alpha=1.0;
+                if(uMaterialPreview==0){
+                    // Geometry Inspection: intentionally independent from materials.
+                    vec3 clay=vec3(0.54,0.66,0.74);
+                    float lit=0.42+0.58*max(dot(n,normalize(vec3(0.48,0.81,0.65))),0.0);
+                    c=clay*lit;
+                    if(uMode==3) alpha=0.23;
+                }else{
+                    vec4 baseTex=uHasBase==1?
+                        texture(uBaseMap,transformedUV(uBaseUVSet,uBaseTransform)):
+                        vec4(1.0);
+                    vec4 base=uBaseFactor*vColor*baseTex;
+                    float rough=clamp(uRoughness,0.055,1.0);
+                    float metal=clamp(uMetallic,0.0,1.0);
+                    if(uHasMetallicRoughness==1){
+                        vec4 mr=texture(uMetallicMap,
+                            transformedUV(uMetallicUVSet,uMetallicTransform));
+                        // glTF: green = roughness, blue = metallic
+                        rough=clamp(rough*mr.g,0.055,1.0);
+                        metal=clamp(metal*mr.b,0.0,1.0);
+                    }
+                    alpha=base.a;
+                    if(uAlphaMode==0)alpha=1.0;
+                    else if(uAlphaMode==1){
+                        if(alpha<uAlphaCutoff) discard;
+                        alpha=1.0;
+                    }
+                    vec3 albedo=base.rgb;
+                    vec3 viewDir=normalize(-vViewPosition);
+                    vec3 f0=mix(vec3(0.04),albedo,metal);
+                    vec3 light=vec3(0.45,0.76,0.58);
+                    light=normalize(light);
+                    vec3 halfDir=normalize(viewDir+light);
+                    float nl=max(dot(n,light),0.0);
+                    float nv=max(dot(n,viewDir),0.001);
+                    float vh=max(dot(viewDir,halfDir),0.0);
+                    vec3 fresnel=fresnelSchlick(vh,f0);
+                    float d=distributionGGX(n,halfDir,rough);
+                    float g=geometrySchlick(nv,rough)*geometrySchlick(nl,rough);
+                    vec3 spec=(d*g*fresnel)/max(4.0*nl*nv,0.001);
+                    vec3 kd=(vec3(1.0)-fresnel)*(1.0-metal);
+                    vec3 direct=(kd*albedo/PI+spec)*nl*2.2;
+                    vec3 env=albedo*(1.0-metal)*0.27+f0*(0.16+0.16*(1.0-rough));
+                    c=direct+env;
+                    vec3 emissionTex=uHasEmissive==1?
+                        texture(uEmissiveMap,
+                          transformedUV(uEmissiveUVSet,uEmissiveTransform)).rgb:
+                        vec3(1.0);
+                    c+=uEmissive*emissionTex*uEmissiveStrength;
+                    // Simple filmic preview exposure/tone mapping; no HDRI/IBL.
+                    c=c/(c+vec3(0.75));
+                    c=pow(clamp(c,0.0,1.0),vec3(1.0/2.2));
+                }
+                if(uMode==2) c=mix(c,vec3(0.04,0.94,0.94),0.75);
+                else if(uMode==4) {
+                    c=mix(c,vec3(0.05,0.98,0.99),0.85);
+                    alpha=0.50;
+                }
+                outColor=vec4(c,alpha);
             }
         """.trimIndent()
 
@@ -193,6 +313,23 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
             locMv = GLES30.glGetUniformLocation(program, "uMV")
             locMode = GLES30.glGetUniformLocation(program, "uMode")
             locPick = GLES30.glGetUniformLocation(program, "uPick")
+            locPreview = GLES30.glGetUniformLocation(program,"uMaterialPreview")
+            locBaseFactor = GLES30.glGetUniformLocation(program,"uBaseFactor")
+            locMetallic = GLES30.glGetUniformLocation(program,"uMetallic")
+            locRoughness = GLES30.glGetUniformLocation(program,"uRoughness")
+            locEmissive = GLES30.glGetUniformLocation(program,"uEmissive")
+            locEmissiveStrength = GLES30.glGetUniformLocation(program,"uEmissiveStrength")
+            locAlphaMode = GLES30.glGetUniformLocation(program,"uAlphaMode")
+            locAlphaCutoff = GLES30.glGetUniformLocation(program,"uAlphaCutoff")
+            GLES30.glUseProgram(program)
+            GLES30.glUniform1i(GLES30.glGetUniformLocation(program,"uBaseMap"),0)
+            GLES30.glUniform1i(GLES30.glGetUniformLocation(program,"uMetallicMap"),1)
+            GLES30.glUniform1i(GLES30.glGetUniformLocation(program,"uEmissiveMap"),2)
+            val maxTex=IntArray(1)
+            GLES30.glGetIntegerv(GLES30.GL_MAX_TEXTURE_SIZE,maxTex,0)
+            maxTextureDimension=min(2048,maxTex[0].coerceAtLeast(512))
+            textureHandles.clear()
+            gpuImageBytes=0L
             // A GL context can be replaced after app pause/resume.
             loaded = null
             vbo = 0
@@ -244,16 +381,17 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
             vao = 0
             if (m == null) return
 
-            // Each triangle gets its actual face normal (preserves bevels and
-            // engineered planar surfaces). Interleaved: position 3f, normal 3f,
-            // color RGBA unsigned bytes = 28 bytes/vertex.
-            val stride = 28
+            // Interleaved positions, flat face normals, vertex color, UV0, UV1.
+            // 3f+3f+4bytes+2f+2f = 44 bytes/vertex.
+            val stride = 44
             val size = m.count.toLong()*3L*stride
             require(size <= 125L*1024*1024) { "Preview buffer exceeds mobile budget" }
             val bytes = ByteBuffer.allocateDirect(size.toInt()).order(ByteOrder.nativeOrder())
             val positions = m.xyz
             val indices = m.triangles
             val colors = m.importedVertexColors
+            val uv0 = m.uv0
+            val uv1 = m.uv1
             for (t in 0 until m.count) {
                 val a = indices[3*t]; val b = indices[3*t+1]; val c = indices[3*t+2]
                 val ax = positions[3*a];val ay=positions[3*a+1];val az=positions[3*a+2]
@@ -267,11 +405,15 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
                     bytes.putFloat(positions[3*id]);bytes.putFloat(positions[3*id+1])
                     bytes.putFloat(positions[3*id+2])
                     bytes.putFloat(nx/mag);bytes.putFloat(ny/mag);bytes.putFloat(nz/mag)
-                    val rgba=colors?.getOrNull(id) ?: 0xffa9bac8.toInt()
+                    val rgba=colors?.getOrNull(id) ?: 0xffffffff.toInt()
                     bytes.put(((rgba shr 16) and 255).toByte())
                     bytes.put(((rgba shr 8) and 255).toByte())
                     bytes.put((rgba and 255).toByte())
                     bytes.put(((rgba ushr 24) and 255).toByte())
+                    bytes.putFloat(uv0?.getOrNull(id*2)?:0f)
+                    bytes.putFloat(uv0?.getOrNull(id*2+1)?:0f)
+                    bytes.putFloat(uv1?.getOrNull(id*2)?:0f)
+                    bytes.putFloat(uv1?.getOrNull(id*2+1)?:0f)
                 }
             }
             bytes.flip()
@@ -290,6 +432,10 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
             GLES30.glVertexAttribPointer(1,3,GLES30.GL_FLOAT,false,stride,12)
             GLES30.glEnableVertexAttribArray(2)
             GLES30.glVertexAttribPointer(2,4,GLES30.GL_UNSIGNED_BYTE,true,stride,24)
+            GLES30.glEnableVertexAttribArray(3)
+            GLES30.glVertexAttribPointer(3,2,GLES30.GL_FLOAT,false,stride,28)
+            GLES30.glEnableVertexAttribArray(4)
+            GLES30.glVertexAttribPointer(4,2,GLES30.GL_FLOAT,false,stride,36)
             GLES30.glBindVertexArray(0)
             GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER,0)
         }
