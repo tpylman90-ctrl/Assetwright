@@ -90,6 +90,33 @@ def export_patch_glb(mesh,labels,areas,path,max_faces=225000):
             "decimation":"deterministic face sample for inspection only; do not use to reconstruct geometry"}
 
 
+
+def export_region_cutaway(mesh,labels,axis,roi,out):
+    """Diagnostic face-centroid-selected region GLB; not Boolean clipping."""
+    other=[d for d in range(3) if d!=axis]
+    centers=mesh.triangles_center
+    b=mesh.bounds
+    lo=b[0,other]
+    length=(b[1,other]-lo).clip(1e-9)
+    u=(centers[:,other[0]]-lo[0])/length[0]
+    v=(centers[:,other[1]]-lo[1])/length[1]
+    chosen=np.flatnonzero((u>=roi[0])&(u<=roi[1])&(v>=roi[2])&(v<=roi[3]))
+    if len(chosen)==0:
+        return {"faces":0,"warning":"No faces inside projected scan ROI"}
+    partial=mesh.submesh([chosen],append=True,repair=False)
+    labels_chosen=labels[chosen].astype(np.uint64)
+    colors=np.column_stack([
+        70+(labels_chosen*79)%175,
+        85+(labels_chosen*113)%155,
+        105+(labels_chosen*57)%140,
+        np.full(len(chosen),255)
+    ]).astype(np.uint8)
+    partial.visual=trimesh.visual.ColorVisuals(mesh=partial,face_colors=colors)
+    partial.export(str(out))
+    return {"faces":int(len(chosen)),"source_faces":int(len(mesh.faces)),
+            "output":out.name,"warning":"Projected ROI face selection; not exact geometric clipping or semantic intake recognition"}
+
+
 def true_axis_rays(mesh,axis=2,enter_side="positive",roi=(.08,.92,.1,.9),grid=(48,36)):
     """Measure exact ordered triangle intersections along axis-parallel rays.
 
@@ -210,6 +237,8 @@ def analyze(source,out,axis=2,side="positive",roi=(.08,.92,.1,.90),grid=(48,36))
         if angle==30:
             report["derived_patch_glb"]=export_patch_glb(
                 mesh,labels,areas,out/"surface_regions_30deg.glb")
+            report["side_region_cutaway"]=export_region_cutaway(
+                mesh,labels,axis,roi,out/"side_region_candidate_cutaway.glb")
     ray=true_axis_rays(mesh,axis=axis,enter_side=side,roi=roi,grid=grid)
     report["raycast"]=ray_exports(ray,out)
     report["method_notes"]=[
