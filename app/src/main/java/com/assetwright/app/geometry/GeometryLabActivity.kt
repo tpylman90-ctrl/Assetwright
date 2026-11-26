@@ -9,6 +9,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import android.app.AlertDialog
+import org.json.JSONObject
 import android.graphics.Typeface
 import androidx.activity.ComponentActivity
 import androidx.core.view.ViewCompat
@@ -44,6 +46,13 @@ class GeometryLabActivity : ComponentActivity() {
     private lateinit var info:TextView
     private lateinit var drawing:ScanView
     private lateinit var viewAxis:Spinner
+    private lateinit var wholeModel:ComponentModelView
+    private lateinit var partPicker:Spinner
+    private lateinit var partDetails:TextView
+    private var reports:List<PartHealth> = emptyList()
+    private val userPartLabels=mutableMapOf<Int,String>()
+    private var selectedPart=-1
+
     private val selectModel=registerForActivityResult(ActivityResultContracts.OpenDocument()){uri->
         if(uri!=null)load(uri,false)
     }
@@ -52,6 +61,12 @@ class GeometryLabActivity : ComponentActivity() {
     }
     private val exportModelingPacket=registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")){uri->
         if(uri!=null)write(uri,"json")
+    }
+    private val exportComponentCsv=registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")){uri->
+        if(uri!=null)write(uri,"parts-csv")
+    }
+    private val exportComponentJson=registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")){uri->
+        if(uri!=null)write(uri,"parts-json")
     }
     private val exportCsv=registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")){uri->
         if(uri!=null)write(uri,"csv")
@@ -128,6 +143,45 @@ class GeometryLabActivity : ComponentActivity() {
         content.addView(row)
         info=label("Open any standard or Meshopt-compressed GLB. Original model is never edited.")
         content.addView(info)
+        content.addView(label("FULL ASSEMBLY  •  select a component",true))
+        wholeModel=ComponentModelView(this)
+        content.addView(wholeModel,LinearLayout.LayoutParams(-1,(resources.displayMetrics.density*335).toInt()))
+        partPicker=Spinner(this)
+        partPicker.adapter=darkSpinnerAdapter(arrayOf("Whole model — no component selected"))
+        partPicker.setBackgroundColor(Color.rgb(29,44,56))
+        partPicker.onItemSelectedListener=object:android.widget.AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(p:android.widget.AdapterView<*>?){}
+            override fun onItemSelected(p:android.widget.AdapterView<*>?,v:View?,i:Int,id:Long){
+                selectedPart=i-1
+                wholeModel.selectedId=selectedPart
+                refreshPartDetails()
+            }
+        }
+        wholeModel.onSelected={id->partPicker.setSelection(id+1)}
+        content.addView(partPicker)
+        val partButtons=LinearLayout(this).apply{orientation=LinearLayout.HORIZONTAL}
+        partButtons.addView(button("Show full model"){
+            wholeModel.isolate=false
+            partPicker.setSelection(0)
+        },LinearLayout.LayoutParams(0,-2,1f))
+        partButtons.addView(button("Isolate selected"){
+            if(selectedPart>=0)wholeModel.isolate=!wholeModel.isolate
+            refreshPartDetails()
+        },LinearLayout.LayoutParams(0,-2,1f))
+        partButtons.addView(button("Label part"){labelSelectedPart()},
+            LinearLayout.LayoutParams(0,-2,1f))
+        content.addView(partButtons)
+        partDetails=label("Select a part to inspect its individual geometry.")
+        content.addView(partDetails)
+        val componentExports=LinearLayout(this).apply{orientation=LinearLayout.HORIZONTAL}
+        componentExports.addView(button("Components JSON"){
+            exportComponentJson.launch("assetwright_component_report.json")
+        },LinearLayout.LayoutParams(0,-2,1f))
+        componentExports.addView(button("Components CSV"){
+            exportComponentCsv.launch("assetwright_component_report.csv")
+        },LinearLayout.LayoutParams(0,-2,1f))
+        content.addView(componentExports)
+        content.addView(label("Analysis view",true))
         drawing=ScanView()
         content.addView(drawing,LinearLayout.LayoutParams(-1,(resources.displayMetrics.density*340).toInt()))
         val spinner=Spinner(this)
@@ -200,6 +254,63 @@ class GeometryLabActivity : ComponentActivity() {
         content.addView(label("Precise slice intersections, graph-based curvature, crease severity, mesh islands, sampled shape differences, envelope reconstruction guides, vertical thickness, silhouettes and feature candidates. Meshopt-compressed GLBs open directly; Draco-compressed GLBs still need conversion. Exports are diagnostic, not automatically retopologized surfaces."))
         setContentView(root)
     }
+    private fun refreshPartDetails() {
+        val m=model ?: return
+        val report=reports.getOrNull(selectedPart)
+        partDetails.text=if(report==null) {
+            "Full assembly • "+reports.size+" source components • "+m.count+
+                " triangles. Select or tap a part for independent diagnostics."
+        } else report.humanSummary(userPartLabels[selectedPart])+
+            "\nPreview: "+if(wholeModel.isolate)"isolated component" else "full assembly, selected part highlighted"
+    }
+    private fun labelSelectedPart() {
+        if(selectedPart<0 || reports.getOrNull(selectedPart)==null) {
+            Toast.makeText(this,"Choose a component first",Toast.LENGTH_SHORT).show()
+            return
+        }
+        val options=arrayOf("Robotic arm","Gripper","Battery cassette","Enclosure",
+            "Control cabinet","Custom label")
+        AlertDialog.Builder(this).setTitle("Identify this component")
+            .setItems(options){_,choice->
+                if(choice==5) {
+                    val input=EditText(this)
+                    input.setText(userPartLabels[selectedPart]?:reports[selectedPart].source.sourceName)
+                    AlertDialog.Builder(this).setTitle("Custom part label")
+                        .setView(input).setPositiveButton("Save"){_,_->
+                            userPartLabels[selectedPart]=input.text.toString().trim()
+                            refreshPartPicker()
+                        }.setNegativeButton("Cancel",null).show()
+                }else {
+                    userPartLabels[selectedPart]=options[choice]
+                    refreshPartPicker()
+                }
+            }.show()
+    }
+    private fun refreshPartPicker() {
+        val current=selectedPart
+        val names=arrayOf("Whole model — no component selected")+
+            reports.map { r->
+                val alias=userPartLabels[r.source.id]
+                val name=alias?.takeIf{it.isNotBlank()}?:r.source.sourceName
+                (r.source.id+1).toString()+". "+name+" ("+r.triangles+" tris)"
+            }.toTypedArray()
+        partPicker.adapter=darkSpinnerAdapter(names)
+        partPicker.setSelection(current+1)
+        refreshPartDetails()
+    }
+    private fun componentsCsv():String=buildString {
+        append("id,name,source_name,triangles,vertices,triangle_density,degenerate_faces,boundary_edges,nonmanifold_edges,sharp_vertex_fraction,high_bending_fraction,flags\n")
+        for(r in reports) {
+            fun quote(v:String)="\""+v.replace("\"","\"\"")+"\""
+            append(r.source.id).append(',').append(quote(userPartLabels[r.source.id]?:r.source.sourceName))
+            append(',').append(quote(r.source.sourceName)).append(',')
+            append(r.triangles).append(',').append(r.vertices).append(',').append(r.triangleDensity)
+            append(',').append(r.degenerateTriangles).append(',').append(r.boundaryEdges?:"")
+            append(',').append(r.nonmanifoldEdges?:"").append(',')
+            append(r.sharpVertexFraction).append(',').append(r.highCurvatureFraction)
+            append(',').append(quote(r.flags.joinToString("; "))).append('\n')
+        }
+    }
     private fun updateSummary(){
         val m=model?:return
         info.text=modelName+" • "+m.n+" vertices • "+m.count+" triangles\n"+
@@ -225,8 +336,17 @@ class GeometryLabActivity : ComponentActivity() {
                 val parsed=GeometryMesh.parse(bytes,name)
                 // Do the heavy graph analyses away from the UI thread.
                 parsed.sharpness;parsed.curvature;parsed.islands
+                val perPart=if(comparison)emptyList() else parsed.partHealth()
                 runOnUiThread{
-                    if(comparison)reference=parsed else {model=parsed;modelName=name}
+                    if(comparison)reference=parsed else {
+                        model=parsed;modelName=name
+                        reports=perPart
+                        userPartLabels.clear()
+                        selectedPart=-1
+                        wholeModel.mesh=parsed
+                        wholeModel.isolate=false
+                        refreshPartPicker()
+                    }
                     updateSummary();drawing.invalidate()
                 }
             } catch(ex:Exception){
@@ -244,8 +364,18 @@ class GeometryLabActivity : ComponentActivity() {
                 contentResolver.openOutputStream(uri)?.use{stream->
                     when(kind){
                         "csv"->stream.write(m.csv(currentMode,axis,fraction).toByteArray(Charsets.UTF_8))
-                        "txt"->stream.write(m.report(reference).toByteArray(Charsets.UTF_8))
-                        "json"->stream.write(m.modelingPacket(axis, reference).toByteArray(Charsets.UTF_8))
+                        "txt"->stream.write((m.report(reference)+"\n\nCOMPONENT DIAGNOSTICS\n"+
+                            reports.joinToString("\n\n"){it.humanSummary(userPartLabels[it.source.id])}
+                        ).toByteArray(Charsets.UTF_8))
+                        "json"-> {
+                            val combined=JSONObject(m.modelingPacket(axis,reference))
+                            combined.put("component_inspection",JSONObject(m.componentInspectionJson(
+                                reports,userPartLabels,selectedPart.takeIf{it>=0})))
+                            stream.write(combined.toString(2).toByteArray(Charsets.UTF_8))
+                        }
+                        "parts-json"->stream.write(m.componentInspectionJson(
+                            reports,userPartLabels,selectedPart.takeIf{it>=0}).toByteArray(Charsets.UTF_8))
+                        "parts-csv"->stream.write(componentsCsv().toByteArray(Charsets.UTF_8))
                         else -> {
                             val bmp=Bitmap.createBitmap(drawing.width.coerceAtLeast(1),drawing.height.coerceAtLeast(1),Bitmap.Config.ARGB_8888)
                             val c=Canvas(bmp);drawing.draw(c)
