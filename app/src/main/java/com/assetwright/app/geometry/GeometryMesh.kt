@@ -348,8 +348,6 @@ class GeometryMesh(
                 val mesh = meshes.getJSONObject(meshId)
                 val primitives = mesh.getJSONArray("primitives")
                 for (p in 0 until primitives.length()) {
-                val primitives = meshes.getJSONObject(meshId).getJSONArray("primitives")
-                for (p in 0 until primitives.length()) {
                     val primitive = primitives.getJSONObject(p)
                     val firstTriangle = faces.size / 3
                     if (primitive.optInt("mode", 4) != 4) continue
