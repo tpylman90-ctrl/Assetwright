@@ -6,7 +6,7 @@ import java.nio.ByteOrder
 import kotlin.math.*
 
 /** Inspection only. The source GLB is never rewritten or altered. */
-class GeometryMesh(val name: String, val xyz: FloatArray, val triangles: IntArray) {
+class GeometryMesh(val name: String, val xyz: FloatArray, val triangles: IntArray, val importedVertexColors: IntArray? = null) {
     val n get() = xyz.size / 3
     val count get() = triangles.size / 3
     val limits: FloatArray by lazy {
@@ -322,6 +322,8 @@ class GeometryMesh(val name: String, val xyz: FloatArray, val triangles: IntArra
 
             val verts = ArrayList<Float>()
             val faces = ArrayList<Int>()
+            val vertexColors = ArrayList<Int>()
+            var hasAnyColors = false
             fun add(meshId: Int, transform: FloatArray) {
                 val primitives = meshes.getJSONObject(meshId).getJSONArray("primitives")
                 for (p in 0 until primitives.length()) {
@@ -353,6 +355,51 @@ class GeometryMesh(val name: String, val xyz: FloatArray, val triangles: IntArra
                         verts.add(transform[0] * x + transform[4] * y + transform[8] * z + transform[12])
                         verts.add(transform[1] * x + transform[5] * y + transform[9] * z + transform[13])
                         verts.add(transform[2] * x + transform[6] * y + transform[10] * z + transform[14])
+                    }
+                    // Import glTF COLOR_0 so derived patch GLBs retain their
+                    // diagnostic color labels in the native Android inspector.
+                    // Supports normalized unsigned bytes and float RGB(A).
+                    if (attributes.has("COLOR_0")) {
+                        val colorAccessor = accessor(attributes.getInt("COLOR_0"))
+                        val colorMeta = colorAccessor.meta
+                        val kind = colorMeta.getInt("componentType")
+                        val components = when (colorMeta.getString("type")) {
+                            "VEC3" -> 3
+                            "VEC4" -> 4
+                            else -> error("Unsupported vertex color type")
+                        }
+                        require(colorMeta.getInt("count") == count) {
+                            "Vertex color and position counts do not match"
+                        }
+                        require(kind == 5121 || kind == 5126) {
+                            "Only byte or float vertex colors supported"
+                        }
+                        val bytesPerComponent = if (kind == 5121) 1 else 4
+                        val naturalStride = components * bytesPerComponent
+                        val colorStride = if (colorAccessor.stride > 0) colorAccessor.stride else naturalStride
+                        val colorBuffer = colorAccessor.bytes
+                        require(colorStride >= naturalStride) { "Invalid vertex color stride" }
+                        for (i in 0 until count) {
+                            val offset = i * colorStride
+                            require(offset >= 0 && offset + naturalStride <= colorBuffer.limit()) {
+                                "Vertex colors outside GLB binary"
+                            }
+                            fun channel(c: Int): Int {
+                                val value = if (kind == 5121) {
+                                    colorBuffer.get(offset + c).toInt() and 255
+                                } else {
+                                    (colorBuffer.getFloat(offset + c * 4).coerceIn(0f, 1f) * 255f).toInt()
+                                }
+                                return value.coerceIn(0, 255)
+                            }
+                            val r = channel(0)
+                            val g = channel(1)
+                            val b = channel(2)
+                            vertexColors.add((255 shl 24) or (r shl 16) or (g shl 8) or b)
+                        }
+                        hasAnyColors = true
+                    } else {
+                        repeat(count) { vertexColors.add(0xff8eaebc.toInt()) }
                     }
                     if (primitive.has("indices")) {
                         val indices = accessor(primitive.getInt("indices"))
@@ -421,7 +468,7 @@ class GeometryMesh(val name: String, val xyz: FloatArray, val triangles: IntArra
             }
             if (visited == 0) for (i in 0 until meshes.length()) add(i, identity())
             require(verts.size >= 9 && faces.size >= 3) { "No triangle mesh found in GLB" }
-            return GeometryMesh(name, verts.toFloatArray(), faces.toIntArray())
+            return GeometryMesh(name, verts.toFloatArray(), faces.toIntArray(), if (hasAnyColors) vertexColors.toIntArray() else null)
         }
     }
 }
