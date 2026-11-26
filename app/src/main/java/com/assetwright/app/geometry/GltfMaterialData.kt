@@ -53,10 +53,12 @@ internal object GltfMaterialReader {
     }
 
     private fun texIndex(info: JSONObject?): Int = info?.optInt("index",-1) ?: -1
-    private fun texCoord(info: JSONObject?): Int =
-        info?.optJSONObject("extensions")?.optJSONObject("KHR_texture_transform")
-            ?.optInt("texCoord",info.optInt("texCoord",0))
-            ?: info?.optInt("texCoord",0) ?: 0
+    private fun texCoord(info: JSONObject?): Int {
+        val fallback=info?.optInt("texCoord",0)?:0
+        return info?.optJSONObject("extensions")
+            ?.optJSONObject("KHR_texture_transform")
+            ?.optInt("texCoord",fallback)?:fallback
+    }
 
     /** Packed 2×3 affine transform [a,b,c,d,e,f]: [u',v'] = [a*u+b*v+c,d*u+e*v+f]. */
     private fun transform(info: JSONObject?): FloatArray {
