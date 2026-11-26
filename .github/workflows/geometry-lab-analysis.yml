@@ -74,6 +74,8 @@ jobs:
               args+=(--compare "$COMPARE_GLB")
             fi
             python tools/geometry_lab/geometry_lab_desktop.py "${args[@]}"
+            python tools/geometry_lab/component_reports.py --input "$IN" \
+              --out geometry-lab-results/components
             # True triangle ray depth + multi-scale surface patch analysis.
             python tools/geometry_lab/surface_depth_lab.py --input "$IN" \
               --out geometry-lab-results/surface_depth --ray-axis z \
@@ -84,6 +86,8 @@ jobs:
         run: |
           python tools/geometry_lab/surface_depth_lab.py --self-test \
             --out geometry-lab-results/synthetic_depth_test
+      - name: Verify five named assembly reports
+        run: python tools/geometry_lab/component_reports.py --self-test --out geometry-lab-results/components_fixture
       - uses: actions/upload-artifact@v4
         with:
           name: assetwright-geometry-scan
