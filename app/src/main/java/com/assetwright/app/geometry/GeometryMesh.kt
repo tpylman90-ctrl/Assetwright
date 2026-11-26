@@ -13,7 +13,8 @@ data class GeometryPart(
     val firstTriangle: Int,
     val triangleCount: Int,
     val firstVertex: Int,
-    val vertexCount: Int
+    val vertexCount: Int,
+    val materialIndex: Int = -1
 )
 
 class GeometryMesh(
@@ -23,7 +24,10 @@ class GeometryMesh(
     val importedVertexColors: IntArray? = null,
     val parts: List<GeometryPart> = listOf(
         GeometryPart(0, "Unnamed mesh", "no named GLB nodes", 0, triangles.size / 3, 0, xyz.size / 3)
-    )
+    ),
+    val uv0: FloatArray? = null,
+    val uv1: FloatArray? = null,
+    val surfaceAssets: GltfPreviewAssets = GltfPreviewAssets(emptyList(), emptyList(), emptyList())
 ) {
     val n get() = xyz.size / 3
     val count get() = triangles.size / 3
@@ -240,6 +244,7 @@ class GeometryMesh(
             }
             val root = json ?: error("Missing GLB JSON")
             require(base >= 0) { "Missing embedded GLB binary chunk" }
+            val surfaceAssets = GltfMaterialReader.read(root, bytes, base, binarySize)
             val required = root.optJSONArray("extensionsRequired")
             if (required != null) for (i in 0 until required.length()) {
                 require(required.getString(i) != "KHR_draco_mesh_compression") {
@@ -342,6 +347,10 @@ class GeometryMesh(
             val faces = ArrayList<Int>()
             val vertexColors = ArrayList<Int>()
             var hasAnyColors = false
+            val uv0 = ArrayList<Float>()
+            val uv1 = ArrayList<Float>()
+            var hasAnyUv0 = false
+            var hasAnyUv1 = false
             val parts = ArrayList<GeometryPart>()
             fun add(meshId: Int, transform: FloatArray, nodePath: String) {
                 val meshName = meshes.getJSONObject(meshId).optString("name", "Mesh $meshId")
@@ -378,6 +387,48 @@ class GeometryMesh(
                         verts.add(transform[1] * x + transform[5] * y + transform[9] * z + transform[13])
                         verts.add(transform[2] * x + transform[6] * y + transform[10] * z + transform[14])
                     }
+                    // glTF UVs are linear floats or normalized integer vectors,
+                    // with independent strides, including Meshopt-compressed views.
+                    fun appendUv(semantic: String, target: ArrayList<Float>): Boolean {
+                        if (!attributes.has(semantic)) {
+                            repeat(count * 2) { target.add(0f) }
+                            return false
+                        }
+                        val view = accessor(attributes.getInt(semantic))
+                        val desc = view.meta
+                        require(desc.getString("type") == "VEC2" && desc.getInt("count") == count) {
+                            "$semantic must be a VEC2 for every vertex"
+                        }
+                        val componentType = desc.getInt("componentType")
+                        val bytesPerValue = when(componentType) {
+                            5126 -> 4
+                            5123 -> 2
+                            5121 -> 1
+                            else -> error("Unsupported $semantic componentType $componentType")
+                        }
+                        val step = if(view.stride>0) view.stride else bytesPerValue*2
+                        require(step >= bytesPerValue*2) { "Invalid UV accessor stride" }
+                        val data = view.bytes
+                        val normalized = desc.optBoolean("normalized",false)
+                        fun component(offset:Int):Float = when(componentType) {
+                            5126 -> data.getFloat(offset)
+                            5123 -> (data.getShort(offset).toInt() and 0xffff).toFloat()/
+                                (if(normalized)65535f else 1f)
+                            else -> (data.get(offset).toInt() and 255).toFloat()/
+                                (if(normalized)255f else 1f)
+                        }
+                        for (i in 0 until count) {
+                            val at = i * step
+                            require(at>=0 && at + bytesPerValue*2<=data.limit()) {
+                                "$semantic outside buffer"
+                            }
+                            target.add(component(at))
+                            target.add(component(at+bytesPerValue))
+                        }
+                        return true
+                    }
+                    if (appendUv("TEXCOORD_0",uv0)) hasAnyUv0=true
+                    if (appendUv("TEXCOORD_1",uv1)) hasAnyUv1=true
                     // Import glTF COLOR_0 so derived patch GLBs retain their
                     // diagnostic color labels in the native Android inspector.
                     // Supports normalized unsigned bytes and float RGB(A).
@@ -463,7 +514,8 @@ class GeometryMesh(
                             .joinToString(" / ")
                         parts.add(GeometryPart(
                             parts.size, displayName, "$nodePath / $meshName / primitive[$p]",
-                            firstTriangle, trianglesAdded, start, count
+                            firstTriangle, trianglesAdded, start, count,
+                            primitive.optInt("material",-1)
                         ))
                     }
                 }
@@ -505,7 +557,13 @@ class GeometryMesh(
             }
             if (visited == 0) for (i in 0 until meshes.length()) add(i, identity(), "Mesh $i")
             require(verts.size >= 9 && faces.size >= 3) { "No triangle mesh found in GLB" }
-            return GeometryMesh(name, verts.toFloatArray(), faces.toIntArray(), if (hasAnyColors) vertexColors.toIntArray() else null, parts)
+            return GeometryMesh(
+                name, verts.toFloatArray(), faces.toIntArray(),
+                if (hasAnyColors) vertexColors.toIntArray() else null, parts,
+                if (hasAnyUv0) uv0.toFloatArray() else null,
+                if (hasAnyUv1) uv1.toFloatArray() else null,
+                surfaceAssets
+            )
         }
     }
 }
