@@ -30,7 +30,8 @@ class GeometryLabActivity : ComponentActivity() {
         "6. Surface reconstruction guides",
         "7. Recess / depth envelope",
         "8. Orthographic silhouettes",
-        "9. Candidate feature detector"
+        "9. Candidate feature detector",
+        "10. Imported colored patch GLB"
     )
     private var model: GeometryMesh?=null
     private var reference:GeometryMesh?=null
@@ -195,6 +196,7 @@ class GeometryLabActivity : ComponentActivity() {
         content.addView(button("EXPORT MODELING DATA  •  JSON FOR CHATGPT"){
             exportModelingPacket.launch("assetwright_modeling_packet.json")
         })
+        content.addView(label("Import surface_regions_30deg.glb or side_region_candidate_cutaway.glb, select mode 10 to display colored surface candidates. This is a wireframe diagnostic view, not a shaded CAD renderer."))
         content.addView(label("Precise slice intersections, graph-based curvature, crease severity, mesh islands, sampled shape differences, envelope reconstruction guides, vertical thickness, silhouettes and feature candidates. Meshopt-compressed GLBs open directly; Draco-compressed GLBs still need conversion. Exports are diagnostic, not automatically retopologized surfaces."))
         setContentView(root)
     }
@@ -210,6 +212,7 @@ class GeometryLabActivity : ComponentActivity() {
                 5->"Section-contour reconstruction guides"
                 6->"Vertical outer-envelope depth proxy"
                 7->"Side, top and front silhouettes"
+                9->"Reads actual GLB COLOR_0 vertex colors; load the derived patch scan GLB"
                 else->"Candidates only: ridges, valleys, boundaries"
             }
     }
@@ -343,6 +346,7 @@ class GeometryLabActivity : ComponentActivity() {
                         }
                         8->if((sharp?.get(a)?:0f)>35f)Color.rgb(246,149,68)
                             else tone(curve?.get(a)?:0f)
+                        9->m.importedVertexColors?.get(a)?:Color.rgb(132,190,198)
                         else->Color.rgb(132,190,198)
                     }
                     val p=position(points[a*3]-center[0],points[a*3+1]-center[1],points[a*3+2]-center[2])
