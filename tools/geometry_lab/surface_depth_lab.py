@@ -70,7 +70,7 @@ def patch_summary(mesh,labels,areas,sizes,order,limit=90):
     return out
 
 
-def export_patch_glb(mesh,labels,areas,path,max_faces=225000):
+def export_patch_glb(mesh,labels,areas,path,max_faces=1000000):
     # Separate derivative; never edit mesh or input. Face colors make patches
     # inspectable in generic Android GLB viewers.
     step=max(1,int(math.ceil(len(mesh.faces)/max_faces)))
@@ -87,7 +87,7 @@ def export_patch_glb(mesh,labels,areas,path,max_faces=225000):
     view.visual=trimesh.visual.ColorVisuals(mesh=view,face_colors=colors)
     view.export(str(path))
     return {"source_faces":int(len(mesh.faces)),"included_faces":int(len(chosen)),
-            "decimation":"deterministic face sample for inspection only; do not use to reconstruct geometry"}
+            "decimation":"full geometry retained for Vantage-scale meshes; face sampling only above maximum"}
 
 
 
