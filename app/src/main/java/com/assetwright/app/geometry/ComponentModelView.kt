@@ -217,6 +217,11 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
             uniform sampler2D uBaseMap;
             uniform sampler2D uMetallicMap;
             uniform sampler2D uEmissiveMap;
+            uniform sampler2D uNormalMap;
+            uniform int uHasNormal;
+            uniform int uNormalUVSet;
+            uniform mat3 uNormalTransform;
+            uniform float uNormalScale;
             out vec4 outColor;
             const float PI=3.14159265;
             vec2 transformedUV(int setIndex, mat3 transform) {
@@ -273,6 +278,23 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
                         alpha=1.0;
                     }
                     vec3 albedo=base.rgb;
+                    if(uHasNormal==1) {
+                        vec2 uv=transformedUV(uNormalUVSet,uNormalTransform);
+                        vec3 mapNormal=texture(uNormalMap,uv).rgb*2.0-1.0;
+                        mapNormal.xy*=uNormalScale;
+                        vec3 p1=dFdx(vViewPosition);
+                        vec3 p2=dFdy(vViewPosition);
+                        vec2 t1=dFdx(uv);
+                        vec2 t2=dFdy(uv);
+                        vec3 tangent=p1*t2.y-p2*t1.y;
+                        vec3 bitangent=-p1*t2.x+p2*t1.x;
+                        float span=length(tangent)*length(bitangent);
+                        if(span>0.0000001) {
+                            tangent=normalize(tangent);
+                            bitangent=normalize(bitangent);
+                            n=normalize(mat3(tangent,bitangent,n)*mapNormal);
+                        }
+                    }
                     vec3 viewDir=normalize(-vViewPosition);
                     vec3 f0=mix(vec3(0.04),albedo,metal);
                     vec3 light=vec3(0.45,0.76,0.58);
@@ -325,6 +347,7 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
             GLES30.glUniform1i(GLES30.glGetUniformLocation(program,"uBaseMap"),0)
             GLES30.glUniform1i(GLES30.glGetUniformLocation(program,"uMetallicMap"),1)
             GLES30.glUniform1i(GLES30.glGetUniformLocation(program,"uEmissiveMap"),2)
+            GLES30.glUniform1i(GLES30.glGetUniformLocation(program,"uNormalMap"),3)
             val maxTex=IntArray(1)
             GLES30.glGetIntegerv(GLES30.GL_MAX_TEXTURE_SIZE,maxTex,0)
             maxTextureDimension=min(2048,maxTex[0].coerceAtLeast(512))
@@ -375,6 +398,12 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
             if (vbo != 0) {
                 GLES30.glDeleteBuffers(1, intArrayOf(vbo), 0)
                 GLES30.glDeleteVertexArrays(1, intArrayOf(vao), 0)
+            }
+            if(textureHandles.isNotEmpty()) {
+                GLES30.glDeleteTextures(textureHandles.size,
+                    textureHandles.values.toIntArray(),0)
+                textureHandles.clear()
+                gpuImageBytes=0L
             }
             loaded = m
             vbo = 0
@@ -506,7 +535,7 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
                 GLES30.glDeleteTextures(1,handles,0)
                 return false
             }finally{bitmap.recycle()}
-            gpuImageBytes+=bitmap.width.toLong()*bitmap.height*4
+            gpuImageBytes+=w.toLong()*h*4
             textureHandles[key]=handles[0]
             return true
         }
@@ -539,12 +568,14 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
             val specs=arrayOf(
                 Triple(mat.baseColorTexture,true,mat.baseTexCoord),
                 Triple(mat.metallicRoughnessTexture,false,mat.metallicTexCoord),
-                Triple(mat.emissiveTexture,true,mat.emissiveTexCoord))
-            val enabledNames=arrayOf("uHasBase","uHasMetallicRoughness","uHasEmissive")
-            val setNames=arrayOf("uBaseUVSet","uMetallicUVSet","uEmissiveUVSet")
-            val transNames=arrayOf("uBaseTransform","uMetallicTransform","uEmissiveTransform")
-            val matrices=arrayOf(mat.baseTexTransform,mat.metallicTexTransform,mat.emissiveTexTransform)
-            for(slot in 0..2) {
+                Triple(mat.emissiveTexture,true,mat.emissiveTexCoord),
+                Triple(mat.normalTexture,false,mat.normalTexCoord))
+            val enabledNames=arrayOf("uHasBase","uHasMetallicRoughness","uHasEmissive","uHasNormal")
+            val setNames=arrayOf("uBaseUVSet","uMetallicUVSet","uEmissiveUVSet","uNormalUVSet")
+            val transNames=arrayOf("uBaseTransform","uMetallicTransform","uEmissiveTransform","uNormalTransform")
+            val matrices=arrayOf(mat.baseTexTransform,mat.metallicTexTransform,mat.emissiveTexTransform,mat.normalTexTransform)
+            GLES30.glUniform1f(GLES30.glGetUniformLocation(program,"uNormalScale"),mat.normalScale)
+            for(slot in 0..3) {
                 val (index,srgb,uvSet)=specs[slot]
                 GLES30.glActiveTexture(GLES30.GL_TEXTURE0+slot)
                 val bound=texture(m,index,srgb)
