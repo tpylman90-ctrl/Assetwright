@@ -15,6 +15,10 @@ data class GltfSurfaceMaterial(
     val baseColorTexture: Int = -1,
     val metallicRoughnessTexture: Int = -1,
     val emissiveTexture: Int = -1,
+    val normalTexture: Int = -1,
+    val normalScale: Float = 1f,
+    val normalTexCoord: Int = 0,
+    val normalTexTransform: FloatArray = floatArrayOf(1f,0f,0f,0f,1f,0f),
     val alphaMode: String = "OPAQUE",
     val alphaCutoff: Float = .5f,
     val doubleSided: Boolean = false,
@@ -154,6 +158,7 @@ internal object GltfMaterialReader {
             val bInfo=pbr.optJSONObject("baseColorTexture")
             val mrInfo=pbr.optJSONObject("metallicRoughnessTexture")
             val eInfo=mat.optJSONObject("emissiveTexture")
+            val nInfo=mat.optJSONObject("normalTexture")
             val strength=mat.optJSONObject("extensions")
                 ?.optJSONObject("KHR_materials_emissive_strength")
                 ?.optDouble("emissiveStrength",1.0)?.toFloat()?:1f
@@ -168,6 +173,10 @@ internal object GltfMaterialReader {
                 baseColorTexture=texIndex(bInfo),
                 metallicRoughnessTexture=texIndex(mrInfo),
                 emissiveTexture=texIndex(eInfo),
+                normalTexture=texIndex(nInfo),
+                normalScale=nInfo?.optDouble("scale",1.0)?.toFloat()?:1f,
+                normalTexCoord=texCoord(nInfo),
+                normalTexTransform=transform(nInfo),
                 alphaMode=alphaMode,
                 alphaCutoff=mat.optDouble("alphaCutoff",0.5).toFloat(),
                 doubleSided=mat.optBoolean("doubleSided",false),
