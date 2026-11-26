@@ -446,6 +446,120 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
                 "polycarbonate","acrylic","perspex").any { it in n }
         }
 
+        private fun texture(m: GeometryMesh,index:Int,srgb:Boolean):Boolean {
+            if(index !in m.surfaceAssets.textures.indices)return false
+            val key=index to srgb
+            val cached=textureHandles[key]
+            if(cached!=null){
+                GLES30.glBindTexture(GLES30.GL_TEXTURE_2D,cached)
+                return true
+            }
+            val source=m.surfaceAssets.textures[index]
+            val data=source.imageBytes?:return false
+            val options=BitmapFactory.Options().apply{inJustDecodeBounds=true}
+            BitmapFactory.decodeByteArray(data,0,data.size,options)
+            if(options.outWidth<=0||options.outHeight<=0)return false
+            var sample=1
+            while(max(options.outWidth,options.outHeight)/sample>maxTextureDimension)
+                sample*=2
+            var w=(options.outWidth/sample).coerceAtLeast(1)
+            var h=(options.outHeight/sample).coerceAtLeast(1)
+            while(gpuImageBytes+w.toLong()*h*4>maxImageBytes &&
+                max(w,h)>32){
+                sample*=2
+                w=(options.outWidth/sample).coerceAtLeast(1)
+                h=(options.outHeight/sample).coerceAtLeast(1)
+            }
+            if(gpuImageBytes+w.toLong()*h*4>maxImageBytes)return false
+            val decode=BitmapFactory.Options().apply{
+                inSampleSize=sample
+                inScaled=false
+                inPreferredConfig=android.graphics.Bitmap.Config.ARGB_8888
+                inPremultiplied=false
+            }
+            val bitmap=try{BitmapFactory.decodeByteArray(data,0,data.size,decode)}
+                catch(_:OutOfMemoryError){null}
+                catch(_:Exception){null}?:return false
+            val handles=IntArray(1)
+            GLES30.glGenTextures(1,handles,0)
+            if(handles[0]==0){bitmap.recycle();return false}
+            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D,handles[0])
+            val wrapS=if(source.wrapS in intArrayOf(33071,33648,10497))source.wrapS else 10497
+            val wrapT=if(source.wrapT in intArrayOf(33071,33648,10497))source.wrapT else 10497
+            GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,GLES30.GL_TEXTURE_WRAP_S,wrapS)
+            GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,GLES30.GL_TEXTURE_WRAP_T,wrapT)
+            val mag=if(source.magFilter==9728)9728 else 9729
+            GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,GLES30.GL_TEXTURE_MAG_FILTER,mag)
+            val mipmap=source.minFilter in 9984..9987
+            val minFilter=if(mipmap) source.minFilter else
+                if(source.minFilter==9728)9728 else 9729
+            GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,GLES30.GL_TEXTURE_MIN_FILTER,minFilter)
+            try{
+                // Color/emissive maps are sRGB and sampled into linear space;
+                // metallic-roughness maps remain linear, per glTF 2.0.
+                GLUtils.texImage2D(GLES30.GL_TEXTURE_2D,0,
+                    if(srgb)GLES30.GL_SRGB8_ALPHA8 else GLES30.GL_RGBA8,bitmap,0)
+                if(mipmap)GLES30.glGenerateMipmap(GLES30.GL_TEXTURE_2D)
+                val err=GLES30.glGetError()
+                if(err!=GLES30.GL_NO_ERROR)throw IllegalStateException("Texture upload error $err")
+            }catch(_:Exception){
+                GLES30.glDeleteTextures(1,handles,0)
+                return false
+            }finally{bitmap.recycle()}
+            gpuImageBytes+=bitmap.width.toLong()*bitmap.height*4
+            textureHandles[key]=handles[0]
+            return true
+        }
+
+        private fun texTransform(uniform:String,a:FloatArray){
+            val matrix=floatArrayOf(
+                a[0],a[3],0f, a[1],a[4],0f, a[2],a[5],1f)
+            GLES30.glUniformMatrix3fv(
+                GLES30.glGetUniformLocation(program,uniform),
+                1,false,matrix,0)
+        }
+
+        private fun material(m:GeometryMesh,p:GeometryPart):GltfSurfaceMaterial {
+            return m.surfaceAssets.materials.getOrNull(p.materialIndex)
+                ?:GltfSurfaceMaterial("glTF default",floatArrayOf(1f,1f,1f,1f),
+                    1f,1f,floatArrayOf(0f,0f,0f),1f)
+        }
+
+        private fun useMaterial(m:GeometryMesh,p:GeometryPart){
+            val mat=material(m,p)
+            GLES30.glUniform4fv(locBaseFactor,1,mat.baseColor,0)
+            GLES30.glUniform1f(locMetallic,mat.metallic)
+            GLES30.glUniform1f(locRoughness,mat.roughness)
+            GLES30.glUniform3fv(locEmissive,1,mat.emissive,0)
+            GLES30.glUniform1f(locEmissiveStrength,mat.emissiveStrength)
+            GLES30.glUniform1i(locAlphaMode,when(mat.alphaMode){
+                "BLEND"->2;"MASK"->1;else->0
+            })
+            GLES30.glUniform1f(locAlphaCutoff,mat.alphaCutoff)
+            val specs=arrayOf(
+                Triple(mat.baseColorTexture,true,mat.baseTexCoord),
+                Triple(mat.metallicRoughnessTexture,false,mat.metallicTexCoord),
+                Triple(mat.emissiveTexture,true,mat.emissiveTexCoord))
+            val enabledNames=arrayOf("uHasBase","uHasMetallicRoughness","uHasEmissive")
+            val setNames=arrayOf("uBaseUVSet","uMetallicUVSet","uEmissiveUVSet")
+            val transNames=arrayOf("uBaseTransform","uMetallicTransform","uEmissiveTransform")
+            val matrices=arrayOf(mat.baseTexTransform,mat.metallicTexTransform,mat.emissiveTexTransform)
+            for(slot in 0..2) {
+                val (index,srgb,uvSet)=specs[slot]
+                GLES30.glActiveTexture(GLES30.GL_TEXTURE0+slot)
+                val bound=texture(m,index,srgb)
+                GLES30.glUniform1i(
+                    GLES30.glGetUniformLocation(program,enabledNames[slot]),
+                    if(bound)1 else 0)
+                GLES30.glUniform1i(
+                    GLES30.glGetUniformLocation(program,setNames[slot]),uvSet)
+                texTransform(transNames[slot],matrices[slot])
+            }
+        }
+
+        private fun materialIsBlended(m:GeometryMesh,p:GeometryPart):Boolean =
+            material(m,p).alphaMode=="BLEND"
+
         private fun matrices(m: GeometryMesh) {
             val b=m.limits
             val cx=(b[0]+b[3])*.5f
@@ -507,6 +621,7 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
             GLES30.glUniformMatrix4fv(locMvp,1,false,mvp,0)
             GLES30.glUniformMatrix4fv(locMv,1,false,mv,0)
             GLES30.glBindVertexArray(vao)
+            GLES30.glUniform1i(locPreview,if(pbrEnabled && !picking)1 else 0)
 
             if (picking) {
                 GLES30.glDisable(GLES30.GL_DITHER)
@@ -520,6 +635,43 @@ class ComponentModelView(context: Context) : GLSurfaceView(context) {
                     drawPart(p)
                 }
                 GLES30.glEnable(GLES30.GL_DITHER)
+            } else if(pbrEnabled) {
+                // Actual source GLB materials. Opaque primitives first, then alpha.
+                // No semantic name-based glass assumptions in this mode.
+                for(p in m.parts) {
+                    if(isolated && selected>=0 && p.id!=selected)continue
+                    if(materialIsBlended(m,p))continue
+                    mode(0)
+                    useMaterial(m,p)
+                    drawPart(p)
+                }
+                GLES30.glEnable(GLES30.GL_BLEND)
+                GLES30.glBlendFunc(GLES30.GL_SRC_ALPHA,GLES30.GL_ONE_MINUS_SRC_ALPHA)
+                GLES30.glDepthMask(false)
+                for(p in m.parts) {
+                    if(isolated && selected>=0 && p.id!=selected)continue
+                    if(!materialIsBlended(m,p))continue
+                    mode(0)
+                    useMaterial(m,p)
+                    drawPart(p)
+                }
+                if(selected>=0) {
+                    val part=m.parts.getOrNull(selected)
+                    if(part!=null){
+                        mode(2)
+                        useMaterial(m,part)
+                        GLES30.glEnable(GLES30.GL_POLYGON_OFFSET_FILL)
+                        GLES30.glPolygonOffset(-1f,-1f)
+                        if(!materialIsBlended(m,part)){
+                            GLES30.glDepthMask(true)
+                            GLES30.glDisable(GLES30.GL_BLEND)
+                        }
+                        drawPart(part)
+                        GLES30.glDisable(GLES30.GL_POLYGON_OFFSET_FILL)
+                    }
+                }
+                GLES30.glDepthMask(true)
+                GLES30.glDisable(GLES30.GL_BLEND)
             } else {
                 mode(0)
                 if (isolated && selected>=0) {
