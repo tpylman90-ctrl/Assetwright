@@ -283,7 +283,7 @@ class GeometryLabActivity : ComponentActivity() {
             exportModelingPacket.launch("assetwright_modeling_packet.json")
         })
         content.addView(label("Import surface_regions_30deg.glb or side_region_candidate_cutaway.glb, select mode 10 to display colored surface candidates. This is a wireframe diagnostic view, not a shaded CAD renderer."))
-        content.addView(label("Precise slice intersections, graph-based curvature, crease severity, mesh islands, sampled shape differences, envelope reconstruction guides, vertical thickness, silhouettes and feature candidates. Meshopt-compressed GLBs open directly; Draco-compressed GLBs still need conversion. Exports are diagnostic, not automatically retopologized surfaces."))
+        content.addView(label("Precise slice intersections, graph-based curvature, crease severity, mesh islands, sampled shape differences, envelope reconstruction guides, vertical thickness, silhouettes and feature candidates. Meshopt and Draco triangle GLBs open directly. Exports are diagnostic, not automatically retopologized surfaces."))
         setContentView(root)
     }
     override fun onPause() {

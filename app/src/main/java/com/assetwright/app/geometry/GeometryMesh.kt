@@ -245,13 +245,6 @@ class GeometryMesh(
             val root = json ?: error("Missing GLB JSON")
             require(base >= 0) { "Missing embedded GLB binary chunk" }
             val surfaceAssets = GltfMaterialReader.read(root, bytes, base, binarySize)
-            val required = root.optJSONArray("extensionsRequired")
-            if (required != null) for (i in 0 until required.length()) {
-                require(required.getString(i) != "KHR_draco_mesh_compression") {
-                    "Draco compression is not yet supported. Meshopt models are supported."
-                }
-            }
-
             val views = root.getJSONArray("bufferViews")
             val access = root.getJSONArray("accessors")
             val meshes = root.getJSONArray("meshes")
@@ -360,12 +353,62 @@ class GeometryMesh(
                     val primitive = primitives.getJSONObject(p)
                     val firstTriangle = faces.size / 3
                     if (primitive.optInt("mode", 4) != 4) continue
-                    if (primitive.optJSONObject("extensions")?.has("KHR_draco_mesh_compression") == true) {
-                        error("KHR_draco_mesh_compression is unsupported")
-                    }
                     val attributes = primitive.getJSONObject("attributes")
                     if (!attributes.has("POSITION")) continue
-                    val pos = accessor(attributes.getInt("POSITION"))
+                    val draco = primitive.optJSONObject("extensions")
+                        ?.optJSONObject("KHR_draco_mesh_compression")
+                    val decodedAttributes = HashMap<String, AccessorView>()
+                    val decodedIndices = draco?.let { extension ->
+                        val mapping = extension.getJSONObject("attributes")
+                        require(mapping.has("POSITION")) { "Draco mesh has no position mapping" }
+                        val positionCount = access.getJSONObject(attributes.getInt("POSITION")).getInt("count")
+                        require(positionCount in 1..(650_000 - verts.size / 3)) {
+                            "Combined model exceeds 650k vertices"
+                        }
+                        val semantics = listOf("POSITION", "TEXCOORD_0", "TEXCOORD_1", "COLOR_0")
+                            .filter { mapping.has(it) }
+                        val descriptors = IntArray(semantics.size * 3)
+                        val metadata = semantics.mapIndexed { index, semantic ->
+                            val meta = access.getJSONObject(attributes.getInt(semantic))
+                            require(meta.getInt("count") == positionCount && !meta.has("sparse")) {
+                                "Invalid Draco $semantic accessor"
+                            }
+                            descriptors[index * 3] = mapping.getInt(semantic)
+                            descriptors[index * 3 + 1] = when (meta.getString("type")) {
+                                "VEC2" -> 2
+                                "VEC3" -> 3
+                                "VEC4" -> 4
+                                else -> error("Invalid Draco $semantic accessor type")
+                            }
+                            descriptors[index * 3 + 2] = meta.getInt("componentType")
+                            meta
+                        }
+                        val indexMeta = if (primitive.has("indices")) {
+                            access.getJSONObject(primitive.getInt("indices")).also {
+                                require(it.getString("type") == "SCALAR" && !it.has("sparse") &&
+                                    it.getInt("componentType") in listOf(5121, 5123, 5125) &&
+                                    it.getInt("count") in 3..3_000_000 && it.getInt("count") % 3 == 0) {
+                                    "Invalid Draco index accessor"
+                                }
+                            }
+                        } else null
+                        val (data, _) = viewData(extension.getInt("bufferView"))
+                        val compressed = ByteArray(data.remaining()).also { data.get(it) }
+                        val output = DracoBridge.decode(
+                            compressed, positionCount, indexMeta?.getInt("count") ?: -1, descriptors
+                        )
+                        fun decodedView(meta: JSONObject, data: ByteArray) =
+                            AccessorView(meta, ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN), 0)
+                        semantics.forEachIndexed { index, semantic ->
+                            decodedAttributes[semantic] = decodedView(metadata[index], output[index])
+                        }
+                        val indices = output.last()
+                        decodedView(JSONObject().put("type", "SCALAR").put("componentType", 5125)
+                            .put("count", indices.size / 4), indices)
+                    }
+                    fun attribute(semantic: String): AccessorView =
+                        decodedAttributes[semantic] ?: accessor(attributes.getInt(semantic))
+                    val pos = attribute("POSITION")
                     val pa = pos.meta
                     require(pa.getInt("componentType") == 5126 && pa.getString("type") == "VEC3") {
                         "Only FLOAT VEC3 geometry positions supported"
@@ -394,7 +437,7 @@ class GeometryMesh(
                             repeat(count * 2) { target.add(0f) }
                             return false
                         }
-                        val view = accessor(attributes.getInt(semantic))
+                        val view = attribute(semantic)
                         val desc = view.meta
                         require(desc.getString("type") == "VEC2" && desc.getInt("count") == count) {
                             "$semantic must be a VEC2 for every vertex"
@@ -433,7 +476,7 @@ class GeometryMesh(
                     // diagnostic color labels in the native Android inspector.
                     // Supports normalized unsigned bytes and float RGB(A).
                     if (attributes.has("COLOR_0")) {
-                        val colorAccessor = accessor(attributes.getInt("COLOR_0"))
+                        val colorAccessor = attribute("COLOR_0")
                         val colorMeta = colorAccessor.meta
                         val kind = colorMeta.getInt("componentType")
                         val components = when (colorMeta.getString("type")) {
@@ -444,10 +487,14 @@ class GeometryMesh(
                         require(colorMeta.getInt("count") == count) {
                             "Vertex color and position counts do not match"
                         }
-                        require(kind == 5121 || kind == 5126) {
-                            "Only byte or float vertex colors supported"
+                        require(kind in listOf(5121, 5123, 5126)) {
+                            "Unsupported vertex color component type"
                         }
-                        val bytesPerComponent = if (kind == 5121) 1 else 4
+                        val bytesPerComponent = when (kind) {
+                            5121 -> 1
+                            5123 -> 2
+                            else -> 4
+                        }
                         val naturalStride = components * bytesPerComponent
                         val colorStride = if (colorAccessor.stride > 0) colorAccessor.stride else naturalStride
                         val colorBuffer = colorAccessor.bytes
@@ -458,10 +505,10 @@ class GeometryMesh(
                                 "Vertex colors outside GLB binary"
                             }
                             fun channel(c: Int): Int {
-                                val value = if (kind == 5121) {
-                                    colorBuffer.get(offset + c).toInt() and 255
-                                } else {
-                                    (colorBuffer.getFloat(offset + c * 4).coerceIn(0f, 1f) * 255f).toInt()
+                                val value = when (kind) {
+                                    5121 -> colorBuffer.get(offset + c).toInt() and 255
+                                    5123 -> (colorBuffer.getShort(offset + c * 2).toInt() and 65535) / 257
+                                    else -> (colorBuffer.getFloat(offset + c * 4).coerceIn(0f, 1f) * 255f).toInt()
                                 }
                                 return value.coerceIn(0, 255)
                             }
@@ -474,8 +521,8 @@ class GeometryMesh(
                     } else {
                         repeat(count) { vertexColors.add(0xff8eaebc.toInt()) }
                     }
-                    if (primitive.has("indices")) {
-                        val indices = accessor(primitive.getInt("indices"))
+                    if (decodedIndices != null || primitive.has("indices")) {
+                        val indices = decodedIndices ?: accessor(primitive.getInt("indices"))
                         val ia = indices.meta
                         require(ia.getString("type") == "SCALAR") { "Invalid index accessor" }
                         val unit = when (ia.getInt("componentType")) {

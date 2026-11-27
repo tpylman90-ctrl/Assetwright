@@ -26,9 +26,9 @@ The same unmodified, imported GLB is used in both modes. Switch directly between
 
 ## Import requirements
 
-Standard binary glTF 2.0 GLB and EXT_meshopt_compression triangle geometry are supported, using the app's existing native mesh decoder. Texture images need to be embedded in the GLB or supplied as data URIs, so that the Android file picker does not need external asset links.
+Standard binary glTF 2.0 GLB and EXT_meshopt_compression triangle geometry are supported. Android v0.7.7 also imports KHR_draco_mesh_compression triangle geometry in both display modes. Texture images need to be embedded in the GLB or supplied as data URIs, so that the Android file picker does not need external asset links.
 
-KTX2/Basis (KHR_texture_basisu), URI-referenced external files, Draco compressed geometry and advanced material extensions (clearcoat, transmission, sheen, iridescence, anisotropy, specular, volume) are **not** fully supported in this version. Such models may display only partial material fidelity. Imported source files remain unchanged.
+KTX2/Basis (KHR_texture_basisu), URI-referenced external files and advanced material extensions (clearcoat, transmission, sheen, iridescence, anisotropy, specular, volume) are **not** fully supported in this version. Such models may display only partial material fidelity. Imported source files remain unchanged.
 
 ### Suggested inspection test
 

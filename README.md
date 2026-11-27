@@ -14,7 +14,7 @@ The existing Blender workflows remain available through GitHub Actions for Manti
 
 ## Geometry Lab (Android v0.7.0)
 
-The native app now has a **Geometry Lab** launch button for inspection of original GLBs without modifying them. Open an uncompressed GLB to explore exact plane slices, curvature indicators, crease edges, connected mesh islands, sampled shape comparisons, sectional surface guides, depth envelopes, orthographic silhouettes, and feature candidates. CSV, PNG and report export are supported.
+The native app now has a **Geometry Lab** launch button for inspection of original GLBs without modifying them. Open a standard, Meshopt-compressed, or Draco-compressed triangle GLB to explore exact plane slices, curvature indicators, crease edges, connected mesh islands, sampled shape comparisons, sectional surface guides, depth envelopes, orthographic silhouettes, and feature candidates. CSV, PNG and report export are supported.
 
 For heavy geometry there is also an independent [Geometry Lab workflow](.github/workflows/geometry-lab-analysis.yml) under [tools/geometry_lab](tools/geometry_lab). Its desktop Python analyzer generates diagnostic GLBs and detailed measurements; a Node Meshopt decoder supports compressed Tripo GLBs through a separate conversion output. See [Android Geometry Lab limitations](docs/GEOMETRY_LAB_ANDROID.md).
 

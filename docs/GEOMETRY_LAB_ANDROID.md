@@ -19,7 +19,7 @@ The app exports a section/profile CSV, full per-vertex geometry CSV, PNG inspect
 ## Current limits (important)
 
 - The native engine handles **uncompressed binary glTF 2.0 triangle meshes** with embedded binary data. A maximum of 650,000 combined vertices and 3 million indices protects phone memory.
-- `EXT_meshopt_compression` and `KHR_draco_mesh_compression` need conversion to uncompressed GLB before native import. Vantage from Tripo uses Meshopt. Use the Python/Node Geometry Lab tool on desktop or GitHub to decode it without altering the original.
+- Embedded triangle geometry using `EXT_meshopt_compression` or `KHR_draco_mesh_compression` opens directly on Android. Draco uses the bundled Google Draco 1.5.7 decoder (Apache-2.0), built from a pinned source revision. The app decodes the data in memory.
 - The current parser combines mesh primitives but does not yet apply parent/node transform matrices or GPU skinning/morph weights. Geometry with non-identity node transforms may appear incorrectly aligned.
 - Connected mesh islands use vertex-index connectivity and may treat UV-split or duplicated seam vertices as disconnected. They are not a reliable semantic part count.
 - Heavy high-density scans run asynchronously; previews decimate drawing only and do **not** modify geometry.
